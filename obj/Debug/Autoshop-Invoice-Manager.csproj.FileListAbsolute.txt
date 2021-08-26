@@ -1,0 +1,10 @@
+C:\Users\Darkp\OneDrive\Desktop\GitHub\Autoshop-Invoice-Manager\bin\Debug\Autoshop-Invoice-Manager.exe.config
+C:\Users\Darkp\OneDrive\Desktop\GitHub\Autoshop-Invoice-Manager\bin\Debug\Autoshop-Invoice-Manager.exe
+C:\Users\Darkp\OneDrive\Desktop\GitHub\Autoshop-Invoice-Manager\bin\Debug\Autoshop-Invoice-Manager.pdb
+C:\Users\Darkp\OneDrive\Desktop\GitHub\Autoshop-Invoice-Manager\obj\Debug\Autoshop-Invoice-Manager.csproj.AssemblyReference.cache
+C:\Users\Darkp\OneDrive\Desktop\GitHub\Autoshop-Invoice-Manager\obj\Debug\Autoshop_Invoice_Manager.Properties.Resources.resources
+C:\Users\Darkp\OneDrive\Desktop\GitHub\Autoshop-Invoice-Manager\obj\Debug\Autoshop-Invoice-Manager.csproj.GenerateResource.cache
+C:\Users\Darkp\OneDrive\Desktop\GitHub\Autoshop-Invoice-Manager\obj\Debug\Autoshop-Invoice-Manager.csproj.CoreCompileInputs.cache
+C:\Users\Darkp\OneDrive\Desktop\GitHub\Autoshop-Invoice-Manager\obj\Debug\Autoshop-Invoice-Manager.exe
+C:\Users\Darkp\OneDrive\Desktop\GitHub\Autoshop-Invoice-Manager\obj\Debug\Autoshop-Invoice-Manager.pdb
+C:\Users\Darkp\OneDrive\Desktop\GitHub\Autoshop-Invoice-Manager\obj\Debug\Autoshop_Invoice_Manager.Form1.resources
