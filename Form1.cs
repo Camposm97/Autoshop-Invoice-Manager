@@ -16,5 +16,24 @@ namespace Autoshop_Invoice_Manager
         {
             InitializeComponent();
         }
+
+        private void btExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btCustomers_Click(object sender, EventArgs e)
+        {
+            Button btAdd = new Button
+            {
+                Name = "btAddCustomer",
+                Location = new Point(11, 11),
+                Size = new Size(220, 40),
+                Text = "Hello World!",
+                UseVisualStyleBackColor = true
+            };
+
+            this.splitContainer2.Panel2.Controls.Add(btAdd);
+        }
     }
 }
