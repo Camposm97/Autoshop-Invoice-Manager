@@ -1,8 +1,6 @@
-package app.model;
+package main.model;
 
-import java.io.Serializable;
-
-public class Vehicle implements Serializable {
+public class Vehicle {
     private String vin;
     private int year;
     private String make, model, licensePlate, color, engine, mileageIn, mileageOut;

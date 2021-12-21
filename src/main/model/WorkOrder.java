@@ -1,4 +1,4 @@
-package app.model;
+package main.model;
 
 import java.time.LocalDate;
 
@@ -6,11 +6,13 @@ public class WorkOrder {
     private LocalDate dateCreated, dateCompleted;
     private Customer customer;
     private Vehicle vehicle;
+    private Invoice invoice;
 
-    public WorkOrder(Customer customer, Vehicle vehicle) {
+    public WorkOrder(Customer customer, Vehicle vehicle, Invoice invoice) {
         this.dateCreated = LocalDate.now();
         this.customer = customer;
         this.vehicle = vehicle;
+        this.invoice = invoice;
     }
 
     public LocalDate getDateCreated() {
