@@ -1,4 +1,4 @@
-package main.model;
+package model;
 
 public class Address {
     private String street, city, state, zip;
@@ -40,5 +40,10 @@ public class Address {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    @Override
+    public String toString() {
+        return street + " " + city + " " + state + " " + zip;
     }
 }

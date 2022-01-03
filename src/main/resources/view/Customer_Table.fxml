@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<TableView fx:id="tv" editable="true" styleClass="table_view" stylesheets="@App.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
+   <columns>
+      <TableColumn fx:id="colId" maxWidth="100.0" prefWidth="75.0" text="ID" />
+      <TableColumn fx:id="colFirstName" prefWidth="150" text="First Name" />
+      <TableColumn fx:id="colLastName" prefWidth="150.0" text="Last Name" />
+      <TableColumn fx:id="colPhone" prefWidth="150.0" text="Phone" />
+      <TableColumn fx:id="colCompany" prefWidth="250.0" text="Company" />
+      <TableColumn fx:id="colAddress" prefWidth="250.0" text="Address" />
+      <TableColumn fx:id="colCity" prefWidth="200.0" text="City" />
+      <TableColumn fx:id="colState" prefWidth="150.0" text="State" />
+      <TableColumn fx:id="colZip" prefWidth="150.0" text="Zip" />
+<!--      <TableColumn fx:id="colStreet" prefWidth="100" text="Street" />-->
+<!--      <TableColumn fx:id="colCity" prefWidth="100" text="City" />-->
+<!--      <TableColumn fx:id="colState" prefWidth="100" text="State" />-->
+<!--      <TableColumn fx:id="colZip" prefWidth="100" text="Zip" />-->
+   </columns>
+   <padding>
+      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+   </padding>
+</TableView>

@@ -5,9 +5,9 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.controller.AppController">
+<BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppController">
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
+      <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -15,20 +15,17 @@
                      <items>
                     <MenuItem mnemonicParsing="false" onAction="#addCustomer" text="Customer" />
                         <MenuItem mnemonicParsing="false" onAction="#addVehicle" text="Vehicle" />
-                        <MenuItem mnemonicParsing="false" text="Work Order" />
+                        <MenuItem mnemonicParsing="false" onAction="#addWorkOrder" text="Work Order" />
                      </items>
                   </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Customer" />
-            </items>
-          </Menu>
           <Menu mnemonicParsing="false" text="View">
             <items>
-              <MenuItem mnemonicParsing="false" text="Customer" />
+              <MenuItem mnemonicParsing="false" onAction="#viewCustomers" text="Customer" />
+                  <MenuItem mnemonicParsing="false" onAction="#viewVehicles" text="Vehicle" />
+                  <MenuItem mnemonicParsing="false" onAction="#viewWorkOrders" text="Work Order" />
             </items>
           </Menu>
         </menus>

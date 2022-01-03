@@ -1,17 +1,16 @@
-package main.model;
+package model;
 
 public class Item implements Billable, Comparable<Item> {
     private String id;
-    private String name;
     private String desc;
     private double retailPrice;
     private double listPrice;
     private boolean taxable;
     private int quantity;
 
-    public Item(String id, String name, String desc, double retailPrice, double listPrice, boolean taxable, int quantity) {
+    public Item(String id, String desc, double retailPrice, double listPrice, boolean taxable, int quantity) {
         this.id = id;
-        this.name = name;
+        this.desc = desc;
         this.retailPrice = retailPrice;
         this.listPrice = listPrice;
         this.taxable = taxable;
@@ -24,14 +23,6 @@ public class Item implements Billable, Comparable<Item> {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDesc() {

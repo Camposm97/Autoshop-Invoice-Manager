@@ -1,4 +1,4 @@
-package main.model;
+package model;
 
 public class Customer {
     private int id;
@@ -64,5 +64,9 @@ public class Customer {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getName() {
+        return firstName + " " + lastName;
     }
 }

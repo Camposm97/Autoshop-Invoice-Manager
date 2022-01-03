@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
   <help_text/>
-  <zoom_level>10</zoom_level>
+  <zoom_level>13</zoom_level>
   <element>
     <id>UMLActor</id>
     <coordinates>
-      <x>370</x>
-      <y>440</y>
-      <w>60</w>
-      <h>110</h>
+      <x>0</x>
+      <y>520</y>
+      <w>78</w>
+      <h>130</h>
     </coordinates>
     <panel_attributes>Worker</panel_attributes>
     <additional_attributes/>
@@ -16,10 +16,10 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>220</y>
-      <w>120</w>
-      <h>40</h>
+      <x>403</x>
+      <y>273</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>Create Customer</panel_attributes>
     <additional_attributes/>
@@ -27,10 +27,10 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>70</y>
-      <w>120</w>
-      <h>40</h>
+      <x>403</x>
+      <y>468</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>Delete Customer</panel_attributes>
     <additional_attributes/>
@@ -38,10 +38,10 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>270</y>
-      <w>120</w>
-      <h>40</h>
+      <x>403</x>
+      <y>403</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>Update Customer</panel_attributes>
     <additional_attributes/>
@@ -49,10 +49,10 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>370</y>
-      <w>120</w>
-      <h>40</h>
+      <x>650</x>
+      <y>273</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>Create Vehicle</panel_attributes>
     <additional_attributes/>
@@ -60,10 +60,10 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>420</y>
-      <w>120</w>
-      <h>40</h>
+      <x>650</x>
+      <y>403</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>Update Vehicle</panel_attributes>
     <additional_attributes/>
@@ -71,10 +71,10 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>520</y>
-      <w>120</w>
-      <h>40</h>
+      <x>403</x>
+      <y>819</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>Create Work Order</panel_attributes>
     <additional_attributes/>
@@ -82,10 +82,10 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>120</y>
-      <w>120</w>
-      <h>40</h>
+      <x>650</x>
+      <y>468</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>Delete Vehicle</panel_attributes>
     <additional_attributes/>
@@ -93,10 +93,10 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>570</y>
-      <w>120</w>
-      <h>40</h>
+      <x>403</x>
+      <y>949</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>Update Work Order</panel_attributes>
     <additional_attributes/>
@@ -104,143 +104,54 @@
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>170</y>
-      <w>120</w>
-      <h>40</h>
+      <x>403</x>
+      <y>1014</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>Delete Work Order</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>UMLActor</id>
-    <coordinates>
-      <x>370</x>
-      <y>140</y>
-      <w>60</w>
-      <h>110</h>
-    </coordinates>
-    <panel_attributes>Admin</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
     <id>Relation</id>
     <coordinates>
-      <x>430</x>
-      <y>380</y>
-      <w>270</w>
-      <h>120</h>
+      <x>65</x>
+      <y>416</y>
+      <w>364</w>
+      <h>169</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;100.0;250.0;10.0</additional_attributes>
+    <additional_attributes>10.0;110.0;130.0;110.0;130.0;10.0;260.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>430</x>
-      <y>430</y>
-      <w>270</w>
-      <h>70</h>
+      <x>65</x>
+      <y>286</y>
+      <w>364</w>
+      <h>299</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;50.0;250.0;10.0</additional_attributes>
+    <additional_attributes>10.0;210.0;110.0;210.0;110.0;10.0;260.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>430</x>
-      <y>470</y>
-      <w>270</w>
-      <h>90</h>
+      <x>65</x>
+      <y>481</y>
+      <w>364</w>
+      <h>104</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;250.0;70.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>430</x>
-      <y>470</y>
-      <w>270</w>
-      <h>140</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;10.0;250.0;120.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>430</x>
-      <y>280</y>
-      <w>270</w>
-      <h>220</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;200.0;250.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>430</x>
-      <y>230</y>
-      <w>270</w>
-      <h>270</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;250.0;250.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>390</x>
-      <y>240</y>
-      <w>90</w>
-      <h>200</h>
-    </coordinates>
-    <panel_attributes>lt=-&gt;&gt;
-&lt;&lt;extends&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;180.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>420</x>
-      <y>80</y>
-      <w>280</w>
-      <h>120</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;100.0;260.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>420</x>
-      <y>130</y>
-      <w>280</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;50.0;260.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>420</x>
-      <y>160</y>
-      <w>280</w>
-      <h>50</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;20.0;260.0;30.0</additional_attributes>
+    <additional_attributes>10.0;60.0;140.0;60.0;140.0;10.0;260.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>620</x>
-      <y>30</y>
-      <w>240</w>
-      <h>760</h>
+      <x>325</x>
+      <y>221</y>
+      <w>520</w>
+      <h>962</h>
     </coordinates>
     <panel_attributes>Invoice Management System
 halign=left</panel_attributes>
@@ -249,32 +160,21 @@ halign=left</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>720</y>
-      <w>120</w>
-      <h>40</h>
+      <x>403</x>
+      <y>1079</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>Print Work Order</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>430</x>
-      <y>470</y>
-      <w>270</w>
-      <h>290</h>
-    </coordinates>
-    <panel_attributes/>
-    <additional_attributes>10.0;10.0;250.0;270.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>620</y>
-      <w>120</w>
-      <h>40</h>
+      <x>403</x>
+      <y>884</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>View Work Order</panel_attributes>
     <additional_attributes/>
@@ -282,10 +182,10 @@ halign=left</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>320</y>
-      <w>120</w>
-      <h>40</h>
+      <x>403</x>
+      <y>338</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>View Customer</panel_attributes>
     <additional_attributes/>
@@ -293,67 +193,250 @@ halign=left</panel_attributes>
   <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>470</y>
-      <w>120</w>
-      <h>40</h>
+      <x>650</x>
+      <y>338</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
     <panel_attributes>View Vehicle</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>65</x>
+      <y>351</y>
+      <w>364</w>
+      <h>234</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;160.0;120.0;160.0;120.0;10.0;260.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>871</x>
+      <y>221</y>
+      <w>299</w>
+      <h>195</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Add Customer/Vehicle/Item
+When a worker wants to add a customer/vehicle/item, a dialog will pop out for the user to fill out the information then can click an add button. 
+If the worker wants to cancel adding a customer/vehicle/item, they can close the dialog
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
     <id>UMLUseCase</id>
     <coordinates>
-      <x>680</x>
-      <y>670</y>
-      <w>120</w>
-      <h>40</h>
+      <x>650</x>
+      <y>819</y>
+      <w>156</w>
+      <h>52</h>
     </coordinates>
-    <panel_attributes>Save Work Order</panel_attributes>
+    <panel_attributes>Create Item</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>650</x>
+      <y>949</y>
+      <w>156</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>Update Item</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>650</x>
+      <y>884</y>
+      <w>156</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>View Item</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLUseCase</id>
+    <coordinates>
+      <x>650</x>
+      <y>1014</y>
+      <w>156</w>
+      <h>52</h>
+    </coordinates>
+    <panel_attributes>Delete Item</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>430</x>
-      <y>330</y>
-      <w>270</w>
-      <h>170</h>
+      <x>91</x>
+      <y>39</y>
+      <w>585</w>
+      <h>546</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;150.0;250.0;10.0</additional_attributes>
+    <additional_attributes>10.0;400.0;10.0;20.0;390.0;20.0;390.0;250.0;430.0;250.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>430</x>
-      <y>460</y>
-      <w>270</w>
-      <h>50</h>
+      <x>78</x>
+      <y>26</y>
+      <w>598</w>
+      <h>559</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;20.0;250.0;30.0</additional_attributes>
+    <additional_attributes>10.0;410.0;10.0;20.0;410.0;20.0;410.0;210.0;440.0;210.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>430</x>
-      <y>470</y>
-      <w>270</w>
-      <h>190</h>
+      <x>104</x>
+      <y>52</y>
+      <w>572</w>
+      <h>533</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;250.0;170.0</additional_attributes>
+    <additional_attributes>10.0;390.0;10.0;20.0;370.0;20.0;370.0;290.0;420.0;290.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>430</x>
-      <y>470</y>
-      <w>270</w>
-      <h>240</h>
+      <x>117</x>
+      <y>65</y>
+      <w>559</w>
+      <h>520</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>10.0;10.0;250.0;220.0</additional_attributes>
+    <additional_attributes>10.0;380.0;10.0;20.0;350.0;20.0;350.0;330.0;410.0;330.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>65</x>
+      <y>546</y>
+      <w>364</w>
+      <h>455</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;130.0;10.0;130.0;330.0;260.0;330.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>65</x>
+      <y>546</y>
+      <w>364</w>
+      <h>325</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;110.0;10.0;110.0;230.0;260.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>65</x>
+      <y>546</y>
+      <w>364</w>
+      <h>520</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;140.0;10.0;140.0;380.0;260.0;380.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>65</x>
+      <y>546</y>
+      <w>364</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;120.0;10.0;120.0;280.0;260.0;280.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>65</x>
+      <y>546</y>
+      <w>364</w>
+      <h>585</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;140.0;10.0;140.0;430.0;260.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>117</x>
+      <y>546</y>
+      <w>559</w>
+      <h>520</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;70.0;350.0;70.0;350.0;380.0;410.0;380.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>104</x>
+      <y>546</y>
+      <w>572</w>
+      <h>455</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;60.0;370.0;60.0;370.0;330.0;420.0;330.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>91</x>
+      <y>546</y>
+      <w>585</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;50.0;390.0;50.0;390.0;280.0;430.0;280.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>78</x>
+      <y>546</y>
+      <w>598</w>
+      <h>325</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;10.0;10.0;40.0;410.0;40.0;410.0;230.0;440.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>871</x>
+      <y>442</y>
+      <w>299</w>
+      <h>494</h>
+    </coordinates>
+    <panel_attributes>style=wordwrap
+Add Work Order
+--
+First, a work order and invoice with ID n is created in the database when the worker decides to add a work order.
+--
+When a worker wants to add a work order, the main window will change to a TabPane and the first tab will show text fields to fill out the information for a customer and vehicle.
+The first tab will also show buttons to search for a customer or vehicle to auto-fill out the information.
+--
+The second tab will show buttons to search
+--
+Outside of the TabPane will be a button "Print Work Order".
+"Print Work Order" will print the entered information
+--
+
+</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

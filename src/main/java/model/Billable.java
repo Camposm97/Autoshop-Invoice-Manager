@@ -1,4 +1,4 @@
-package main.model;
+package model;
 
 public interface Billable {
     double TAX_RATE = 1.08625;

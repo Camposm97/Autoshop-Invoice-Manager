@@ -1,11 +1,11 @@
-package main.model;
+package model;
 
 public class Vehicle {
     private String vin;
     private int year;
-    private String make, model, licensePlate, color, engine, mileageIn, mileageOut;
+    private String make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut;
 
-    public Vehicle(String vin, int year, String make, String model, String licensePlate, String color, String engine, String mileageIn, String mileageOut) {
+    public Vehicle(String vin, int year, String make, String model, String licensePlate, String color, String engine, String transmission, String mileageIn, String mileageOut) {
         this.vin = vin;
         this.year = year;
         this.make = make;
@@ -13,6 +13,7 @@ public class Vehicle {
         this.licensePlate = licensePlate;
         this.color = color;
         this.engine = engine;
+        this.transmission = transmission;
         this.mileageIn = mileageIn;
         this.mileageOut = mileageOut;
     }
@@ -71,6 +72,14 @@ public class Vehicle {
 
     public void setEngine(String engine) {
         this.engine = engine;
+    }
+
+    public String getTransmission() {
+        return transmission;
+    }
+
+    public void setTransmission(String transmission) {
+        this.transmission = transmission;
     }
 
     public String getMileageIn() {

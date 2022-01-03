@@ -1,4 +1,4 @@
-package main.model;
+package model;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -7,7 +7,8 @@ public class Invoice implements Billable {
     private int id;
     private List<Item> items;
 
-    public Invoice() {
+    public Invoice(int id) {
+        this.id = id;
         this.items = new LinkedList<>();
     }
 
