@@ -3,6 +3,7 @@ package model;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,15 +33,15 @@ public class DB {
             c = DriverManager.getConnection("jdbc:sqlite:" + file);
             try {
                 System.out.println("Connected to AutoShop Database");
-                System.out.println("customer: " + c.createStatement().execute("select * from customer"));
-                System.out.println("vehicle: " + c.createStatement().execute("select * from vehicle"));
-                System.out.println("item: " + c.createStatement().execute("select * from item"));
-                System.out.println("invoice: " + c.createStatement().execute("select * from invoice"));
-                System.out.println("invoice_customer: " + c.createStatement().execute("select * from invoice_customer"));
-                System.out.println("invoice_vehicle: " + c.createStatement().execute("select * from invoice_vehicle"));
-                System.out.println("invoice_item: " + c.createStatement().execute("select * from invoice_item"));
-                System.out.println("invoice_labor: " + c.createStatement().execute("select * from invoice_labor"));
-                System.out.println("work_order: " + c.createStatement().execute("select * from work_order"));
+                System.out.println("customer: " + c.createStatement().executeQuery("select count(*) from customer").getInt(1));
+                System.out.println("vehicle: " + c.createStatement().executeQuery("select count(*) from vehicle").getInt(1));
+                System.out.println("item: " + c.createStatement().executeQuery("select count(*) from item").getInt(1));
+//                System.out.println("invoice: " + c.createStatement().execute("select * from invoice"));
+                System.out.println("work_order: " + c.createStatement().executeQuery("select count(*) from work_order").getInt(1));
+//                System.out.println("work_order_customer: " + c.createStatement().executeQuery("select count(*) from work_order_customer").getInt(1));
+//                System.out.println("work_order_vehicle: " + c.createStatement().executeQuery("select count(*) from work_order_vehicle").getInt(1));
+                System.out.println("work_order_item: " + c.createStatement().executeQuery("select count(*) from work_order_item").getInt(1));
+                System.out.println("work_order_labor: " + c.createStatement().executeQuery("select count(*) from work_order_labor").getInt(1));
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
                 System.out.println("Some of the tables do not exist, re-initializing tables...");
@@ -88,12 +89,12 @@ public class DB {
                 "list_price real, " +
                 "taxable boolean, " +
                 "quantity integer);");
-        stmt.addBatch("create table if not exists invoice (" +
-                "invoice_id integer primary key autoincrement);");
-        stmt.addBatch("create table if not exists invoice_customer (" +
-                "invoice_customer_id integer primary key autoincrement, " +
-                "invoice_id integer, " +
-                "customer_id integer, " +
+//        stmt.addBatch("create table if not exists invoice (" +
+//                "invoice_id integer primary key autoincrement);");
+        stmt.addBatch("create table if not exists work_order (" +
+                "work_order_id integer primary key autoincrement, " +
+                "date_created date, " +
+                "date_completed date" +
                 "customer_first_name text, " +
                 "customer_last_name text, " +
                 "customer_phone text, " +
@@ -101,10 +102,33 @@ public class DB {
                 "customer_street text, " +
                 "customer_city text, " +
                 "customer_state text, " +
-                "customer_zip text);");
-        stmt.addBatch("create table if not exists invoice_vehicle (" +
-                "invoice_vehicle_id integer primary key autoincrement, " +
-                "invoice_id integer, " +
+                "customer_zip text," +
+                "vehicle_vin text, " +
+                "vehicle_year int, " +
+                "vehicle_make text, " +
+                "vehicle_model text, " +
+                "vehicle_license_plate text, " +
+                "vehicle_color text, " +
+                "vehicle_engine text, " +
+                "vehicle_transmission text, " +
+                "vehicle_mileage_in text, " +
+                "vehicle_mileage_out text);");
+        /*
+        stmt.addBatch("create table if not exists work_order_customer (" +
+                "work_order_customer_id integer primary key autoincrement, " +
+                "work_order_id integer, " +
+                "customer_first_name text, " +
+                "customer_last_name text, " +
+                "customer_phone text, " +
+                "customer_company text, " +
+                "customer_street text, " +
+                "customer_city text, " +
+                "customer_state text, " +
+                "customer_zip text," +
+                "foreign key(work_order_id) references work_order(work_order_id));");
+        stmt.addBatch("create table if not exists work_order_vehicle (" +
+                "work_order_vehicle_id integer primary key autoincrement, " +
+                "work_order_id integer, " +
                 "vehicle_vin text, " +
                 "vehicle_year int, " +
                 "vehicle_make text, " +
@@ -113,31 +137,28 @@ public class DB {
                 "vehicle_color text, " +
                 "vehicle_engine text, " +
                 "vehicle_mileage_in text, " +
-                "vehicle_mileage_out text);");
-        stmt.addBatch("create table if not exists invoice_item (" +
-                "invoice_item_id integer primary key autoincrement, " +
-                "invoice_id integer, " +
+                "vehicle_mileage_out text, " +
+                "foreign key(work_order_id) references work_order(work_order_id));");
+         */
+        stmt.addBatch("create table if not exists work_order_item (" +
+                "work_order_item_id integer primary key autoincrement, " +
+                "work_order_id integer, " +
                 "item_id text, " +
                 "item_desc text, " +
                 "item_retail_price real, " +
                 "item_list_price real, " +
+                "item_quantity integer, " +
                 "item_taxable boolean, " +
-                "item_quantity integer);");
-        stmt.addBatch("create table if not exists invoice_labor (" +
-                "invoice_labor_id integer primary key autoincrement, " +
-                "invoice_id integer, " +
+                "foreign key(work_order_id) references work_order(work_order_id));");
+        stmt.addBatch("create table if not exists work_order_labor (" +
+                "work_order_labor_id integer primary key autoincrement, " +
+                "work_order_id integer, " +
                 "labor_code text, " +
                 "labor_desc text, " +
                 "labor_billed_hrs real," +
                 "labor_rate real," +
-                "labor_taxable boolean);");
-        stmt.addBatch("create table if not exists work_order (" +
-                "work_order_id integer primary key autoincrement, " +
-                "customer_id integer, " +
-                "date_created date, " +
-                "date_completed date," +
-                "vehicle_vin text, " +
-                "invoice_id integer);");
+                "labor_taxable boolean, " +
+                "foreign key(work_order_id) references work_order(work_order_id));");
         stmt.executeBatch();
     }
 
@@ -296,25 +317,107 @@ public class DB {
         }
     }
 
-    public List<Vehicle> getAllVehicles() {
-        return null;
+//    public List<Vehicle> getAllVehicles() {
+//        return null;
+//    }
+
+    public void addWorkOrder(WorkOrder workOrder) {
+
+    }
+
+    public WorkOrder getWorkOrderById(int workOrderId) {
+        WorkOrder workOrder = null;
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rsWorkOrder = stmt.executeQuery(
+                    "select * from work_order " +
+                            "where work_order_id = " + workOrderId);
+
+            if (rsWorkOrder.next()) {
+                Date dateCreated = rsWorkOrder.getDate(2);
+                Date dateCompleted = rsWorkOrder.getDate(3);
+                String firstName = rsWorkOrder.getString(4);
+                String lastName = rsWorkOrder.getString(5);
+                String phone = rsWorkOrder.getString(6);
+                String company = rsWorkOrder.getString(7);
+                String street = rsWorkOrder.getString(8);
+                String city = rsWorkOrder.getString(9);
+                String state = rsWorkOrder.getString(10);
+                String zip = rsWorkOrder.getString(11);
+                Address address = new Address(street, city, state, zip);
+                Customer customer = new Customer(firstName, lastName, phone, company, address);
+                String vin = rsWorkOrder.getString(12);
+                int year = rsWorkOrder.getInt(13);
+                String make = rsWorkOrder.getString(14);
+                String model = rsWorkOrder.getString(15);
+                String licensePlate = rsWorkOrder.getString(16);
+                String color = rsWorkOrder.getString(17);
+                String engine = rsWorkOrder.getString(18);
+                String transmission = rsWorkOrder.getString(19);
+                String mileageIn = rsWorkOrder.getString(20);
+                String mileageOut = rsWorkOrder.getString(21);
+                Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
+                workOrder = new WorkOrder(customer, vehicle);
+                workOrder.setId(workOrderId);
+
+                ResultSet rsItem = stmt.executeQuery("select * from work_order_item " +
+                        "where work_order_id = " + workOrderId);
+                while (rsItem.next()) {
+                    String id = rsItem.getString(3);
+                    String desc = rsItem.getString(4);
+                    double retailPrice = rsItem.getDouble(5);
+                    double listPrice = rsItem.getDouble(6);
+                    int quantity = rsItem.getInt(7);
+                    boolean taxable = rsItem.getBoolean(8);
+                    Item item = new Item(id, desc, retailPrice, listPrice, quantity, taxable);
+                    workOrder.addItem(item);
+                }
+
+                ResultSet rsLabor = stmt.executeQuery("select * from work_order_labor " +
+                        "where work_order_id = " + workOrderId);
+                while (rsLabor.next()) {
+                    String laborCode = rsLabor.getString(3);
+                    String desc = rsLabor.getString(4);
+                    double billedHrs = rsLabor.getDouble(5);
+                    double rate = rsLabor.getDouble(6);
+                    boolean taxable = rsLabor.getBoolean(7);
+                    Labor labor = new Labor(laborCode, desc, billedHrs, rate, taxable);
+                    workOrder.addLabor(labor);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return workOrder;
     }
 
     public List<WorkOrder> getAllWorkOrders() {
-        return null;
+        List<WorkOrder> list = new LinkedList<>();
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet workOrderSet = stmt.executeQuery("select work_order_id from work_order");
+            while (workOrderSet.next()) {
+                int workOrderId = workOrderSet.getInt(1);
+                WorkOrder workOrder = getWorkOrderById(workOrderId);
+                list.add(workOrder);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
-    public List<Item> getAllItems() {
-        return null;
-    }
+//    public List<Item> getAllItems() {
+//        return null;
+//    }
 
     public List<Item> getItemsByInvoiceId(int invoiceId) {
-        return null;
+        List<Item> list = new LinkedList<>();
+        return list;
     }
 
-    public Invoice getInvoice(int id) {
-        return null;
+    public List<Labor> getLaborsByInvoiceId(int invoiceId) {
+        List<Labor> list = new LinkedList<>();
+        return list;
     }
-
-
 }

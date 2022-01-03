@@ -1,20 +1,26 @@
 package model;
 
+import java.sql.Date;
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
-public class WorkOrder {
+public class WorkOrder implements Billable {
     private int id;
-    private LocalDate dateCreated, dateCompleted;
+    private Date dateCreated, dateCompleted;
     private Customer customer;
     private Vehicle vehicle;
-    private Invoice invoice;
+    private List<Item> itemList;
+    private List<Labor> laborList;
 
-    public WorkOrder(int id, Customer customer, Vehicle vehicle, Invoice invoice) {
+    public WorkOrder(Customer customer, Vehicle vehicle) {
         this.id = id;
-        this.dateCreated = LocalDate.now();
         this.customer = customer;
         this.vehicle = vehicle;
-        this.invoice = invoice;
+        this.dateCreated = Date.valueOf(LocalDate.now().toString());
+        this.dateCompleted = null;
+        this.itemList = new LinkedList<>();
+        this.laborList = new LinkedList<>();
     }
 
     public int getId() {
@@ -25,15 +31,19 @@ public class WorkOrder {
         this.id = id;
     }
 
-    public LocalDate getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public LocalDate getDateCompleted() {
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Date getDateCompleted() {
         return dateCompleted;
     }
 
-    public void setDateCompleted(LocalDate dateCompleted) {
+    public void setDateCompleted(Date dateCompleted) {
         this.dateCompleted = dateCompleted;
     }
 
@@ -53,11 +63,39 @@ public class WorkOrder {
         this.vehicle = vehicle;
     }
 
-    public Invoice getInvoice() {
-        return invoice;
+    public boolean addItem(Item item) {
+        return itemList.add(item);
     }
 
-    public void setInvoice(Invoice invoice) {
-        this.invoice = invoice;
+    public boolean removeItem(Item item) {
+        return itemList.remove(item);
+    }
+
+    public List<Item> getItemList() {
+        return itemList;
+    }
+
+    public boolean addLabor(Labor labor) {
+        return laborList.add(labor);
+    }
+
+    public boolean removeLabor(Labor labor) {
+        return laborList.remove(labor);
+    }
+
+    public List<Labor> getLaborList() {
+        return laborList;
+    }
+
+    @Override
+    public double bill() {
+        double total = 0;
+        for (Item item : itemList) {
+            total += item.bill();
+        }
+        for (Labor labor : laborList) {
+            total += labor.bill();
+        }
+        return total;
     }
 }

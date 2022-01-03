@@ -1,15 +1,17 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import model.Address;
 import model.Customer;
+import model.Vehicle;
 import model.WorkOrder;
 
+import java.util.Optional;
+
 public class WorkOrderController {
-    WorkOrder workOrder;
+    int workOrderId;
     @FXML
     TextField tfFirstName, tfLastName, tfPhone, tfCompany,tfAddress, tfCity, tfState, tfZip;
     @FXML
@@ -24,11 +26,11 @@ public class WorkOrderController {
     TableColumn<Object, String> colLaborId;
 
     public WorkOrderController() {
-
+        this.workOrderId = -1;
     }
 
     public WorkOrderController(WorkOrder workOrder) {
-        this.workOrder = workOrder;
+        this.workOrderId = workOrder.getId();
     }
 
     public void save() {
@@ -42,6 +44,7 @@ public class WorkOrderController {
         String zip = tfZip.getText();
         Address address = new Address(street, city, state, zip);
         Customer customer = new Customer(firstName, lastName, phone, company, address);
+
         String vin = tfVin.getText();
         String licensePlate = tfLicensePlate.getText();
         String color = tfColor.getText();
@@ -52,16 +55,27 @@ public class WorkOrderController {
         String transmission = tfTransmission.getText();
         String mileageIn = tfMileageIn.getText();
         String mileageOut = tfMileageOut.getText();
-        if (workOrder != null) {
+        Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color,
+                engine, transmission, mileageIn, mileageOut);
+
+        if (workOrderId != -1) {
             // Update work order
+            WorkOrder workOrder = new WorkOrder(customer, vehicle);
+            workOrder.setId(this.workOrderId);
+
         } else {
-            // create new work order
+            // Create new work order
+            WorkOrder workOrder = new WorkOrder(customer, vehicle);
 
         }
     }
 
     public void print() {
-
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Print Work Order");
+        alert.setHeaderText("Ready to print Word Order #");
+        Optional<ButtonType> rs = alert.showAndWait();
+        rs.ifPresent(e -> System.out.println(e));
     }
 
     public void addPart() {
@@ -70,5 +84,9 @@ public class WorkOrderController {
 
     public void addLabor() {
 
+    }
+
+    public WorkOrder buildWorkOrder() {
+        return null; // TODO
     }
 }

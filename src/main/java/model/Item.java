@@ -8,13 +8,13 @@ public class Item implements Billable, Comparable<Item> {
     private boolean taxable;
     private int quantity;
 
-    public Item(String id, String desc, double retailPrice, double listPrice, boolean taxable, int quantity) {
+    public Item(String id, String desc, double retailPrice, double listPrice, int quantity, boolean taxable) {
         this.id = id;
         this.desc = desc;
         this.retailPrice = retailPrice;
         this.listPrice = listPrice;
-        this.taxable = taxable;
         this.quantity = quantity;
+        this.taxable = taxable;
     }
 
     public String getId() {

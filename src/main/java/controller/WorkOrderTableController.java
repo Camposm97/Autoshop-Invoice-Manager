@@ -7,7 +7,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import model.WorkOrder;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 public class WorkOrderTableController {
     @FXML
@@ -19,9 +19,9 @@ public class WorkOrderTableController {
     @FXML
     TableColumn<WorkOrder, String> colCompany;
     @FXML
-    TableColumn<WorkOrder, LocalDate> colDateCreated;
+    TableColumn<WorkOrder, Date> colDateCreated;
     @FXML
-    TableColumn<WorkOrder, LocalDate> colDateCompleted;
+    TableColumn<WorkOrder, Date> colDateCompleted;
     @FXML
     TableColumn<WorkOrder, Double> colInvoiceTotal;
 
@@ -32,7 +32,7 @@ public class WorkOrderTableController {
             colCompany.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCustomer().getCompany()));
             colDateCreated.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().getDateCreated()));
             colDateCompleted.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().getDateCompleted()));
-            colInvoiceTotal.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().getInvoice().bill()));
+            colInvoiceTotal.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().bill()));
         });
     }
 }
