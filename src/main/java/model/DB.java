@@ -95,7 +95,7 @@ public class DB {
         stmt.addBatch("create table if not exists work_order (" +
                 "work_order_id integer primary key autoincrement, " +
                 "date_created date, " +
-                "date_completed date" +
+                "date_completed date," +
                 "customer_first_name text, " +
                 "customer_last_name text, " +
                 "customer_phone text, " +
@@ -499,6 +499,13 @@ public class DB {
         return list;
     }
 
+    public void updateWorkOrder(WorkOrder workOrder) { // TODO
+
+    }
+
+    public void deleteWorkOrder(WorkOrder workOrder) { // TODO
+
+    }
 //    public List<Item> getAllItems() {
 //        return null;
 //    }

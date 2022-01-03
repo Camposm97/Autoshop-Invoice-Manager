@@ -5,6 +5,7 @@ import javafx.beans.property.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import model.DB;
 import model.WorkOrder;
 
 import java.sql.Date;
@@ -33,6 +34,7 @@ public class WorkOrderTableController {
             colDateCreated.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().getDateCreated()));
             colDateCompleted.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().getDateCompleted()));
             colInvoiceTotal.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().bill()));
+            tv.getItems().setAll(DB.get().getAllWorkOrders());
         });
     }
 }

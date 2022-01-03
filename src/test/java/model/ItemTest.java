@@ -7,7 +7,7 @@ public class ItemTest {
     @Test
     public void test1() {
         Item item = new Item("IEEE", "Single Precision",
-                9.99, 4.99, true, 2);
+                9.99, 4.99, 2, true);
         assertEquals("IEEE", item.getId());
         assertEquals("Single Precision", item.getDesc());
         assertEquals(9.99, item.getRetailPrice());

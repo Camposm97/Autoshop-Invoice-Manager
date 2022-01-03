@@ -1,14 +1,13 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-import model.Address;
-import model.Customer;
-import model.Vehicle;
-import model.WorkOrder;
+import model.*;
 
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 public class WorkOrderController {
     int workOrderId;
@@ -19,14 +18,15 @@ public class WorkOrderController {
     @FXML
     TextField tfPartsTotal, tfTax, tfDiscount, tfLaborTotal, tfSubtotal, tfTotal;
     @FXML
-    TableView tvParts;
+    TableView<Item> tvParts;
     @FXML
-    TableView tvLabor;
+    TableView<Labor> tvLabor;
     @FXML
     TableColumn<Object, String> colLaborId;
 
     public WorkOrderController() {
         this.workOrderId = -1;
+
     }
 
     public WorkOrderController(WorkOrder workOrder) {
@@ -66,23 +66,80 @@ public class WorkOrderController {
         } else {
             // Create new work order
             WorkOrder workOrder = new WorkOrder(customer, vehicle);
-
+            for (Item item : tvParts.getItems()) {
+                workOrder.addItem(item);
+            }
+            for (Labor labor : tvLabor.getItems()) {
+                workOrder.addLabor(labor);
+            }
+            DB.get().addWorkOrder(workOrder);
         }
     }
 
-    public void print() {
+    public void print() { // TODO
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Print Work Order");
         alert.setHeaderText("Ready to print Word Order #");
+        alert.getDialogPane().setContent(FX.view("Work_Order_Print.fxml"));
+        ButtonType bt1 = new ButtonType("Print", ButtonBar.ButtonData.OK_DONE);
+        ButtonType bt2 = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(bt1, bt2);
         Optional<ButtonType> rs = alert.showAndWait();
-        rs.ifPresent(e -> System.out.println(e));
+        rs.ifPresent(e -> {
+            if (e == bt1) {
+                PrinterJob printerJob = PrinterJob.createPrinterJob();
+                if (printerJob.showPrintDialog(alert.getOwner())) {
+                    System.out.println("Print Work Order");
+                }
+            }
+        });
     }
 
     public void addPart() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Add Part");
+        alert.setHeaderText("Please enter the following information");
+        alert.getDialogPane().setContent(FX.view("Work_Order_Add_Part.fxml"));
+        ButtonType btSave = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(btSave, btCancel);
+        Optional<ButtonType> rs = alert.showAndWait();
+        rs.ifPresent(e -> {
+            if (e == btSave) {
+                System.out.println("Save Part");
+            }
+        });
+    }
+
+    public void deletePart() { // TODO
+
+    }
+
+    public void editPart() { // TODO
 
     }
 
     public void addLabor() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Add Labor");
+        alert.setHeaderText("Please enter the following information");
+        alert.getDialogPane().setContent(FX.view("Work_Order_Add_Labor.fxml"));
+        ButtonType btSave = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(btSave, btCancel);
+        Optional<ButtonType> rs = alert.showAndWait();
+        rs.ifPresent(e -> {
+            if (e == btSave) {
+                System.out.println("Save Labor");
+            }
+        });
+    }
+
+    public void deleteLabor() { // TODO
+
+    }
+
+    public void editLabor() { // TODO
 
     }
 
