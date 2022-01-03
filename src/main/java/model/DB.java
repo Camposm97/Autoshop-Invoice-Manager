@@ -58,6 +58,7 @@ public class DB {
 
     /**
      * Tables are only initialized if they do not exist.
+     *
      * @throws SQLException
      */
     private void initTables() throws SQLException {
@@ -288,10 +289,10 @@ public class DB {
 
     public void updateVehicle(Vehicle vehicle) {
         try {
-             PreparedStatement prepStmt = c.prepareStatement("update vehicle set " +
-                     "year = ?, model = ?, license_plate = ?, color = ?, engine = ?, " +
-                     "transmission = ?, mileage_in = ?, mileage_out = ? " +
-                     "where vin=\"" + vehicle.getVin() + "\"");
+            PreparedStatement prepStmt = c.prepareStatement("update vehicle set " +
+                    "year = ?, model = ?, license_plate = ?, color = ?, engine = ?, " +
+                    "transmission = ?, mileage_in = ?, mileage_out = ? " +
+                    "where vin=\"" + vehicle.getVin() + "\"");
             prepStmt.setString(1, vehicle.getVin());
             prepStmt.setInt(2, vehicle.getYear());
             prepStmt.setString(3, vehicle.getModel());
@@ -322,7 +323,98 @@ public class DB {
 //    }
 
     public void addWorkOrder(WorkOrder workOrder) {
+        try {
+            // Add work_order row
+            PreparedStatement prepStmt = c.prepareStatement(
+                    "insert into work_order (" +
+                            "date_created," +
+                            "date_completed," +
+                            "customer_first_name," +
+                            "customer_last_name," +
+                            "customer_phone," +
+                            "customer_company," +
+                            "customer_street," +
+                            "customer_city," +
+                            "customer_state," +
+                            "customer_zip," +
+                            "vehicle_vin," +
+                            "vehicle_year," +
+                            "vehicle_make," +
+                            "vehicle_model," +
+                            "vehicle_license_plate," +
+                            "vehicle_color," +
+                            "vehicle_engine," +
+                            "vehicle_transmission," +
+                            "vehicle_mileage_in," +
+                            "vehicle_mileage_out) " +
+                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+            prepStmt.setDate(1, workOrder.getDateCreated());
+            prepStmt.setDate(2, workOrder.getDateCompleted());
+            prepStmt.setString(3, workOrder.getCustomer().getFirstName());
+            prepStmt.setString(4, workOrder.getCustomer().getLastName());
+            prepStmt.setString(5, workOrder.getCustomer().getPhone());
+            prepStmt.setString(6, workOrder.getCustomer().getCompany());
+            prepStmt.setString(7, workOrder.getCustomer().getAddress().getStreet());
+            prepStmt.setString(8, workOrder.getCustomer().getAddress().getCity());
+            prepStmt.setString(9, workOrder.getCustomer().getAddress().getState());
+            prepStmt.setString(10, workOrder.getCustomer().getAddress().getZip());
+            prepStmt.setString(11, workOrder.getVehicle().getVin());
+            prepStmt.setInt(12, workOrder.getVehicle().getYear());
+            prepStmt.setString(13, workOrder.getVehicle().getMake());
+            prepStmt.setString(14, workOrder.getVehicle().getModel());
+            prepStmt.setString(15, workOrder.getVehicle().getLicensePlate());
+            prepStmt.setString(16, workOrder.getVehicle().getColor());
+            prepStmt.setString(17, workOrder.getVehicle().getEngine());
+            prepStmt.setString(18, workOrder.getVehicle().getTransmission());
+            prepStmt.setString(19, workOrder.getVehicle().getMileageIn());
+            prepStmt.setString(20, workOrder.getVehicle().getMileageOut());
+            prepStmt.execute();
 
+            // Add work_order_item row(s)
+            for (Item item : workOrder.getItemList()) {
+                prepStmt = c.prepareStatement(
+                        "insert into work_order_item (" +
+                                "work_order_id," +
+                                "item_id," +
+                                "item_desc," +
+                                "item_retail_price," +
+                                "item_list_price," +
+                                "item_quantity," +
+                                "item_taxable" +
+                                ") " +
+                                "values (?, ?, ?, ?, ?, ?, ?)");
+                prepStmt.setInt(1, workOrder.getId());
+                prepStmt.setString(2, item.getId());
+                prepStmt.setString(3, item.getDesc());
+                prepStmt.setDouble(4, item.getRetailPrice());
+                prepStmt.setDouble(5, item.getListPrice());
+                prepStmt.setInt(6, item.getQuantity());
+                prepStmt.setBoolean(7, item.isTaxable());
+                prepStmt.execute();
+            }
+
+            // Add work_order_labor row(s)
+            for (Labor labor : workOrder.getLaborList()) {
+                prepStmt = c.prepareStatement(
+                        "insert into work_order_labor (" +
+                                "work_order_id," +
+                                "labor_code," +
+                                "labor_desc," +
+                                "labor_billed_hrs," +
+                                "labor_rate," +
+                                "labor_taxable," +
+                                ") " +
+                                "values (?, ?, ?, ?, ?, ?)");
+                prepStmt.setInt(1, workOrder.getId());
+                prepStmt.setString(2, labor.getLaborCode());
+                prepStmt.setString(3, labor.getDesc());
+                prepStmt.setDouble(4, labor.getBilledHrs());
+                prepStmt.setDouble(5, labor.getRate());
+                prepStmt.setBoolean(6, labor.isTaxable());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public WorkOrder getWorkOrderById(int workOrderId) {
@@ -411,13 +503,5 @@ public class DB {
 //        return null;
 //    }
 
-    public List<Item> getItemsByInvoiceId(int invoiceId) {
-        List<Item> list = new LinkedList<>();
-        return list;
-    }
 
-    public List<Labor> getLaborsByInvoiceId(int invoiceId) {
-        List<Labor> list = new LinkedList<>();
-        return list;
-    }
 }
