@@ -5,3 +5,7 @@ target
 
 # SQL
 autoshop.db
+
+# MacOS
+.DS_Store
+*/.DS_Store

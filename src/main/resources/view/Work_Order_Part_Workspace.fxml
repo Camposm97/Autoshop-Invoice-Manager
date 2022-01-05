@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -49,7 +48,7 @@
             <Label text="Part Number" />
             <TextField fx:id="tfPartNumber" GridPane.columnIndex="1" />
             <Label text="Part Description" GridPane.rowIndex="1" />
-            <TextArea fx:id="taPartDesc" prefHeight="75.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="tfPartDesc" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Retail Price" GridPane.rowIndex="2" />
             <TextField fx:id="tfPartRetailPrice" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label text="List Cost" GridPane.rowIndex="3" />

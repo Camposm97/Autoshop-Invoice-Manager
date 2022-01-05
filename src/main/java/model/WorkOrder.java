@@ -107,6 +107,17 @@ public class WorkOrder implements Billable {
         return laborList.add(labor);
     }
 
+    public void updateLabor(Labor oldLabor, Labor newLabor) {
+        ListIterator<Labor> iterator = laborList.listIterator();
+        while (iterator.hasNext()) {
+            Labor currentLabor = iterator.next();
+            if (currentLabor.equals(oldLabor)) {
+                iterator.set(newLabor);
+                break;
+            }
+        }
+    }
+
     public boolean removeLabor(Labor labor) {
         return laborList.remove(labor);
     }

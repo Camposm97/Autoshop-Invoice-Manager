@@ -3,7 +3,7 @@ package model;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class Labor implements Billable{
+public class Labor implements Billable, Comparable<Labor> {
     private String laborCode, desc;
     private double billedHrs, rate;
     private boolean taxable;
@@ -83,5 +83,10 @@ public class Labor implements Billable{
 
     public SimpleObjectProperty<Double> billProperty() {
         return new SimpleObjectProperty<>(bill());
+    }
+
+    @Override
+    public int compareTo(Labor o) {
+        return laborCode.compareTo(o.laborCode);
     }
 }

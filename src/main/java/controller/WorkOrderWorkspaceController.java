@@ -156,12 +156,18 @@ public class WorkOrderWorkspaceController {
         AlertFactory.showAddLabor(workOrder);
     }
 
-    public void editLabor() { // TODO
-
+    public void editLabor() {
+        Labor labor = tvLabor.getSelectionModel().getSelectedItem();
+        if (labor != null) {
+            AlertFactory.showEditLabor(workOrder, labor);
+        }
     }
 
-    public void deleteLabor() { // TODO
-
+    public void deleteLabor() {
+        Labor labor = tvLabor.getSelectionModel().getSelectedItem();
+        if (labor != null) {
+            workOrder.removeLabor(labor);
+        }
     }
 
     public WorkOrder buildWorkOrder() {

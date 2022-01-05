@@ -1,5 +1,6 @@
 package model;
 
+import controller.WorkOrderLaborWorkspaceController;
 import controller.WorkOrderPartWorkspaceController;
 import controller.CustomerWorkspaceController;
 import controller.VehicleWorkspaceController;
@@ -61,13 +62,29 @@ public class AlertFactory {
         });
     }
 
-    public static void showAddLabor(WorkOrder workOrder) { // TODO
+    public static void showAddLabor(WorkOrder workOrder) {
         Alert alert = AlertBuilder.buildDialog("Add Labor");
-        alert.getDialogPane().setContent(FX.view("Work_Order_Labor_Workspace.fxml"));
+        WorkOrderLaborWorkspaceController controller = new WorkOrderLaborWorkspaceController();
+        Parent node = FX.view("Work_Order_Labor_Workspace.fxml", controller);
+        alert.getDialogPane().setContent(node);
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
-                System.out.println("Save Labor");
+                controller.saveLabor(workOrder);
+            }
+        });
+    }
+
+    public static void showEditLabor(WorkOrder workOrder, Labor selectedLabor) {
+        Alert alert = AlertBuilder.buildDialog("Update Labor");
+        WorkOrderLaborWorkspaceController controller = new WorkOrderLaborWorkspaceController();
+        Parent node = FX.view("Work_Order_Labor_Workspace.fxml", controller);
+        controller.loadLabor(selectedLabor);
+        alert.getDialogPane().setContent(node);
+        Optional<ButtonType> rs = alert.showAndWait();
+        rs.ifPresent(e -> {
+            if (e.getButtonData().isDefaultButton()) {
+                controller.updateLabor(workOrder, selectedLabor);
             }
         });
     }

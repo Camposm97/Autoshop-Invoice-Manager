@@ -3,7 +3,6 @@ package controller;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import model.Item;
 import model.WorkOrder;
@@ -12,7 +11,7 @@ public class WorkOrderPartWorkspaceController {
     @FXML
     TextField tfPartNumber;
     @FXML
-    TextArea taPartDesc;
+    TextField tfPartDesc;
     @FXML
     TextField tfPartRetailPrice;
     @FXML
@@ -49,7 +48,7 @@ public class WorkOrderPartWorkspaceController {
 
     public void loadPart(Item item) {
         tfPartNumber.setText(item.getId());
-        taPartDesc.setText(item.getDesc());
+        tfPartDesc.setText(item.getDesc());
         tfPartRetailPrice.setText(String.valueOf(item.getRetailPrice()));
         tfPartListCost.setText(String.valueOf(item.getListPrice()));
         tfPartQuantity.setText(String.valueOf(item.getQuantity()));
@@ -58,7 +57,7 @@ public class WorkOrderPartWorkspaceController {
 
     public Item buildPart() {
         String partNumber = tfPartNumber.getText();
-        String desc = taPartDesc.getText();
+        String desc = tfPartDesc.getText();
         double retailPrice = Double.parseDouble(tfPartRetailPrice.getText());
         double listCost = Double.parseDouble(tfPartListCost.getText());
         int quantity = Integer.parseInt(tfPartQuantity.getText());
