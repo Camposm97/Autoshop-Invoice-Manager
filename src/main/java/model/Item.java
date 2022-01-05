@@ -1,5 +1,8 @@
 package model;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class Item implements Billable, Comparable<Item> {
     private String id;
     private String desc;
@@ -68,6 +71,34 @@ public class Item implements Billable, Comparable<Item> {
     @Override
     public double bill() {
         return taxable ? TAX_RATE * (retailPrice * quantity) : retailPrice * quantity;
+    }
+
+    public SimpleStringProperty idProperty() {
+        return new SimpleStringProperty(id);
+    }
+
+    public SimpleStringProperty descProperty() {
+        return new SimpleStringProperty(desc);
+    }
+
+    public SimpleObjectProperty<Double> retailPriceProperty() {
+        return new SimpleObjectProperty<>(retailPrice);
+    }
+
+    public SimpleObjectProperty<Double> listPriceProperty() {
+        return new SimpleObjectProperty<>(listPrice);
+    }
+
+    public SimpleObjectProperty<Integer> quantityProperty() {
+        return new SimpleObjectProperty<>(quantity);
+    }
+
+    public SimpleObjectProperty<Boolean> taxableProperty() {
+        return new SimpleObjectProperty<>(taxable);
+    }
+
+    public SimpleObjectProperty<Double> billProperty() {
+        return new SimpleObjectProperty<>(bill());
     }
 
     @Override

@@ -97,4 +97,20 @@ public class Vehicle {
     public void setMileageOut(String mileageOut) {
         this.mileageOut = mileageOut;
     }
+
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "vin='" + vin + '\'' +
+                ", year=" + year +
+                ", make='" + make + '\'' +
+                ", model='" + model + '\'' +
+                ", licensePlate='" + licensePlate + '\'' +
+                ", color='" + color + '\'' +
+                ", engine='" + engine + '\'' +
+                ", transmission='" + transmission + '\'' +
+                ", mileageIn='" + mileageIn + '\'' +
+                ", mileageOut='" + mileageOut + '\'' +
+                '}';
+    }
 }

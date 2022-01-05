@@ -19,7 +19,7 @@ public class CustomerTableController {
     @FXML
     TableView<Customer> tv;
     @FXML
-    TableColumn<Customer, String> colId;
+    TableColumn<Customer, Integer> colId;
     @FXML
     TableColumn<Customer, String> colFirstName;
     @FXML
@@ -39,8 +39,8 @@ public class CustomerTableController {
 
     public CustomerTableController() {
         Platform.runLater(() -> {
-            colId.setCellValueFactory(c -> new SimpleStringProperty(String.valueOf(c.getValue().getId())));
-            colFirstName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getFirstName()));
+            colId.setCellValueFactory(c -> c.getValue().idProperty());
+            colFirstName.setCellValueFactory(c -> c.getValue().firstNameProperty());
             colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
             colFirstName.setOnEditCommit(e -> {
                 int index = e.getTablePosition().getRow();
@@ -48,7 +48,7 @@ public class CustomerTableController {
                 customer.setFirstName(e.getNewValue());
                 DB.get().updateCustomer(customer);
             });
-            colLastName.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getLastName()));
+            colLastName.setCellValueFactory(c -> c.getValue().lastNameProperty());
             colLastName.setCellFactory(TextFieldTableCell.forTableColumn());
             colLastName.setOnEditCommit(e -> {
                 int index = e.getTablePosition().getRow();
@@ -56,7 +56,7 @@ public class CustomerTableController {
                 customer.setLastName(e.getNewValue());
                 DB.get().updateCustomer(customer);
             });
-            colPhone.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getPhone()));
+            colPhone.setCellValueFactory(c -> c.getValue().phoneProperty());
             colPhone.setCellFactory(TextFieldTableCell.forTableColumn());
             colPhone.setOnEditCommit(e -> {
                 int index = e.getTablePosition().getRow();
@@ -64,7 +64,7 @@ public class CustomerTableController {
                 customer.setPhone(e.getNewValue());
                 DB.get().updateCustomer(customer);
             });
-            colCompany.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCompany()));
+            colCompany.setCellValueFactory(c -> c.getValue().companyProperty());
             colCompany.setCellFactory(TextFieldTableCell.forTableColumn());
             colCompany.setOnEditCommit(e -> {
                 int index = e.getTablePosition().getRow();
@@ -72,7 +72,7 @@ public class CustomerTableController {
                 customer.setCompany(e.getNewValue());
                 DB.get().updateCustomer(customer);
             });
-            colAddress.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getAddress().getStreet()));
+            colAddress.setCellValueFactory(c -> c.getValue().getAddress().streetProperty());
             colAddress.setCellFactory(TextFieldTableCell.forTableColumn());
             colAddress.setOnEditCommit(e -> {
                 int index = e.getTablePosition().getRow();
@@ -80,7 +80,7 @@ public class CustomerTableController {
                 customer.getAddress().setStreet(e.getNewValue());
                 DB.get().updateCustomer(customer);
             });
-            colCity.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getAddress().getCity()));
+            colCity.setCellValueFactory(c -> c.getValue().getAddress().cityProperty());
             colCity.setCellFactory(TextFieldTableCell.forTableColumn());
             colCity.setOnEditCommit(e -> {
                 int index = e.getTablePosition().getRow();
@@ -88,7 +88,7 @@ public class CustomerTableController {
                 customer.getAddress().setCity(e.getNewValue());
                 DB.get().updateCustomer(customer);
             });
-            colState.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getAddress().getState()));
+            colState.setCellValueFactory(c -> c.getValue().getAddress().stateProperty());
             colState.setCellFactory(TextFieldTableCell.forTableColumn());
             colState.setOnEditCommit(e -> {
                 int index = e.getTablePosition().getRow();
@@ -96,7 +96,7 @@ public class CustomerTableController {
                 customer.getAddress().setState(e.getNewValue());
                 DB.get().updateCustomer(customer);
             });
-            colZip.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getAddress().getZip()));
+            colZip.setCellValueFactory(c -> c.getValue().getAddress().zipProperty());
             colZip.setCellFactory(TextFieldTableCell.forTableColumn());
             colZip.setOnEditCommit(e -> {
                 int index = e.getTablePosition().getRow();

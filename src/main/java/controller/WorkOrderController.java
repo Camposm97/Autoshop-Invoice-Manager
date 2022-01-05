@@ -1,18 +1,17 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.control.*;
 import model.*;
 
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 public class WorkOrderController {
-    int workOrderId;
+    WorkOrder workOrder;
     @FXML
-    TextField tfFirstName, tfLastName, tfPhone, tfCompany,tfAddress, tfCity, tfState, tfZip;
+    TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfAddress, tfCity, tfState, tfZip;
     @FXML
     TextField tfVin, tfLicensePlate, tfColor, tfYear, tfMake, tfModel, tfEngine, tfTransmission, tfMileageIn, tfMileageOut;
     @FXML
@@ -20,17 +19,47 @@ public class WorkOrderController {
     @FXML
     TableView<Item> tvParts;
     @FXML
+    TableColumn<Item, String> colPartNumber, colPartDesc;
+    @FXML
+    TableColumn<Item, Integer> colPartQuantity;
+    @FXML
+    TableColumn<Item, Double> colPartRetailPrice, colPartListPrice;
+    @FXML
     TableView<Labor> tvLabor;
     @FXML
-    TableColumn<Object, String> colLaborId;
+    TableColumn<Labor, String> colLaborCode, colLaborDesc;
+    @FXML
+    TableColumn<Labor, Double> colLaborRetailPrice, colLaborBilledHrs, colLaborRate;
 
     public WorkOrderController() {
-        this.workOrderId = -1;
-
+        this.workOrder = new WorkOrder();
+        init();
     }
 
     public WorkOrderController(WorkOrder workOrder) {
-        this.workOrderId = workOrder.getId();
+        this.workOrder = workOrder;
+        init();
+    }
+
+    private void init() {
+        Platform.runLater(() -> {
+            if (workOrder.isNew()) {
+                System.out.println("New Work Order");
+            } else {
+                System.out.println("Old Work Order");
+            }
+            colPartNumber.setCellValueFactory(c -> c.getValue().idProperty());
+            colPartDesc.setCellValueFactory(c -> c.getValue().descProperty());
+            colPartQuantity.setCellValueFactory(c -> c.getValue().quantityProperty());
+            colPartRetailPrice.setCellValueFactory(c -> c.getValue().retailPriceProperty());
+            colPartListPrice.setCellValueFactory(c -> c.getValue().listPriceProperty());
+
+            colLaborCode.setCellValueFactory(c -> c.getValue().laborCodeProperty());
+            colLaborDesc.setCellValueFactory(c -> c.getValue().descProperty());
+            colLaborRetailPrice.setCellValueFactory(c -> c.getValue().billProperty());
+            colLaborBilledHrs.setCellValueFactory(c -> c.getValue().billedHrsProperty());
+            colLaborRate.setCellValueFactory(c -> c.getValue().billedHrsProperty());
+        });
     }
 
     public void save() {
@@ -58,10 +87,10 @@ public class WorkOrderController {
         Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color,
                 engine, transmission, mileageIn, mileageOut);
 
-        if (workOrderId != -1) {
-            // Update work order
+        if (!workOrder.isNew()) {
+            // TODO Update work order
             WorkOrder workOrder = new WorkOrder(customer, vehicle);
-            workOrder.setId(this.workOrderId);
+            workOrder.setId(this.workOrder.getId());
 
         } else {
             // Create new work order
@@ -73,6 +102,7 @@ public class WorkOrderController {
                 workOrder.addLabor(labor);
             }
             DB.get().addWorkOrder(workOrder);
+
         }
     }
 
@@ -90,25 +120,16 @@ public class WorkOrderController {
                 PrinterJob printerJob = PrinterJob.createPrinterJob();
                 if (printerJob.showPrintDialog(alert.getOwner())) {
                     System.out.println("Print Work Order");
+//                    if (printerJob.printPage(node)) {
+//                        printerJob.endJob();
+//                    }
                 }
             }
         });
     }
 
     public void addPart() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add Part");
-        alert.setHeaderText("Please enter the following information");
-        alert.getDialogPane().setContent(FX.view("Work_Order_Add_Part.fxml"));
-        ButtonType btSave = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        ButtonType btCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(btSave, btCancel);
-        Optional<ButtonType> rs = alert.showAndWait();
-        rs.ifPresent(e -> {
-            if (e == btSave) {
-                System.out.println("Save Part");
-            }
-        });
+        AlertFactory.showAddPart(workOrder);
     }
 
     public void deletePart() { // TODO
@@ -120,19 +141,7 @@ public class WorkOrderController {
     }
 
     public void addLabor() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add Labor");
-        alert.setHeaderText("Please enter the following information");
-        alert.getDialogPane().setContent(FX.view("Work_Order_Add_Labor.fxml"));
-        ButtonType btSave = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        ButtonType btCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(btSave, btCancel);
-        Optional<ButtonType> rs = alert.showAndWait();
-        rs.ifPresent(e -> {
-            if (e == btSave) {
-                System.out.println("Save Labor");
-            }
-        });
+        AlertFactory.showAddLabor(workOrder);
     }
 
     public void deleteLabor() { // TODO

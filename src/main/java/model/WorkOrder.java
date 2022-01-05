@@ -1,7 +1,10 @@
 package model;
 
+import javafx.beans.property.SimpleObjectProperty;
+
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,12 +16,22 @@ public class WorkOrder implements Billable {
     private List<Item> itemList;
     private List<Labor> laborList;
 
-    public WorkOrder(Customer customer, Vehicle vehicle) {
-        this.id = id;
-        this.customer = customer;
-        this.vehicle = vehicle;
+    public WorkOrder() {
+        this.id = -1;
         this.dateCreated = Date.valueOf(LocalDate.now().toString());
         this.dateCompleted = null;
+        this.customer = null;
+        this.vehicle = null;
+        this.itemList = new LinkedList<>();
+        this.laborList = new LinkedList<>();
+    }
+
+    public WorkOrder(Customer customer, Vehicle vehicle) {
+        this.id = -1;
+        this.dateCreated = Date.valueOf(LocalDate.now().toString());
+        this.dateCompleted = null;
+        this.customer = customer;
+        this.vehicle = vehicle;
         this.itemList = new LinkedList<>();
         this.laborList = new LinkedList<>();
     }
@@ -29,6 +42,10 @@ public class WorkOrder implements Billable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isNew() {
+        return id != -1;
     }
 
     public Date getDateCreated() {
@@ -71,8 +88,8 @@ public class WorkOrder implements Billable {
         return itemList.remove(item);
     }
 
-    public List<Item> getItemList() {
-        return itemList;
+    public Iterator<Item> itemIterator() {
+        return itemList.iterator();
     }
 
     public boolean addLabor(Labor labor) {
@@ -83,8 +100,8 @@ public class WorkOrder implements Billable {
         return laborList.remove(labor);
     }
 
-    public List<Labor> getLaborList() {
-        return laborList;
+    public Iterator<Labor> laborIterator() {
+        return laborList.iterator();
     }
 
     @Override
@@ -97,5 +114,34 @@ public class WorkOrder implements Billable {
             total += labor.bill();
         }
         return total;
+    }
+
+    @Override
+    public String toString() {
+        return "WorkOrder{" +
+                "id=" + id +
+                ", dateCreated=" + dateCreated +
+                ", dateCompleted=" + dateCompleted +
+                ", customer=" + customer +
+                ", vehicle=" + vehicle +
+                ", itemList=" + itemList +
+                ", laborList=" + laborList +
+                '}';
+    }
+
+    public SimpleObjectProperty<Integer> idProperty() {
+        return new SimpleObjectProperty<>(id);
+    }
+
+    public SimpleObjectProperty<Date> dateCreatedProperty() {
+        return new SimpleObjectProperty<>(dateCreated);
+    }
+
+    public SimpleObjectProperty<Date> dateCompletedProperty() {
+        return new SimpleObjectProperty<>(dateCompleted);
+    }
+
+    public SimpleObjectProperty<Double> billProperty() {
+        return new SimpleObjectProperty<>(bill());
     }
 }

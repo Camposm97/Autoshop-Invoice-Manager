@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
+import model.AlertFactory;
 import model.FX;
 import java.util.Optional;
 
@@ -14,31 +15,11 @@ public class AppController {
     BorderPane root;
 
     public void addCustomer() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add Customer");
-        alert.setHeaderText("Please enter the following information:");
-        ButtonType bt = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        alert.getButtonTypes().setAll(bt);
-
-        CustomerController addCustomerController = new CustomerController();
-        alert.getDialogPane().setContent(FX.view("Customer.fxml", addCustomerController));
-
-        Optional<ButtonType> rs = alert.showAndWait();
-        rs.ifPresent(e -> addCustomerController.addCustomer());
+        AlertFactory.showAddCustomer();
     }
 
     public void addVehicle() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add Vehicle");
-        alert.setHeaderText("Please enter the following information:");
-        ButtonType bt = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        alert.getButtonTypes().setAll(bt);
-
-        VehicleController addVehicleController = new VehicleController();
-        alert.getDialogPane().setContent(FX.view("Vehicle_Add.fxml", addVehicleController));
-
-        Optional<ButtonType> rs = alert.showAndWait();
-        rs.ifPresent(e -> addVehicleController.addVehicle());
+        AlertFactory.showAddVehicle();
     }
 
     public void addWorkOrder() {

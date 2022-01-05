@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -371,7 +372,9 @@ public class DB {
             prepStmt.execute();
 
             // Add work_order_item row(s)
-            for (Item item : workOrder.getItemList()) {
+            Iterator<Item> itemIterator = workOrder.itemIterator();
+            while (itemIterator.hasNext()) {
+                Item item = itemIterator.next();
                 prepStmt = c.prepareStatement(
                         "insert into work_order_item (" +
                                 "work_order_id," +
@@ -392,9 +395,10 @@ public class DB {
                 prepStmt.setBoolean(7, item.isTaxable());
                 prepStmt.execute();
             }
-
             // Add work_order_labor row(s)
-            for (Labor labor : workOrder.getLaborList()) {
+            Iterator<Labor> laborIterator = workOrder.laborIterator();
+            while (laborIterator.hasNext()) {
+                Labor labor = laborIterator.next();
                 prepStmt = c.prepareStatement(
                         "insert into work_order_labor (" +
                                 "work_order_id," +
@@ -411,6 +415,7 @@ public class DB {
                 prepStmt.setDouble(4, labor.getBilledHrs());
                 prepStmt.setDouble(5, labor.getRate());
                 prepStmt.setBoolean(6, labor.isTaxable());
+                prepStmt.execute();
             }
         } catch (SQLException e) {
             e.printStackTrace();

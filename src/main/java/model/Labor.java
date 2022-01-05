@@ -1,5 +1,8 @@
 package model;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class Labor implements Billable{
     private String laborCode, desc;
     private double billedHrs, rate;
@@ -56,5 +59,29 @@ public class Labor implements Billable{
     @Override
     public double bill() {
         return taxable ? TAX_RATE * (billedHrs * rate) : billedHrs * rate;
+    }
+
+    public SimpleStringProperty laborCodeProperty() {
+        return new SimpleStringProperty(laborCode);
+    }
+
+    public SimpleStringProperty descProperty() {
+        return new SimpleStringProperty(desc);
+    }
+
+    public SimpleObjectProperty<Double> billedHrsProperty() {
+        return new SimpleObjectProperty<>(billedHrs);
+    }
+
+    public SimpleObjectProperty<Double> rateProperty() {
+        return new SimpleObjectProperty<>(rate);
+    }
+
+    public SimpleObjectProperty<Boolean> taxableProperty() {
+        return new SimpleObjectProperty<>(taxable);
+    }
+
+    public SimpleObjectProperty<Double> billProperty() {
+        return new SimpleObjectProperty<>(bill());
     }
 }

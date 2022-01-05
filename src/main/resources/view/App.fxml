@@ -11,7 +11,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-                  <Menu mnemonicParsing="false" text="New">
+                  <Menu mnemonicParsing="false" text="New...">
                      <items>
                     <MenuItem mnemonicParsing="false" onAction="#addCustomer" text="Customer" />
                         <MenuItem mnemonicParsing="false" onAction="#addVehicle" text="Vehicle" />

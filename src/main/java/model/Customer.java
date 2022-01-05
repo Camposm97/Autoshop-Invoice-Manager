@@ -1,5 +1,8 @@
 package model;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class Customer {
     private int id;
     private String firstName, lastName, phone, company;
@@ -66,7 +69,39 @@ public class Customer {
         this.address = address;
     }
 
-    public String getName() {
-        return firstName + " " + lastName;
+    public SimpleObjectProperty<Integer> idProperty() {
+        return new SimpleObjectProperty<>(id);
+    }
+
+    public SimpleStringProperty firstNameProperty() {
+        return new SimpleStringProperty(firstName);
+    }
+
+    public SimpleStringProperty lastNameProperty() {
+        return new SimpleStringProperty(lastName);
+    }
+
+    public SimpleStringProperty nameProperty() {
+        return new SimpleStringProperty(firstName + " " + lastName);
+    }
+
+    public SimpleStringProperty phoneProperty() {
+        return new SimpleStringProperty(phone);
+    }
+
+    public SimpleStringProperty companyProperty() {
+        return new SimpleStringProperty(company);
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", company='" + company + '\'' +
+                ", address=" + address +
+                '}';
     }
 }

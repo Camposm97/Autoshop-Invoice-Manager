@@ -1,5 +1,7 @@
 package model;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class Address {
     private String street, city, state, zip;
 
@@ -40,6 +42,22 @@ public class Address {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    public SimpleStringProperty streetProperty() {
+        return new SimpleStringProperty(street);
+    }
+
+    public SimpleStringProperty cityProperty() {
+        return new SimpleStringProperty(city);
+    }
+
+    public SimpleStringProperty stateProperty() {
+        return new SimpleStringProperty(state);
+    }
+
+    public SimpleStringProperty zipProperty() {
+        return new SimpleStringProperty(zip);
     }
 
     @Override

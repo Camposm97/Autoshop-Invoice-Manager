@@ -28,12 +28,12 @@ public class WorkOrderTableController {
 
     public WorkOrderTableController() {
         Platform.runLater(() -> {
-            colId.setCellValueFactory(e -> new SimpleObjectProperty<>(e.getValue().getId()));
-            colCustomer.setCellValueFactory(e -> new SimpleStringProperty(e.getValue().getCustomer().getName()));
-            colCompany.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCustomer().getCompany()));
-            colDateCreated.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().getDateCreated()));
-            colDateCompleted.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().getDateCompleted()));
-            colInvoiceTotal.setCellValueFactory(c -> new SimpleObjectProperty<>(c.getValue().bill()));
+            colId.setCellValueFactory(c -> c.getValue().idProperty());
+            colCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
+            colCompany.setCellValueFactory(c -> c.getValue().getCustomer().companyProperty());
+            colDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
+            colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
+            colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
             tv.getItems().setAll(DB.get().getAllWorkOrders());
         });
     }
