@@ -1,20 +1,20 @@
 package model;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class WorkOrder implements Billable {
     private int id;
     private Date dateCreated, dateCompleted;
     private Customer customer;
     private Vehicle vehicle;
-    private List<Item> itemList;
-    private List<Labor> laborList;
+    private ObservableList<Item> itemList;
+    private ObservableList<Labor> laborList;
 
     public WorkOrder() {
         this.id = -1;
@@ -22,8 +22,8 @@ public class WorkOrder implements Billable {
         this.dateCompleted = null;
         this.customer = null;
         this.vehicle = null;
-        this.itemList = new LinkedList<>();
-        this.laborList = new LinkedList<>();
+        this.itemList = FXCollections.observableArrayList();
+        this.laborList = FXCollections.observableArrayList();
     }
 
     public WorkOrder(Customer customer, Vehicle vehicle) {
@@ -32,8 +32,8 @@ public class WorkOrder implements Billable {
         this.dateCompleted = null;
         this.customer = customer;
         this.vehicle = vehicle;
-        this.itemList = new LinkedList<>();
-        this.laborList = new LinkedList<>();
+        this.itemList = FXCollections.observableArrayList();
+        this.laborList = FXCollections.observableArrayList();
     }
 
     public int getId() {
@@ -82,6 +82,17 @@ public class WorkOrder implements Billable {
 
     public boolean addItem(Item item) {
         return itemList.add(item);
+    }
+
+    public void updateItem(Item oldItem, Item newItem) {
+        ListIterator<Item> iterator = itemList.listIterator();
+        while (iterator.hasNext()) {
+            Item currentItem = iterator.next();
+            if (currentItem.equals(oldItem)) {
+                iterator.set(newItem);
+                break;
+            }
+        }
     }
 
     public boolean removeItem(Item item) {
@@ -143,5 +154,13 @@ public class WorkOrder implements Billable {
 
     public SimpleObjectProperty<Double> billProperty() {
         return new SimpleObjectProperty<>(bill());
+    }
+
+    public ObservableList<Item> itemObservableList() {
+        return itemList;
+    }
+
+    public ObservableList<Labor> laborObservableList() {
+        return laborList;
     }
 }

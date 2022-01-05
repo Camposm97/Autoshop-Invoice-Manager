@@ -1,8 +1,8 @@
 package model;
 
-import controller.WorkOrderPartController;
-import controller.CustomerController;
-import controller.VehicleController;
+import controller.WorkOrderPartWorkspaceController;
+import controller.CustomerWorkspaceController;
+import controller.VehicleWorkspaceController;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
@@ -12,61 +12,58 @@ import java.util.Optional;
 
 public class AlertFactory {
     public static void showAddCustomer() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add Customer");
-        alert.setHeaderText("Please fill out the following information");
-        ButtonType bt = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        alert.getButtonTypes().setAll(bt);
-
-        CustomerController controller = new CustomerController();
-        alert.getDialogPane().setContent(FX.view("Customer.fxml", controller));
-
+        Alert alert = AlertBuilder.buildDialog("Add Customer");
+        CustomerWorkspaceController controller = new CustomerWorkspaceController();
+        alert.getDialogPane().setContent(FX.view("Customer_Workspace.fxml", controller));
         Optional<ButtonType> rs = alert.showAndWait();
-        rs.ifPresent(e -> controller.addCustomer());
+        rs.ifPresent(e -> {
+            if (e.getButtonData().isDefaultButton())
+                controller.addCustomer();
+        });
     }
 
     public static void showAddVehicle() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add Vehicle");
-        alert.setHeaderText("Please fill out the following information");
-        ButtonType bt = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        alert.getButtonTypes().setAll(bt);
-
-        VehicleController controller = new VehicleController();
-        alert.getDialogPane().setContent(FX.view("Vehicle_Add.fxml", controller));
+        Alert alert = AlertBuilder.buildDialog("Add Vehicle");
+        VehicleWorkspaceController controller = new VehicleWorkspaceController();
+        alert.getDialogPane().setContent(FX.view("Vehicle_Workspace.fxml", controller));
 
         Optional<ButtonType> rs = alert.showAndWait();
-        rs.ifPresent(e -> controller.addVehicle());
+        rs.ifPresent(e -> {
+            if (e.getButtonData().isDefaultButton())
+                controller.addVehicle();
+        });
     }
 
     public static void showAddPart(WorkOrder workOrder) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add Part");
-        alert.setHeaderText("Please fill out the following information");
-
-        WorkOrderPartController controller = new WorkOrderPartController(workOrder);
-        Parent node = FX.view("Work_Order_Add_Part.fxml", controller);
+        Alert alert = AlertBuilder.buildDialog("Add Part");
+        WorkOrderPartWorkspaceController controller = new WorkOrderPartWorkspaceController();
+        Parent node = FX.view("Work_Order_Part_Workspace.fxml", controller);
         alert.getDialogPane().setContent(node);
-        ButtonType btSave = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        ButtonType btCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(btSave, btCancel);
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 System.out.println("Save Part");
-                controller.savePart();
+                controller.savePart(workOrder);
             }
         });
     }
 
+    public static void showEditPart(WorkOrder workOrder, Item selectedItem) {
+        Alert alert = AlertBuilder.buildDialog("Update Part");
+        WorkOrderPartWorkspaceController controller = new WorkOrderPartWorkspaceController();
+        Parent node = FX.view("Work_Order_Part_Workspace.fxml", controller);
+        alert.getDialogPane().setContent(node);
+        controller.loadPart(selectedItem);
+        Optional<ButtonType> rs = alert.showAndWait();
+        rs.ifPresent(e -> {
+            if (e.getButtonData().isDefaultButton())
+                controller.updatePart(workOrder, selectedItem);
+        });
+    }
+
     public static void showAddLabor(WorkOrder workOrder) { // TODO
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Add Labor");
-        alert.setHeaderText("Please fill out the following information");
-        alert.getDialogPane().setContent(FX.view("Work_Order_Add_Labor.fxml"));
-        ButtonType btSave = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
-        ButtonType btCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(btSave, btCancel);
+        Alert alert = AlertBuilder.buildDialog("Add Labor");
+        alert.getDialogPane().setContent(FX.view("Work_Order_Labor_Workspace.fxml"));
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
