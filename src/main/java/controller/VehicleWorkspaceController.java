@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 
 import javafx.scene.control.TextField;
 
-public class VehicleController {
+public class VehicleWorkspaceController {
     @FXML
     TextField tfVin, tfYear, tfMake, tfModel, tfLicensePlate,
             tfColor, tfEngine, tfTransmission, tfMileageIn, tfMileageOut;

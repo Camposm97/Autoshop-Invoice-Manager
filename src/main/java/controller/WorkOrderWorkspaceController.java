@@ -8,7 +8,7 @@ import model.*;
 
 import java.util.Optional;
 
-public class WorkOrderController {
+public class WorkOrderWorkspaceController {
     WorkOrder workOrder;
     @FXML
     TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfAddress, tfCity, tfState, tfZip;
@@ -31,12 +31,12 @@ public class WorkOrderController {
     @FXML
     TableColumn<Labor, Double> colLaborRetailPrice, colLaborBilledHrs, colLaborRate;
 
-    public WorkOrderController() {
+    public WorkOrderWorkspaceController() {
         this.workOrder = new WorkOrder();
         init();
     }
 
-    public WorkOrderController(WorkOrder workOrder) {
+    public WorkOrderWorkspaceController(WorkOrder workOrder) {
         this.workOrder = workOrder;
         init();
     }
@@ -59,6 +59,9 @@ public class WorkOrderController {
             colLaborRetailPrice.setCellValueFactory(c -> c.getValue().billProperty());
             colLaborBilledHrs.setCellValueFactory(c -> c.getValue().billedHrsProperty());
             colLaborRate.setCellValueFactory(c -> c.getValue().billedHrsProperty());
+
+            tvParts.setItems(workOrder.itemObservableList());
+            tvLabor.setItems(workOrder.laborObservableList());
         });
     }
 
@@ -130,25 +133,34 @@ public class WorkOrderController {
 
     public void addPart() {
         AlertFactory.showAddPart(workOrder);
+        workOrder.itemIterator().forEachRemaining(e -> {
+            System.out.println(e);
+        });
     }
 
-    public void deletePart() { // TODO
-
+    public void editPart() {
+        Item selectedItem = tvParts.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            AlertFactory.showEditPart(workOrder, selectedItem);
+        }
     }
 
-    public void editPart() { // TODO
-
+    public void deletePart() {
+        Item selectedItem = tvParts.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            workOrder.removeItem(selectedItem);
+        }
     }
 
     public void addLabor() {
         AlertFactory.showAddLabor(workOrder);
     }
 
-    public void deleteLabor() { // TODO
+    public void editLabor() { // TODO
 
     }
 
-    public void editLabor() { // TODO
+    public void deleteLabor() { // TODO
 
     }
 

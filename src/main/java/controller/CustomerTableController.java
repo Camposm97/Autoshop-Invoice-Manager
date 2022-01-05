@@ -137,7 +137,7 @@ public class CustomerTableController {
 //            alert.getButtonTypes().setAll(bt);
 //
 //            CustomerController controller = new CustomerController(customer);
-//            alert.getDialogPane().setContent(FX.view("Customer.fxml", controller));
+//            alert.getDialogPane().setContent(FX.view("Customer_Workspace.fxml", controller));
 //
 //            Optional<ButtonType> rs = alert.showAndWait();
 //            rs.ifPresent(action -> controller.updateCustomer());

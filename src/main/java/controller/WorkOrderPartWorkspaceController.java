@@ -8,8 +8,7 @@ import javafx.scene.control.TextField;
 import model.Item;
 import model.WorkOrder;
 
-public class WorkOrderPartController {
-    WorkOrder workOrder;
+public class WorkOrderPartWorkspaceController {
     @FXML
     TextField tfPartNumber;
     @FXML
@@ -27,8 +26,7 @@ public class WorkOrderPartController {
     @FXML
     TextField tfPartDescSearch;
 
-    public WorkOrderPartController(WorkOrder workOrder) {
-        this.workOrder = workOrder;
+    public WorkOrderPartWorkspaceController() {
         Platform.runLater(() -> {
             tfPartNumberSearch.textProperty().addListener((o, oldValue, newValue) -> { // TODO
                 System.out.println(newValue);
@@ -39,7 +37,26 @@ public class WorkOrderPartController {
         });
     }
 
-    public void savePart() {
+    public void savePart(WorkOrder workOrder) {
+        Item item = buildPart();
+        workOrder.addItem(item);
+    }
+
+    public void updatePart(WorkOrder workOrder, Item oldItem) {
+        Item newItem = buildPart();
+        workOrder.updateItem(oldItem, newItem);
+    }
+
+    public void loadPart(Item item) {
+        tfPartNumber.setText(item.getId());
+        taPartDesc.setText(item.getDesc());
+        tfPartRetailPrice.setText(String.valueOf(item.getRetailPrice()));
+        tfPartListCost.setText(String.valueOf(item.getListPrice()));
+        tfPartQuantity.setText(String.valueOf(item.getQuantity()));
+        cbPartTaxable.setSelected(item.isTaxable());
+    }
+
+    public Item buildPart() {
         String partNumber = tfPartNumber.getText();
         String desc = taPartDesc.getText();
         double retailPrice = Double.parseDouble(tfPartRetailPrice.getText());
@@ -47,6 +64,6 @@ public class WorkOrderPartController {
         int quantity = Integer.parseInt(tfPartQuantity.getText());
         boolean taxable = cbPartTaxable.isSelected();
         Item item = new Item(partNumber, desc, retailPrice, listCost, quantity, taxable);
-        workOrder.addItem(item);
+        return item;
     }
 }

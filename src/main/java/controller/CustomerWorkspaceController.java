@@ -6,7 +6,7 @@ import model.Address;
 import model.Customer;
 import model.DB;
 
-public class CustomerController {
+public class CustomerWorkspaceController {
     @FXML
     TextField tfFirstName, tfLastName, tfPhone, tfCompany, tfStreet, tfCity, tfState, tfZip;
 
