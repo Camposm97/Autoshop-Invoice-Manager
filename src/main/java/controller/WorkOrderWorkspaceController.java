@@ -1,5 +1,6 @@
 package controller;
 
+import app.App;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.print.PrinterJob;
@@ -15,60 +16,88 @@ public class WorkOrderWorkspaceController {
     @FXML
     TextField tfVin, tfLicensePlate, tfColor, tfYear, tfMake, tfModel, tfEngine, tfTransmission, tfMileageIn, tfMileageOut;
     @FXML
-    TextField tfPartsTotal, tfTax, tfDiscount, tfLaborTotal, tfSubtotal, tfTotal;
+    TableView<AutoPart> tvParts;
     @FXML
-    TableView<Item> tvParts;
+    TableColumn<AutoPart, String> colPartNumber, colPartDesc;
     @FXML
-    TableColumn<Item, String> colPartNumber, colPartDesc;
+    TableColumn<AutoPart, Integer> colPartQuantity;
     @FXML
-    TableColumn<Item, Integer> colPartQuantity;
+    TableColumn<AutoPart, Double> colPartRetailPrice, colPartListPrice;
     @FXML
-    TableColumn<Item, Double> colPartRetailPrice, colPartListPrice;
+    TableColumn<AutoPart, String> colPartTotal;
     @FXML
     TableView<Labor> tvLabor;
     @FXML
     TableColumn<Labor, String> colLaborCode, colLaborDesc;
     @FXML
-    TableColumn<Labor, Double> colLaborRetailPrice, colLaborBilledHrs, colLaborRate;
+    TableColumn<Labor, Double> colLaborBilledHrs, colLaborRate;
+    @FXML
+    TableColumn<Labor, String> colLaborTotal;
+    @FXML
+    TextField tfPartsTotal, tfTax, tfDiscount, tfLaborTotal, tfSubtotal, tfTotal; // TODO
 
-    public WorkOrderWorkspaceController() {
+    public WorkOrderWorkspaceController() { // New Work Order
         this.workOrder = new WorkOrder();
         init();
     }
 
-    public WorkOrderWorkspaceController(WorkOrder workOrder) {
+    public WorkOrderWorkspaceController(WorkOrder workOrder) { // Update Work Order
         this.workOrder = workOrder;
         init();
     }
 
+    /**
+     * Initializes what columns hold what values binds tables to
+     * display parts and labor of a work order
+     */
     private void init() {
         Platform.runLater(() -> {
-            if (workOrder.isNew()) {
-                System.out.println("New Work Order");
-            } else {
-                System.out.println("Old Work Order");
-            }
-            colPartNumber.setCellValueFactory(c -> c.getValue().idProperty());
+            colPartNumber.setCellValueFactory(c -> c.getValue().nameProperty());
             colPartDesc.setCellValueFactory(c -> c.getValue().descProperty());
             colPartQuantity.setCellValueFactory(c -> c.getValue().quantityProperty());
             colPartRetailPrice.setCellValueFactory(c -> c.getValue().retailPriceProperty());
             colPartListPrice.setCellValueFactory(c -> c.getValue().listPriceProperty());
+            colPartTotal.setCellValueFactory(c -> c.getValue().billProperty());
+            tvParts.setItems(workOrder.itemList());
 
-            colLaborCode.setCellValueFactory(c -> c.getValue().laborCodeProperty());
+            colLaborCode.setCellValueFactory(c -> c.getValue().nameProperty());
             colLaborDesc.setCellValueFactory(c -> c.getValue().descProperty());
-            colLaborRetailPrice.setCellValueFactory(c -> c.getValue().billProperty());
             colLaborBilledHrs.setCellValueFactory(c -> c.getValue().billedHrsProperty());
-            colLaborRate.setCellValueFactory(c -> c.getValue().billedHrsProperty());
+            colLaborRate.setCellValueFactory(c -> c.getValue().rateProperty());
+            colLaborTotal.setCellValueFactory(c -> c.getValue().billProperty());
+            tvLabor.setItems(workOrder.laborList());
 
-            tvParts.setItems(workOrder.itemObservableList());
-            tvLabor.setItems(workOrder.laborObservableList());
+            if (!workOrder.isNew()) {
+                loadCustomer(workOrder.getCustomer());
+                loadVehicle(workOrder.getVehicle());
+            }
         });
     }
 
     public void save() {
+        buildWorkOrder();
+        System.out.println(workOrder);
+        if (workOrder.isNew()) {
+            System.out.println("Add Work Order");
+            DB.get().addWorkOrder(workOrder);
+        } else { // TODO Update work order
+            System.out.println("Update Work Order");
+            DB.get().updateWorkOrder(workOrder);
+            DB.get().deleteProductsMarkedForDeletion();
+        }
+        App.clearDisplay();
+    }
+
+    public void close() {
+        DB.get().clearAllProductsMarkedForDeletion();
+        App.clearDisplay();
+    }
+
+    public Customer buildCustomer() {
         String firstName = tfFirstName.getText();
         String lastName = tfLastName.getText();
         String phone = tfPhone.getText();
+        String email = tfEmail.getText();
         String company = tfCompany.getText();
         String street = tfAddress.getText();
         String city = tfCity.getText();
@@ -76,7 +105,10 @@ public class WorkOrderWorkspaceController {
         String zip = tfZip.getText();
         Address address = new Address(street, city, state, zip);
         Customer customer = new Customer(firstName, lastName, phone, company, address);
+        return customer;
+    }
 
+    public Vehicle buildVehicle() {
         String vin = tfVin.getText();
         String licensePlate = tfLicensePlate.getText();
         String color = tfColor.getText();
@@ -89,24 +121,38 @@ public class WorkOrderWorkspaceController {
         String mileageOut = tfMileageOut.getText();
         Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color,
                 engine, transmission, mileageIn, mileageOut);
+        return vehicle;
+    }
 
-        if (!workOrder.isNew()) {
-            // TODO Update work order
-            WorkOrder workOrder = new WorkOrder(customer, vehicle);
-            workOrder.setId(this.workOrder.getId());
+    public void loadCustomer(Customer customer) {
+        tfFirstName.setText(customer.getFirstName());
+        tfLastName.setText(customer.getLastName());
+        tfPhone.setText(customer.getPhone());
+        tfCompany.setText(customer.getCompany());
+        tfAddress.setText(customer.getAddress().getStreet());
+        tfCity.setText(customer.getAddress().getCity());
+        tfState.setText(customer.getAddress().getState());
+        tfZip.setText(customer.getAddress().getZip());
+    }
 
-        } else {
-            // Create new work order
-            WorkOrder workOrder = new WorkOrder(customer, vehicle);
-            for (Item item : tvParts.getItems()) {
-                workOrder.addItem(item);
-            }
-            for (Labor labor : tvLabor.getItems()) {
-                workOrder.addLabor(labor);
-            }
-            DB.get().addWorkOrder(workOrder);
+    public void loadVehicle(Vehicle vehicle) {
+        tfVin.setText(vehicle.getVin());
+        tfLicensePlate.setText(vehicle.getLicensePlate());
+        tfColor.setText(vehicle.getColor());
+        tfYear.setText(String.valueOf(vehicle.getYear()));
+        tfMake.setText(vehicle.getMake());
+        tfModel.setText(vehicle.getModel());
+        tfEngine.setText(vehicle.getEngine());
+        tfTransmission.setText(vehicle.getTransmission());
+        tfMileageIn.setText(vehicle.getMileageIn());
+        tfMileageOut.setText(vehicle.getMileageOut());
+    }
 
-        }
+    public void buildWorkOrder() {
+        Customer customer = buildCustomer();
+        Vehicle vehicle = buildVehicle();
+        workOrder.setCustomer(customer);
+        workOrder.setVehicle(vehicle);
     }
 
     public void print() { // TODO
@@ -133,22 +179,25 @@ public class WorkOrderWorkspaceController {
 
     public void addPart() {
         AlertFactory.showAddPart(workOrder);
-        workOrder.itemIterator().forEachRemaining(e -> {
+        workOrder.autoPartIterator().forEachRemaining(e -> {
             System.out.println(e);
         });
     }
 
     public void editPart() {
-        Item selectedItem = tvParts.getSelectionModel().getSelectedItem();
+        AutoPart selectedItem = tvParts.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             AlertFactory.showEditPart(workOrder, selectedItem);
         }
     }
 
     public void deletePart() {
-        Item selectedItem = tvParts.getSelectionModel().getSelectedItem();
-        if (selectedItem != null) {
-            workOrder.removeItem(selectedItem);
+        AutoPart autoPart = tvParts.getSelectionModel().getSelectedItem();
+        if (autoPart != null) {
+            if (!autoPart.isNew()) {
+                DB.get().addProductMarkedForDeletion(autoPart);
+            }
+            workOrder.removeItem(autoPart);
         }
     }
 
@@ -166,11 +215,10 @@ public class WorkOrderWorkspaceController {
     public void deleteLabor() {
         Labor labor = tvLabor.getSelectionModel().getSelectedItem();
         if (labor != null) {
+            if (!labor.isNew()) {
+                DB.get().addProductMarkedForDeletion(labor);
+            }
             workOrder.removeLabor(labor);
         }
-    }
-
-    public WorkOrder buildWorkOrder() {
-        return null; // TODO
     }
 }

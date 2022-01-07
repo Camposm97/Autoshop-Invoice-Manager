@@ -1,12 +1,11 @@
 package model;
 
-import controller.WorkOrderLaborWorkspaceController;
-import controller.WorkOrderPartWorkspaceController;
+import controller.LaborWorkspaceController;
+import controller.PartWorkspaceController;
 import controller.CustomerWorkspaceController;
 import controller.VehicleWorkspaceController;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
@@ -37,7 +36,7 @@ public class AlertFactory {
 
     public static void showAddPart(WorkOrder workOrder) {
         Alert alert = AlertBuilder.buildDialog("Add Part");
-        WorkOrderPartWorkspaceController controller = new WorkOrderPartWorkspaceController();
+        PartWorkspaceController controller = new PartWorkspaceController();
         Parent node = FX.view("Work_Order_Part_Workspace.fxml", controller);
         alert.getDialogPane().setContent(node);
         Optional<ButtonType> rs = alert.showAndWait();
@@ -49,9 +48,9 @@ public class AlertFactory {
         });
     }
 
-    public static void showEditPart(WorkOrder workOrder, Item selectedItem) {
+    public static void showEditPart(WorkOrder workOrder, AutoPart selectedItem) {
         Alert alert = AlertBuilder.buildDialog("Update Part");
-        WorkOrderPartWorkspaceController controller = new WorkOrderPartWorkspaceController();
+        PartWorkspaceController controller = new PartWorkspaceController();
         Parent node = FX.view("Work_Order_Part_Workspace.fxml", controller);
         alert.getDialogPane().setContent(node);
         controller.loadPart(selectedItem);
@@ -64,7 +63,7 @@ public class AlertFactory {
 
     public static void showAddLabor(WorkOrder workOrder) {
         Alert alert = AlertBuilder.buildDialog("Add Labor");
-        WorkOrderLaborWorkspaceController controller = new WorkOrderLaborWorkspaceController();
+        LaborWorkspaceController controller = new LaborWorkspaceController();
         Parent node = FX.view("Work_Order_Labor_Workspace.fxml", controller);
         alert.getDialogPane().setContent(node);
         Optional<ButtonType> rs = alert.showAndWait();
@@ -77,7 +76,7 @@ public class AlertFactory {
 
     public static void showEditLabor(WorkOrder workOrder, Labor selectedLabor) {
         Alert alert = AlertBuilder.buildDialog("Update Labor");
-        WorkOrderLaborWorkspaceController controller = new WorkOrderLaborWorkspaceController();
+        LaborWorkspaceController controller = new LaborWorkspaceController();
         Parent node = FX.view("Work_Order_Labor_Workspace.fxml", controller);
         controller.loadLabor(selectedLabor);
         alert.getDialogPane().setContent(node);

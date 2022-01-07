@@ -4,28 +4,21 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import model.Item;
+import javafx.scene.text.Text;
+import model.AutoPart;
 import model.WorkOrder;
 
-public class WorkOrderPartWorkspaceController {
+public class PartWorkspaceController {
     @FXML
-    TextField tfPartNumber;
+    Text lblId;
     @FXML
-    TextField tfPartDesc;
-    @FXML
-    TextField tfPartRetailPrice;
-    @FXML
-    TextField tfPartListCost;
-    @FXML
-    TextField tfPartQuantity;
+    TextField tfPartNumber, tfPartDesc, tfPartRetailPrice, tfPartListCost, tfPartQuantity;
     @FXML
     CheckBox cbPartTaxable;
     @FXML
-    TextField tfPartNumberSearch;
-    @FXML
-    TextField tfPartDescSearch;
+    TextField tfPartNumberSearch, tfPartDescSearch;
 
-    public WorkOrderPartWorkspaceController() {
+    public PartWorkspaceController() {
         Platform.runLater(() -> {
             tfPartNumberSearch.textProperty().addListener((o, oldValue, newValue) -> { // TODO
                 System.out.println(newValue);
@@ -37,17 +30,18 @@ public class WorkOrderPartWorkspaceController {
     }
 
     public void savePart(WorkOrder workOrder) {
-        Item item = buildPart();
+        AutoPart item = buildPart();
         workOrder.addItem(item);
     }
 
-    public void updatePart(WorkOrder workOrder, Item oldItem) {
-        Item newItem = buildPart();
+    public void updatePart(WorkOrder workOrder, AutoPart oldItem) {
+        AutoPart newItem = buildPart();
         workOrder.updateItem(oldItem, newItem);
     }
 
-    public void loadPart(Item item) {
-        tfPartNumber.setText(item.getId());
+    public void loadPart(AutoPart item) {
+        lblId.setText(String.valueOf(item.getId()));
+        tfPartNumber.setText(item.getName());
         tfPartDesc.setText(item.getDesc());
         tfPartRetailPrice.setText(String.valueOf(item.getRetailPrice()));
         tfPartListCost.setText(String.valueOf(item.getListPrice()));
@@ -55,14 +49,16 @@ public class WorkOrderPartWorkspaceController {
         cbPartTaxable.setSelected(item.isTaxable());
     }
 
-    public Item buildPart() {
+    public AutoPart buildPart() {
+        int id = Integer.parseInt(lblId.getText());
         String partNumber = tfPartNumber.getText();
         String desc = tfPartDesc.getText();
         double retailPrice = Double.parseDouble(tfPartRetailPrice.getText());
         double listCost = Double.parseDouble(tfPartListCost.getText());
         int quantity = Integer.parseInt(tfPartQuantity.getText());
         boolean taxable = cbPartTaxable.isSelected();
-        Item item = new Item(partNumber, desc, retailPrice, listCost, quantity, taxable);
+        AutoPart item = new AutoPart(partNumber, desc, retailPrice, listCost, quantity, taxable);
+        item.setId(id);
         return item;
     }
 }

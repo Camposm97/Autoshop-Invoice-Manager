@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.Customer;
 import model.DB;
@@ -17,29 +18,17 @@ import java.util.Optional;
 
 public class CustomerTableController {
     @FXML
+    TextField tfFirstName, tfLastName, tfPhone, tfCompanyName, tfStreet, tfCity, tfState, tfZip;
+    @FXML
     TableView<Customer> tv;
+//    @FXML
+//    TableColumn<Customer, Integer> colId;
     @FXML
-    TableColumn<Customer, Integer> colId;
-    @FXML
-    TableColumn<Customer, String> colFirstName;
-    @FXML
-    TableColumn<Customer, String> colLastName;
-    @FXML
-    TableColumn<Customer, String> colPhone;
-    @FXML
-    TableColumn<Customer, String> colCompany;
-    @FXML
-    TableColumn<Customer, String> colAddress;
-    @FXML
-    TableColumn<Customer, String> colCity;
-    @FXML
-    TableColumn<Customer, String> colState;
-    @FXML
-    TableColumn<Customer, String> colZip;
+    TableColumn<Customer, String> colFirstName, colLastName, colPhone, colCompany, colAddress, colCity, colState, colZip;
 
     public CustomerTableController() {
         Platform.runLater(() -> {
-            colId.setCellValueFactory(c -> c.getValue().idProperty());
+//            colId.setCellValueFactory(c -> c.getValue().idProperty());
             colFirstName.setCellValueFactory(c -> c.getValue().firstNameProperty());
             colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
             colFirstName.setOnEditCommit(e -> {

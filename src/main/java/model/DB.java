@@ -3,8 +3,6 @@ package model;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +20,7 @@ public class DB {
     }
 
     private Connection c;
+    private List<Product> productsMarkedForDeletion;
 
     private DB() {
         try {
@@ -31,16 +30,14 @@ public class DB {
                 file.createNewFile();
             }
             Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:" + file);
+            this.c = DriverManager.getConnection("jdbc:sqlite:" + file);
+            this.productsMarkedForDeletion = new LinkedList<>();
             try {
                 System.out.println("Connected to AutoShop Database");
                 System.out.println("customer: " + c.createStatement().executeQuery("select count(*) from customer").getInt(1));
                 System.out.println("vehicle: " + c.createStatement().executeQuery("select count(*) from vehicle").getInt(1));
                 System.out.println("item: " + c.createStatement().executeQuery("select count(*) from item").getInt(1));
-//                System.out.println("invoice: " + c.createStatement().execute("select * from invoice"));
                 System.out.println("work_order: " + c.createStatement().executeQuery("select count(*) from work_order").getInt(1));
-//                System.out.println("work_order_customer: " + c.createStatement().executeQuery("select count(*) from work_order_customer").getInt(1));
-//                System.out.println("work_order_vehicle: " + c.createStatement().executeQuery("select count(*) from work_order_vehicle").getInt(1));
                 System.out.println("work_order_item: " + c.createStatement().executeQuery("select count(*) from work_order_item").getInt(1));
                 System.out.println("work_order_labor: " + c.createStatement().executeQuery("select count(*) from work_order_labor").getInt(1));
             } catch (SQLException e) {
@@ -55,6 +52,28 @@ public class DB {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void addProductMarkedForDeletion(Product product) {
+        productsMarkedForDeletion.add(product);
+    }
+
+    public void clearAllProductsMarkedForDeletion() {
+        productsMarkedForDeletion.clear();
+    }
+
+    public void deleteProductsMarkedForDeletion() {
+        productsMarkedForDeletion.forEach(product -> {
+            try {
+                if (product instanceof AutoPart)
+                    deleteWorkOrderAutoPart((AutoPart) product);
+                else if (product instanceof Labor)
+                    deleteWorkOrderLabor((Labor) product);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+        clearAllProductsMarkedForDeletion();
     }
 
     /**
@@ -85,7 +104,7 @@ public class DB {
                 "mileage_in text, " +
                 "mileage_out text);");
         stmt.addBatch("create table if not exists item (" +
-                "item_id text primary key, " +
+                "item_name text primary key, " +
                 "desc text, " +
                 "retail_price real, " +
                 "list_price real, " +
@@ -145,7 +164,7 @@ public class DB {
         stmt.addBatch("create table if not exists work_order_item (" +
                 "work_order_item_id integer primary key autoincrement, " +
                 "work_order_id integer, " +
-                "item_id text, " +
+                "item_name text, " +
                 "item_desc text, " +
                 "item_retail_price real, " +
                 "item_list_price real, " +
@@ -319,10 +338,6 @@ public class DB {
         }
     }
 
-//    public List<Vehicle> getAllVehicles() {
-//        return null;
-//    }
-
     public void addWorkOrder(WorkOrder workOrder) {
         try {
             // Add work_order row
@@ -348,7 +363,7 @@ public class DB {
                             "vehicle_transmission," +
                             "vehicle_mileage_in," +
                             "vehicle_mileage_out) " +
-                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             prepStmt.setDate(1, workOrder.getDateCreated());
             prepStmt.setDate(2, workOrder.getDateCompleted());
             prepStmt.setString(3, workOrder.getCustomer().getFirstName());
@@ -371,51 +386,22 @@ public class DB {
             prepStmt.setString(20, workOrder.getVehicle().getMileageOut());
             prepStmt.execute();
 
+            prepStmt = c.prepareStatement("select max(work_order_id) from work_order");
+            ResultSet rs = prepStmt.executeQuery();
+            int id = rs.getInt(1);
+            workOrder.setId(id);
+
             // Add work_order_item row(s)
-            Iterator<Item> itemIterator = workOrder.itemIterator();
+            Iterator<AutoPart> itemIterator = workOrder.autoPartIterator();
             while (itemIterator.hasNext()) {
-                Item item = itemIterator.next();
-                prepStmt = c.prepareStatement(
-                        "insert into work_order_item (" +
-                                "work_order_id," +
-                                "item_id," +
-                                "item_desc," +
-                                "item_retail_price," +
-                                "item_list_price," +
-                                "item_quantity," +
-                                "item_taxable" +
-                                ") " +
-                                "values (?, ?, ?, ?, ?, ?, ?)");
-                prepStmt.setInt(1, workOrder.getId());
-                prepStmt.setString(2, item.getId());
-                prepStmt.setString(3, item.getDesc());
-                prepStmt.setDouble(4, item.getRetailPrice());
-                prepStmt.setDouble(5, item.getListPrice());
-                prepStmt.setInt(6, item.getQuantity());
-                prepStmt.setBoolean(7, item.isTaxable());
-                prepStmt.execute();
+                AutoPart item = itemIterator.next();
+                addItem(workOrder.getId(), item);
             }
             // Add work_order_labor row(s)
             Iterator<Labor> laborIterator = workOrder.laborIterator();
             while (laborIterator.hasNext()) {
                 Labor labor = laborIterator.next();
-                prepStmt = c.prepareStatement(
-                        "insert into work_order_labor (" +
-                                "work_order_id," +
-                                "labor_code," +
-                                "labor_desc," +
-                                "labor_billed_hrs," +
-                                "labor_rate," +
-                                "labor_taxable," +
-                                ") " +
-                                "values (?, ?, ?, ?, ?, ?)");
-                prepStmt.setInt(1, workOrder.getId());
-                prepStmt.setString(2, labor.getLaborCode());
-                prepStmt.setString(3, labor.getDesc());
-                prepStmt.setDouble(4, labor.getBilledHrs());
-                prepStmt.setDouble(5, labor.getRate());
-                prepStmt.setBoolean(6, labor.isTaxable());
-                prepStmt.execute();
+                addLabor(workOrder.getId(), labor);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -456,29 +442,35 @@ public class DB {
                 Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
                 workOrder = new WorkOrder(customer, vehicle);
                 workOrder.setId(workOrderId);
+                workOrder.setDateCreated(dateCreated);
+                workOrder.setDateCompleted(dateCompleted);
 
                 ResultSet rsItem = stmt.executeQuery("select * from work_order_item " +
                         "where work_order_id = " + workOrderId);
                 while (rsItem.next()) {
-                    String id = rsItem.getString(3);
+                    int id = rsItem.getInt(1);
+                    String name = rsItem.getString(3);
                     String desc = rsItem.getString(4);
                     double retailPrice = rsItem.getDouble(5);
                     double listPrice = rsItem.getDouble(6);
                     int quantity = rsItem.getInt(7);
                     boolean taxable = rsItem.getBoolean(8);
-                    Item item = new Item(id, desc, retailPrice, listPrice, quantity, taxable);
+                    AutoPart item = new AutoPart(name, desc, retailPrice, listPrice, quantity, taxable);
+                    item.setId(id);
                     workOrder.addItem(item);
                 }
 
                 ResultSet rsLabor = stmt.executeQuery("select * from work_order_labor " +
                         "where work_order_id = " + workOrderId);
                 while (rsLabor.next()) {
+                    int id = rsLabor.getInt(1);
                     String laborCode = rsLabor.getString(3);
                     String desc = rsLabor.getString(4);
                     double billedHrs = rsLabor.getDouble(5);
                     double rate = rsLabor.getDouble(6);
                     boolean taxable = rsLabor.getBoolean(7);
                     Labor labor = new Labor(laborCode, desc, billedHrs, rate, taxable);
+                    labor.setId(id);
                     workOrder.addLabor(labor);
                 }
             }
@@ -505,15 +497,176 @@ public class DB {
     }
 
     public void updateWorkOrder(WorkOrder workOrder) { // TODO
+        try {
+            PreparedStatement prepStmt = c.prepareStatement(
+                    "update work_order set " +
+                            "date_completed = ?," +
+                            "customer_first_name = ?," +
+                            "customer_last_name = ?," +
+                            "customer_phone = ?," +
+                            "customer_company = ?," +
+                            "customer_street = ?," +
+                            "customer_city = ?," +
+                            "customer_state = ?," +
+                            "customer_zip = ?," +
+                            "vehicle_vin = ?," +
+                            "vehicle_year = ?," +
+                            "vehicle_make = ?," +
+                            "vehicle_model = ?," +
+                            "vehicle_license_plate = ?," +
+                            "vehicle_color = ?," +
+                            "vehicle_engine = ?," +
+                            "vehicle_transmission = ?," +
+                            "vehicle_mileage_in = ?," +
+                            "vehicle_mileage_out = ? " +
+                            "where work_order_id = ?");
+            prepStmt.setDate(1, workOrder.getDateCompleted());
+            prepStmt.setString(2, workOrder.getCustomer().getFirstName());
+            prepStmt.setString(3, workOrder.getCustomer().getLastName());
+            prepStmt.setString(4, workOrder.getCustomer().getPhone());
+            prepStmt.setString(5, workOrder.getCustomer().getCompany());
+            prepStmt.setString(6, workOrder.getCustomer().getAddress().getStreet());
+            prepStmt.setString(7, workOrder.getCustomer().getAddress().getCity());
+            prepStmt.setString(8, workOrder.getCustomer().getAddress().getState());
+            prepStmt.setString(9, workOrder.getCustomer().getAddress().getZip());
+            prepStmt.setString(10, workOrder.getVehicle().getVin());
+            prepStmt.setInt(11, workOrder.getVehicle().getYear());
+            prepStmt.setString(12, workOrder.getVehicle().getMake());
+            prepStmt.setString(13, workOrder.getVehicle().getModel());
+            prepStmt.setString(14, workOrder.getVehicle().getLicensePlate());
+            prepStmt.setString(15, workOrder.getVehicle().getColor());
+            prepStmt.setString(16, workOrder.getVehicle().getEngine());
+            prepStmt.setString(17, workOrder.getVehicle().getTransmission());
+            prepStmt.setString(18, workOrder.getVehicle().getMileageIn());
+            prepStmt.setString(19, workOrder.getVehicle().getMileageOut());
+            prepStmt.setInt(20, workOrder.getId());
+            prepStmt.execute();
 
+            Iterator<AutoPart> autoPartIterator = workOrder.autoPartIterator();
+            while (autoPartIterator.hasNext()) {
+                AutoPart autoPart = autoPartIterator.next();
+                if (autoPart.isNew())
+                    addItem(workOrder.getId(), autoPart);
+                else
+                    updateItem(autoPart);
+            }
+            Iterator<Labor> laborIterator = workOrder.laborIterator();
+            while (laborIterator.hasNext()) {
+                Labor labor = laborIterator.next();
+                if (labor.isNew())
+                    addLabor(workOrder.getId(), labor);
+                else
+                    updateLabor(labor);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void deleteWorkOrder(WorkOrder workOrder) { // TODO
-
+    public void deleteWorkOrder(WorkOrder workOrder) {
+        try {
+            Statement stmt = c.createStatement();
+            stmt.execute("delete from work_order where work_order_id = " + workOrder.getId());
+            Iterator<AutoPart> itemIterator = workOrder.autoPartIterator();
+            while (itemIterator.hasNext()) {
+               deleteWorkOrderAutoPart(itemIterator.next());
+            }
+            Iterator<Labor> laborIterator = workOrder.laborIterator();
+            while (laborIterator.hasNext()) {
+                deleteWorkOrderLabor(laborIterator.next());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-//    public List<Item> getAllItems() {
-//        return null;
-//    }
 
+    public void addItem(int workOrderId, AutoPart item) throws SQLException {
+        PreparedStatement prepStmt = c.prepareStatement(
+                "insert into work_order_item (" +
+                        "work_order_id," +
+                        "item_name," +
+                        "item_desc," +
+                        "item_retail_price," +
+                        "item_list_price," +
+                        "item_quantity," +
+                        "item_taxable" +
+                        ") " +
+                        "values (?, ?, ?, ?, ?, ?, ?)");
+        prepStmt.setInt(1, workOrderId);
+        prepStmt.setString(2, item.getName());
+        prepStmt.setString(3, item.getDesc());
+        prepStmt.setDouble(4, item.getRetailPrice());
+        prepStmt.setDouble(5, item.getListPrice());
+        prepStmt.setInt(6, item.getQuantity());
+        prepStmt.setBoolean(7, item.isTaxable());
+        prepStmt.execute();
+    }
 
+    public void updateItem(AutoPart item) throws SQLException {
+        PreparedStatement prepStmt = c.prepareStatement(
+                "update work_order_item set " +
+                "item_name = ?," +
+                "item_desc = ?," +
+                "item_retail_price = ?," +
+                "item_list_price = ?," +
+                "item_quantity = ?," +
+                "item_taxable = ? " +
+                "where work_order_item_id = ?");
+        prepStmt.setString(1, item.getName());
+        prepStmt.setString(2, item.getDesc());
+        prepStmt.setDouble(3, item.getRetailPrice());
+        prepStmt.setDouble(4, item.getListPrice());
+        prepStmt.setInt(5, item.getQuantity());
+        prepStmt.setBoolean(6, item.isTaxable());
+        prepStmt.setInt(7, item.getId());
+        prepStmt.execute();
+    }
+
+    public void deleteWorkOrderAutoPart(AutoPart item) throws SQLException {
+        Statement stmt = c.createStatement();
+        stmt.execute("delete from work_order_item where work_order_item_id = " + item.getId());
+    }
+
+    public void addLabor(int workOrderId, Labor labor) throws SQLException {
+        PreparedStatement prepStmt = c.prepareStatement(
+                "insert into work_order_labor (" +
+                        "work_order_id," +
+                        "labor_code," +
+                        "labor_desc," +
+                        "labor_billed_hrs," +
+                        "labor_rate," +
+                        "labor_taxable" +
+                        ") " +
+                        "values (?, ?, ?, ?, ?, ?)");
+        prepStmt.setInt(1, workOrderId);
+        prepStmt.setString(2, labor.getName());
+        prepStmt.setString(3, labor.getDesc());
+        prepStmt.setDouble(4, labor.getBilledHrs());
+        prepStmt.setDouble(5, labor.getRate());
+        prepStmt.setBoolean(6, labor.isTaxable());
+        prepStmt.execute();
+    }
+
+    public void updateLabor(Labor labor) throws SQLException {
+        PreparedStatement prepStmt = c.prepareStatement(
+                "update work_order_labor set " +
+                        "labor_code = ?," +
+                        "labor_desc = ?," +
+                        "labor_billed_hrs = ?," +
+                        "labor_rate = ?," +
+                        "labor_taxable = ? " +
+                        "where work_order_labor_id = ?");
+        prepStmt.setString(1, labor.getName());
+        prepStmt.setString(2, labor.getDesc());
+        prepStmt.setDouble(3, labor.getBilledHrs());
+        prepStmt.setDouble(4, labor.getRate());
+        prepStmt.setBoolean(5, labor.isTaxable());
+        prepStmt.setInt(6, labor.getId());
+        prepStmt.execute();
+    }
+
+    public void deleteWorkOrderLabor(Labor labor) throws SQLException {
+        Statement stmt = c.createStatement();
+        stmt.execute("delete from work_order_labor where work_order_labor_id = " + labor.getId());
+    }
 }

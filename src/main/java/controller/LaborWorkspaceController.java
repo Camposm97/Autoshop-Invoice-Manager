@@ -4,10 +4,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import model.Labor;
 import model.WorkOrder;
 
-public class WorkOrderLaborWorkspaceController {
+public class LaborWorkspaceController {
+    @FXML
+    Text lblId;
     @FXML
     TextField tfLaborCode;
     @FXML
@@ -28,7 +31,8 @@ public class WorkOrderLaborWorkspaceController {
     }
 
     public void loadLabor(Labor labor) {
-        tfLaborCode.setText(labor.getLaborCode());
+        lblId.setText(String.valueOf(labor.getId()));
+        tfLaborCode.setText(labor.getName());
         taDesc.setText(labor.getDesc());
         tfBilledHrs.setText(String.valueOf(labor.getBilledHrs()));
         tfRate.setText(String.valueOf(labor.getRate()));
@@ -36,12 +40,14 @@ public class WorkOrderLaborWorkspaceController {
     }
 
     public Labor buildLabor() {
+        int id = Integer.parseInt(lblId.getText());
         String laborCode = tfLaborCode.getText();
         String desc = taDesc.getText();
         double billedHrs = Double.parseDouble(tfBilledHrs.getText());
         double rate = Double.parseDouble(tfRate.getText());
         boolean taxable = cbTaxable.isSelected();
         Labor labor = new Labor(laborCode, desc, billedHrs, rate, taxable);
+        labor.setId(id);
         return labor;
     }
 }

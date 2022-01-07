@@ -3,18 +3,22 @@ package model;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class Labor extends Product implements Comparable<Labor> {
+public class AutoPart extends Product implements Comparable<AutoPart> {
 //    private int id;
-//    private String name, desc;
-    private double billedHrs, rate;
+//    private String name;
+//    private String desc;
+    private double retailPrice;
+    private double listPrice;
     private boolean taxable;
+    private int quantity;
 
-    public Labor(String name, String desc, double billedHrs, double rate, boolean taxable) {
+    public AutoPart(String name, String desc, double retailPrice, double listPrice, int quantity, boolean taxable) {
         super(name, desc);
 //        this.name = name;
 //        this.desc = desc;
-        this.billedHrs = billedHrs;
-        this.rate = rate;
+        this.retailPrice = retailPrice;
+        this.listPrice = listPrice;
+        this.quantity = quantity;
         this.taxable = taxable;
     }
 
@@ -42,24 +46,24 @@ public class Labor extends Product implements Comparable<Labor> {
 //        return desc;
 //    }
 //
-//    public void setDesc(String desc) {
+//    public void setDes(String desc) {
 //        this.desc = desc;
 //    }
 
-    public double getBilledHrs() {
-        return billedHrs;
+    public double getRetailPrice() {
+        return retailPrice;
     }
 
-    public void setBilledHrs(double billedHrs) {
-        this.billedHrs = billedHrs;
+    public void setRetailPrice(double retailPrice) {
+        this.retailPrice = retailPrice;
     }
 
-    public double getRate() {
-        return rate;
+    public double getListPrice() {
+        return listPrice;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
+    public void setListPrice(double listPrice) {
+        this.listPrice = listPrice;
     }
 
     public boolean isTaxable() {
@@ -70,9 +74,17 @@ public class Labor extends Product implements Comparable<Labor> {
         this.taxable = taxable;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public double subTotal() {
-        return billedHrs * rate;
+        return retailPrice * quantity;
     }
 
     @Override
@@ -82,15 +94,21 @@ public class Labor extends Product implements Comparable<Labor> {
 
     @Override
     public double bill() {
-        return taxable ? TAX_RATE * (billedHrs * rate) : billedHrs * rate;
+        return taxable ? TAX_RATE * (retailPrice * quantity) : retailPrice * quantity;
+    }
+
+    @Override
+    public int compareTo(AutoPart o) {
+        return getName().compareTo(o.getName());
     }
 
     @Override
     public String toString() {
-        return "Labor{" + super.toString() +
-                ", billedHrs=" + billedHrs +
-                ", rate=" + rate +
+        return "Item{" + super.toString() +
+                ", retailPrice=" + retailPrice +
+                ", listPrice=" + listPrice +
                 ", taxable=" + taxable +
+                ", quantity=" + quantity +
                 '}';
     }
 
@@ -102,12 +120,16 @@ public class Labor extends Product implements Comparable<Labor> {
 //        return new SimpleStringProperty(desc);
 //    }
 
-    public SimpleObjectProperty<Double> billedHrsProperty() {
-        return new SimpleObjectProperty<>(billedHrs);
+    public SimpleObjectProperty<Double> retailPriceProperty() {
+        return new SimpleObjectProperty<>(retailPrice);
     }
 
-    public SimpleObjectProperty<Double> rateProperty() {
-        return new SimpleObjectProperty<>(rate);
+    public SimpleObjectProperty<Double> listPriceProperty() {
+        return new SimpleObjectProperty<>(listPrice);
+    }
+
+    public SimpleObjectProperty<Integer> quantityProperty() {
+        return new SimpleObjectProperty<>(quantity);
     }
 
     public SimpleObjectProperty<Boolean> taxableProperty() {
@@ -116,10 +138,5 @@ public class Labor extends Product implements Comparable<Labor> {
 
     public SimpleStringProperty billProperty() {
         return new SimpleStringProperty(String.format("$ %.2f", bill()));
-    }
-
-    @Override
-    public int compareTo(Labor o) {
-       return getName().compareTo(o.getName());
     }
 }

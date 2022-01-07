@@ -1,6 +1,7 @@
 package model;
 
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -13,11 +14,10 @@ public class WorkOrder implements Billable {
     private Date dateCreated, dateCompleted;
     private Customer customer;
     private Vehicle vehicle;
-    private ObservableList<Item> itemList;
+    private ObservableList<AutoPart> itemList;
     private ObservableList<Labor> laborList;
 
     public WorkOrder() {
-        this.id = -1;
         this.dateCreated = Date.valueOf(LocalDate.now().toString());
         this.dateCompleted = null;
         this.customer = null;
@@ -27,7 +27,6 @@ public class WorkOrder implements Billable {
     }
 
     public WorkOrder(Customer customer, Vehicle vehicle) {
-        this.id = -1;
         this.dateCreated = Date.valueOf(LocalDate.now().toString());
         this.dateCompleted = null;
         this.customer = customer;
@@ -45,7 +44,7 @@ public class WorkOrder implements Billable {
     }
 
     public boolean isNew() {
-        return id != -1;
+        return id <= 0;
     }
 
     public Date getDateCreated() {
@@ -80,14 +79,14 @@ public class WorkOrder implements Billable {
         this.vehicle = vehicle;
     }
 
-    public boolean addItem(Item item) {
+    public boolean addItem(AutoPart item) {
         return itemList.add(item);
     }
 
-    public void updateItem(Item oldItem, Item newItem) {
-        ListIterator<Item> iterator = itemList.listIterator();
+    public void updateItem(AutoPart oldItem, AutoPart newItem) {
+        ListIterator<AutoPart> iterator = itemList.listIterator();
         while (iterator.hasNext()) {
-            Item currentItem = iterator.next();
+            AutoPart currentItem = iterator.next();
             if (currentItem.equals(oldItem)) {
                 iterator.set(newItem);
                 break;
@@ -95,11 +94,11 @@ public class WorkOrder implements Billable {
         }
     }
 
-    public boolean removeItem(Item item) {
+    public boolean removeItem(AutoPart item) {
         return itemList.remove(item);
     }
 
-    public Iterator<Item> itemIterator() {
+    public Iterator<AutoPart> autoPartIterator() {
         return itemList.iterator();
     }
 
@@ -126,10 +125,62 @@ public class WorkOrder implements Billable {
         return laborList.iterator();
     }
 
+    public SimpleObjectProperty<Integer> idProperty() {
+        return new SimpleObjectProperty<>(id);
+    }
+
+    public SimpleObjectProperty<Date> dateCreatedProperty() {
+        return new SimpleObjectProperty<>(dateCreated);
+    }
+
+    public SimpleObjectProperty<Date> dateCompletedProperty() {
+        return new SimpleObjectProperty<>(dateCompleted);
+    }
+
+    public SimpleStringProperty billProperty() {
+        return new SimpleStringProperty(String.format("$ %.2f", bill()));
+    }
+
+    public ObservableList<AutoPart> itemList() {
+        return itemList;
+    }
+
+    public ObservableList<Labor> laborList() {
+        return laborList;
+    }
+
+    @Override
+    public double subTotal() {
+        double itemSum = itemList.stream()
+                .map(item -> item.subTotal())
+                .reduce((x, y) -> x + y)
+                .get();
+        double laborSum = laborList.stream()
+                .map(labor -> labor.subTotal())
+                .reduce((x, y) -> x + y)
+                .get();
+        return itemSum + laborSum;
+    }
+
+    @Override
+    public double tax() {
+        double itemTaxSum = itemList.stream()
+                .filter(item -> item.isTaxable())
+                .map(item -> item.tax())
+                .reduce((x, y) -> x + y)
+                .get();
+        double laborTaxSum = laborList.stream()
+                .filter(labor -> labor.isTaxable())
+                .map(labor -> labor.tax())
+                .reduce((x, y) -> x + y)
+                .get();
+        return itemTaxSum + laborTaxSum;
+    }
+
     @Override
     public double bill() {
         double total = 0;
-        for (Item item : itemList) {
+        for (AutoPart item : itemList) {
             total += item.bill();
         }
         for (Labor labor : laborList) {
@@ -149,29 +200,5 @@ public class WorkOrder implements Billable {
                 ", itemList=" + itemList +
                 ", laborList=" + laborList +
                 '}';
-    }
-
-    public SimpleObjectProperty<Integer> idProperty() {
-        return new SimpleObjectProperty<>(id);
-    }
-
-    public SimpleObjectProperty<Date> dateCreatedProperty() {
-        return new SimpleObjectProperty<>(dateCreated);
-    }
-
-    public SimpleObjectProperty<Date> dateCompletedProperty() {
-        return new SimpleObjectProperty<>(dateCompleted);
-    }
-
-    public SimpleObjectProperty<Double> billProperty() {
-        return new SimpleObjectProperty<>(bill());
-    }
-
-    public ObservableList<Item> itemObservableList() {
-        return itemList;
-    }
-
-    public ObservableList<Labor> laborObservableList() {
-        return laborList;
     }
 }

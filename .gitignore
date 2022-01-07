@@ -1,10 +1,13 @@
-# IntelliJ
+r IntelliJ
 .idea
 out
 target
 
 # SQL
 autoshop.db
+
+# Log
+*.log
 
 # MacOS
 .DS_Store

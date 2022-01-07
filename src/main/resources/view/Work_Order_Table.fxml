@@ -1,19 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<TableView fx:id="tv" styleClass="table_view" stylesheets="@App.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderTableController">
-   <columns>
-      <TableColumn fx:id="colId" text="ID" />
-      <TableColumn fx:id="colCustomer" prefWidth="200.0" text="Customer Name" />
-      <TableColumn fx:id="colCompany" prefWidth="200.0" text="Company Name" />
-      <TableColumn fx:id="colDateCreated" prefWidth="150.0" text="Date Created" />
-      <TableColumn fx:id="colDateCompleted" prefWidth="150.0" text="Date Completed" />
-      <TableColumn fx:id="colInvoiceTotal" prefWidth="150.0" text="Invoice Total" />
-   </columns>
+
+<GridPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderTableController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <GridPane hgap="8.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="tfFirstName" promptText="First Name" />
+            <TextField fx:id="tfLastName" promptText="Last Name" GridPane.columnIndex="1" />
+            <TextField fx:id="tfCompanyName" promptText="Company Name" GridPane.columnIndex="2" />
+            <HBox alignment="CENTER" GridPane.columnIndex="3">
+               <children>
+                  <ComboBox fx:id="cbDateCreated" prefWidth="100.0" />
+                  <DatePicker fx:id="dateCreatedPicker" promptText="Date Created" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" spacing="8.0" GridPane.columnIndex="4">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#editWorkOrder" text="Edit" />
+                  <Button mnemonicParsing="false" onAction="#deleteWorkOrder" text="Delete" />
+               </children>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </HBox>
+         </children>
+         <GridPane.margin>
+            <Insets bottom="5.0" />
+         </GridPane.margin>
+      </GridPane>
+      <TableView fx:id="tv" styleClass="table_view" stylesheets="@App.css" GridPane.rowIndex="1">
+         <columns>
+            <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
+            <TableColumn fx:id="colCustomer" prefWidth="200.0" text="Customer Name" />
+            <TableColumn fx:id="colCompany" prefWidth="200.0" text="Company Name" />
+            <TableColumn fx:id="colDateCreated" prefWidth="150.0" text="Date Created" />
+            <TableColumn fx:id="colDateCompleted" prefWidth="150.0" text="Date Completed" />
+            <TableColumn fx:id="colInvoiceTotal" prefWidth="150.0" text="Invoice Total" />
+         </columns>
+      </TableView>
+   </children>
    <padding>
-      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
    </padding>
-</TableView>
+</GridPane>
