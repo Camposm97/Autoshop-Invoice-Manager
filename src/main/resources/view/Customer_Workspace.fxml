@@ -24,23 +24,23 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="First Name" />
-      <Label text="Last Name" GridPane.rowIndex="1" />
-      <Label text="Phone" GridPane.rowIndex="2" />
+      <Label contentDisplay="RIGHT" text="First Name" />
       <TextField fx:id="tfFirstName" GridPane.columnIndex="1" />
-      <Label text="Email" GridPane.rowIndex="3" />
-      <TextField fx:id="tfEmail" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Label contentDisplay="RIGHT" text="Last Name" GridPane.rowIndex="1" />
       <TextField fx:id="tfLastName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <TextField fx:id="tfPhone" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Label text="Company" GridPane.rowIndex="4" />
-      <Label text="Street" GridPane.rowIndex="5" />
-      <Label text="City" GridPane.rowIndex="6" />
+      <Label contentDisplay="RIGHT" text="Phone" GridPane.rowIndex="2" />
+      <fx:include fx:id="tfPhone" source="PhoneField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label contentDisplay="RIGHT" text="Email" GridPane.rowIndex="3" />
+      <TextField fx:id="tfEmail" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Label contentDisplay="RIGHT" text="Company" GridPane.rowIndex="4" />
       <TextField fx:id="tfCompany" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Label contentDisplay="RIGHT" text="Street" GridPane.rowIndex="5" />
       <TextField fx:id="tfStreet" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <Label contentDisplay="RIGHT" text="City" GridPane.rowIndex="6" />
       <TextField fx:id="tfCity" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <Label text="State" GridPane.rowIndex="7" />
-      <Label text="Zip" GridPane.rowIndex="8" />
+      <Label contentDisplay="RIGHT" text="State" GridPane.rowIndex="7" />
       <TextField fx:id="tfState" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <Label contentDisplay="RIGHT" text="Zip" GridPane.rowIndex="8" />
       <TextField fx:id="tfZip" GridPane.columnIndex="1" GridPane.rowIndex="8" />
    </children>
    <padding>

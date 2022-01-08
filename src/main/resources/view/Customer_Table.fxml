@@ -35,9 +35,9 @@
          <children>
             <TextField fx:id="tfFirstName" promptText="First Name" />
             <TextField fx:id="tfLastName" promptText="Last Name" GridPane.columnIndex="1" />
-            <TextField fx:id="tfPhone" promptText="Phone" GridPane.columnIndex="2" />
-            <TextField promptText="Email" GridPane.columnIndex="3" />
-            <TextField fx:id="tfCompanyName" promptText=" Company Name" GridPane.columnIndex="4" />
+            <fx:include fx:id="tfPhone" source="PhoneField.fxml" GridPane.columnIndex="2" />
+            <TextField fx:id="tfEmail" promptText="Email" GridPane.columnIndex="3" />
+            <TextField fx:id="tfCompany" promptText=" Company Name" GridPane.columnIndex="4" />
             <TextField fx:id="tfStreet" promptText="Address" GridPane.columnIndex="5" />
             <TextField fx:id="tfCity" promptText="City" GridPane.columnIndex="6" />
             <TextField fx:id="tfState" promptText="State" GridPane.columnIndex="7" />

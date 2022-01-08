@@ -177,6 +177,48 @@ public class DB {
         }
     }
 
+    public Customer getCustomerById(int id) {
+        Customer customer = null;
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from customer where customer_id = " + id);
+            if (rs.next()) {
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String phone = rs.getString("phone");
+                String email = rs.getString("email");
+                String company = rs.getString("company");
+                String street = rs.getString("street");
+                String city = rs.getString("city");
+                String state = rs.getString("state");
+                String zip = rs.getString("zip");
+                Address address = new Address(street, city, state, zip);
+                customer = new Customer(id, firstName, lastName, phone, email, company, address);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            return customer;
+        }
+    }
+
+    public List<Customer> getAllCustomers() {
+        List<Customer> list = new LinkedList<>();
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("select customer_id from customer;");
+            while (rs.next()) {
+                int id = rs.getInt("customer_id");
+                Customer cus = getCustomerById(id);
+                list.add(cus);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            return list;
+        }
+    }
+
     public void updateCustomer(Customer customer) {
         try {
             PreparedStatement prepStmt = c.prepareStatement("update customer set " +
@@ -207,54 +249,24 @@ public class DB {
         }
     }
 
-    public List<Customer> getAllCustomers() {
+    public List<Customer> getFilteredCustomers(Customer c) {
         List<Customer> list = new LinkedList<>();
         try {
-            Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from customer;");
-            while (rs.next()) {
-                int id = rs.getInt("customer_id");
-                String firstName = rs.getString("first_name");
-                String lastName = rs.getString("last_name");
-                String phone = rs.getString("phone");
-                String email = rs.getString("email");
-                String company = rs.getString("company");
-                String street = rs.getString("street");
-                String city = rs.getString("city");
-                String state = rs.getString("state");
-                String zip = rs.getString("zip");
-                Address address = new Address(street, city, state, zip);
-                Customer cus = new Customer(id, firstName, lastName, phone, email, company, address);
-                list.add(cus);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
-
-    public List<Customer> getFilteredCustomers(String strFirstName, String strLastName, String strCompany) {
-        List<Customer> list = new LinkedList<>();
-        try {
-            Statement stmt = c.createStatement();
+            Statement stmt = this.c.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "select * from customer " +
-                            "where first_name like \"" + strFirstName + "%\" " +
-                            "and last_name like \"" + strLastName + "%\" " +
-                            "and company like \"" + strCompany + "%\";");
+                    "select customer_id from customer " +
+                            "where first_name like \"" + c.getFirstName() + "%\"" +
+                            "and last_name like \"" + c.getLastName() + "%\"" +
+                            "and company like \"" + c.getCompany() + "%\"" +
+                            "and phone like \"" + c.getPhone() + "%\"" +
+                            "and email like \"" + c.getEmail() + "%\"" +
+                            "and street like \"" + c.getAddress().getStreet() + "%\"" +
+                            "and city like \"" + c.getAddress().getCity() + "%\"" +
+                            "and state like \"" + c.getAddress().getState() + "%\"" +
+                            "and zip like \"" + c.getAddress().getZip() + "%\"");
             while (rs.next()) {
                 int id = rs.getInt("customer_id");
-                String firstName = rs.getString("first_name");
-                String lastName = rs.getString("last_name");
-                String phone = rs.getString("phone");
-                String email = rs.getString("email");
-                String company = rs.getString("company");
-                String street = rs.getString("street");
-                String city = rs.getString("city");
-                String state = rs.getString("state");
-                String zip = rs.getString("zip");
-                Address address = new Address(street, city, state, zip);
-                Customer cus = new Customer(id, firstName, lastName, phone, email, company, address);
+                Customer cus = getCustomerById(id);
                 list.add(cus);
             }
         } catch (SQLException e) {
@@ -316,13 +328,13 @@ public class DB {
     }
 
     public int getMaxWorkOrderId() throws SQLException {
-            Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("select max(work_order_id) from work_order");
-            if (rs.next()) {
-                return rs.getInt(1);
-            } else {
-                return 0;
-            }
+        Statement stmt = c.createStatement();
+        ResultSet rs = stmt.executeQuery("select max(work_order_id) from work_order");
+        if (rs.next()) {
+            return rs.getInt(1);
+        } else {
+            return 0;
+        }
     }
 
     public int getNextWorkOrderId() {
@@ -567,7 +579,7 @@ public class DB {
             stmt.execute("delete from work_order where work_order_id = " + workOrder.getId());
             Iterator<AutoPart> itemIterator = workOrder.autoPartIterator();
             while (itemIterator.hasNext()) {
-               deleteWorkOrderAutoPart(itemIterator.next());
+                deleteWorkOrderAutoPart(itemIterator.next());
             }
             Iterator<Labor> laborIterator = workOrder.laborIterator();
             while (laborIterator.hasNext()) {
@@ -603,13 +615,13 @@ public class DB {
     public void updateItem(AutoPart item) throws SQLException {
         PreparedStatement prepStmt = c.prepareStatement(
                 "update work_order_item set " +
-                "item_name = ?," +
-                "item_desc = ?," +
-                "item_retail_price = ?," +
-                "item_list_price = ?," +
-                "item_quantity = ?," +
-                "item_taxable = ? " +
-                "where work_order_item_id = ?");
+                        "item_name = ?," +
+                        "item_desc = ?," +
+                        "item_retail_price = ?," +
+                        "item_list_price = ?," +
+                        "item_quantity = ?," +
+                        "item_taxable = ? " +
+                        "where work_order_item_id = ?");
         prepStmt.setString(1, item.getName());
         prepStmt.setString(2, item.getDesc());
         prepStmt.setDouble(3, item.getRetailPrice());

@@ -83,7 +83,7 @@
                                     <Label text="Last Name" GridPane.columnIndex="1" />
                                     <TextField fx:id="tfLastName" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <Label text="Phone" GridPane.columnIndex="2" />
-                                    <TextField fx:id="tfPhone" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                    <fx:include fx:id="tfPhone" source="PhoneField.fxml" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                     <Label text="Email" GridPane.columnIndex="3" />
                                     <TextField fx:id="tfEmail" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                  </children>
