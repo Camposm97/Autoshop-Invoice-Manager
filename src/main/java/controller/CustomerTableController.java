@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.text.Text;
 import model.Customer;
 import model.DB;
 import model.FX;
@@ -21,10 +22,10 @@ public class CustomerTableController {
     TextField tfFirstName, tfLastName, tfPhone, tfCompanyName, tfStreet, tfCity, tfState, tfZip;
     @FXML
     TableView<Customer> tv;
-//    @FXML
+    //    @FXML
 //    TableColumn<Customer, Integer> colId;
     @FXML
-    TableColumn<Customer, String> colFirstName, colLastName, colPhone, colCompany, colAddress, colCity, colState, colZip;
+    TableColumn<Customer, String> colFirstName, colLastName, colPhone, colEmail, colCompany, colAddress, colCity, colState, colZip;
 
     public CustomerTableController() {
         Platform.runLater(() -> {
@@ -51,6 +52,14 @@ public class CustomerTableController {
                 int index = e.getTablePosition().getRow();
                 Customer customer = e.getTableView().getItems().get(index);
                 customer.setPhone(e.getNewValue());
+                DB.get().updateCustomer(customer);
+            });
+            colEmail.setCellValueFactory(c -> c.getValue().emailProperty());
+            colEmail.setCellFactory(TextFieldTableCell.forTableColumn());
+            colEmail.setOnEditCommit(e -> {
+                int index = e.getTablePosition().getRow();
+                Customer customer = e.getTableView().getItems().get(index);
+                customer.setEmail(e.getNewValue());
                 DB.get().updateCustomer(customer);
             });
             colCompany.setCellValueFactory(c -> c.getValue().companyProperty());
@@ -95,6 +104,7 @@ public class CustomerTableController {
             });
 
             tv.getItems().setAll(DB.get().getAllCustomers());
+            FX.autoResizeColumns(tv);
             ContextMenu cm = initContextMenu();
             tv.setOnContextMenuRequested(e -> {
                 if (tv.getSelectionModel().getSelectedItem() != null) {

@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class WorkOrder implements Billable {
@@ -129,12 +130,15 @@ public class WorkOrder implements Billable {
         return new SimpleObjectProperty<>(id);
     }
 
-    public SimpleObjectProperty<Date> dateCreatedProperty() {
-        return new SimpleObjectProperty<>(dateCreated);
+    public SimpleStringProperty dateCreatedProperty() {
+        return new SimpleStringProperty(dateCreated.toLocalDate().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
     }
 
-    public SimpleObjectProperty<Date> dateCompletedProperty() {
-        return new SimpleObjectProperty<>(dateCompleted);
+    public SimpleStringProperty dateCompletedProperty() {
+        if (dateCompleted != null) {
+            return new SimpleStringProperty(dateCompleted.toLocalDate().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
+        }
+        return new SimpleStringProperty();
     }
 
     public SimpleStringProperty billProperty() {

@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <GridPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderTableController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -57,7 +56,7 @@
             <Insets bottom="5.0" />
          </GridPane.margin>
       </GridPane>
-      <TableView fx:id="tv" styleClass="table_view" stylesheets="@App.css" GridPane.rowIndex="1">
+      <TableView fx:id="tv" stylesheets="@App.css" GridPane.rowIndex="1">
          <columns>
             <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
             <TableColumn fx:id="colCustomer" prefWidth="200.0" text="Customer Name" />

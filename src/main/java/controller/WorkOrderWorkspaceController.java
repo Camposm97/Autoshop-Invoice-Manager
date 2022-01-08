@@ -1,12 +1,15 @@
 package controller;
 
 import app.App;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.print.PrinterJob;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 import model.*;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class WorkOrderWorkspaceController {
@@ -35,23 +38,28 @@ public class WorkOrderWorkspaceController {
     TableColumn<Labor, String> colLaborTotal;
     @FXML
     TextField tfPartsTotal, tfTax, tfDiscount, tfLaborTotal, tfSubtotal, tfTotal; // TODO
+    @FXML
+    TextField tfWorkOrderId, tfDateCreated;
+    @FXML
+    DatePicker dateCompletedPicker;
 
     public WorkOrderWorkspaceController() { // New Work Order
         this.workOrder = new WorkOrder();
-        init();
+//        init();
     }
 
     public WorkOrderWorkspaceController(WorkOrder workOrder) { // Update Work Order
         this.workOrder = workOrder;
-        init();
+//        init();
     }
 
     /**
      * Initializes what columns hold what values binds tables to
      * display parts and labor of a work order
      */
-    private void init() {
-        Platform.runLater(() -> {
+    @FXML
+    public void initialize() {
+//        Platform.runLater(() -> {
             colPartNumber.setCellValueFactory(c -> c.getValue().nameProperty());
             colPartDesc.setCellValueFactory(c -> c.getValue().descProperty());
             colPartQuantity.setCellValueFactory(c -> c.getValue().quantityProperty());
@@ -67,11 +75,30 @@ public class WorkOrderWorkspaceController {
             colLaborTotal.setCellValueFactory(c -> c.getValue().billProperty());
             tvLabor.setItems(workOrder.laborList());
 
+            tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
+            dateCompletedPicker.setConverter(new StringConverter<>() {
+                @Override
+                public String toString(LocalDate localDate) {
+                    return localDate != null ? localDate.format(DateTimeFormatter.ofPattern("MM/DD/YYYY")) : null;
+                }
+
+                @Override
+                public LocalDate fromString(String s) {
+                    return LocalDate.now();
+                }
+            });
+
             if (!workOrder.isNew()) {
                 loadCustomer(workOrder.getCustomer());
                 loadVehicle(workOrder.getVehicle());
+                tfWorkOrderId.setText(String.valueOf(workOrder.getId()));
+                if (workOrder.getDateCompleted() != null) {
+                    dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
+                }
+            } else {
+                tfWorkOrderId.setText(String.valueOf(DB.get().getNextWorkOrderId()));
             }
-        });
+//        });
     }
 
     public void save() {
@@ -80,7 +107,7 @@ public class WorkOrderWorkspaceController {
         if (workOrder.isNew()) {
             System.out.println("Add Work Order");
             DB.get().addWorkOrder(workOrder);
-        } else { // TODO Update work order
+        } else {
             System.out.println("Update Work Order");
             DB.get().updateWorkOrder(workOrder);
             DB.get().deleteProductsMarkedForDeletion();
@@ -104,7 +131,7 @@ public class WorkOrderWorkspaceController {
         String state = tfState.getText();
         String zip = tfZip.getText();
         Address address = new Address(street, city, state, zip);
-        Customer customer = new Customer(firstName, lastName, phone, company, address);
+        Customer customer = new Customer(firstName, lastName, phone, email, company, address);
         return customer;
     }
 
@@ -128,6 +155,7 @@ public class WorkOrderWorkspaceController {
         tfFirstName.setText(customer.getFirstName());
         tfLastName.setText(customer.getLastName());
         tfPhone.setText(customer.getPhone());
+        tfEmail.setText(customer.getEmail());
         tfCompany.setText(customer.getCompany());
         tfAddress.setText(customer.getAddress().getStreet());
         tfCity.setText(customer.getAddress().getCity());
@@ -153,6 +181,10 @@ public class WorkOrderWorkspaceController {
         Vehicle vehicle = buildVehicle();
         workOrder.setCustomer(customer);
         workOrder.setVehicle(vehicle);
+        LocalDate dateCompleted = dateCompletedPicker.getValue();
+        if (dateCompleted != null) {
+            workOrder.setDateCompleted(Date.valueOf(dateCompleted));
+        }
     }
 
     public void print() { // TODO

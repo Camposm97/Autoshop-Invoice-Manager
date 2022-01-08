@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <GridPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -28,6 +27,7 @@
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -35,27 +35,29 @@
          <children>
             <TextField fx:id="tfFirstName" promptText="First Name" />
             <TextField fx:id="tfLastName" promptText="Last Name" GridPane.columnIndex="1" />
-            <TextField fx:id="tfCompanyName" promptText=" Company Name" GridPane.columnIndex="3" />
             <TextField fx:id="tfPhone" promptText="Phone" GridPane.columnIndex="2" />
-            <TextField fx:id="tfStreet" promptText="Address" GridPane.columnIndex="4" />
-            <TextField fx:id="tfCity" promptText="City" GridPane.columnIndex="5" />
-            <TextField fx:id="tfState" promptText="State" GridPane.columnIndex="6" />
-            <TextField fx:id="tfZip" promptText="Zip" GridPane.columnIndex="7" />
+            <TextField promptText="Email" GridPane.columnIndex="3" />
+            <TextField fx:id="tfCompanyName" promptText=" Company Name" GridPane.columnIndex="4" />
+            <TextField fx:id="tfStreet" promptText="Address" GridPane.columnIndex="5" />
+            <TextField fx:id="tfCity" promptText="City" GridPane.columnIndex="6" />
+            <TextField fx:id="tfState" promptText="State" GridPane.columnIndex="7" />
+            <TextField fx:id="tfZip" promptText="Zip" GridPane.columnIndex="8" />
          </children>
          <GridPane.margin>
             <Insets bottom="5.0" />
          </GridPane.margin>
       </GridPane>
-      <TableView fx:id="tv" editable="true" styleClass="table_view" stylesheets="@App.css" GridPane.rowIndex="1">
+      <TableView fx:id="tv" editable="true" stylesheets="@App.css" GridPane.rowIndex="1">
          <columns>
-            <TableColumn fx:id="colFirstName" prefWidth="125.0" text="First Name" />
-            <TableColumn fx:id="colLastName" prefWidth="125.0" text="Last Name" />
-            <TableColumn fx:id="colPhone" prefWidth="125.0" text="Phone" />
-            <TableColumn fx:id="colCompany" prefWidth="250.0" text="Company" />
-            <TableColumn fx:id="colAddress" prefWidth="225.0" text="Address" />
-            <TableColumn fx:id="colCity" prefWidth="200.0" text="City" />
-            <TableColumn fx:id="colState" prefWidth="125.0" text="State" />
-            <TableColumn fx:id="colZip" prefWidth="125.0" text="Zip" />
+            <TableColumn fx:id="colFirstName" prefWidth="100.0" text="First Name" />
+            <TableColumn fx:id="colLastName" prefWidth="100.0" text="Last Name" />
+            <TableColumn fx:id="colPhone" prefWidth="100.0" text="Phone" />
+            <TableColumn fx:id="colEmail" prefWidth="100.0" text="Email" />
+            <TableColumn fx:id="colCompany" prefWidth="100.0" text="Company" />
+            <TableColumn fx:id="colAddress" prefWidth="100.0" text="Address" />
+            <TableColumn fx:id="colCity" prefWidth="100.0" text="City" />
+            <TableColumn fx:id="colState" prefWidth="100.0" text="State" />
+            <TableColumn fx:id="colZip" prefWidth="100.0" text="Zip" />
       <!--      <TableColumn fx:id="colStreet" prefWidth="100" text="Street" />-->
       <!--      <TableColumn fx:id="colCity" prefWidth="100" text="City" />-->
       <!--      <TableColumn fx:id="colState" prefWidth="100" text="State" />-->

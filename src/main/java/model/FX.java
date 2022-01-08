@@ -2,8 +2,10 @@ package model;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,5 +31,24 @@ public class FX {
         } catch (IOException e) {
             return new Pane();
         }
+    }
+
+    public static void autoResizeColumns(TableView<?> tv) {
+        final double OFFSET = 15.0;
+        tv.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        tv.getColumns().stream().forEach((col) -> {
+            Text t = new Text(col.getText());
+            double currentWidth = t.getLayoutBounds().getWidth();
+            for (int i = 0; i < tv.getItems().size(); i++) {
+                if (col.getCellData(i) != null) {
+                    t = new Text(col.getCellData(i).toString());
+                    double width = t.getLayoutBounds().getWidth();
+                    if (width > currentWidth) {
+                        currentWidth = width;
+                    }
+                }
+            }
+            col.setPrefWidth(currentWidth + OFFSET);
+        });
     }
 }

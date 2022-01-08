@@ -5,22 +5,24 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Customer {
     private int id;
-    private String firstName, lastName, phone, company;
+    private String firstName, lastName, phone, email, company;
     private Address address;
 
-    public Customer(String firstName, String lastName, String phone, String company, Address address) {
+    public Customer(String firstName, String lastName, String phone, String email, String company, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
+        this.email = email;
         this.company = company;
         this.address = address;
     }
 
-    public Customer(int id, String firstName, String lastName, String phone, String company, Address address) {
+    public Customer(int id, String firstName, String lastName, String phone, String email, String company, Address address) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
+        this.email = email;
         this.company = company;
         this.address = address;
     }
@@ -43,6 +45,14 @@ public class Customer {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getLastName() {
@@ -89,6 +99,8 @@ public class Customer {
         return new SimpleStringProperty(phone);
     }
 
+    public SimpleStringProperty emailProperty() { return new SimpleStringProperty(email); }
+
     public SimpleStringProperty companyProperty() {
         return new SimpleStringProperty(company);
     }
@@ -100,6 +112,7 @@ public class Customer {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
                 ", company='" + company + '\'' +
                 ", address=" + address +
                 '}';

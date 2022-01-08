@@ -77,109 +77,82 @@ public class DB {
     }
 
     /**
-     * Tables are only initialized if they do not exist.
+     * Tables are only initialized if one of them do not exist.
      *
      * @throws SQLException
      */
     private void initTables() throws SQLException {
         Statement stmt = c.createStatement();
         stmt.addBatch("create table if not exists customer (" +
-                "customer_id integer primary key autoincrement, " +
-                "first_name text, " +
-                "last_name text, " +
-                "phone text, " +
-                "company text, " +
-                "street text, " +
-                "city text, " +
-                "state text, " +
-                "zip text);");
+                "customer_id integer primary key autoincrement," +
+                "first_name text," +
+                "last_name text," +
+                "phone text," +
+                "email text," +
+                "company text," +
+                "street text," +
+                "city text," +
+                "state text," +
+                "zip text)");
         stmt.addBatch("create table if not exists vehicle (" +
-                "vin text primary key, " +
-                "year int, make text, " +
-                "model text, " +
-                "license_plate text, " +
-                "color text, " +
-                "engine text, " +
-                "transmission text, " +
-                "mileage_in text, " +
-                "mileage_out text);");
+                "vin text primary key," +
+                "year int, make text," +
+                "model text," +
+                "license_plate text," +
+                "color text," +
+                "engine text," +
+                "transmission text," +
+                "mileage_in text," +
+                "mileage_out text)");
         stmt.addBatch("create table if not exists item (" +
-                "item_name text primary key, " +
-                "desc text, " +
-                "retail_price real, " +
-                "list_price real, " +
-                "taxable boolean, " +
-                "quantity integer);");
-//        stmt.addBatch("create table if not exists invoice (" +
-//                "invoice_id integer primary key autoincrement);");
+                "item_name text primary key," +
+                "desc text," +
+                "retail_price real," +
+                "list_price real," +
+                "taxable boolean," +
+                "quantity integer)");
         stmt.addBatch("create table if not exists work_order (" +
-                "work_order_id integer primary key autoincrement, " +
-                "date_created date, " +
+                "work_order_id integer primary key autoincrement," +
+                "date_created date," +
                 "date_completed date," +
-                "customer_first_name text, " +
-                "customer_last_name text, " +
-                "customer_phone text, " +
-                "customer_company text, " +
-                "customer_street text, " +
-                "customer_city text, " +
-                "customer_state text, " +
+                "customer_first_name text," +
+                "customer_last_name text," +
+                "customer_phone text," +
+                "customer_email text," +
+                "customer_company text," +
+                "customer_street text," +
+                "customer_city text," +
+                "customer_state text," +
                 "customer_zip text," +
-                "vehicle_vin text, " +
-                "vehicle_year int, " +
-                "vehicle_make text, " +
-                "vehicle_model text, " +
+                "vehicle_vin text," +
+                "vehicle_year int," +
+                "vehicle_make text," +
+                "vehicle_model text," +
                 "vehicle_license_plate text, " +
-                "vehicle_color text, " +
-                "vehicle_engine text, " +
-                "vehicle_transmission text, " +
-                "vehicle_mileage_in text, " +
-                "vehicle_mileage_out text);");
-        /*
-        stmt.addBatch("create table if not exists work_order_customer (" +
-                "work_order_customer_id integer primary key autoincrement, " +
-                "work_order_id integer, " +
-                "customer_first_name text, " +
-                "customer_last_name text, " +
-                "customer_phone text, " +
-                "customer_company text, " +
-                "customer_street text, " +
-                "customer_city text, " +
-                "customer_state text, " +
-                "customer_zip text," +
-                "foreign key(work_order_id) references work_order(work_order_id));");
-        stmt.addBatch("create table if not exists work_order_vehicle (" +
-                "work_order_vehicle_id integer primary key autoincrement, " +
-                "work_order_id integer, " +
-                "vehicle_vin text, " +
-                "vehicle_year int, " +
-                "vehicle_make text, " +
-                "vehicle_model text, " +
-                "vehicle_license_plate text, " +
-                "vehicle_color text, " +
-                "vehicle_engine text, " +
-                "vehicle_mileage_in text, " +
-                "vehicle_mileage_out text, " +
-                "foreign key(work_order_id) references work_order(work_order_id));");
-         */
+                "vehicle_color text," +
+                "vehicle_engine text," +
+                "vehicle_transmission text," +
+                "vehicle_mileage_in text," +
+                "vehicle_mileage_out text)");
         stmt.addBatch("create table if not exists work_order_item (" +
-                "work_order_item_id integer primary key autoincrement, " +
-                "work_order_id integer, " +
-                "item_name text, " +
-                "item_desc text, " +
-                "item_retail_price real, " +
-                "item_list_price real, " +
-                "item_quantity integer, " +
-                "item_taxable boolean, " +
-                "foreign key(work_order_id) references work_order(work_order_id));");
+                "work_order_item_id integer primary key autoincrement," +
+                "work_order_id integer," +
+                "item_name text," +
+                "item_desc text," +
+                "item_retail_price real," +
+                "item_list_price real," +
+                "item_quantity integer," +
+                "item_taxable boolean," +
+                "foreign key(work_order_id) references work_order(work_order_id))");
         stmt.addBatch("create table if not exists work_order_labor (" +
-                "work_order_labor_id integer primary key autoincrement, " +
-                "work_order_id integer, " +
-                "labor_code text, " +
-                "labor_desc text, " +
+                "work_order_labor_id integer primary key autoincrement," +
+                "work_order_id integer," +
+                "labor_code text," +
+                "labor_desc text," +
                 "labor_billed_hrs real," +
                 "labor_rate real," +
-                "labor_taxable boolean, " +
-                "foreign key(work_order_id) references work_order(work_order_id));");
+                "labor_taxable boolean," +
+                "foreign key(work_order_id) references work_order(work_order_id))");
         stmt.executeBatch();
     }
 
@@ -187,16 +160,17 @@ public class DB {
         try {
             PreparedStatement prepStmt = c.prepareStatement(
                     "insert into customer " +
-                            "(first_name, last_name, phone, company, street, city, state, zip)" +
-                            "values (?, ?, ?, ?, ?, ?, ?, ?);");
+                            "(first_name, last_name, phone, email, company, street, city, state, zip)" +
+                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             prepStmt.setString(1, customer.getFirstName());
             prepStmt.setString(2, customer.getLastName());
             prepStmt.setString(3, customer.getPhone());
-            prepStmt.setString(4, customer.getCompany());
-            prepStmt.setString(5, customer.getAddress().getStreet());
-            prepStmt.setString(6, customer.getAddress().getCity());
-            prepStmt.setString(7, customer.getAddress().getState());
-            prepStmt.setString(8, customer.getAddress().getZip());
+            prepStmt.setString(4, customer.getEmail());
+            prepStmt.setString(5, customer.getCompany());
+            prepStmt.setString(6, customer.getAddress().getStreet());
+            prepStmt.setString(7, customer.getAddress().getCity());
+            prepStmt.setString(8, customer.getAddress().getState());
+            prepStmt.setString(9, customer.getAddress().getZip());
             prepStmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -206,17 +180,18 @@ public class DB {
     public void updateCustomer(Customer customer) {
         try {
             PreparedStatement prepStmt = c.prepareStatement("update customer set " +
-                    "first_name = ?, last_name = ?, phone = ?, company = ?, " +
+                    "first_name = ?, last_name = ?, phone = ?, email = ?, company = ?, " +
                     "street = ?, city = ?, state = ?, zip = ?" +
                     "where customer_id=" + customer.getId());
             prepStmt.setString(1, customer.getFirstName());
             prepStmt.setString(2, customer.getLastName());
             prepStmt.setString(3, customer.getPhone());
-            prepStmt.setString(4, customer.getCompany());
-            prepStmt.setString(5, customer.getAddress().getStreet());
-            prepStmt.setString(6, customer.getAddress().getCity());
-            prepStmt.setString(7, customer.getAddress().getState());
-            prepStmt.setString(8, customer.getAddress().getZip());
+            prepStmt.setString(4, customer.getEmail());
+            prepStmt.setString(5, customer.getCompany());
+            prepStmt.setString(6, customer.getAddress().getStreet());
+            prepStmt.setString(7, customer.getAddress().getCity());
+            prepStmt.setString(8, customer.getAddress().getState());
+            prepStmt.setString(9, customer.getAddress().getZip());
             prepStmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -242,13 +217,14 @@ public class DB {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
                 String phone = rs.getString("phone");
+                String email = rs.getString("email");
                 String company = rs.getString("company");
                 String street = rs.getString("street");
                 String city = rs.getString("city");
                 String state = rs.getString("state");
                 String zip = rs.getString("zip");
                 Address address = new Address(street, city, state, zip);
-                Customer cus = new Customer(id, firstName, lastName, phone, company, address);
+                Customer cus = new Customer(id, firstName, lastName, phone, email, company, address);
                 list.add(cus);
             }
         } catch (SQLException e) {
@@ -271,13 +247,14 @@ public class DB {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
                 String phone = rs.getString("phone");
+                String email = rs.getString("email");
                 String company = rs.getString("company");
                 String street = rs.getString("street");
                 String city = rs.getString("city");
                 String state = rs.getString("state");
                 String zip = rs.getString("zip");
                 Address address = new Address(street, city, state, zip);
-                Customer cus = new Customer(id, firstName, lastName, phone, company, address);
+                Customer cus = new Customer(id, firstName, lastName, phone, email, company, address);
                 list.add(cus);
             }
         } catch (SQLException e) {
@@ -338,6 +315,24 @@ public class DB {
         }
     }
 
+    public int getMaxWorkOrderId() throws SQLException {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("select max(work_order_id) from work_order");
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                return 0;
+            }
+    }
+
+    public int getNextWorkOrderId() {
+        try {
+            return getMaxWorkOrderId() + 1;
+        } catch (SQLException e) {
+            return -1;
+        }
+    }
+
     public void addWorkOrder(WorkOrder workOrder) {
         try {
             // Add work_order row
@@ -348,6 +343,7 @@ public class DB {
                             "customer_first_name," +
                             "customer_last_name," +
                             "customer_phone," +
+                            "customer_email," +
                             "customer_company," +
                             "customer_street," +
                             "customer_city," +
@@ -363,32 +359,31 @@ public class DB {
                             "vehicle_transmission," +
                             "vehicle_mileage_in," +
                             "vehicle_mileage_out) " +
-                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             prepStmt.setDate(1, workOrder.getDateCreated());
             prepStmt.setDate(2, workOrder.getDateCompleted());
             prepStmt.setString(3, workOrder.getCustomer().getFirstName());
             prepStmt.setString(4, workOrder.getCustomer().getLastName());
             prepStmt.setString(5, workOrder.getCustomer().getPhone());
-            prepStmt.setString(6, workOrder.getCustomer().getCompany());
-            prepStmt.setString(7, workOrder.getCustomer().getAddress().getStreet());
-            prepStmt.setString(8, workOrder.getCustomer().getAddress().getCity());
-            prepStmt.setString(9, workOrder.getCustomer().getAddress().getState());
-            prepStmt.setString(10, workOrder.getCustomer().getAddress().getZip());
-            prepStmt.setString(11, workOrder.getVehicle().getVin());
-            prepStmt.setInt(12, workOrder.getVehicle().getYear());
-            prepStmt.setString(13, workOrder.getVehicle().getMake());
-            prepStmt.setString(14, workOrder.getVehicle().getModel());
-            prepStmt.setString(15, workOrder.getVehicle().getLicensePlate());
-            prepStmt.setString(16, workOrder.getVehicle().getColor());
-            prepStmt.setString(17, workOrder.getVehicle().getEngine());
-            prepStmt.setString(18, workOrder.getVehicle().getTransmission());
-            prepStmt.setString(19, workOrder.getVehicle().getMileageIn());
-            prepStmt.setString(20, workOrder.getVehicle().getMileageOut());
+            prepStmt.setString(6, workOrder.getCustomer().getEmail());
+            prepStmt.setString(7, workOrder.getCustomer().getCompany());
+            prepStmt.setString(8, workOrder.getCustomer().getAddress().getStreet());
+            prepStmt.setString(9, workOrder.getCustomer().getAddress().getCity());
+            prepStmt.setString(10, workOrder.getCustomer().getAddress().getState());
+            prepStmt.setString(11, workOrder.getCustomer().getAddress().getZip());
+            prepStmt.setString(12, workOrder.getVehicle().getVin());
+            prepStmt.setInt(13, workOrder.getVehicle().getYear());
+            prepStmt.setString(14, workOrder.getVehicle().getMake());
+            prepStmt.setString(15, workOrder.getVehicle().getModel());
+            prepStmt.setString(16, workOrder.getVehicle().getLicensePlate());
+            prepStmt.setString(17, workOrder.getVehicle().getColor());
+            prepStmt.setString(18, workOrder.getVehicle().getEngine());
+            prepStmt.setString(19, workOrder.getVehicle().getTransmission());
+            prepStmt.setString(20, workOrder.getVehicle().getMileageIn());
+            prepStmt.setString(21, workOrder.getVehicle().getMileageOut());
             prepStmt.execute();
 
-            prepStmt = c.prepareStatement("select max(work_order_id) from work_order");
-            ResultSet rs = prepStmt.executeQuery();
-            int id = rs.getInt(1);
+            int id = getMaxWorkOrderId();
             workOrder.setId(id);
 
             // Add work_order_item row(s)
@@ -422,23 +417,24 @@ public class DB {
                 String firstName = rsWorkOrder.getString(4);
                 String lastName = rsWorkOrder.getString(5);
                 String phone = rsWorkOrder.getString(6);
-                String company = rsWorkOrder.getString(7);
-                String street = rsWorkOrder.getString(8);
-                String city = rsWorkOrder.getString(9);
-                String state = rsWorkOrder.getString(10);
-                String zip = rsWorkOrder.getString(11);
+                String email = rsWorkOrder.getString(7);
+                String company = rsWorkOrder.getString(8);
+                String street = rsWorkOrder.getString(9);
+                String city = rsWorkOrder.getString(10);
+                String state = rsWorkOrder.getString(11);
+                String zip = rsWorkOrder.getString(12);
                 Address address = new Address(street, city, state, zip);
-                Customer customer = new Customer(firstName, lastName, phone, company, address);
-                String vin = rsWorkOrder.getString(12);
-                int year = rsWorkOrder.getInt(13);
-                String make = rsWorkOrder.getString(14);
-                String model = rsWorkOrder.getString(15);
-                String licensePlate = rsWorkOrder.getString(16);
-                String color = rsWorkOrder.getString(17);
-                String engine = rsWorkOrder.getString(18);
-                String transmission = rsWorkOrder.getString(19);
-                String mileageIn = rsWorkOrder.getString(20);
-                String mileageOut = rsWorkOrder.getString(21);
+                Customer customer = new Customer(firstName, lastName, phone, email, company, address);
+                String vin = rsWorkOrder.getString(13);
+                int year = rsWorkOrder.getInt(14);
+                String make = rsWorkOrder.getString(15);
+                String model = rsWorkOrder.getString(16);
+                String licensePlate = rsWorkOrder.getString(17);
+                String color = rsWorkOrder.getString(18);
+                String engine = rsWorkOrder.getString(19);
+                String transmission = rsWorkOrder.getString(20);
+                String mileageIn = rsWorkOrder.getString(21);
+                String mileageOut = rsWorkOrder.getString(22);
                 Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
                 workOrder = new WorkOrder(customer, vehicle);
                 workOrder.setId(workOrderId);
@@ -496,7 +492,7 @@ public class DB {
         return list;
     }
 
-    public void updateWorkOrder(WorkOrder workOrder) { // TODO
+    public void updateWorkOrder(WorkOrder workOrder) {
         try {
             PreparedStatement prepStmt = c.prepareStatement(
                     "update work_order set " +
@@ -504,6 +500,7 @@ public class DB {
                             "customer_first_name = ?," +
                             "customer_last_name = ?," +
                             "customer_phone = ?," +
+                            "customer_email = ?," +
                             "customer_company = ?," +
                             "customer_street = ?," +
                             "customer_city = ?," +
@@ -524,22 +521,23 @@ public class DB {
             prepStmt.setString(2, workOrder.getCustomer().getFirstName());
             prepStmt.setString(3, workOrder.getCustomer().getLastName());
             prepStmt.setString(4, workOrder.getCustomer().getPhone());
-            prepStmt.setString(5, workOrder.getCustomer().getCompany());
-            prepStmt.setString(6, workOrder.getCustomer().getAddress().getStreet());
-            prepStmt.setString(7, workOrder.getCustomer().getAddress().getCity());
-            prepStmt.setString(8, workOrder.getCustomer().getAddress().getState());
-            prepStmt.setString(9, workOrder.getCustomer().getAddress().getZip());
-            prepStmt.setString(10, workOrder.getVehicle().getVin());
-            prepStmt.setInt(11, workOrder.getVehicle().getYear());
-            prepStmt.setString(12, workOrder.getVehicle().getMake());
-            prepStmt.setString(13, workOrder.getVehicle().getModel());
-            prepStmt.setString(14, workOrder.getVehicle().getLicensePlate());
-            prepStmt.setString(15, workOrder.getVehicle().getColor());
-            prepStmt.setString(16, workOrder.getVehicle().getEngine());
-            prepStmt.setString(17, workOrder.getVehicle().getTransmission());
-            prepStmt.setString(18, workOrder.getVehicle().getMileageIn());
-            prepStmt.setString(19, workOrder.getVehicle().getMileageOut());
-            prepStmt.setInt(20, workOrder.getId());
+            prepStmt.setString(5, workOrder.getCustomer().getEmail());
+            prepStmt.setString(6, workOrder.getCustomer().getCompany());
+            prepStmt.setString(7, workOrder.getCustomer().getAddress().getStreet());
+            prepStmt.setString(8, workOrder.getCustomer().getAddress().getCity());
+            prepStmt.setString(9, workOrder.getCustomer().getAddress().getState());
+            prepStmt.setString(10, workOrder.getCustomer().getAddress().getZip());
+            prepStmt.setString(11, workOrder.getVehicle().getVin());
+            prepStmt.setInt(12, workOrder.getVehicle().getYear());
+            prepStmt.setString(13, workOrder.getVehicle().getMake());
+            prepStmt.setString(14, workOrder.getVehicle().getModel());
+            prepStmt.setString(15, workOrder.getVehicle().getLicensePlate());
+            prepStmt.setString(16, workOrder.getVehicle().getColor());
+            prepStmt.setString(17, workOrder.getVehicle().getEngine());
+            prepStmt.setString(18, workOrder.getVehicle().getTransmission());
+            prepStmt.setString(19, workOrder.getVehicle().getMileageIn());
+            prepStmt.setString(20, workOrder.getVehicle().getMileageOut());
+            prepStmt.setInt(21, workOrder.getId());
             prepStmt.execute();
 
             Iterator<AutoPart> autoPartIterator = workOrder.autoPartIterator();

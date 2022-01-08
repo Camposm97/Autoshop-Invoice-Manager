@@ -13,6 +13,7 @@ import model.FX;
 import model.WorkOrder;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class WorkOrderTableController {
     @FXML
@@ -30,9 +31,9 @@ public class WorkOrderTableController {
     @FXML
     TableColumn<WorkOrder, String> colCompany;
     @FXML
-    TableColumn<WorkOrder, Date> colDateCreated;
+    TableColumn<WorkOrder, String> colDateCreated;
     @FXML
-    TableColumn<WorkOrder, Date> colDateCompleted;
+    TableColumn<WorkOrder, String> colDateCompleted;
     @FXML
     TableColumn<WorkOrder, String> colInvoiceTotal;
 
@@ -61,6 +62,7 @@ public class WorkOrderTableController {
             colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
             colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
             tv.getItems().setAll(DB.get().getAllWorkOrders());
+            FX.autoResizeColumns(tv);
         });
     }
 

@@ -1,12 +1,8 @@
 .add_pane {
-    -fx-font-size: 11pt;
+    -fx-font-size: 10pt;
 }
 
 .title_label {
     -fx-font-weight: bold;
-    -fx-font-size: 12pt;
-}
-
-.table_view {
-    -fx-font-size: 10.5pt;
+    -fx-font-size: 11pt;
 }
