@@ -20,7 +20,7 @@
                      </items>
                   </Menu>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Preferences..." />
+                  <MenuItem mnemonicParsing="false" onAction="#preferences" text="Preferences..." />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
             </items>

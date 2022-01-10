@@ -188,25 +188,7 @@ public class WorkOrderWorkspaceController {
     }
 
     public void print() { // TODO
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Print Work Order");
-        alert.setHeaderText("Ready to print Word Order #");
-        alert.getDialogPane().setContent(FX.view("Work_Order_Print.fxml"));
-        ButtonType bt1 = new ButtonType("Print", ButtonBar.ButtonData.OK_DONE);
-        ButtonType bt2 = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(bt1, bt2);
-        Optional<ButtonType> rs = alert.showAndWait();
-        rs.ifPresent(e -> {
-            if (e == bt1) {
-                PrinterJob printerJob = PrinterJob.createPrinterJob();
-                if (printerJob.showPrintDialog(alert.getOwner())) {
-                    System.out.println("Print Work Order");
-//                    if (printerJob.printPage(node)) {
-//                        printerJob.endJob();
-//                    }
-                }
-            }
-        });
+        AlertFactory.showPrintWorkOrder(workOrder);
     }
 
     public void addPart() {

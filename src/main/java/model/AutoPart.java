@@ -83,13 +83,13 @@ public class AutoPart extends Product implements Comparable<AutoPart> {
     }
 
     @Override
-    public double subTotal() {
+    public double subtotal() {
         return retailPrice * quantity;
     }
 
     @Override
     public double tax() {
-        return taxable ? bill() - subTotal() : 0;
+        return taxable ? bill() - subtotal() : 0;
     }
 
     @Override

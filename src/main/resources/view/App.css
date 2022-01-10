@@ -6,3 +6,12 @@
     -fx-font-weight: bold;
     -fx-font-size: 11pt;
 }
+
+.information_form {
+    -fx-border-color: black;
+    -fx-border-width: 0.5pt
+}
+
+.report_form, .information_form {
+    -fx-font-size: 8pt;
+}

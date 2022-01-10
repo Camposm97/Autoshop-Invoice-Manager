@@ -29,7 +29,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         App.root = (BorderPane) FX.view("App.fxml");
-        Scene scene = new Scene(root, 1024, 768);
+        Scene scene = new Scene(root, 1160, 768);
         stage.setScene(scene);
         stage.setTitle(TITLE);
         Image img = new Image("red_car.png");

@@ -71,13 +71,13 @@ public class Labor extends Product implements Comparable<Labor> {
     }
 
     @Override
-    public double subTotal() {
+    public double subtotal() {
         return billedHrs * rate;
     }
 
     @Override
     public double tax() {
-        return taxable ? bill() - subTotal() : 0;
+        return taxable ? bill() - subtotal() : 0;
     }
 
     @Override

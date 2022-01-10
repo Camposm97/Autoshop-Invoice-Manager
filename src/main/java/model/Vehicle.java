@@ -98,6 +98,10 @@ public class Vehicle {
         this.mileageOut = mileageOut;
     }
 
+    public String getMileageInAndOut() {
+        return mileageIn + '/' + mileageOut + " (" + (Integer.parseInt(mileageOut) - Integer.parseInt(mileageIn)) + ')';
+    }
+
     @Override
     public String toString() {
         return "Vehicle{" +

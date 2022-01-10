@@ -17,6 +17,7 @@ public class FX {
             URL url = FX.class.getClassLoader().getResource("view/" + src);
             return FXMLLoader.load(url);
         } catch (IOException e) {
+            e.printStackTrace();
             return new Pane();
         }
     }
@@ -29,6 +30,7 @@ public class FX {
             fxmlLoader.setLocation(url);
             return fxmlLoader.load();
         } catch (IOException e) {
+            e.printStackTrace();
             return new Pane();
         }
     }

@@ -1,21 +1,27 @@
 package model;
 
-import controller.LaborWorkspaceController;
-import controller.PartWorkspaceController;
-import controller.CustomerWorkspaceController;
-import controller.VehicleWorkspaceController;
+import controller.*;
+import javafx.print.*;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
 
 import java.util.Optional;
 
 public class AlertFactory {
     public static void showAddCustomer() {
-        Alert alert = AlertBuilder.buildDialog("Add Customer");
         CustomerWorkspaceController controller = new CustomerWorkspaceController();
-        alert.getDialogPane().setContent(FX.view("Customer_Workspace.fxml", controller));
-        Optional<ButtonType> rs = alert.showAndWait();
+        AlertBuilder builder = new AlertBuilder();
+        Optional<ButtonType> rs = builder.buildAddDialog(
+                "Add Customer",
+                FX.view("Customer_Workspace.fxml", controller)).showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton())
                 controller.addCustomer();
@@ -23,11 +29,11 @@ public class AlertFactory {
     }
 
     public static void showAddVehicle() {
-        Alert alert = AlertBuilder.buildDialog("Add Vehicle");
         VehicleWorkspaceController controller = new VehicleWorkspaceController();
-        alert.getDialogPane().setContent(FX.view("Vehicle_Workspace.fxml", controller));
-
-        Optional<ButtonType> rs = alert.showAndWait();
+        AlertBuilder builder = new AlertBuilder();
+        Optional<ButtonType> rs = builder.buildAddDialog(
+                "Add Vehicle",
+                FX.view("Vehicle_Workspace.fxml", controller)).showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton())
                 controller.addVehicle();
@@ -35,11 +41,11 @@ public class AlertFactory {
     }
 
     public static void showAddPart(WorkOrder workOrder) {
-        Alert alert = AlertBuilder.buildDialog("Add Part");
         PartWorkspaceController controller = new PartWorkspaceController();
-        Parent node = FX.view("Work_Order_Part_Workspace.fxml", controller);
-        alert.getDialogPane().setContent(node);
-        Optional<ButtonType> rs = alert.showAndWait();
+        AlertBuilder builder = new AlertBuilder();
+        Optional<ButtonType> rs = builder.buildAddDialog(
+                "Add Part",
+                FX.view("Work_Order_Part_Workspace.fxml", controller)).showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 System.out.println("Save Part");
@@ -49,10 +55,10 @@ public class AlertFactory {
     }
 
     public static void showEditPart(WorkOrder workOrder, AutoPart selectedItem) {
-        Alert alert = AlertBuilder.buildDialog("Update Part");
         PartWorkspaceController controller = new PartWorkspaceController();
         Parent node = FX.view("Work_Order_Part_Workspace.fxml", controller);
-        alert.getDialogPane().setContent(node);
+        AlertBuilder builder = new AlertBuilder();
+        Alert alert = builder.buildAddDialog("Update Part", node);
         controller.loadPart(selectedItem);
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
@@ -62,10 +68,10 @@ public class AlertFactory {
     }
 
     public static void showAddLabor(WorkOrder workOrder) {
-        Alert alert = AlertBuilder.buildDialog("Add Labor");
         LaborWorkspaceController controller = new LaborWorkspaceController();
         Parent node = FX.view("Work_Order_Labor_Workspace.fxml", controller);
-        alert.getDialogPane().setContent(node);
+        AlertBuilder builder = new AlertBuilder();
+        Alert alert = builder.buildAddDialog("Add Labor", node);
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
@@ -75,16 +81,55 @@ public class AlertFactory {
     }
 
     public static void showEditLabor(WorkOrder workOrder, Labor selectedLabor) {
-        Alert alert = AlertBuilder.buildDialog("Update Labor");
         LaborWorkspaceController controller = new LaborWorkspaceController();
         Parent node = FX.view("Work_Order_Labor_Workspace.fxml", controller);
+        AlertBuilder builder = new AlertBuilder();
+        Alert alert = builder.buildAddDialog("Update Labor", node);
         controller.loadLabor(selectedLabor);
-        alert.getDialogPane().setContent(node);
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 controller.updateLabor(workOrder, selectedLabor);
             }
         });
+    }
+
+    public static void showPrintWorkOrder(WorkOrder workOrder) {
+        WorkOrderPrintController controller = new WorkOrderPrintController(workOrder);
+        AnchorPane node = (AnchorPane) FX.view("Work_Order_Print.fxml", controller);
+        AlertBuilder builder = new AlertBuilder();
+        builder.setTitle("Print Work Order");
+        builder.setHeaderText("Ready to print Work Order #" + workOrder.getId());
+        ScrollPane root = new ScrollPane(node);
+        root.setFitToWidth(true);
+        root.setPrefHeight(400);
+
+        builder.setContent(root);
+        builder.setPrintWorkOrderBtns();
+        Alert alert = builder.build();
+        Optional<ButtonType> rs = alert.showAndWait();
+        rs.ifPresent(e -> {
+            if (e.getButtonData().isDefaultButton()) {
+                PrinterJob printerJob = PrinterJob.createPrinterJob();
+                if (printerJob.showPrintDialog(alert.getOwner())) {
+                    WritableImage wi = node.snapshot(null, null);
+                    ImageView iv = new ImageView(wi);
+                    PageLayout pageLayout = printerJob.getPrinter().createPageLayout(Paper.NA_LETTER, PageOrientation.PORTRAIT, Printer.MarginType.HARDWARE_MINIMUM);
+                    printerJob.getJobSettings().setPageLayout(pageLayout);
+                    iv.setFitWidth(pageLayout.getPrintableWidth());
+                    iv.setFitHeight(pageLayout.getPrintableHeight());
+                    if (printerJob.printPage(iv)) {
+                        System.out.println(Printer.MarginType.HARDWARE_MINIMUM);
+                        System.out.println(printerJob.getJobSettings().getPageLayout().toString());
+                        printerJob.endJob();
+                    }
+                }
+            }
+        });
+    }
+
+    public static void showPreferences() {
+        AlertBuilder builder = new AlertBuilder();
+        builder.build().showAndWait();
     }
 }

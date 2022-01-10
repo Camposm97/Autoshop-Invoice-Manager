@@ -79,6 +79,10 @@ public class Customer {
         this.address = address;
     }
 
+    public String getName() {
+        return firstName + " " + lastName;
+    }
+
     public SimpleObjectProperty<Integer> idProperty() {
         return new SimpleObjectProperty<>(id);
     }
@@ -92,7 +96,7 @@ public class Customer {
     }
 
     public SimpleStringProperty nameProperty() {
-        return new SimpleStringProperty(firstName + " " + lastName);
+        return new SimpleStringProperty(getName());
     }
 
     public SimpleStringProperty phoneProperty() {

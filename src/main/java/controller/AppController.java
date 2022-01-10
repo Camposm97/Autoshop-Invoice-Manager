@@ -36,6 +36,10 @@ public class AppController {
         App.setDisplay(FX.view("Work_Order_Table.fxml"));
     }
 
+    public void preferences() {
+        AlertFactory.showPreferences();
+    }
+
     public void exit() {
         Platform.exit();
     }
