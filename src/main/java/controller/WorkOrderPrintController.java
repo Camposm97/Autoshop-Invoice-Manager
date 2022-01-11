@@ -5,6 +5,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import model.AutoPart;
 import model.Labor;
+import model.Preferences;
 import model.WorkOrder;
 
 import java.util.Iterator;
@@ -34,6 +35,11 @@ public class WorkOrderPrintController {
         while (workOrderId.length() < 4) {
             workOrderId = '0' + workOrderId;
         }
+        txtOwnerCompany.setText(Preferences.get().getCompany());
+        txtOwnerStreet.setText(Preferences.get().getAddress());
+        txtOwnerCityStateAndZip.setText(Preferences.get().getCity() + ", " + Preferences.get().getState() + " " + Preferences.get().getZip());
+        txtOwnerPhone.setText(Preferences.get().getPhone());
+
         txtWorkOrderId.setText(workOrderId);
         txtName.setText(workOrder.getCustomer().getName());
         txtPhone.setText(workOrder.getCustomer().getPhone());

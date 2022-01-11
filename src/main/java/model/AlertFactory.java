@@ -1,5 +1,6 @@
 package model;
 
+import app.App;
 import controller.*;
 import javafx.print.*;
 import javafx.scene.Parent;
@@ -129,7 +130,11 @@ public class AlertFactory {
     }
 
     public static void showPreferences() {
-        AlertBuilder builder = new AlertBuilder();
-        builder.build().showAndWait();
+        AlertBuilder builder = new AlertBuilder()
+                .setTitle("Preferences")
+                .setHeaderText("Repair-Shop Settings")
+                .setDefaultBtn()
+                .setContent(FX.view("Preferences.fxml"));
+        builder.build().showAndWait().ifPresent(e -> Preferences.get().save());
     }
 }

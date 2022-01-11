@@ -3,10 +3,9 @@ r IntelliJ
 out
 target
 
-# SQL
+# Files
 autoshop.db
-
-# Log
+preferences.config
 *.log
 
 # MacOS

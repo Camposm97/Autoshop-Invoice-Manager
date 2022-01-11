@@ -20,43 +20,56 @@ public class AlertBuilder {
 
     public AlertBuilder() {
         this.alertType = Alert.AlertType.INFORMATION;
-        this.btList = new ButtonType[0];
     }
 
-    public void setAlertType(Alert.AlertType alertType) {
+    public AlertBuilder setAlertType(Alert.AlertType alertType) {
         this.alertType = alertType;
+        return this;
     }
 
-    public void setTitle(String title) {
+    public AlertBuilder setTitle(String title) {
         this.title = title;
+        return this;
     }
 
-    public void setHeaderText(String headerText) {
+    public AlertBuilder setHeaderText(String headerText) {
         this.headerText = headerText;
+        return this;
     }
 
-    public void setHeaderTextInfo() {
+    public AlertBuilder setHeaderTextInfo() {
         this.headerText = "Please fill out the following information";
+        return this;
     }
 
-    public void setOnDefaultBtnClicked(Function<Void, Void> callback) {
+    public AlertBuilder setOnDefaultBtnClicked(Function<Void, Void> callback) {
         this.callback = callback;
+        return this;
     }
 
-    public void setSaveCancelBtns() {
+    public AlertBuilder setSaveCancelBtns() {
         ButtonType bt1 = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         ButtonType bt2 = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         btList = new ButtonType[]{bt1, bt2};
+        return this;
     }
 
-    public void setPrintWorkOrderBtns() {
+    public AlertBuilder setPrintWorkOrderBtns() {
         ButtonType bt1 = new ButtonType("Print", ButtonBar.ButtonData.OK_DONE);
         ButtonType bt2 = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         btList = new ButtonType[]{bt1, bt2};
+        return this;
     }
 
-    public void setContent(Node content) {
+    public AlertBuilder setDefaultBtn() {
+        ButtonType bt = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        btList = new ButtonType[]{bt};
+        return this;
+    }
+
+    public AlertBuilder setContent(Node content) {
         this.content = content;
+        return this;
     }
 
     public Alert buildAddDialog(String title, Node content) {

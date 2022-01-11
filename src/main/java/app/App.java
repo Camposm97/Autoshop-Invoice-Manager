@@ -8,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.DB;
 import model.FX;
+import model.Preferences;
 
 public class App extends Application {
     private static final String TITLE = "Autoshop Invoice Manager";
