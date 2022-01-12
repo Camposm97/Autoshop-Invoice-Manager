@@ -37,7 +37,7 @@ public class WorkOrderPrintController {
         }
         txtOwnerCompany.setText(Preferences.get().getCompany());
         txtOwnerStreet.setText(Preferences.get().getAddress());
-        txtOwnerCityStateAndZip.setText(Preferences.get().getCity() + ", " + Preferences.get().getState() + " " + Preferences.get().getZip());
+        txtOwnerCityStateAndZip.setText(initCityStateAndZip());
         txtOwnerPhone.setText(Preferences.get().getPhone());
 
         txtWorkOrderId.setText(workOrderId);
@@ -57,12 +57,12 @@ public class WorkOrderPrintController {
         txtMileageInAndOut.setText(workOrder.getVehicle().getMileageInAndOut());
         Iterator<AutoPart> autoPartIterator = workOrder.autoPartIterator();
         for (int i = 1; autoPartIterator.hasNext(); i++) {
-            AutoPart ap = autoPartIterator.next();
-            Text txtName = new Text(ap.getName());
-            Text txtDesc = new Text(ap.getDesc());
-            Text txtUnitPrice = new Text(String.format("%.2f", ap.getRetailPrice()));
-            Text txtQty = new Text(String.valueOf(ap.getQuantity()));
-            Text txtSubtotal = new Text(String.format("%.2f", ap.subtotal()));
+            AutoPart a = autoPartIterator.next();
+            Text txtName = new Text(a.getName());
+            Text txtDesc = new Text(a.getDesc());
+            Text txtUnitPrice = new Text(format1(a.getRetailPrice()));
+            Text txtQty = new Text(String.valueOf(a.getQuantity()));
+            Text txtSubtotal = new Text(format1(a.subtotal()));
             gridPaneParts.addRow(i, txtName, txtDesc, txtUnitPrice, txtQty, txtSubtotal);
         }
         Iterator<Labor> laborIterator = workOrder.laborIterator();
@@ -70,10 +70,27 @@ public class WorkOrderPrintController {
             Labor lbr = laborIterator.next();
             Text txtCode = new Text(lbr.getName());
             Text txtDesc = new Text(lbr.getDesc());
-            Text txtRate = new Text(String.format("%.2f", lbr.getRate()));
+            Text txtRate = new Text(format1(lbr.getRate()));
             Text txtBilledHrs = new Text(String.valueOf(lbr.getBilledHrs()));
-            Text txtSubtotal = new Text(String.format("%.2f", lbr.subtotal()));
+            Text txtSubtotal = new Text(format1(lbr.subtotal()));
             gridPaneLabor.addRow(i, txtCode, txtDesc, txtRate, txtBilledHrs, txtSubtotal);
         }
+        txtPartsTotal.setText(format2(workOrder.partsSubtotal()));
+        txtLaborTotal.setText(format2(workOrder.laborSubtotal()));
+        txtSubtotal.setText(format2(workOrder.subtotal()));
+        txtSalesTax.setText(format2(workOrder.tax()));
+        txtWorkOrderTotal.setText(format2(workOrder.bill()));
+    }
+
+    public String initCityStateAndZip() {
+        return Preferences.get().getCity() + ", " + Preferences.get().getState() + " " + Preferences.get().getZip();
+     }
+
+    public String format1(double x) {
+        return String.format("%.2f", x);
+    }
+
+    public String format2(double x) {
+        return String.format("$ %.2f", x);
     }
 }

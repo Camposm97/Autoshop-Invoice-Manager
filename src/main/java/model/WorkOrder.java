@@ -153,6 +153,14 @@ public class WorkOrder implements Billable {
         return laborList;
     }
 
+    public double partsSubtotal() {
+        return itemList.stream().map(x -> x.subtotal()).reduce((x,y) -> x+y).get();
+    }
+
+    public double laborSubtotal() {
+        return laborList.stream().map(x -> x.subtotal()).reduce((x,y) -> x+y).get();
+    }
+
     @Override
     public double subtotal() {
         double itemSum = itemList.stream()
