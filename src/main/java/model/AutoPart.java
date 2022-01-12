@@ -112,20 +112,12 @@ public class AutoPart extends Product implements Comparable<AutoPart> {
                 '}';
     }
 
-//    public SimpleStringProperty nameProperty() {
-//        return new SimpleStringProperty(name);
-//    }
-//
-//    public SimpleStringProperty descProperty() {
-//        return new SimpleStringProperty(desc);
-//    }
-
-    public SimpleObjectProperty<Double> retailPriceProperty() {
-        return new SimpleObjectProperty<>(retailPrice);
+    public SimpleStringProperty retailPriceProperty() {
+        return new SimpleStringProperty(String.format("%.2f", retailPrice));
     }
 
-    public SimpleObjectProperty<Double> listPriceProperty() {
-        return new SimpleObjectProperty<>(listPrice);
+    public SimpleStringProperty listPriceProperty() {
+        return new SimpleStringProperty(String.format("%.2f", listPrice));
     }
 
     public SimpleObjectProperty<Integer> quantityProperty() {

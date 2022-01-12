@@ -25,7 +25,7 @@ public class WorkOrderWorkspaceController {
     @FXML
     TableColumn<AutoPart, Integer> colPartQuantity;
     @FXML
-    TableColumn<AutoPart, Double> colPartRetailPrice, colPartListPrice;
+    TableColumn<AutoPart, String> colPartRetailPrice, colPartListPrice;
     @FXML
     TableColumn<AutoPart, String> colPartTotal;
     @FXML
@@ -33,7 +33,9 @@ public class WorkOrderWorkspaceController {
     @FXML
     TableColumn<Labor, String> colLaborCode, colLaborDesc;
     @FXML
-    TableColumn<Labor, Double> colLaborBilledHrs, colLaborRate;
+    TableColumn<Labor, Double> colLaborBilledHrs;
+    @FXML
+    TableColumn<Labor, String> colLaborRate;
     @FXML
     TableColumn<Labor, String> colLaborTotal;
     @FXML
@@ -59,46 +61,44 @@ public class WorkOrderWorkspaceController {
      */
     @FXML
     public void initialize() {
-//        Platform.runLater(() -> {
-            colPartNumber.setCellValueFactory(c -> c.getValue().nameProperty());
-            colPartDesc.setCellValueFactory(c -> c.getValue().descProperty());
-            colPartQuantity.setCellValueFactory(c -> c.getValue().quantityProperty());
-            colPartRetailPrice.setCellValueFactory(c -> c.getValue().retailPriceProperty());
-            colPartListPrice.setCellValueFactory(c -> c.getValue().listPriceProperty());
-            colPartTotal.setCellValueFactory(c -> c.getValue().billProperty());
-            tvParts.setItems(workOrder.itemList());
+        colPartNumber.setCellValueFactory(c -> c.getValue().nameProperty());
+        colPartDesc.setCellValueFactory(c -> c.getValue().descProperty());
+        colPartQuantity.setCellValueFactory(c -> c.getValue().quantityProperty());
+        colPartRetailPrice.setCellValueFactory(c -> c.getValue().retailPriceProperty());
+        colPartListPrice.setCellValueFactory(c -> c.getValue().listPriceProperty());
+        colPartTotal.setCellValueFactory(c -> c.getValue().billProperty());
+        tvParts.setItems(workOrder.itemList());
 
-            colLaborCode.setCellValueFactory(c -> c.getValue().nameProperty());
-            colLaborDesc.setCellValueFactory(c -> c.getValue().descProperty());
-            colLaborBilledHrs.setCellValueFactory(c -> c.getValue().billedHrsProperty());
-            colLaborRate.setCellValueFactory(c -> c.getValue().rateProperty());
-            colLaborTotal.setCellValueFactory(c -> c.getValue().billProperty());
-            tvLabor.setItems(workOrder.laborList());
+        colLaborCode.setCellValueFactory(c -> c.getValue().nameProperty());
+        colLaborDesc.setCellValueFactory(c -> c.getValue().descProperty());
+        colLaborBilledHrs.setCellValueFactory(c -> c.getValue().billedHrsProperty());
+        colLaborRate.setCellValueFactory(c -> c.getValue().rateProperty());
+        colLaborTotal.setCellValueFactory(c -> c.getValue().billProperty());
+        tvLabor.setItems(workOrder.laborList());
 
-            tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
-            dateCompletedPicker.setConverter(new StringConverter<>() {
-                @Override
-                public String toString(LocalDate localDate) {
-                    return localDate != null ? localDate.format(DateTimeFormatter.ofPattern("MM/DD/YYYY")) : null;
-                }
-
-                @Override
-                public LocalDate fromString(String s) {
-                    return LocalDate.now();
-                }
-            });
-
-            if (!workOrder.isNew()) {
-                loadCustomer(workOrder.getCustomer());
-                loadVehicle(workOrder.getVehicle());
-                tfWorkOrderId.setText(String.valueOf(workOrder.getId()));
-                if (workOrder.getDateCompleted() != null) {
-                    dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
-                }
-            } else {
-                tfWorkOrderId.setText(String.valueOf(DB.get().getNextWorkOrderId()));
+        tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
+        dateCompletedPicker.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(LocalDate localDate) {
+                return localDate != null ? localDate.format(DateTimeFormatter.ofPattern("MM/DD/YYYY")) : null;
             }
-//        });
+
+            @Override
+            public LocalDate fromString(String s) {
+                return LocalDate.now();
+            }
+        });
+
+        if (!workOrder.isNew()) {
+            loadCustomer(workOrder.getCustomer());
+            loadVehicle(workOrder.getVehicle());
+            tfWorkOrderId.setText(String.valueOf(workOrder.getId()));
+            if (workOrder.getDateCompleted() != null) {
+                dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
+            }
+        } else {
+            tfWorkOrderId.setText(String.valueOf(DB.get().getNextWorkOrderId()));
+        }
     }
 
     public void save() {

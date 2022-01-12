@@ -3,10 +3,15 @@ package controller;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import model.AutoPart;
+import model.DB;
 import model.WorkOrder;
+
+import java.util.List;
 
 public class PartWorkspaceController {
     @FXML
@@ -17,16 +22,24 @@ public class PartWorkspaceController {
     CheckBox cbPartTaxable;
     @FXML
     TextField tfPartNumberSearch, tfPartDescSearch;
+    @FXML
+    TableView<AutoPart> tvParts;
+    @FXML
+    TableColumn<AutoPart, String> colPartNumber, colPartDesc, colPartRetailPrice;
 
-    public PartWorkspaceController() {
-        Platform.runLater(() -> {
-            tfPartNumberSearch.textProperty().addListener((o, oldValue, newValue) -> { // TODO
-                System.out.println(newValue);
-            });
-            tfPartDescSearch.textProperty().addListener((o, oldValue, newValue) -> { // TODO
-                System.out.println(newValue);
-            });
+    @FXML
+    public void initialize() {
+        tfPartNumberSearch.textProperty().addListener((o, oldValue, newValue) -> { // TODO
+            List<AutoPart> list = DB.get().getFilteredItems(newValue, tfPartDescSearch.getText());
+            tvParts.getItems().setAll(list);
         });
+        tfPartDescSearch.textProperty().addListener((o, oldValue, newValue) -> { // TODO
+            List<AutoPart> list = DB.get().getFilteredItems(tfPartNumberSearch.getText(), newValue);
+            tvParts.getItems().setAll(list);
+        });
+        colPartNumber.setCellValueFactory(e -> e.getValue().nameProperty());
+        colPartDesc.setCellValueFactory(e -> e.getValue().descProperty());
+        colPartRetailPrice.setCellValueFactory(e -> e.getValue().retailPriceProperty());
     }
 
     public void savePart(WorkOrder workOrder) {

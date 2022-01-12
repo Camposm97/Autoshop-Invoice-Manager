@@ -1,18 +1,14 @@
 package model;
 
-import app.App;
 import controller.*;
 import javafx.print.*;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
 
 import java.util.Optional;
 
@@ -132,7 +128,7 @@ public class AlertFactory {
     public static void showPreferences() {
         AlertBuilder builder = new AlertBuilder()
                 .setTitle("Preferences")
-                .setHeaderText("Repair-Shop Settings")
+                .setHeaderText("Repairshop Settings")
                 .setDefaultBtn()
                 .setContent(FX.view("Preferences.fxml"));
         builder.build().showAndWait().ifPresent(e -> Preferences.get().save());

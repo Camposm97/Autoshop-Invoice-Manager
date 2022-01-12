@@ -106,8 +106,8 @@ public class Labor extends Product implements Comparable<Labor> {
         return new SimpleObjectProperty<>(billedHrs);
     }
 
-    public SimpleObjectProperty<Double> rateProperty() {
-        return new SimpleObjectProperty<>(rate);
+    public SimpleStringProperty rateProperty() {
+        return new SimpleStringProperty(String.format("%.2f", rate));
     }
 
     public SimpleObjectProperty<Boolean> taxableProperty() {

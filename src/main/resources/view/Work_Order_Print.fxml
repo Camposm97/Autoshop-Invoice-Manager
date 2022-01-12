@@ -15,19 +15,41 @@
       <URL value="@App.css" />
    </stylesheets>
    <children>
-      <VBox alignment="CENTER" spacing="2.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <Text fx:id="txtDate" strokeType="OUTSIDE" strokeWidth="0.0" text="8/19/2020 7:03:32 PM" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Text>
+      <VBox alignment="CENTER" spacing="2.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
          <children>
-            <Text fx:id="txtOwnerCompany" strokeType="OUTSIDE" strokeWidth="0.0" text="COMPANY NAME">
+            <Text fx:id="txtOwnerCompany" strokeType="OUTSIDE" strokeWidth="0.0" text="Precison Automotive Services Inc.">
                <font>
-                  <Font name="System Bold" size="15.0" />
+                  <Font name="System Bold" size="13.0" />
                </font>
             </Text>
-            <Text fx:id="txtOwnerStreet" strokeType="OUTSIDE" strokeWidth="0.0" text="123 Mainstreet Ave." />
-            <Text fx:id="txtOwnerCityStateAndZip" strokeType="OUTSIDE" strokeWidth="0.0" text="Cityville, New Hampshire 11456" />
-            <Text fx:id="txtOwnerPhone" strokeType="OUTSIDE" strokeWidth="0.0" text="123-456-7890" />
+            <Text fx:id="txtOwnerStreet" strokeType="OUTSIDE" strokeWidth="0.0" text="123 Mainstreet Ave.">
+               <font>
+                  <Font size="12.0" />
+               </font></Text>
+            <Text fx:id="txtOwnerCityStateAndZip" strokeType="OUTSIDE" strokeWidth="0.0" text="City, State 11456">
+               <font>
+                  <Font size="12.0" />
+               </font></Text>
+            <Text fx:id="txtOwnerPhone" strokeType="OUTSIDE" strokeWidth="0.0" text="123-456-7890">
+               <font>
+                  <Font size="12.0" />
+               </font></Text>
+            <Text fx:id="txtShop" strokeType="OUTSIDE" strokeWidth="0.0" text="NYS Repair Shop #3493940">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Text>
          </children>
       </VBox>
-      <Text fx:id="txtWorkOrderId" strokeType="OUTSIDE" strokeWidth="0.0" text="0000" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+      <Text fx:id="txtWorkOrderId" strokeType="OUTSIDE" strokeWidth="0.0" text=" Work Order # 0000" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
+         <font>
+            <Font size="12.0" />
+         </font></Text>
       <AnchorPane fx:id="anchorCustomer" maxHeight="-Infinity" styleClass="information_form" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="90.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
@@ -154,7 +176,7 @@
             </GridPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorProblem" prefHeight="125.0" prefWidth="200.0" styleClass="information_form" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="167.0" AnchorPane.topAnchor="622.0" />
+      <AnchorPane fx:id="anchorProblem" prefHeight="125.0" prefWidth="391.0" styleClass="information_form" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="622.0" />
       <AnchorPane fx:id="anchorTotals" maxHeight="-Infinity" prefHeight="125.0" styleClass="information_form" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="622.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Parts Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
