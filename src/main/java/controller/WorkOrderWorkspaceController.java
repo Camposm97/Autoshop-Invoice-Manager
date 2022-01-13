@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class WorkOrderWorkspaceController {
-    WorkOrder workOrder;
+    protected WorkOrder workOrder;
     @FXML
     TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfAddress, tfCity, tfState, tfZip;
     @FXML
@@ -37,7 +37,7 @@ public class WorkOrderWorkspaceController {
     @FXML
     TableColumn<Labor, String> colLaborTotal;
     @FXML
-    TextField tfPartsTotal, tfTax, tfDiscount, tfLaborTotal, tfSubtotal, tfTotal; // TODO
+    TextField tfPartsTotal, tfTaxTotal, tfDiscount, tfLaborTotal, tfSubtotal, tfTotal; // TODO
     @FXML
     TextField tfWorkOrderId, tfDateCreated;
     @FXML
@@ -45,12 +45,10 @@ public class WorkOrderWorkspaceController {
 
     public WorkOrderWorkspaceController() { // New Work Order
         this.workOrder = new WorkOrder();
-//        init();
     }
 
     public WorkOrderWorkspaceController(WorkOrder workOrder) { // Update Work Order
         this.workOrder = workOrder;
-//        init();
     }
 
     /**
@@ -89,21 +87,22 @@ public class WorkOrderWorkspaceController {
             }
         });
 
-        if (!workOrder.isNew()) {
+        if (workOrder.isNew()) {
+            tfWorkOrderId.setText(String.valueOf(DB.get().getNextWorkOrderId()));
+        } else {
             loadCustomer(workOrder.getCustomer());
             loadVehicle(workOrder.getVehicle());
             tfWorkOrderId.setText(String.valueOf(workOrder.getId()));
             if (workOrder.getDateCompleted() != null) {
                 dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
             }
-        } else {
-            tfWorkOrderId.setText(String.valueOf(DB.get().getNextWorkOrderId()));
+            updateTotals();
         }
     }
 
     public void print() {
-        buildWorkOrder();
-        AlertFactory.showPrintWorkOrder(workOrder);
+        save();
+        AlertFactory.showPrintWorkOrder(workOrder, this);
     }
 
     public void save() {
@@ -114,7 +113,11 @@ public class WorkOrderWorkspaceController {
             DB.get().updateWorkOrder(workOrder);
             DB.get().deleteProductsMarkedForDeletion();
         }
-        App.clearDisplay();
+    }
+
+    public void saveAndClose() {
+        save();
+        close();
     }
 
     public void close() {
@@ -232,5 +235,14 @@ public class WorkOrderWorkspaceController {
             }
             workOrder.removeLabor(labor);
         }
+    }
+
+    public void updateTotals() {
+        tfPartsTotal.setText(String.format("%.2f", workOrder.partsSubtotal()));
+        tfTaxTotal.setText(String.format("%.2f", workOrder.tax()));
+        tfLaborTotal.setText(String.format("%.2f", workOrder.laborSubtotal()));
+        tfSubtotal.setText(String.format("%.2f", workOrder.subtotal()));
+        tfTotal.setText(String.format("%.2f", workOrder.bill()));
+
     }
 }

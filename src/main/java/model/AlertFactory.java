@@ -1,5 +1,6 @@
 package model;
 
+import app.App;
 import controller.*;
 import javafx.print.*;
 import javafx.scene.Node;
@@ -9,11 +10,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.AnchorPane;
 
 import java.util.Optional;
-
-import app.App;
 
 public class AlertFactory {
     public static void showAddCustomer() {
@@ -94,7 +92,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showPrintWorkOrder(WorkOrder workOrder) {
+    public static void showPrintWorkOrder(WorkOrder workOrder, WorkOrderWorkspaceController c) {
         WorkOrderPrintController controller = new WorkOrderPrintController(workOrder);
         Node node = FX.view("Work_Order_Print.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -123,6 +121,7 @@ public class AlertFactory {
                         System.out.println(Printer.MarginType.HARDWARE_MINIMUM);
                         System.out.println(printerJob.getJobSettings().getPageLayout().toString());
                         printerJob.endJob();
+                        c.save();
                     }
                 }
             }

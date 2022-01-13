@@ -3,6 +3,7 @@ package controller;
 import app.App;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import model.AlertFactory;
 import model.FX;
@@ -10,6 +11,8 @@ import model.FX;
 public class AppController {
     @FXML
     BorderPane root;
+    @FXML
+    MenuBar menuBar;
 
     public void addCustomer() {
         AlertFactory.showAddCustomer();

@@ -42,8 +42,6 @@ public class WorkOrderPrintController {
         txtWorkOrderId.setText(workOrderId);
         txtOwnerCompany.setText(Preferences.get().getCompany());
         txtOwnerAddress.setText(getAddress());
-//        txtOwnerStreet.setText(Preferences.get().getAddress());
-//        txtOwnerCityStateAndZip.setText(initCityStateAndZip());
         txtOwnerPhone.setText(Preferences.get().getPhone());
         txtShop.setText(getShopDetail());
         txtName.setText(workOrder.getCustomer().getName());
@@ -88,7 +86,7 @@ public class WorkOrderPrintController {
     }
 
     public String getAddress() {
-        return Preferences.get().getAddress() + ' ' + Preferences.get().getCity() + ", " + Preferences.get().getState() + ' ' + Preferences.get().getZip();
+        return Preferences.get().getAddress() + ' ' + Preferences.get().getCity() + ' ' + Preferences.get().getState() + ' ' + Preferences.get().getZip();
     }
 
      public String getShopDetail() {

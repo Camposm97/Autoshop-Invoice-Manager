@@ -104,17 +104,6 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return "Vehicle{" +
-                "vin='" + vin + '\'' +
-                ", year=" + year +
-                ", make='" + make + '\'' +
-                ", model='" + model + '\'' +
-                ", licensePlate='" + licensePlate + '\'' +
-                ", color='" + color + '\'' +
-                ", engine='" + engine + '\'' +
-                ", transmission='" + transmission + '\'' +
-                ", mileageIn='" + mileageIn + '\'' +
-                ", mileageOut='" + mileageOut + '\'' +
-                '}';
+        return getYear() + ' ' + getMake() + ' ' + getModel();
     }
 }
