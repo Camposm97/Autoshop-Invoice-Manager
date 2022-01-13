@@ -2,6 +2,7 @@ package model;
 
 import controller.*;
 import javafx.print.*;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -93,7 +94,7 @@ public class AlertFactory {
 
     public static void showPrintWorkOrder(WorkOrder workOrder) {
         WorkOrderPrintController controller = new WorkOrderPrintController(workOrder);
-        AnchorPane node = (AnchorPane) FX.view("Work_Order_Print.fxml", controller);
+        Node node =  FX.view("Work_Order_Print.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
         builder.setTitle("Print Work Order");
         builder.setHeaderText("Ready to print Work Order #" + workOrder.getId());

@@ -10,13 +10,12 @@ import model.WorkOrder;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Iterator;
 
 public class WorkOrderPrintController {
     WorkOrder workOrder;
     @FXML
-    Text txtDate, txtOwnerCompany, txtOwnerStreet, txtOwnerCityStateAndZip, txtOwnerPhone, txtShop;
+    Text txtDate, txtOwnerCompany, txtOwnerAddress, txtOwnerPhone, txtShop;
     @FXML
     Text txtWorkOrderId;
     @FXML
@@ -42,8 +41,9 @@ public class WorkOrderPrintController {
         workOrderId = "Work Order # " + workOrderId;
         txtWorkOrderId.setText(workOrderId);
         txtOwnerCompany.setText(Preferences.get().getCompany());
-        txtOwnerStreet.setText(Preferences.get().getAddress());
-        txtOwnerCityStateAndZip.setText(initCityStateAndZip());
+        txtOwnerAddress.setText(getAddress());
+//        txtOwnerStreet.setText(Preferences.get().getAddress());
+//        txtOwnerCityStateAndZip.setText(initCityStateAndZip());
         txtOwnerPhone.setText(Preferences.get().getPhone());
         txtShop.setText(getShopDetail());
 
@@ -88,9 +88,9 @@ public class WorkOrderPrintController {
         txtWorkOrderTotal.setText(format2(workOrder.bill()));
     }
 
-    public String initCityStateAndZip() {
-        return Preferences.get().getCity() + ", " + Preferences.get().getState() + " " + Preferences.get().getZip();
-     }
+    public String getAddress() {
+        return Preferences.get().getAddress() + ' ' + Preferences.get().getCity() + ", " + Preferences.get().getState() + ' ' + Preferences.get().getZip();
+    }
 
      public String getShopDetail() {
         return Preferences.get().getState().getAbbreviation() + " Repair Shop #" + Preferences.get().getRepairShopId();

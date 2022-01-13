@@ -10,28 +10,24 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <stylesheets>
       <URL value="@App.css" />
    </stylesheets>
    <children>
-      <Text fx:id="txtDate" strokeType="OUTSIDE" strokeWidth="0.0" text="8/19/2020 7:03:32 PM" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
+      <Text fx:id="txtDate" strokeType="OUTSIDE" strokeWidth="0.0" text="8/19/2020 7:03:32 PM" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="2.0">
          <font>
             <Font size="12.0" />
          </font>
       </Text>
-      <VBox alignment="CENTER" spacing="2.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
+      <VBox alignment="CENTER" spacing="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
          <children>
             <Text fx:id="txtOwnerCompany" strokeType="OUTSIDE" strokeWidth="0.0" text="Precison Automotive Services Inc.">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font>
             </Text>
-            <Text fx:id="txtOwnerStreet" strokeType="OUTSIDE" strokeWidth="0.0" text="123 Mainstreet Ave.">
-               <font>
-                  <Font size="12.0" />
-               </font></Text>
-            <Text fx:id="txtOwnerCityStateAndZip" strokeType="OUTSIDE" strokeWidth="0.0" text="City, State 11456">
+            <Text fx:id="txtOwnerAddress" strokeType="OUTSIDE" strokeWidth="0.0" text="123 Mainstreet Ave. City, State Zip">
                <font>
                   <Font size="12.0" />
                </font></Text>
@@ -46,11 +42,11 @@
             </Text>
          </children>
       </VBox>
-      <Text fx:id="txtWorkOrderId" strokeType="OUTSIDE" strokeWidth="0.0" text=" Work Order # 0000" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
+      <Text fx:id="txtWorkOrderId" strokeType="OUTSIDE" strokeWidth="0.0" text=" Work Order # 0000" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
          <font>
             <Font size="12.0" />
          </font></Text>
-      <AnchorPane fx:id="anchorCustomer" maxHeight="-Infinity" styleClass="information_form" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="90.0">
+      <AnchorPane fx:id="anchorCustomer" maxHeight="-Infinity" styleClass="information_form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="90.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
             <Label contentDisplay="RIGHT" text="Name:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="20.0">
@@ -80,7 +76,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorVehicle" maxHeight="-Infinity" styleClass="information_form" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="165.0">
+      <AnchorPane fx:id="anchorVehicle" maxHeight="-Infinity" styleClass="information_form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="165.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Vehicle Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
             <Label contentDisplay="RIGHT" text="VIN:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="20.0">
@@ -130,7 +126,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorParts" maxHeight="-Infinity" prefHeight="250.0" styleClass="information_form" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="240.0">
+      <AnchorPane fx:id="anchorParts" maxHeight="-Infinity" prefHeight="250.0" styleClass="information_form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="240.0">
          <children>
             <GridPane fx:id="gridPaneParts" hgap="2.0" styleClass="report_form" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
               <columnConstraints>
@@ -153,7 +149,7 @@
             </GridPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorLabor" maxHeight="-Infinity" prefHeight="125.0" styleClass="information_form" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="493.0">
+      <AnchorPane fx:id="anchorLabor" maxHeight="-Infinity" prefHeight="130.0" styleClass="information_form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="491.0">
          <children>
             <GridPane fx:id="gridPaneLabor" styleClass="report_form" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
               <columnConstraints>
@@ -176,8 +172,8 @@
             </GridPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorProblem" prefHeight="125.0" prefWidth="391.0" styleClass="information_form" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="622.0" />
-      <AnchorPane fx:id="anchorTotals" maxHeight="-Infinity" prefHeight="125.0" styleClass="information_form" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="622.0">
+      <AnchorPane fx:id="anchorProblem" prefHeight="125.0" prefWidth="391.0" styleClass="information_form" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="622.0" />
+      <AnchorPane fx:id="anchorTotals" maxHeight="-Infinity" prefHeight="125.0" styleClass="information_form" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="395.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="622.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Parts Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
             <Text fx:id="txtPartsTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 1000.00" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
