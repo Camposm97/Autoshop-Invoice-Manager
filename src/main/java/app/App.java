@@ -14,6 +14,10 @@ public class App extends Application {
     private static final String TITLE = "Autoshop Invoice Manager";
     private static BorderPane root;
 
+    public static String getTitle() {
+        return TITLE;
+    }
+
     public static void setDisplay(Node node) {
         root.setCenter(node);
     }
@@ -28,7 +32,7 @@ public class App extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         App.root = (BorderPane) FX.view("App.fxml");
         Scene scene = new Scene(root, 1160, 768);
         stage.setScene(scene);

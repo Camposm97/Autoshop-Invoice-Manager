@@ -13,6 +13,8 @@ import javafx.scene.layout.AnchorPane;
 
 import java.util.Optional;
 
+import app.App;
+
 public class AlertFactory {
     public static void showAddCustomer() {
         CustomerWorkspaceController controller = new CustomerWorkspaceController();
@@ -94,7 +96,7 @@ public class AlertFactory {
 
     public static void showPrintWorkOrder(WorkOrder workOrder) {
         WorkOrderPrintController controller = new WorkOrderPrintController(workOrder);
-        Node node =  FX.view("Work_Order_Print.fxml", controller);
+        Node node = FX.view("Work_Order_Print.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
         builder.setTitle("Print Work Order");
         builder.setHeaderText("Ready to print Work Order #" + workOrder.getId());
@@ -112,7 +114,8 @@ public class AlertFactory {
                 if (printerJob.showPrintDialog(alert.getOwner())) {
                     WritableImage wi = node.snapshot(null, null);
                     ImageView iv = new ImageView(wi);
-                    PageLayout pageLayout = printerJob.getPrinter().createPageLayout(Paper.NA_LETTER, PageOrientation.PORTRAIT, Printer.MarginType.HARDWARE_MINIMUM);
+                    PageLayout pageLayout = printerJob.getPrinter().createPageLayout(Paper.NA_LETTER,
+                            PageOrientation.PORTRAIT, Printer.MarginType.HARDWARE_MINIMUM);
                     printerJob.getJobSettings().setPageLayout(pageLayout);
                     iv.setFitWidth(pageLayout.getPrintableWidth());
                     iv.setFitHeight(pageLayout.getPrintableHeight());
@@ -133,5 +136,17 @@ public class AlertFactory {
                 .setDefaultBtn()
                 .setContent(FX.view("Preferences.fxml"));
         builder.build().showAndWait().ifPresent(e -> Preferences.get().save());
+    }
+
+    public static void showAbout() {
+
+        AlertBuilder builder = new AlertBuilder()
+                .setTitle("About")
+                .setHeaderText(App.getTitle())
+                .setDefaultBtn()
+                .setContent(FX.view("About.fxml"));
+        Alert alert = builder.build();
+        alert.setGraphic(new ImageView("red_car.png"));
+        alert.showAndWait();
     }
 }

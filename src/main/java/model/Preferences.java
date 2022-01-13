@@ -22,7 +22,6 @@ public class Preferences {
         try {
             this.file = new File("preferences.config");
             if (!file.exists()) {
-                file.createNewFile();
                 company = "";
                 address = "";
                 city = "";

@@ -2,7 +2,6 @@ package controller;
 
 import app.App;
 import javafx.fxml.FXML;
-import javafx.print.PrinterJob;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import model.*;
@@ -10,7 +9,6 @@ import model.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 public class WorkOrderWorkspaceController {
     WorkOrder workOrder;
@@ -61,6 +59,8 @@ public class WorkOrderWorkspaceController {
      */
     @FXML
     public void initialize() {
+        tfVin.textProperty().addListener((o,x,y) -> tfVin.setText(y.toUpperCase()));
+        tfLicensePlate.textProperty().addListener((o,x,y) -> tfLicensePlate.setText(y.toUpperCase()));
         colPartNumber.setCellValueFactory(c -> c.getValue().nameProperty());
         colPartDesc.setCellValueFactory(c -> c.getValue().descProperty());
         colPartQuantity.setCellValueFactory(c -> c.getValue().quantityProperty());
@@ -101,14 +101,16 @@ public class WorkOrderWorkspaceController {
         }
     }
 
+    public void print() {
+        buildWorkOrder();
+        AlertFactory.showPrintWorkOrder(workOrder);
+    }
+
     public void save() {
         buildWorkOrder();
-        System.out.println(workOrder);
         if (workOrder.isNew()) {
-            System.out.println("Add Work Order");
             DB.get().addWorkOrder(workOrder);
         } else {
-            System.out.println("Update Work Order");
             DB.get().updateWorkOrder(workOrder);
             DB.get().deleteProductsMarkedForDeletion();
         }
@@ -185,10 +187,6 @@ public class WorkOrderWorkspaceController {
         if (dateCompleted != null) {
             workOrder.setDateCompleted(Date.valueOf(dateCompleted));
         }
-    }
-
-    public void print() { // TODO
-        AlertFactory.showPrintWorkOrder(workOrder);
     }
 
     public void addPart() {

@@ -22,12 +22,12 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="Your Company" />
-      <Label text="Your Address" GridPane.rowIndex="1" />
-      <Label text="Your City" GridPane.rowIndex="2" />
-      <Label text="Your State" GridPane.rowIndex="3" />
-      <Label text="Your Zip" GridPane.rowIndex="4" />
-      <Label text="Your Phone" GridPane.rowIndex="5" />
+      <Label text="Company" />
+      <Label text="Address" GridPane.rowIndex="1" />
+      <Label text="City" GridPane.rowIndex="2" />
+      <Label text="State" GridPane.rowIndex="3" />
+      <Label text="Zip" GridPane.rowIndex="4" />
+      <Label text="Phone" GridPane.rowIndex="5" />
       <Label text="Repair Shop ID" GridPane.rowIndex="6" />
       <TextField fx:id="tfCompany" GridPane.columnIndex="1" />
       <TextField fx:id="tfAddress" GridPane.columnIndex="1" GridPane.rowIndex="1" />

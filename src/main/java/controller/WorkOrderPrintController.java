@@ -46,7 +46,6 @@ public class WorkOrderPrintController {
 //        txtOwnerCityStateAndZip.setText(initCityStateAndZip());
         txtOwnerPhone.setText(Preferences.get().getPhone());
         txtShop.setText(getShopDetail());
-
         txtName.setText(workOrder.getCustomer().getName());
         txtPhone.setText(workOrder.getCustomer().getPhone());
         txtEmail.setText(workOrder.getCustomer().getEmail());

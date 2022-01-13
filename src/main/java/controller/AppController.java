@@ -40,6 +40,10 @@ public class AppController {
         AlertFactory.showPreferences();
     }
 
+    public void about() {
+        AlertFactory.showAbout();
+    }
+
     public void exit() {
         Platform.exit();
     }

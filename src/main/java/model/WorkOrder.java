@@ -154,34 +154,26 @@ public class WorkOrder implements Billable {
     }
 
     public double partsSubtotal() {
-        return itemList.stream().map(x -> x.subtotal()).reduce((x,y) -> x+y).get();
+        return itemList.isEmpty() ? 0 : itemList.stream().map(x -> x.subtotal()).reduce((x,y) -> x+y).get();
     }
 
     public double laborSubtotal() {
-        return laborList.stream().map(x -> x.subtotal()).reduce((x,y) -> x+y).get();
+        return laborList.isEmpty() ? 0 : laborList.stream().map(x -> x.subtotal()).reduce((x,y) -> x+y).get();
     }
 
     @Override
     public double subtotal() {
-        double itemSum = itemList.stream()
-                .map(item -> item.subtotal())
-                .reduce((x, y) -> x + y)
-                .get();
-        double laborSum = laborList.stream()
-                .map(labor -> labor.subtotal())
-                .reduce((x, y) -> x + y)
-                .get();
-        return itemSum + laborSum;
+        return partsSubtotal() + laborSubtotal();
     }
 
     @Override
     public double tax() {
-        double itemTaxSum = itemList.stream()
+        double itemTaxSum = itemList.isEmpty() ? 0 : itemList.stream()
                 .filter(item -> item.isTaxable())
                 .map(item -> item.tax())
                 .reduce((x, y) -> x + y)
                 .get();
-        double laborTaxSum = laborList.stream()
+        double laborTaxSum = laborList.isEmpty() ? 0 : laborList.stream()
                 .filter(labor -> labor.isTaxable())
                 .map(labor -> labor.tax())
                 .reduce((x, y) -> x + y)
