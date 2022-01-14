@@ -5,10 +5,20 @@ import javafx.scene.control.TextField;
 import model.Address;
 import model.Customer;
 import model.DB;
+import model.State;
+import org.controlsfx.control.textfield.TextFields;
 
 public class CustomerWorkspaceController {
     @FXML
     TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfStreet, tfCity, tfState, tfZip;
+
+    @FXML
+    public void initialize() {
+        TextFields.bindAutoCompletion(tfStreet, DB.get().getUniqueStreets());
+        TextFields.bindAutoCompletion(tfCity, DB.get().getUniqueCities());
+        TextFields.bindAutoCompletion(tfState, State.list());
+        TextFields.bindAutoCompletion(tfZip, DB.get().getUniqueZips());
+    }
 
     public void addCustomer() {
         String firstName = tfFirstName.getText();

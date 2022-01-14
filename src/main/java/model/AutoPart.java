@@ -4,9 +4,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class AutoPart extends Product implements Comparable<AutoPart> {
-//    private int id;
-//    private String name;
-//    private String desc;
     private double retailPrice;
     private double listPrice;
     private boolean taxable;
@@ -14,41 +11,11 @@ public class AutoPart extends Product implements Comparable<AutoPart> {
 
     public AutoPart(String name, String desc, double retailPrice, double listPrice, int quantity, boolean taxable) {
         super(name, desc);
-//        this.name = name;
-//        this.desc = desc;
         this.retailPrice = retailPrice;
         this.listPrice = listPrice;
         this.quantity = quantity;
         this.taxable = taxable;
     }
-
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public boolean isNew() {
-//        return id <= 0;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public String getDesc() {
-//        return desc;
-//    }
-//
-//    public void setDes(String desc) {
-//        this.desc = desc;
-//    }
 
     public double getRetailPrice() {
         return retailPrice;
@@ -124,8 +91,8 @@ public class AutoPart extends Product implements Comparable<AutoPart> {
         return new SimpleObjectProperty<>(quantity);
     }
 
-    public SimpleObjectProperty<Boolean> taxableProperty() {
-        return new SimpleObjectProperty<>(taxable);
+    public SimpleStringProperty subtotalProperty() {
+        return new SimpleStringProperty(String.format("$ %.2f", subtotal()));
     }
 
     public SimpleStringProperty billProperty() {

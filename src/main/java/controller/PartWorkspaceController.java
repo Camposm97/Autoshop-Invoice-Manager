@@ -1,17 +1,15 @@
 package controller;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
 import model.AutoPart;
 import model.DB;
 import model.WorkOrder;
-
-import java.util.List;
 
 public class PartWorkspaceController {
     @FXML
@@ -29,17 +27,24 @@ public class PartWorkspaceController {
 
     @FXML
     public void initialize() {
-        tfPartNumberSearch.textProperty().addListener((o, oldValue, newValue) -> { // TODO
-            List<AutoPart> list = DB.get().getFilteredItems(newValue, tfPartDescSearch.getText());
-            tvParts.getItems().setAll(list);
-        });
-        tfPartDescSearch.textProperty().addListener((o, oldValue, newValue) -> { // TODO
-            List<AutoPart> list = DB.get().getFilteredItems(tfPartNumberSearch.getText(), newValue);
-            tvParts.getItems().setAll(list);
+        tfPartNumber.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().getFilteredItems(newValue, tfPartDesc.getText())));
+        tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().getFilteredItems(tfPartNumber.getText(), newValue)));
+        tfPartRetailPrice.textProperty().addListener((o,oldValue, newValue) -> {
+            if (newValue.isEmpty()) {
+                tfPartRetailPrice.setText("0.00");
+            }
         });
         colPartNumber.setCellValueFactory(e -> e.getValue().nameProperty());
         colPartDesc.setCellValueFactory(e -> e.getValue().descProperty());
         colPartRetailPrice.setCellValueFactory(e -> e.getValue().retailPriceProperty());
+        tvParts.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2 && e.getButton().equals(MouseButton.PRIMARY)) {
+                AutoPart autoPart = tvParts.getSelectionModel().getSelectedItem();
+                if (autoPart != null) {
+                    loadPart(autoPart);
+                }
+            }
+        });
     }
 
     public void savePart(WorkOrder workOrder) {
@@ -52,14 +57,14 @@ public class PartWorkspaceController {
         workOrder.updateItem(oldItem, newItem);
     }
 
-    public void loadPart(AutoPart item) {
-        lblId.setText(String.valueOf(item.getId()));
-        tfPartNumber.setText(item.getName());
-        tfPartDesc.setText(item.getDesc());
-        tfPartRetailPrice.setText(String.valueOf(item.getRetailPrice()));
-        tfPartListCost.setText(String.valueOf(item.getListPrice()));
-        tfPartQuantity.setText(String.valueOf(item.getQuantity()));
-        cbPartTaxable.setSelected(item.isTaxable());
+    public void loadPart(AutoPart ap) {
+        lblId.setText(String.valueOf(ap.getId()));
+        tfPartNumber.setText(ap.getName());
+        tfPartDesc.setText(ap.getDesc());
+        tfPartRetailPrice.setText(String.valueOf(ap.getRetailPrice()));
+        tfPartListCost.setText(String.valueOf(ap.getListPrice()));
+        tfPartQuantity.setText(String.valueOf(ap.getQuantity()));
+        cbPartTaxable.setSelected(ap.isTaxable());
     }
 
     public AutoPart buildPart() {
@@ -70,8 +75,9 @@ public class PartWorkspaceController {
         double listCost = Double.parseDouble(tfPartListCost.getText());
         int quantity = Integer.parseInt(tfPartQuantity.getText());
         boolean taxable = cbPartTaxable.isSelected();
-        AutoPart item = new AutoPart(partNumber, desc, retailPrice, listCost, quantity, taxable);
-        item.setId(id);
-        return item;
+        AutoPart autoPart = new AutoPart(partNumber, desc, retailPrice, listCost, quantity, taxable);
+        autoPart.setId(id);
+        DB.get().saveAutoPart(autoPart);
+        return autoPart;
     }
 }

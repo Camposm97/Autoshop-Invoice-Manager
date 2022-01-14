@@ -145,6 +145,8 @@ public class WorkOrder implements Billable {
         return new SimpleStringProperty(String.format("$ %.2f", bill()));
     }
 
+    public SimpleStringProperty vehicleProperty() { return new SimpleStringProperty(vehicle.toString()); }
+
     public ObservableList<AutoPart> itemList() {
         return itemList;
     }

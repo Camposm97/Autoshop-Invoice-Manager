@@ -2,18 +2,16 @@ package controller;
 
 import app.App;
 import javafx.application.Platform;
-import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.input.MouseButton;
 import model.DB;
 import model.FX;
 import model.WorkOrder;
 
 import java.sql.Date;
-import java.time.LocalDate;
 
 public class WorkOrderTableController {
     @FXML
@@ -30,6 +28,8 @@ public class WorkOrderTableController {
     TableColumn<WorkOrder, String> colCustomer;
     @FXML
     TableColumn<WorkOrder, String> colCompany;
+    @FXML
+    TableColumn<WorkOrder, String> colVehicle;
     @FXML
     TableColumn<WorkOrder, String> colDateCreated;
     @FXML
@@ -58,10 +58,16 @@ public class WorkOrderTableController {
             colId.setCellValueFactory(c -> c.getValue().idProperty());
             colCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
             colCompany.setCellValueFactory(c -> c.getValue().getCustomer().companyProperty());
+            colVehicle.setCellValueFactory(c -> c.getValue().vehicleProperty());
             colDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
             colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
             colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
             tv.getItems().setAll(DB.get().getAllWorkOrders());
+            tv.setOnMouseClicked(e -> {
+                if (e.getClickCount() == 2 && e.getButton().equals(MouseButton.PRIMARY)) {
+                    editWorkOrder();
+                }
+            });
             FX.autoResizeColumns(tv);
         });
     }

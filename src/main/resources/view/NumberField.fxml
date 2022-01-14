@@ -2,4 +2,4 @@
 
 <?import javafx.scene.control.*?>
 
-<TextField fx:id="tfNum" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NumberFieldController"/>
+<TextField fx:id="tfNum" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" text="0" fx:controller="controller.NumberFieldController"/>

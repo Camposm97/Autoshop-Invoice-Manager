@@ -1,6 +1,5 @@
 package model;
 
-import java.util.Collections;
 import java.util.List;
 
 public enum State {
@@ -65,7 +64,7 @@ public enum State {
     WYOMING("Wyoming", "WY"),
     UNKNOWN("Unknown", "");
 
-    public static List<State> all() {
+    public static List<State> list() {
         return List.of(State.values());
     }
 

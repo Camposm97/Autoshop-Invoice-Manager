@@ -104,6 +104,6 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return getYear() + ' ' + getMake() + ' ' + getModel();
+        return getYear() + " " + getMake() + " " + getModel();
     }
 }

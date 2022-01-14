@@ -61,76 +61,82 @@ public class DB {
      */
     private void initTables() throws SQLException {
         Statement stmt = c.createStatement();
-        stmt.addBatch("create table if not exists customer (" +
-                "customer_id integer primary key autoincrement," +
-                "first_name text," +
-                "last_name text," +
-                "phone text," +
-                "email text," +
-                "company text," +
-                "street text," +
-                "city text," +
-                "state text," +
-                "zip text)");
-        stmt.addBatch("create table if not exists vehicle (" +
-                "vin text primary key," +
-                "year int, make text," +
-                "model text," +
-                "license_plate text," +
-                "color text," +
-                "engine text," +
-                "transmission text," +
-                "mileage_in text," +
-                "mileage_out text)");
-        stmt.addBatch("create table if not exists item (" +
-                "item_name text primary key," +
-                "desc text," +
-                "retail_price real," +
-                "list_price real," +
-                "taxable boolean," +
-                "quantity integer)");
-        stmt.addBatch("create table if not exists work_order (" +
-                "work_order_id integer primary key autoincrement," +
-                "date_created date," +
-                "date_completed date," +
-                "customer_first_name text," +
-                "customer_last_name text," +
-                "customer_phone text," +
-                "customer_email text," +
-                "customer_company text," +
-                "customer_street text," +
-                "customer_city text," +
-                "customer_state text," +
-                "customer_zip text," +
-                "vehicle_vin text," +
-                "vehicle_year int," +
-                "vehicle_make text," +
-                "vehicle_model text," +
-                "vehicle_license_plate text, " +
-                "vehicle_color text," +
-                "vehicle_engine text," +
-                "vehicle_transmission text," +
-                "vehicle_mileage_in text," +
-                "vehicle_mileage_out text)");
-        stmt.addBatch("create table if not exists work_order_item (" +
-                "work_order_item_id integer primary key autoincrement," +
-                "work_order_id integer," +
-                "item_name text," +
-                "item_desc text," +
-                "item_retail_price real," +
-                "item_list_price real," +
-                "item_quantity integer," +
-                "item_taxable boolean," +
-                "foreign key(work_order_id) references work_order(work_order_id))");
-        stmt.addBatch("create table if not exists work_order_labor (" +
-                "work_order_labor_id integer primary key autoincrement," +
-                "work_order_id integer," +
-                "labor_code text," +
-                "labor_desc text," +
-                "labor_billed_hrs real," +
-                "labor_rate real," +
-                "labor_taxable boolean," +
-                "foreign key(work_order_id) references work_order(work_order_id))");
+        stmt.addBatch("""
+                    create table if not exists customer (
+                    customer_id integer primary key autoincrement,
+                    first_name text,
+                    last_name text,
+                    phone text,
+                    email text,
+                    company text,
+                    street text,
+                    city text,
+                    state text,
+                    zip text)""");
+        stmt.addBatch("""
+                create table if not exists vehicle (
+                vin text primary key,
+                year int, make text,
+                model text,
+                license_plate text,
+                color text,
+                engine text,
+                transmission text,
+                mileage_in text,
+                mileage_out text)""");
+        stmt.addBatch("""
+                create table if not exists item (
+                item_name text primary key,
+                desc text,
+                retail_price real,
+                list_price real,
+                taxable boolean,
+                quantity integer)""");
+        stmt.addBatch("""
+                create table if not exists work_order (
+                work_order_id integer primary key autoincrement,
+                date_created date,
+                date_completed date,
+                customer_first_name text,
+                customer_last_name text,
+                customer_phone text,
+                customer_email text,
+                customer_company text,
+                customer_street text,
+                customer_city text,
+                customer_state text,
+                customer_zip text,
+                vehicle_vin text,
+                vehicle_year int,
+                vehicle_make text,
+                vehicle_model text,
+                vehicle_license_plate text,
+                vehicle_color text,
+                vehicle_engine text,
+                vehicle_transmission text,
+                vehicle_mileage_in text,
+                vehicle_mileage_out text)""");
+        stmt.addBatch("""
+                create table if not exists work_order_item (
+                work_order_item_id integer primary key autoincrement,
+                work_order_id integer,
+                item_name text,
+                item_desc text,
+                item_retail_price real,
+                item_list_price real,
+                item_quantity integer,
+                item_taxable boolean,
+                foreign key(work_order_id) references work_order(work_order_id))""");
+        stmt.addBatch("""
+                create table if not exists work_order_labor (
+                work_order_labor_id integer primary key autoincrement,
+                work_order_id integer,
+                labor_code text,
+                labor_desc text,
+                labor_billed_hrs real,
+                labor_rate real,
+                labor_taxable boolean,
+                foreign key(work_order_id) references work_order(work_order_id))""");
         stmt.executeBatch();
     }
 
@@ -275,6 +281,51 @@ public class DB {
         return list;
     }
 
+    public List<String> getUniqueStreets() {
+        List<String> list = new LinkedList<>();
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("select distinct street from customer order by street");
+            while(rs.next()) {
+                String street = rs.getString(1);
+                list.add(street);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<String> getUniqueCities() {
+        List<String> list = new LinkedList<>();
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("select distinct city from customer order by city");
+            while(rs.next()) {
+                String street = rs.getString(1);
+                list.add(street);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<String> getUniqueZips() {
+        List<String> list = new LinkedList<>();
+        try {
+            Statement stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery("select distinct zip from customer order by zip");
+            while(rs.next()) {
+                String street = rs.getString(1);
+                list.add(street);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public void addVehicle(Vehicle vehicle) {
         try {
             PreparedStatement prepStmt = c.prepareStatement(
@@ -327,7 +378,7 @@ public class DB {
         }
     }
 
-    public void addItem(AutoPart part) {
+    public void saveAutoPart(AutoPart part) {
         try {
             PreparedStatement prepStmt = c.prepareStatement(
                     "insert into item " +
@@ -443,7 +494,7 @@ public class DB {
             Iterator<AutoPart> itemIterator = workOrder.autoPartIterator();
             while (itemIterator.hasNext()) {
                 AutoPart item = itemIterator.next();
-                addItem(workOrder.getId(), item);
+                saveAutoPart(workOrder.getId(), item);
             }
             // Add work_order_labor row(s)
             Iterator<Labor> laborIterator = workOrder.laborIterator();
@@ -597,7 +648,7 @@ public class DB {
             while (autoPartIterator.hasNext()) {
                 AutoPart autoPart = autoPartIterator.next();
                 if (autoPart.isNew())
-                    addItem(workOrder.getId(), autoPart);
+                    saveAutoPart(workOrder.getId(), autoPart);
                 else
                     updateItem(autoPart);
             }
@@ -631,7 +682,7 @@ public class DB {
         }
     }
 
-    public void addItem(int workOrderId, AutoPart item) throws SQLException {
+    public void saveAutoPart(int workOrderId, AutoPart item) throws SQLException {
         PreparedStatement prepStmt = c.prepareStatement(
                 "insert into work_order_item (" +
                         "work_order_id," +

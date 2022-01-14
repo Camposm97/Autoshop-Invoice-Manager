@@ -64,14 +64,14 @@ public class WorkOrderWorkspaceController {
         colPartQuantity.setCellValueFactory(c -> c.getValue().quantityProperty());
         colPartRetailPrice.setCellValueFactory(c -> c.getValue().retailPriceProperty());
         colPartListPrice.setCellValueFactory(c -> c.getValue().listPriceProperty());
-        colPartTotal.setCellValueFactory(c -> c.getValue().billProperty());
+        colPartTotal.setCellValueFactory(c -> c.getValue().subtotalProperty());
         tvParts.setItems(workOrder.itemList());
 
         colLaborCode.setCellValueFactory(c -> c.getValue().nameProperty());
         colLaborDesc.setCellValueFactory(c -> c.getValue().descProperty());
         colLaborBilledHrs.setCellValueFactory(c -> c.getValue().billedHrsProperty());
         colLaborRate.setCellValueFactory(c -> c.getValue().rateProperty());
-        colLaborTotal.setCellValueFactory(c -> c.getValue().billProperty());
+        colLaborTotal.setCellValueFactory(c -> c.getValue().subtotalProperty());
         tvLabor.setItems(workOrder.laborList());
 
         tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
@@ -194,15 +194,14 @@ public class WorkOrderWorkspaceController {
 
     public void addPart() {
         AlertFactory.showAddPart(workOrder);
-        workOrder.autoPartIterator().forEachRemaining(e -> {
-            System.out.println(e);
-        });
+        updateTotals();
     }
 
     public void editPart() {
         AutoPart selectedItem = tvParts.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             AlertFactory.showEditPart(workOrder, selectedItem);
+            updateTotals();
         }
     }
 
@@ -213,17 +212,20 @@ public class WorkOrderWorkspaceController {
                 DB.get().addProductMarkedForDeletion(autoPart);
             }
             workOrder.removeItem(autoPart);
+            updateTotals();
         }
     }
 
     public void addLabor() {
         AlertFactory.showAddLabor(workOrder);
+        updateTotals();
     }
 
     public void editLabor() {
         Labor labor = tvLabor.getSelectionModel().getSelectedItem();
         if (labor != null) {
             AlertFactory.showEditLabor(workOrder, labor);
+            updateTotals();
         }
     }
 
@@ -234,6 +236,7 @@ public class WorkOrderWorkspaceController {
                 DB.get().addProductMarkedForDeletion(labor);
             }
             workOrder.removeLabor(labor);
+            updateTotals();
         }
     }
 
@@ -243,6 +246,5 @@ public class WorkOrderWorkspaceController {
         tfLaborTotal.setText(String.format("%.2f", workOrder.laborSubtotal()));
         tfSubtotal.setText(String.format("%.2f", workOrder.subtotal()));
         tfTotal.setText(String.format("%.2f", workOrder.bill()));
-
     }
 }

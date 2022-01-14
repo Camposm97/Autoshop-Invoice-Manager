@@ -22,7 +22,7 @@ public class PreferencesController {
         tfAddress.textProperty().addListener((o, oldValue, newValue) -> Preferences.get().setAddress(newValue));
         tfCity.setText(Preferences.get().getCity());
         tfCity.textProperty().addListener((o, oldValue, newValue) -> Preferences.get().setCity(newValue));
-        cbState.getItems().setAll(State.all());
+        cbState.getItems().setAll(State.list());
         cbState.setValue(Preferences.get().getState());
         cbState.setOnAction(e -> Preferences.get().setState(cbState.getValue()));
         tfZip.setText(Preferences.get().getZip());

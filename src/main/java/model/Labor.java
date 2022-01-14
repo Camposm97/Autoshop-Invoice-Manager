@@ -4,47 +4,15 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Labor extends Product implements Comparable<Labor> {
-//    private int id;
-//    private String name, desc;
     private double billedHrs, rate;
     private boolean taxable;
 
     public Labor(String name, String desc, double billedHrs, double rate, boolean taxable) {
         super(name, desc);
-//        this.name = name;
-//        this.desc = desc;
         this.billedHrs = billedHrs;
         this.rate = rate;
         this.taxable = taxable;
     }
-
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public boolean isNew() {
-//        return id <= 0;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public String getDesc() {
-//        return desc;
-//    }
-//
-//    public void setDesc(String desc) {
-//        this.desc = desc;
-//    }
 
     public double getBilledHrs() {
         return billedHrs;
@@ -94,14 +62,6 @@ public class Labor extends Product implements Comparable<Labor> {
                 '}';
     }
 
-//    public SimpleStringProperty nameProperty() {
-//        return new SimpleStringProperty(name);
-//    }
-//
-//    public SimpleStringProperty descProperty() {
-//        return new SimpleStringProperty(desc);
-//    }
-
     public SimpleObjectProperty<Double> billedHrsProperty() {
         return new SimpleObjectProperty<>(billedHrs);
     }
@@ -110,8 +70,8 @@ public class Labor extends Product implements Comparable<Labor> {
         return new SimpleStringProperty(String.format("%.2f", rate));
     }
 
-    public SimpleObjectProperty<Boolean> taxableProperty() {
-        return new SimpleObjectProperty<>(taxable);
+    public SimpleStringProperty subtotalProperty() {
+        return new SimpleStringProperty(String.format("$ %.2f", subtotal()));
     }
 
     public SimpleStringProperty billProperty() {
