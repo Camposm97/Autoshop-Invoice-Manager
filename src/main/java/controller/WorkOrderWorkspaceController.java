@@ -37,7 +37,7 @@ public class WorkOrderWorkspaceController {
     @FXML
     TableColumn<Labor, String> colLaborTotal;
     @FXML
-    TextField tfPartsTotal, tfTaxTotal, tfDiscount, tfLaborTotal, tfSubtotal, tfTotal; // TODO
+    TextField tfPartsTotal, tfTaxTotal, tfDiscount, tfLaborTotal, tfSubtotal, tfTotal;
     @FXML
     TextField tfWorkOrderId, tfDateCreated;
     @FXML
