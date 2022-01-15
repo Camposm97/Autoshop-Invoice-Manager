@@ -1,4 +1,4 @@
-package model;
+package model.work_order;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

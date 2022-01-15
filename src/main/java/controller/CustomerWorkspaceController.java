@@ -2,9 +2,9 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import model.Address;
-import model.Customer;
-import model.DB;
+import model.customer.Address;
+import model.customer.Customer;
+import model.database.DB;
 import model.State;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -14,10 +14,10 @@ public class CustomerWorkspaceController {
 
     @FXML
     public void initialize() {
-        TextFields.bindAutoCompletion(tfStreet, DB.get().getUniqueStreets());
-        TextFields.bindAutoCompletion(tfCity, DB.get().getUniqueCities());
+        TextFields.bindAutoCompletion(tfStreet, DB.get().customers().getUniqueStreets());
+        TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
         TextFields.bindAutoCompletion(tfState, State.list());
-        TextFields.bindAutoCompletion(tfZip, DB.get().getUniqueZips());
+        TextFields.bindAutoCompletion(tfZip, DB.get().customers().getUniqueZips());
     }
 
     public void addCustomer() {
@@ -33,6 +33,6 @@ public class CustomerWorkspaceController {
 
         Address address = new Address(street, city, state, zip);
         Customer customer = new Customer(firstName, lastName, phone, email, company, address);
-        DB.get().addCustomer(customer);
+        DB.get().customers().add(customer);
     }
 }

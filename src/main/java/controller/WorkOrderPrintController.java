@@ -3,10 +3,10 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import model.AutoPart;
-import model.Labor;
+import model.work_order.AutoPart;
+import model.work_order.Labor;
 import model.Preferences;
-import model.WorkOrder;
+import model.work_order.WorkOrder;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

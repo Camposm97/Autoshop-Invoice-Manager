@@ -1,4 +1,4 @@
-package model;
+package model.work_order;
 
 public class Vehicle {
     private String vin;

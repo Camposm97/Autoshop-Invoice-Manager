@@ -7,9 +7,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
-import model.DB;
-import model.FX;
-import model.WorkOrder;
+import model.database.DB;
+import model.ui.FX;
+import model.work_order.WorkOrder;
 
 import java.sql.Date;
 
@@ -62,7 +62,7 @@ public class WorkOrderTableController {
             colDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
             colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
             colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
-            tv.getItems().setAll(DB.get().getAllWorkOrders());
+            tv.getItems().setAll(DB.get().workOrders().getAll());
             tv.setOnMouseClicked(e -> {
                 if (e.getClickCount() == 2 && e.getButton().equals(MouseButton.PRIMARY)) {
                     editWorkOrder();
@@ -85,7 +85,7 @@ public class WorkOrderTableController {
         WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
         if (workOrder != null) {
             tv.getItems().remove(workOrder);
-            DB.get().deleteWorkOrder(workOrder);
+            DB.get().workOrders().deleteById(workOrder);
         }
     }
 }

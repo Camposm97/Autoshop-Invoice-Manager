@@ -7,10 +7,10 @@ import javafx.scene.control.*;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
-import model.Address;
-import model.Customer;
-import model.DB;
-import model.FX;
+import model.customer.Address;
+import model.customer.Customer;
+import model.database.DB;
+import model.ui.FX;
 
 import java.awt.*;
 
@@ -24,22 +24,22 @@ public class CustomerTableController {
 
     @FXML
     public void initialize() {
-        tfFirstName.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().getFilteredCustomers(buildCustomer())));
-        tfLastName.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().getFilteredCustomers(buildCustomer())));
-        tfPhone.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().getFilteredCustomers(buildCustomer())));
-        tfEmail.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().getFilteredCustomers(buildCustomer())));
-        tfCompany.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().getFilteredCustomers(buildCustomer())));
-        tfStreet.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().getFilteredCustomers(buildCustomer())));
-        tfCity.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().getFilteredCustomers(buildCustomer())));
-        tfState.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().getFilteredCustomers(buildCustomer())));
-        tfZip.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().getFilteredCustomers(buildCustomer())));
+        tfFirstName.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
+        tfLastName.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
+        tfPhone.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
+        tfEmail.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
+        tfCompany.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
+        tfStreet.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
+        tfCity.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
+        tfState.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
+        tfZip.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
         colFirstName.setCellValueFactory(c -> c.getValue().firstNameProperty());
         colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
         colFirstName.setOnEditCommit(e -> {
             int index = e.getTablePosition().getRow();
             Customer customer = e.getTableView().getItems().get(index);
             customer.setFirstName(e.getNewValue());
-            DB.get().updateCustomer(customer);
+            DB.get().customers().update(customer);
         });
         colLastName.setCellValueFactory(c -> c.getValue().lastNameProperty());
         colLastName.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -47,7 +47,7 @@ public class CustomerTableController {
             int index = e.getTablePosition().getRow();
             Customer customer = e.getTableView().getItems().get(index);
             customer.setLastName(e.getNewValue());
-            DB.get().updateCustomer(customer);
+            DB.get().customers().update(customer);
         });
         colPhone.setCellValueFactory(c -> c.getValue().phoneProperty());
         colPhone.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -55,7 +55,7 @@ public class CustomerTableController {
             int index = e.getTablePosition().getRow();
             Customer customer = e.getTableView().getItems().get(index);
             customer.setPhone(e.getNewValue());
-            DB.get().updateCustomer(customer);
+            DB.get().customers().update(customer);
         });
         colEmail.setCellValueFactory(c -> c.getValue().emailProperty());
         colEmail.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -63,7 +63,7 @@ public class CustomerTableController {
             int index = e.getTablePosition().getRow();
             Customer customer = e.getTableView().getItems().get(index);
             customer.setEmail(e.getNewValue());
-            DB.get().updateCustomer(customer);
+            DB.get().customers().update(customer);
         });
         colCompany.setCellValueFactory(c -> c.getValue().companyProperty());
         colCompany.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -71,7 +71,7 @@ public class CustomerTableController {
             int index = e.getTablePosition().getRow();
             Customer customer = e.getTableView().getItems().get(index);
             customer.setCompany(e.getNewValue());
-            DB.get().updateCustomer(customer);
+            DB.get().customers().update(customer);
         });
         colAddress.setCellValueFactory(c -> c.getValue().getAddress().streetProperty());
         colAddress.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -79,7 +79,7 @@ public class CustomerTableController {
             int index = e.getTablePosition().getRow();
             Customer customer = e.getTableView().getItems().get(index);
             customer.getAddress().setStreet(e.getNewValue());
-            DB.get().updateCustomer(customer);
+            DB.get().customers().update(customer);
         });
         colCity.setCellValueFactory(c -> c.getValue().getAddress().cityProperty());
         colCity.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -87,7 +87,7 @@ public class CustomerTableController {
             int index = e.getTablePosition().getRow();
             Customer customer = e.getTableView().getItems().get(index);
             customer.getAddress().setCity(e.getNewValue());
-            DB.get().updateCustomer(customer);
+            DB.get().customers().update(customer);
         });
         colState.setCellValueFactory(c -> c.getValue().getAddress().stateProperty());
         colState.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -95,7 +95,7 @@ public class CustomerTableController {
             int index = e.getTablePosition().getRow();
             Customer customer = e.getTableView().getItems().get(index);
             customer.getAddress().setState(e.getNewValue());
-            DB.get().updateCustomer(customer);
+            DB.get().customers().update(customer);
         });
         colZip.setCellValueFactory(c -> c.getValue().getAddress().zipProperty());
         colZip.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -103,9 +103,9 @@ public class CustomerTableController {
             int index = e.getTablePosition().getRow();
             Customer customer = e.getTableView().getItems().get(index);
             customer.getAddress().setZip(e.getNewValue());
-            DB.get().updateCustomer(customer);
+            DB.get().customers().update(customer);
         });
-        tv.getItems().setAll(DB.get().getAllCustomers());
+        tv.getItems().setAll(DB.get().customers().getAll());
         FX.autoResizeColumns(tv);
         ContextMenu cm = initContextMenu();
         tv.setOnContextMenuRequested(e -> {
@@ -145,7 +145,7 @@ public class CustomerTableController {
         @Override
         public void handle(ActionEvent e) {
             Customer customer = tv.getSelectionModel().getSelectedItem();
-            DB.get().deleteCustomerById(customer.getId());
+            DB.get().customers().deleteById(customer.getId());
             tv.getItems().removeIf(c -> c.getId() == customer.getId());
         }
     }

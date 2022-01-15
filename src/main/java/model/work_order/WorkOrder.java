@@ -1,9 +1,10 @@
-package model;
+package model.work_order;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.customer.Customer;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -80,7 +81,7 @@ public class WorkOrder implements Billable {
         this.vehicle = vehicle;
     }
 
-    public boolean addItem(AutoPart item) {
+    public boolean addAutoPart(AutoPart item) {
         return itemList.add(item);
     }
 

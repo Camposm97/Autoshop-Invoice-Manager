@@ -5,8 +5,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import model.Labor;
-import model.WorkOrder;
+import model.work_order.Labor;
+import model.work_order.WorkOrder;
 
 public class LaborWorkspaceController {
     @FXML

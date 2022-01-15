@@ -7,11 +7,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
-import model.AutoPart;
-import model.DB;
-import model.WorkOrder;
+import model.work_order.AutoPart;
+import model.database.DB;
+import model.work_order.WorkOrder;
 
-public class PartWorkspaceController {
+public class AutoPartWorkspaceController {
     @FXML
     Text lblId;
     @FXML
@@ -19,16 +19,14 @@ public class PartWorkspaceController {
     @FXML
     CheckBox cbPartTaxable;
     @FXML
-    TextField tfPartNumberSearch, tfPartDescSearch;
-    @FXML
     TableView<AutoPart> tvParts;
     @FXML
     TableColumn<AutoPart, String> colPartNumber, colPartDesc, colPartRetailPrice;
 
     @FXML
     public void initialize() {
-        tfPartNumber.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().getFilteredItems(newValue, tfPartDesc.getText())));
-        tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().getFilteredItems(tfPartNumber.getText(), newValue)));
+        tfPartNumber.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(newValue, tfPartDesc.getText())));
+        tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(tfPartNumber.getText(), newValue)));
         tfPartRetailPrice.textProperty().addListener((o,oldValue, newValue) -> {
             if (newValue.isEmpty()) {
                 tfPartRetailPrice.setText("0.00");
@@ -48,8 +46,8 @@ public class PartWorkspaceController {
     }
 
     public void savePart(WorkOrder workOrder) {
-        AutoPart item = buildPart();
-        workOrder.addItem(item);
+        AutoPart autoPart = buildPart();
+        workOrder.addAutoPart(autoPart);
     }
 
     public void updatePart(WorkOrder workOrder, AutoPart oldItem) {
@@ -77,7 +75,7 @@ public class PartWorkspaceController {
         boolean taxable = cbPartTaxable.isSelected();
         AutoPart autoPart = new AutoPart(partNumber, desc, retailPrice, listCost, quantity, taxable);
         autoPart.setId(id);
-        DB.get().saveAutoPart(autoPart);
+        DB.get().autoParts().add(autoPart);
         return autoPart;
     }
 }

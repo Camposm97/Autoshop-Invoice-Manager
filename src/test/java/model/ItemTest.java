@@ -1,6 +1,8 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import model.work_order.AutoPart;
 import org.junit.jupiter.api.Test;
 
 public class ItemTest {

@@ -4,7 +4,14 @@ import app.App;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
-import model.*;
+import model.customer.Address;
+import model.customer.Customer;
+import model.database.DB;
+import model.ui.AlertFactory;
+import model.work_order.AutoPart;
+import model.work_order.Labor;
+import model.work_order.Vehicle;
+import model.work_order.WorkOrder;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -88,7 +95,7 @@ public class WorkOrderWorkspaceController {
         });
 
         if (workOrder.isNew()) {
-            tfWorkOrderId.setText(String.valueOf(DB.get().getNextWorkOrderId()));
+            tfWorkOrderId.setText(String.valueOf(DB.get().workOrders().getNextId()));
         } else {
             loadCustomer(workOrder.getCustomer());
             loadVehicle(workOrder.getVehicle());
@@ -108,9 +115,9 @@ public class WorkOrderWorkspaceController {
     public void save() {
         buildWorkOrder();
         if (workOrder.isNew()) {
-            DB.get().addWorkOrder(workOrder);
+            DB.get().workOrders().add(workOrder);
         } else {
-            DB.get().updateWorkOrder(workOrder);
+            DB.get().workOrders().update(workOrder);
             DB.get().deleteProductsMarkedForDeletion();
         }
     }
