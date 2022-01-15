@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WorkOrderStore {
     private Connection c;
@@ -186,6 +187,34 @@ public class WorkOrderStore {
                 int workOrderId = workOrderSet.getInt(1);
                 WorkOrder workOrder = getById(workOrderId);
                 list.add(workOrder);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<WorkOrder> filter(String firstName, String lastName, String company, String dateFilter, Date date) {
+        List<WorkOrder> list = new LinkedList<>();
+        try {
+            ResultSet rs = stmt.executeQuery("select work_order_id from work_order where " +
+                    "customer_first_name like \"" + firstName + "%\" " +
+                    "and customer_last_name like \"" + lastName + "%\" " +
+                    "and customer_company like \"" + company + "%\"");
+            while (rs.next()) {
+                list.add(getById(rs.getInt(1)));
+                list = list.stream().filter(workOrder -> {
+                   switch (dateFilter) {
+                       case "Exactly":
+                           return workOrder.getDateCreated().equals(date);
+                       case "Before":
+                           return workOrder.getDateCreated().before(date);
+                       case "After":
+                           return workOrder.getDateCreated().after(date);
+                       default:
+                           return true;
+                   }
+                }).collect(Collectors.toList());
             }
         } catch (SQLException e) {
             e.printStackTrace();

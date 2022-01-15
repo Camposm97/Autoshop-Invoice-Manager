@@ -39,22 +39,13 @@ public class WorkOrderTableController {
 
     public WorkOrderTableController() {
         Platform.runLater(() -> {
-            tfFirstName.textProperty().addListener((o, oldText, newText) -> { // TODO
-
-            });
-            tfLastName.textProperty().addListener((o, oldText, newText) -> { // TODO
-
-            });
-            tfCompanyName.textProperty().addListener((o, oldText, newText) -> { // TODO
-
-            });
+            tfFirstName.textProperty().addListener((o, oldText, newText) -> filter());
+            tfLastName.textProperty().addListener((o, oldText, newText) -> filter());
+            tfCompanyName.textProperty().addListener((o, oldText, newText) -> filter());
             cbDateCreated.setItems(FXCollections.observableArrayList("Exactly", "Before", "After"));
             cbDateCreated.setValue("Exactly");
-            dateCreatedPicker.setOnAction(e -> { // TODO
-                Date date = Date.valueOf(dateCreatedPicker.getValue());
-                System.out.println(cbDateCreated.getValue() + " " + date);
-
-            });
+            cbDateCreated.setOnAction(e -> filter());
+            dateCreatedPicker.setOnAction(e -> filter());
             colId.setCellValueFactory(c -> c.getValue().idProperty());
             colCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
             colCompany.setCellValueFactory(c -> c.getValue().getCustomer().companyProperty());
@@ -87,5 +78,15 @@ public class WorkOrderTableController {
             tv.getItems().remove(workOrder);
             DB.get().workOrders().deleteById(workOrder);
         }
+    }
+
+    public void filter() {
+        var firstName = tfFirstName.getText();
+        var lastName = tfLastName.getText();
+        var company = tfCompanyName.getText();
+        var dateFilter = cbDateCreated.getValue();
+        var date = Date.valueOf(dateCreatedPicker.getValue());
+        var list = DB.get().workOrders().filter(firstName, lastName, company, dateFilter, date);
+        tv.getItems().setAll(list);
     }
 }

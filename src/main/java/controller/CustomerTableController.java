@@ -24,15 +24,15 @@ public class CustomerTableController {
 
     @FXML
     public void initialize() {
-        tfFirstName.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
-        tfLastName.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
-        tfPhone.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
-        tfEmail.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
-        tfCompany.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
-        tfStreet.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
-        tfCity.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
-        tfState.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
-        tfZip.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().getFiltered(buildCustomer())));
+        tfFirstName.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfLastName.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfPhone.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfEmail.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfCompany.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfStreet.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfCity.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfState.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfZip.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         colFirstName.setCellValueFactory(c -> c.getValue().firstNameProperty());
         colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
         colFirstName.setOnEditCommit(e -> {

@@ -107,7 +107,7 @@ public class CustomerStore {
         }
     }
 
-    public List<Customer> getFiltered(@NotNull Customer c) {
+    public List<Customer> filter(@NotNull Customer c) {
         List<Customer> list = new LinkedList<>();
         try {
             ResultSet rs = stmt.executeQuery(
