@@ -9,11 +9,9 @@ import java.util.List;
 
 public class AutoPartStore {
     private Connection c;
-    private Statement stmt;
 
     public AutoPartStore(@NotNull Connection c) throws SQLException {
         this.c = c;
-        this.stmt = c.createStatement();
     }
 
     public void add(@NotNull AutoPart part) {
@@ -37,7 +35,7 @@ public class AutoPartStore {
     public List<AutoPart> getFilteredAutoParts(String s1, String s2) {
         List<AutoPart> list = new LinkedList<>();
         try {
-            ResultSet rs = stmt.executeQuery(
+            ResultSet rs = c.createStatement().executeQuery(
                     "select * from item where " +
                             "item_name like \"" + s1 + "%\" " +
                             "and desc like \"%" + s2 + "%\"");

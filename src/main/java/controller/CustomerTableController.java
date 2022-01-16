@@ -7,10 +7,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseButton;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.ui.FX;
+import org.controlsfx.control.PopOver;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -113,6 +116,31 @@ public class CustomerTableController {
                 cm.show(tv.getScene().getWindow(), MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY());
             }
         });
+    }
+
+    public void connect(@NotNull WorkOrderWorkspaceController controller) {
+        disableEditing();
+        tv.setOnMouseClicked(e -> {
+            if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
+                Customer customer = getSelectedCustomer();
+                if (customer != null) {
+                    controller.loadCustomer(customer);
+                    controller.customerPopOver.hide();
+                }
+            }
+        });
+    }
+
+    public void disableEditing() {
+        colFirstName.setEditable(false);
+        colLastName.setEditable(false);
+        colPhone.setEditable(false);
+        colEmail.setEditable(false);
+        colCompany.setEditable(false);
+        colAddress.setEditable(false);
+        colCity.setEditable(false);
+        colState.setEditable(false);
+        colZip.setEditable(false);
     }
 
     public Customer buildCustomer() {

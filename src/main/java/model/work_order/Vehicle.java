@@ -1,5 +1,8 @@
 package model.work_order;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class Vehicle {
     private String vin;
     private int year;
@@ -105,5 +108,45 @@ public class Vehicle {
     @Override
     public String toString() {
         return getYear() + " " + getMake() + " " + getModel();
+    }
+
+    public SimpleStringProperty vinProperty() {
+        return new SimpleStringProperty(vin);
+    }
+
+    public SimpleObjectProperty<Integer> yearProperty() {
+        return new SimpleObjectProperty<>(year);
+    }
+
+    public SimpleStringProperty makeProperty() {
+        return new SimpleStringProperty(make);
+    }
+
+    public SimpleStringProperty modelProperty() {
+        return new SimpleStringProperty(model);
+    }
+
+    public SimpleStringProperty licensePlateProperty() {
+        return new SimpleStringProperty(licensePlate);
+    }
+
+    public SimpleStringProperty colorProperty() {
+        return new SimpleStringProperty(color);
+    }
+
+    public SimpleStringProperty engineProperty() {
+        return new SimpleStringProperty(engine);
+    }
+
+    public SimpleStringProperty transmissionProperty() {
+        return new SimpleStringProperty(transmission);
+    }
+
+    public SimpleStringProperty mileageInProperty() {
+        return new SimpleStringProperty(mileageIn);
+    }
+
+    public SimpleStringProperty mileageOutProperty() {
+        return new SimpleStringProperty(mileageOut);
     }
 }

@@ -10,11 +10,9 @@ import java.util.List;
 
 public class CustomerStore {
     private Connection c;
-    private Statement stmt;
 
     protected CustomerStore(@NotNull Connection c) throws SQLException {
         this.c = c;
-        this.stmt = c.createStatement();
     }
 
     public void add(@NotNull Customer customer) {
@@ -41,7 +39,7 @@ public class CustomerStore {
     public Customer getById(int id) {
         Customer customer = null;
         try {
-            ResultSet rs = stmt.executeQuery("select * from customer where customer_id = " + id);
+            ResultSet rs = c.createStatement().executeQuery("select * from customer where customer_id = " + id);
             if (rs.next()) {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
@@ -57,15 +55,14 @@ public class CustomerStore {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            return customer;
         }
+        return customer;
     }
 
     public List<Customer> getAll() {
         List<Customer> list = new LinkedList<>();
         try {
-            ResultSet rs = stmt.executeQuery("select customer_id from customer;");
+            ResultSet rs = c.createStatement().executeQuery("select customer_id from customer;");
             while (rs.next()) {
                 int id = rs.getInt("customer_id");
                 Customer cus = getById(id);
@@ -101,26 +98,26 @@ public class CustomerStore {
 
     public void deleteById(int id) {
         try {
-            stmt.execute("delete from customer where customer_id=" + id);
+            c.createStatement().execute("delete from customer where customer_id=" + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public List<Customer> filter(@NotNull Customer c) {
+    public List<Customer> filter(@NotNull Customer customer) {
         List<Customer> list = new LinkedList<>();
         try {
-            ResultSet rs = stmt.executeQuery(
+            ResultSet rs = c.createStatement().executeQuery(
                     "select customer_id from customer " +
-                            "where first_name like \"" + c.getFirstName() + "%\"" +
-                            "and last_name like \"" + c.getLastName() + "%\"" +
-                            "and company like \"" + c.getCompany() + "%\"" +
-                            "and phone like \"" + c.getPhone() + "%\"" +
-                            "and email like \"" + c.getEmail() + "%\"" +
-                            "and street like \"" + c.getAddress().getStreet() + "%\"" +
-                            "and city like \"" + c.getAddress().getCity() + "%\"" +
-                            "and state like \"" + c.getAddress().getState() + "%\"" +
-                            "and zip like \"" + c.getAddress().getZip() + "%\"");
+                            "where first_name like \"" + customer.getFirstName() + "%\"" +
+                            "and last_name like \"" + customer.getLastName() + "%\"" +
+                            "and company like \"" + customer.getCompany() + "%\"" +
+                            "and phone like \"" + customer.getPhone() + "%\"" +
+                            "and email like \"" + customer.getEmail() + "%\"" +
+                            "and street like \"" + customer.getAddress().getStreet() + "%\"" +
+                            "and city like \"" + customer.getAddress().getCity() + "%\"" +
+                            "and state like \"" + customer.getAddress().getState() + "%\"" +
+                            "and zip like \"" + customer.getAddress().getZip() + "%\"");
             while (rs.next()) {
                 int id = rs.getInt("customer_id");
                 Customer cus = getById(id);
@@ -135,7 +132,7 @@ public class CustomerStore {
     public List<String> getUniqueStreets() {
         List<String> list = new LinkedList<>();
         try {
-            ResultSet rs = stmt.executeQuery("select distinct street from customer order by street");
+            ResultSet rs = c.createStatement().executeQuery("select distinct street from customer order by street");
             while (rs.next()) {
                 String street = rs.getString(1);
                 list.add(street);
@@ -149,7 +146,7 @@ public class CustomerStore {
     public List<String> getUniqueCities() {
         List<String> list = new LinkedList<>();
         try {
-            ResultSet rs = stmt.executeQuery("select distinct city from customer order by city");
+            ResultSet rs = c.createStatement().executeQuery("select distinct city from customer order by city");
             while (rs.next()) {
                 String street = rs.getString(1);
                 list.add(street);
@@ -163,7 +160,7 @@ public class CustomerStore {
     public List<String> getUniqueZips() {
         List<String> list = new LinkedList<>();
         try {
-            ResultSet rs = stmt.executeQuery("select distinct zip from customer order by zip");
+            ResultSet rs = c.createStatement().executeQuery("select distinct zip from customer order by zip");
             while (rs.next()) {
                 String street = rs.getString(1);
                 list.add(street);

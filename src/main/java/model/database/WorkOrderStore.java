@@ -13,15 +13,13 @@ import java.util.stream.Collectors;
 
 public class WorkOrderStore {
     private Connection c;
-    private Statement stmt;
 
     public WorkOrderStore(@NotNull Connection c) throws SQLException {
         this.c = c;
-        this.stmt = c.createStatement();
     }
 
     public int getMaxId() throws SQLException {
-        ResultSet rs = stmt.executeQuery("select max(work_order_id) from work_order");
+        ResultSet rs = c.createStatement().executeQuery("select max(work_order_id) from work_order");
         if (rs.next()) {
             return rs.getInt(1);
         } else {
@@ -110,7 +108,7 @@ public class WorkOrderStore {
     public WorkOrder getById(int workOrderId) {
         WorkOrder workOrder = null;
         try {
-            ResultSet rsWorkOrder = stmt.executeQuery(
+            ResultSet rsWorkOrder = c.createStatement().executeQuery(
                     "select * from work_order " +
                             "where work_order_id = " + workOrderId);
 
@@ -144,7 +142,7 @@ public class WorkOrderStore {
                 workOrder.setDateCreated(dateCreated);
                 workOrder.setDateCompleted(dateCompleted);
 
-                ResultSet rsItem = stmt.executeQuery("select * from work_order_item " +
+                ResultSet rsItem = c.createStatement().executeQuery("select * from work_order_item " +
                         "where work_order_id = " + workOrderId);
                 while (rsItem.next()) {
                     int id = rsItem.getInt(1);
@@ -159,7 +157,7 @@ public class WorkOrderStore {
                     workOrder.addAutoPart(item);
                 }
 
-                ResultSet rsLabor = stmt.executeQuery("select * from work_order_labor " +
+                ResultSet rsLabor = c.createStatement().executeQuery("select * from work_order_labor " +
                         "where work_order_id = " + workOrderId);
                 while (rsLabor.next()) {
                     int id = rsLabor.getInt(1);
@@ -182,7 +180,7 @@ public class WorkOrderStore {
     public List<WorkOrder> getAll() {
         List<WorkOrder> list = new LinkedList<>();
         try {
-            ResultSet workOrderSet = stmt.executeQuery("select work_order_id from work_order");
+            ResultSet workOrderSet = c.createStatement().executeQuery("select work_order_id from work_order");
             while (workOrderSet.next()) {
                 int workOrderId = workOrderSet.getInt(1);
                 WorkOrder workOrder = getById(workOrderId);
@@ -197,7 +195,7 @@ public class WorkOrderStore {
     public List<WorkOrder> filter(String firstName, String lastName, String company, String dateFilter, Date date) {
         List<WorkOrder> list = new LinkedList<>();
         try {
-            ResultSet rs = stmt.executeQuery("select work_order_id from work_order where " +
+            ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where " +
                     "customer_first_name like \"" + firstName + "%\" " +
                     "and customer_last_name like \"" + lastName + "%\" " +
                     "and customer_company like \"" + company + "%\"");
@@ -293,7 +291,7 @@ public class WorkOrderStore {
 
     public void deleteById(@NotNull WorkOrder workOrder) {
         try {
-            stmt.execute("delete from work_order where work_order_id = " + workOrder.getId());
+            c.createStatement().execute("delete from work_order where work_order_id = " + workOrder.getId());
             Iterator<AutoPart> itemIterator = workOrder.autoPartIterator();
             while (itemIterator.hasNext()) {
                 deleteAutoPart(itemIterator.next());
@@ -350,7 +348,7 @@ public class WorkOrderStore {
     }
 
     public void deleteAutoPart(@NotNull AutoPart item) throws SQLException {
-        stmt.execute("delete from work_order_item where work_order_item_id = " + item.getId());
+        c.createStatement().execute("delete from work_order_item where work_order_item_id = " + item.getId());
     }
 
     public void addLabor(int workOrderId, @NotNull Labor labor) throws SQLException {
@@ -392,7 +390,7 @@ public class WorkOrderStore {
     }
 
     public void deleteLabor(@NotNull Labor labor) throws SQLException {
-        stmt.execute("delete from work_order_labor where work_order_labor_id = " + labor.getId());
+        c.createStatement().execute("delete from work_order_labor where work_order_labor_id = " + labor.getId());
     }
 
     public void addPayment(@NotNull WorkOrderPayment payment) {
@@ -413,7 +411,7 @@ public class WorkOrderStore {
     public List<WorkOrderPayment> getPaymentsByWorkOrderId(int workOrderId) {
         List<WorkOrderPayment> list = new LinkedList<>();
         try {
-            ResultSet rs = stmt.executeQuery("select * from work_order_payment where work_order_id = " + workOrderId);
+            ResultSet rs = c.createStatement().executeQuery("select * from work_order_payment where work_order_id = " + workOrderId);
             while (rs.next()) {
                 int id = rs.getInt(1);
                 Date date = rs.getDate(3);
@@ -446,7 +444,7 @@ public class WorkOrderStore {
 
     public void deletePaymentById(int id) {
         try {
-            stmt.execute("delete from work_order_payment where work_order_payment_id =" + id);
+            c.createStatement().execute("delete from work_order_payment where work_order_payment_id =" + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

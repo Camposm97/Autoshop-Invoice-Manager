@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <SplitPane dividerPositions="0.8">
             <items>
@@ -66,7 +66,7 @@
                                                         <Glyph fontFamily="FontAwesome" icon="USER" />
                                                     </graphic>
                                                 </Label>
-                                                <Button alignment="TOP_LEFT" mnemonicParsing="false">
+                                                <Button fx:id="btCus" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#showCustomer">
                                                     <graphic>
                                                         <Glyph fontFamily="FontAwesome" icon="BARS" />
                                                     </graphic>
@@ -141,7 +141,7 @@
                                                         <Glyph fontFamily="FontAwesome" icon="CAR" />
                                                     </graphic>
                                                 </Label>
-                                                <Button mnemonicParsing="false">
+                                                <Button fx:id="btVeh" mnemonicParsing="false" onAction="#showVehicle">
                                                     <graphic>
                                                         <Glyph fontFamily="FontAwesome" icon="BARS" />
                                                     </graphic>

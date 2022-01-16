@@ -20,6 +20,17 @@ public class FX {
         }
     }
 
+    public static FXMLLoader load(String src) {
+        try {
+            URL url = FX.class.getClassLoader().getResource("view/" + src);
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(url);
+            return fxmlLoader;
+        } catch (NullPointerException e) {
+            return null;
+        }
+    }
+
     public static Parent view(String src, Object controller) {
         try {
             URL url = FX.class.getClassLoader().getResource("view/" + src);

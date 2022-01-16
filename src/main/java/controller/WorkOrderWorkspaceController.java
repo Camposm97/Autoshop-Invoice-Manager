@@ -2,17 +2,24 @@ package controller;
 
 import app.App;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
+import model.State;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.ui.AlertFactory;
+import model.ui.FX;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.Vehicle;
 import model.work_order.WorkOrder;
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.textfield.TextFields;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -49,6 +56,10 @@ public class WorkOrderWorkspaceController {
     TextField tfWorkOrderId, tfDateCreated;
     @FXML
     DatePicker dateCompletedPicker;
+    @FXML
+    Button btCus, btVeh;
+    @FXML
+    PopOver customerPopOver, vehiclePopOver;
 
     public WorkOrderWorkspaceController() { // New Work Order
         this.workOrder = new WorkOrder();
@@ -63,7 +74,18 @@ public class WorkOrderWorkspaceController {
      * display parts and labor of a work order
      */
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
+        TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
+        TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
+        TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
+        TextFields.bindAutoCompletion(tfColor, DB.get().vehicles().getUniqueColor());
+        TextFields.bindAutoCompletion(tfEngine, DB.get().vehicles().getUniqueEngine());
+        TextFields.bindAutoCompletion(tfTransmission, DB.get().vehicles().getUniqueYear());
+        TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueStreets());
+        TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
+        TextFields.bindAutoCompletion(tfState, State.list());
+        TextFields.bindAutoCompletion(tfZip, DB.get().customers().getUniqueZips());
+
         tfVin.textProperty().addListener((o,x,y) -> tfVin.setText(y.toUpperCase()));
         tfLicensePlate.textProperty().addListener((o,x,y) -> tfLicensePlate.setText(y.toUpperCase()));
         colPartNumber.setCellValueFactory(c -> c.getValue().nameProperty());
@@ -105,6 +127,23 @@ public class WorkOrderWorkspaceController {
             }
             updateTotals();
         }
+
+        FXMLLoader fxmlLoader = FX.load("Customer_Table.fxml");
+        customerPopOver = new PopOver(fxmlLoader.load());
+        CustomerTableController customerTableController = fxmlLoader.getController();
+        customerTableController.connect(this);
+        fxmlLoader = FX.load("Vehicle_Table.fxml");
+        vehiclePopOver = new PopOver(fxmlLoader.load());
+        VehicleTableController vehicleTableController = fxmlLoader.getController();
+        vehicleTableController.connect(this);
+    }
+
+    public void showCustomer() throws IOException {
+        customerPopOver.show(btCus);
+    }
+
+    public void showVehicle() throws IOException {
+        vehiclePopOver.show(btVeh);
     }
 
     public void print() {
@@ -163,7 +202,7 @@ public class WorkOrderWorkspaceController {
         return vehicle;
     }
 
-    public void loadCustomer(Customer customer) {
+    public void loadCustomer(@NotNull Customer customer) {
         tfFirstName.setText(customer.getFirstName());
         tfLastName.setText(customer.getLastName());
         tfPhone.setText(customer.getPhone());
@@ -175,7 +214,7 @@ public class WorkOrderWorkspaceController {
         tfZip.setText(customer.getAddress().getZip());
     }
 
-    public void loadVehicle(Vehicle vehicle) {
+    public void loadVehicle(@NotNull Vehicle vehicle) {
         tfVin.setText(vehicle.getVin());
         tfLicensePlate.setText(vehicle.getLicensePlate());
         tfColor.setText(vehicle.getColor());
