@@ -75,16 +75,16 @@ public class WorkOrderWorkspaceController {
      */
     @FXML
     public void initialize() throws IOException {
+        TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueStreets());
+        TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
+        TextFields.bindAutoCompletion(tfState, State.list());
+        TextFields.bindAutoCompletion(tfZip, DB.get().customers().getUniqueZips());
         TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
         TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
         TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
         TextFields.bindAutoCompletion(tfColor, DB.get().vehicles().getUniqueColor());
         TextFields.bindAutoCompletion(tfEngine, DB.get().vehicles().getUniqueEngine());
         TextFields.bindAutoCompletion(tfTransmission, DB.get().vehicles().getUniqueYear());
-        TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueStreets());
-        TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
-        TextFields.bindAutoCompletion(tfState, State.list());
-        TextFields.bindAutoCompletion(tfZip, DB.get().customers().getUniqueZips());
 
         tfVin.textProperty().addListener((o,x,y) -> tfVin.setText(y.toUpperCase()));
         tfLicensePlate.textProperty().addListener((o,x,y) -> tfLicensePlate.setText(y.toUpperCase()));

@@ -25,13 +25,11 @@ public class AutoPartWorkspaceController {
 
     @FXML
     public void initialize() {
+        tfPartRetailPrice.setText("0.00");
+        tfPartListCost.setText("0.00");
+        tfPartQuantity.setText("1");
         tfPartNumber.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(newValue, tfPartDesc.getText())));
         tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(tfPartNumber.getText(), newValue)));
-        tfPartRetailPrice.textProperty().addListener((o,oldValue, newValue) -> {
-            if (newValue.isEmpty()) {
-                tfPartRetailPrice.setText("0.00");
-            }
-        });
         colPartNumber.setCellValueFactory(e -> e.getValue().nameProperty());
         colPartDesc.setCellValueFactory(e -> e.getValue().descProperty());
         colPartRetailPrice.setCellValueFactory(e -> e.getValue().retailPriceProperty());

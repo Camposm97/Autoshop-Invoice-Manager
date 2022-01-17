@@ -20,6 +20,12 @@ public class LaborWorkspaceController {
     @FXML
     CheckBox cbTaxable;
 
+    @FXML
+    public void initialize() {
+        tfBilledHrs.setText("1.0");
+        tfRate.setText("105.00");
+    }
+
     public void saveLabor(WorkOrder workOrder) {
         Labor labor = buildLabor();
         workOrder.addLabor(labor);
