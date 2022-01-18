@@ -16,6 +16,11 @@ public class AutoPartStore {
 
     public void add(@NotNull AutoPart part) {
         try {
+            ResultSet rs = c.createStatement().executeQuery("select item_name from item where item_name = '" + part.getName() + "'");
+            if (rs.next()) {
+                update(part);
+                return;
+            }
             PreparedStatement prepStmt = c.prepareStatement(
                     "insert into item " +
                             "(item_name,desc,retail_price,list_price,taxable,quantity) " +
@@ -26,6 +31,22 @@ public class AutoPartStore {
             prepStmt.setDouble(4, part.getListPrice());
             prepStmt.setBoolean(5, part.isTaxable());
             prepStmt.setInt(6, part.getQuantity());
+            prepStmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void update(@NotNull AutoPart part) {
+        try {
+            PreparedStatement prepStmt = c.prepareStatement("""
+                    update item set desc = ?,retail_price = ?, list_price = ?, taxable = ?, quantity = ? where item_name = ?
+                    """);
+            prepStmt.setString(1, part.getDesc());
+            prepStmt.setDouble(2, part.getRetailPrice());
+            prepStmt.setDouble(3, part.getListPrice());
+            prepStmt.setBoolean(4, part.isTaxable());
+            prepStmt.setInt(5, part.getQuantity());
+            prepStmt.setString(6, part.getName());
             prepStmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
