@@ -4,6 +4,7 @@ import app.App;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.util.StringConverter;
 import model.State;
 import model.customer.Address;
@@ -94,6 +95,10 @@ public class WorkOrderWorkspaceController {
         colPartRetailPrice.setCellValueFactory(c -> c.getValue().retailPriceProperty());
         colPartListPrice.setCellValueFactory(c -> c.getValue().listPriceProperty());
         colPartTotal.setCellValueFactory(c -> c.getValue().subtotalProperty());
+        tvParts.setOnMouseClicked(e -> {
+            if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2)
+                editPart();
+        });
         tvParts.setItems(workOrder.itemList());
 
         colLaborCode.setCellValueFactory(c -> c.getValue().nameProperty());
@@ -101,6 +106,10 @@ public class WorkOrderWorkspaceController {
         colLaborBilledHrs.setCellValueFactory(c -> c.getValue().billedHrsProperty());
         colLaborRate.setCellValueFactory(c -> c.getValue().rateProperty());
         colLaborTotal.setCellValueFactory(c -> c.getValue().subtotalProperty());
+        tvLabor.setOnMouseClicked(e -> {
+            if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2)
+                editLabor();
+        });
         tvLabor.setItems(workOrder.laborList());
 
         tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
