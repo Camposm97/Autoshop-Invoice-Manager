@@ -15,22 +15,50 @@ public class CustomerStore {
         this.c = c;
     }
 
-    public void add(@NotNull Customer customer) {
+    public boolean exists(@NotNull Customer cus) {
         try {
-            PreparedStatement prepStmt = c.prepareStatement(
-                    "insert into customer " +
-                            "(first_name, last_name, phone, email, company, street, city, state, zip)" +
-                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            prepStmt.setString(1, customer.getFirstName());
-            prepStmt.setString(2, customer.getLastName());
-            prepStmt.setString(3, customer.getPhone());
-            prepStmt.setString(4, customer.getEmail());
-            prepStmt.setString(5, customer.getCompany());
-            prepStmt.setString(6, customer.getAddress().getStreet());
-            prepStmt.setString(7, customer.getAddress().getCity());
-            prepStmt.setString(8, customer.getAddress().getState());
-            prepStmt.setString(9, customer.getAddress().getZip());
-            prepStmt.execute();
+            PreparedStatement prepStmt = c.prepareStatement("""
+                    select customer_id from customer 
+                    where first_name =  ? and last_name = ? 
+                    and phone = ? and email = ? 
+                    and company = ? and street = ? 
+                    and city = ? and state = ? and zip = ?
+                    """);
+            prepStmt.setString(1, cus.getFirstName());
+            prepStmt.setString(2, cus.getLastName());
+            prepStmt.setString(3, cus.getPhone());
+            prepStmt.setString(4, cus.getEmail());
+            prepStmt.setString(5, cus.getCompany());
+            prepStmt.setString(6, cus.getAddress().getStreet());
+            prepStmt.setString(7, cus.getAddress().getCity());
+            prepStmt.setString(8, cus.getAddress().getState());
+            prepStmt.setString(9, cus.getAddress().getZip());
+            ResultSet rs = prepStmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void add(@NotNull Customer cus) {
+        try {
+            if (!exists(cus)) {
+                PreparedStatement prepStmt = c.prepareStatement(
+                        "insert into customer " +
+                                "(first_name, last_name, phone, email, company, street, city, state, zip)" +
+                                "values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                prepStmt.setString(1, cus.getFirstName());
+                prepStmt.setString(2, cus.getLastName());
+                prepStmt.setString(3, cus.getPhone());
+                prepStmt.setString(4, cus.getEmail());
+                prepStmt.setString(5, cus.getCompany());
+                prepStmt.setString(6, cus.getAddress().getStreet());
+                prepStmt.setString(7, cus.getAddress().getCity());
+                prepStmt.setString(8, cus.getAddress().getState());
+                prepStmt.setString(9, cus.getAddress().getZip());
+                prepStmt.execute();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
