@@ -70,6 +70,7 @@ public class AlertBuilder {
     }
 
     public Alert buildAddDialog(String title, Node content) {
+        setTitle(title);
         setHeaderTextInfo();
         setSaveCancelBtns();
         setContent(content);

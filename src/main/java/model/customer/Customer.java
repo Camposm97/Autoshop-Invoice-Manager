@@ -113,6 +113,14 @@ public class Customer {
         return new SimpleStringProperty(company);
     }
 
+    public String toPrettyString() {
+        if (company.isBlank()) {
+            return firstName + " " + lastName;
+        } else {
+            return company;
+        }
+    }
+
     @Override
     public String toString() {
         return "Customer{" +

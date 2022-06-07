@@ -3,16 +3,15 @@ package controller;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.ui.FX;
-import org.controlsfx.control.PopOver;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -114,6 +113,19 @@ public class CustomerTableController {
         tv.setOnContextMenuRequested(e -> {
             if (tv.getSelectionModel().getSelectedItem() != null) {
                 cm.show(tv.getScene().getWindow(), MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY());
+            }
+        });
+    }
+
+    public void connect(@NotNull VehicleWorkspaceController controller) {
+        disableEditing();
+        tv.setOnMouseClicked(e -> {
+            if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
+                Customer customer = getSelectedCustomer();
+                if (customer != null) {
+                    controller.loadCustomer(customer);
+                    controller.customerPopOver.hide();
+                }
             }
         });
     }

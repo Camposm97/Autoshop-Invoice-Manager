@@ -7,7 +7,7 @@
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppController">
+<BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppController">
    <top>
       <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
         <menus>
@@ -15,14 +15,20 @@
             <items>
                   <Menu mnemonicParsing="false" text="New...">
                      <items>
-                    <MenuItem mnemonicParsing="false" onAction="#addCustomer" text="Customer">
-                           <accelerator>
-                              <KeyCodeCombination alt="UP" code="DIGIT1" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                           </accelerator></MenuItem>
-                        <MenuItem mnemonicParsing="false" onAction="#addVehicle" text="Vehicle">
-                           <accelerator>
-                              <KeyCodeCombination alt="UP" code="DIGIT2" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                           </accelerator></MenuItem>
+                        <Menu mnemonicParsing="false" text="Customer">
+                          <items>
+                          <MenuItem mnemonicParsing="false" onAction="#addCustomer" text="Profile">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="DIGIT1" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                 </accelerator>
+                              </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#addVehicle" text="Vehicle">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="DIGIT2" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                 </accelerator>
+                              </MenuItem>
+                          </items>
+                        </Menu>
                         <MenuItem mnemonicParsing="false" onAction="#addWorkOrder" text="Work Order">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="DIGIT3" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
@@ -44,7 +50,6 @@
           <Menu mnemonicParsing="false" text="View">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#viewCustomers" text="Customer" />
-                  <MenuItem mnemonicParsing="false" onAction="#viewVehicles" text="Vehicle" />
                   <MenuItem mnemonicParsing="false" onAction="#viewWorkOrders" text="Work Order" />
             </items>
           </Menu>

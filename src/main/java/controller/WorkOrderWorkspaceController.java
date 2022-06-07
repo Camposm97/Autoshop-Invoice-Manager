@@ -112,11 +112,11 @@ public class WorkOrderWorkspaceController {
         });
         tvLabor.setItems(workOrder.laborList());
 
-        tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
+        tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
         dateCompletedPicker.setConverter(new StringConverter<>() {
             @Override
             public String toString(LocalDate localDate) {
-                return localDate != null ? localDate.format(DateTimeFormatter.ofPattern("MM/DD/YYYY")) : null;
+                return localDate != null ? localDate.format(DateTimeFormatter.ofPattern("MM/dd/u")) : null;
             }
 
             @Override

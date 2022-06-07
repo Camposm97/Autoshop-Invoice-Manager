@@ -14,10 +14,16 @@ public class AppController {
     @FXML
     MenuBar menuBar;
 
+    /**
+     * Adds a new customer ot the database
+     */
     public void addCustomer() {
         AlertFactory.showAddCustomer();
     }
 
+    /**
+     * Adds a new vehicle for an existing customer
+     */
     public void addVehicle() {
         AlertFactory.showAddVehicle();
     }

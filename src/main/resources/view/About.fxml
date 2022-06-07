@@ -6,7 +6,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Build # 1.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Version 1.0" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Developed by Michael Campos" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Powered by JavaFX, ControlsFX, and SQLite" />
    </children>
