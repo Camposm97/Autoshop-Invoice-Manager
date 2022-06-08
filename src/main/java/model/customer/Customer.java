@@ -113,6 +113,21 @@ public class Customer {
         return new SimpleStringProperty(company);
     }
 
+    /**
+     * @return all info of customer in a formatted table except customer id.
+     */
+    public String toFormattedString() {
+        var name = String.format("%s\n", this.getName());
+        var phone = String.format("%s\n", this.phone);
+        var email = String.format("%s\n", this.email);
+        var company = String.format("%s\n", this.company);
+        var addr = String.format("%s\n", this.getAddress());
+        return name + phone + email + company + addr;
+    }
+
+    /**
+     * @return first and last name of customer if no company name given, otherwise company name is returned
+     */
     public String toPrettyString() {
         if (company.isBlank()) {
             return firstName + " " + lastName;

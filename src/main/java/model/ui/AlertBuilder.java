@@ -8,8 +8,7 @@ import javafx.scene.control.ButtonType;
 import java.util.function.Function;
 
 public class AlertBuilder {
-    private String title;
-    private String headerText;
+    private String title, headerText, contentText;
     private Alert.AlertType alertType;
     private Function<Void, Void> callback;
     private ButtonType[] btList;
@@ -36,6 +35,11 @@ public class AlertBuilder {
 
     public AlertBuilder setHeaderTextInfo() {
         this.headerText = "Please fill out the following information";
+        return this;
+    }
+
+    public AlertBuilder setContentText(String contentText) {
+        this.contentText = contentText;
         return this;
     }
 
@@ -88,7 +92,11 @@ public class AlertBuilder {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
-        alert.getDialogPane().setContent(content);
+        if (contentText != null) {
+            alert.setContentText(contentText);
+        } else {
+            alert.getDialogPane().setContent(content);
+        }
         alert.getButtonTypes().setAll(btList);
         return alert;
     }

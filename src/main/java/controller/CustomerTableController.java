@@ -190,7 +190,8 @@ public class CustomerTableController {
             AlertBuilder builder = new AlertBuilder();
             builder.setAlertType(Alert.AlertType.CONFIRMATION)
                     .setTitle("Delete Customer")
-                    .setHeaderText("Are you sure you want to delete customer: " + cus.toPrettyString())
+                    .setHeaderText("Are you sure you want to delete this customer?")
+                    .setContentText(cus.toFormattedString())
                     .setYesNoBtns();
             Optional<ButtonType> result = builder.build().showAndWait();
             result.ifPresent(x -> {
