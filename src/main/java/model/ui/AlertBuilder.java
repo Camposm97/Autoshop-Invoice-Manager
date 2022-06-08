@@ -58,6 +58,13 @@ public class AlertBuilder {
         return this;
     }
 
+    public AlertBuilder setYesNoBtns() {
+        ButtonType bt1 = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+        ButtonType bt2 = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+        btList = new ButtonType[]{bt1, bt2};
+        return this;
+    }
+
     public AlertBuilder setDefaultBtn() {
         ButtonType bt = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         btList = new ButtonType[]{bt};

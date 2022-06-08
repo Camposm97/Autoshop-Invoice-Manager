@@ -26,6 +26,7 @@ public class VehicleWorkspaceController {
 
     @FXML
     public void initialize() {
+        tfVin.textProperty().addListener((o,x,y) -> tfVin.setText(y.toUpperCase()));
         TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
         TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
         TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
@@ -59,7 +60,6 @@ public class VehicleWorkspaceController {
         String mileageIn = tfMileageIn.getText();
         String mileageOut = tfMileageOut.getText();
         Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
-
         DB.get().vehicles().add(vehicle);
     }
 

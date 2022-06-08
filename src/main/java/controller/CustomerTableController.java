@@ -11,10 +11,12 @@ import javafx.scene.input.MouseButton;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
+import model.ui.AlertBuilder;
 import model.ui.FX;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Optional;
 
 public class CustomerTableController {
     @FXML
@@ -184,9 +186,19 @@ public class CustomerTableController {
     private class DeleteCustomerHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {
-            Customer customer = tv.getSelectionModel().getSelectedItem();
-            DB.get().customers().deleteById(customer.getId());
-            tv.getItems().removeIf(c -> c.getId() == customer.getId());
+            Customer cus = tv.getSelectionModel().getSelectedItem();
+            AlertBuilder builder = new AlertBuilder();
+            builder.setAlertType(Alert.AlertType.CONFIRMATION)
+                    .setTitle("Delete Customer")
+                    .setHeaderText("Are you sure you want to delete customer: " + cus.toPrettyString())
+                    .setYesNoBtns();
+            Optional<ButtonType> result = builder.build().showAndWait();
+            result.ifPresent(x -> {
+                if (!x.getButtonData().isCancelButton()) {
+                    DB.get().customers().deleteById(cus.getId());
+                    tv.getItems().removeIf(c -> c.getId() == cus.getId());
+                }
+            });
         }
     }
 }
