@@ -2,7 +2,7 @@ package app;
 
 /**
  * TODO
- * Save preferences to database instead of having a separate file called preferenes.config
+ * Save preferences to database instead of having a separate file called preferences.config
  * Refactor database names and attributes for item and work_order_item
  * Implement payment system to keep track of completed work orders.
  * Implement vehicle transfer of ownership between customers

@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import model.customer.Customer;
+import model.customer.OwnedVehicle;
 import model.database.DB;
 import model.ui.FX;
 import model.work_order.Vehicle;
@@ -60,7 +61,9 @@ public class VehicleWorkspaceController {
         String mileageIn = tfMileageIn.getText();
         String mileageOut = tfMileageOut.getText();
         Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
-        DB.get().vehicles().add(vehicle);
+        int customerId = this.customer.getId();
+        OwnedVehicle ownedVehicle = new OwnedVehicle(customerId, vehicle);
+        DB.get().vehicles().add(ownedVehicle);
     }
 
     public void loadCustomer(Customer customer) {

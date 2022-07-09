@@ -1,5 +1,6 @@
 package model.database;
 
+import model.customer.OwnedVehicle;
 import model.work_order.Vehicle;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,22 +15,23 @@ public class VehicleStore {
         this.c = c;
     }
 
-    public void add(@NotNull Vehicle vehicle) {
+    public void add(@NotNull OwnedVehicle ov) {
         try {
             PreparedStatement prepStmt = c.prepareStatement(
                     "insert into vehicle " +
-                            "(vin, year, make, model, license_plate, color, engine, transmission, mileage_in, mileage_out) " +
+                            "(vin, year, make, model, license_plate, color, engine, transmission, mileage_in, mileage_out, customer_id) " +
                             "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            prepStmt.setString(1, vehicle.getVin());
-            prepStmt.setInt(2, vehicle.getYear());
-            prepStmt.setString(3, vehicle.getMake());
-            prepStmt.setString(4, vehicle.getModel());
-            prepStmt.setString(5, vehicle.getLicensePlate());
-            prepStmt.setString(6, vehicle.getColor());
-            prepStmt.setString(7, vehicle.getEngine());
-            prepStmt.setString(8, vehicle.getTransmission());
-            prepStmt.setString(9, vehicle.getMileageIn());
-            prepStmt.setString(10, vehicle.getMileageOut());
+            prepStmt.setString(1, ov.getVehicle().getVin());
+            prepStmt.setInt(2, ov.getVehicle().getYear());
+            prepStmt.setString(3, ov.getVehicle().getMake());
+            prepStmt.setString(4, ov.getVehicle().getModel());
+            prepStmt.setString(5, ov.getVehicle().getLicensePlate());
+            prepStmt.setString(6, ov.getVehicle().getColor());
+            prepStmt.setString(7, ov.getVehicle().getEngine());
+            prepStmt.setString(8, ov.getVehicle().getTransmission());
+            prepStmt.setString(9, ov.getVehicle().getMileageIn());
+            prepStmt.setString(10, ov.getVehicle().getMileageOut());
+            prepStmt.setInt(11, ov.getCustomerId());
             prepStmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,7 +42,7 @@ public class VehicleStore {
         try {
             PreparedStatement prepStmt = c.prepareStatement("update vehicle set " +
                     "year = ?, model = ?, license_plate = ?, color = ?, engine = ?, " +
-                    "transmission = ?, mileage_in = ?, mileage_out = ? " +
+                    "transmission = ?, mileage_in = ?, mileage_out = ?, customer_id = ? " +
                     "where vin=\"" + vehicle.getVin() + "\"");
             prepStmt.setString(1, vehicle.getVin());
             prepStmt.setInt(2, vehicle.getYear());
