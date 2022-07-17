@@ -99,8 +99,6 @@ public class DB {
                 VEHICLE_TABLE.COLOR + " text," +
                 VEHICLE_TABLE.ENGINE + " text," +
                 VEHICLE_TABLE.TRANSMISSION + " text," +
-                VEHICLE_TABLE.MILEAGE_IN + " text," +
-                VEHICLE_TABLE.MILEAGE_OUT + " text," +
                 VEHICLE_TABLE.CUSTOMER_ID + " int," +
                 "foreign key (" + VEHICLE_TABLE.CUSTOMER_ID + ")" + " references " +
                 CUSTOMER_TABLE + "(" + CUSTOMER_TABLE.CUSTOMER_ID + "))");

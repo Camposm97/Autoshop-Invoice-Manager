@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 import model.State;
 import model.customer.Address;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.function.Function;
 
 public class WorkOrderWorkspaceController {
     protected WorkOrder workOrder;
@@ -76,6 +78,7 @@ public class WorkOrderWorkspaceController {
      */
     @FXML
     public void initialize() throws IOException {
+        // Bind TextFields for auto-completion
         TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueStreets());
         TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
         TextFields.bindAutoCompletion(tfState, State.list());
@@ -87,36 +90,44 @@ public class WorkOrderWorkspaceController {
         TextFields.bindAutoCompletion(tfEngine, DB.get().vehicles().getUniqueEngine());
         TextFields.bindAutoCompletion(tfTransmission, DB.get().vehicles().getUniqueYear());
 
+        // Add Listeners to text fields vin and license plate
         tfVin.textProperty().addListener((o,x,y) -> tfVin.setText(y.toUpperCase()));
         tfLicensePlate.textProperty().addListener((o,x,y) -> tfLicensePlate.setText(y.toUpperCase()));
+
+        // Bind columns to appropriate fields in WorkOrder
         colPartNumber.setCellValueFactory(c -> c.getValue().nameProperty());
         colPartDesc.setCellValueFactory(c -> c.getValue().descProperty());
         colPartQuantity.setCellValueFactory(c -> c.getValue().quantityProperty());
         colPartRetailPrice.setCellValueFactory(c -> c.getValue().retailPriceProperty());
         colPartListPrice.setCellValueFactory(c -> c.getValue().listPriceProperty());
         colPartTotal.setCellValueFactory(c -> c.getValue().subtotalProperty());
-        tvParts.setOnMouseClicked(e -> {
-            if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2)
-                editPart();
-        });
-        tvParts.setItems(workOrder.itemList());
-
         colLaborCode.setCellValueFactory(c -> c.getValue().nameProperty());
         colLaborDesc.setCellValueFactory(c -> c.getValue().descProperty());
         colLaborBilledHrs.setCellValueFactory(c -> c.getValue().billedHrsProperty());
         colLaborRate.setCellValueFactory(c -> c.getValue().rateProperty());
         colLaborTotal.setCellValueFactory(c -> c.getValue().subtotalProperty());
+
+        // Set double-click function for parts and labor tables
+        // Set Parts and Labor Items
+        final int DOUBLE_CLICK = 2;
+        Function<MouseEvent, Boolean> doubleClicked = x -> x.getButton().equals(MouseButton.PRIMARY) && x.getClickCount() == DOUBLE_CLICK;
+        tvParts.setOnMouseClicked(e -> {
+            if (doubleClicked.apply(e))
+                editPart();
+        });
+        tvParts.setItems(workOrder.itemList());
         tvLabor.setOnMouseClicked(e -> {
-            if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 2)
+            if (doubleClicked.apply(e))
                 editLabor();
         });
         tvLabor.setItems(workOrder.laborList());
 
+        // Set date created value to current date
         tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
         dateCompletedPicker.setConverter(new StringConverter<>() {
             @Override
-            public String toString(LocalDate localDate) {
-                return localDate != null ? localDate.format(DateTimeFormatter.ofPattern("MM/dd/u")) : null;
+            public String toString(LocalDate x) {
+                return x != null ? x.format(DateTimeFormatter.ofPattern("MM/dd/u")) : null;
             }
 
             @Override
@@ -232,8 +243,8 @@ public class WorkOrderWorkspaceController {
         tfModel.setText(vehicle.getModel());
         tfEngine.setText(vehicle.getEngine());
         tfTransmission.setText(vehicle.getTransmission());
-        tfMileageIn.setText(vehicle.getMileageIn());
-        tfMileageOut.setText(vehicle.getMileageOut());
+//        tfMileageIn.setText(vehicle.getMileageIn());
+//        tfMileageOut.setText(vehicle.getMileageOut());
     }
 
     public void buildWorkOrder() {

@@ -21,7 +21,7 @@ public class VehicleWorkspaceController {
     @FXML
     Button btCus;
     @FXML
-    TextField tfVin, tfYear, tfMake, tfModel, tfLicensePlate, tfColor, tfEngine, tfTransmission, tfMileageIn, tfMileageOut;
+    TextField tfVin, tfYear, tfMake, tfModel, tfLicensePlate, tfColor, tfEngine, tfTransmission;
     @FXML
     PopOver customerPopOver;
 
@@ -58,9 +58,9 @@ public class VehicleWorkspaceController {
         String color = tfColor.getText();
         String engine = tfEngine.getText();
         String transmission = tfTransmission.getText();
-        String mileageIn = tfMileageIn.getText();
-        String mileageOut = tfMileageOut.getText();
-        Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
+//        String mileageIn = tfMileageIn.getText();
+//        String mileageOut = tfMileageOut.getText();
+        Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission);
         int customerId = this.customer.getId();
         OwnedVehicle ownedVehicle = new OwnedVehicle(customerId, vehicle);
         DB.get().vehicles().add(ownedVehicle);

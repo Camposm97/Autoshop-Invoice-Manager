@@ -21,6 +21,17 @@ public class Vehicle {
         this.mileageOut = mileageOut;
     }
 
+    public Vehicle(String vin, int year, String make, String model, String licensePlate, String color, String engine, String transmission) {
+        this.vin = vin;
+        this.year = year;
+        this.make = make;
+        this.model = model;
+        this.licensePlate = licensePlate;
+        this.color = color;
+        this.engine = engine;
+        this.transmission = transmission;
+    }
+
     public String getVin() {
         return vin;
     }

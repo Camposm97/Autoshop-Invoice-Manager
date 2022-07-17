@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <SplitPane dividerPositions="0.8">
             <items>
@@ -333,7 +333,7 @@
                                                 <Label text="Total Due" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                                 <TextField fx:id="tfPartsTotal" editable="false" GridPane.rowIndex="1" />
                                                 <TextField fx:id="tfLaborTotal" editable="false" GridPane.rowIndex="3" />
-                                                <TextField fx:id="tfDiscountTotal" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="tfDiscountTotal" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <TextField fx:id="tfTaxTotal" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                                 <TextField fx:id="tfSubtotal" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                                 <TextField fx:id="tfTotal" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="3" />
@@ -362,9 +362,9 @@
                                         <Label text="Work Order #" />
                                         <Label text="Date Created" GridPane.rowIndex="1" />
                                         <Label text="Date Completed" GridPane.rowIndex="2" />
-                                        <DatePicker fx:id="dateCompletedPicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                        <TextField fx:id="tfWorkOrderId" disable="true" GridPane.columnIndex="1" />
-                                        <TextField fx:id="tfDateCreated" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <DatePicker fx:id="dateCompletedPicker" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <TextField fx:id="tfWorkOrderId" editable="false" GridPane.columnIndex="1" />
+                                        <TextField fx:id="tfDateCreated" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     </children>
                                     <padding>
                                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

@@ -132,12 +132,12 @@ public class WorkOrder implements Billable {
     }
 
     public SimpleStringProperty dateCreatedProperty() {
-        return new SimpleStringProperty(dateCreated.toLocalDate().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
+        return new SimpleStringProperty(dateCreated.toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
     }
 
     public SimpleStringProperty dateCompletedProperty() {
         if (dateCompleted != null) {
-            return new SimpleStringProperty(dateCompleted.toLocalDate().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
+            return new SimpleStringProperty(dateCompleted.toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
         }
         return new SimpleStringProperty();
     }

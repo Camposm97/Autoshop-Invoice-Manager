@@ -15,20 +15,16 @@
             <items>
                   <Menu mnemonicParsing="false" text="New...">
                      <items>
-                        <Menu mnemonicParsing="false" text="Customer">
-                          <items>
-                          <MenuItem mnemonicParsing="false" onAction="#addCustomer" text="Profile">
-                                 <accelerator>
-                                    <KeyCodeCombination alt="UP" code="DIGIT1" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                                 </accelerator>
-                              </MenuItem>
-                              <MenuItem mnemonicParsing="false" onAction="#addVehicle" text="Vehicle">
-                                 <accelerator>
-                                    <KeyCodeCombination alt="UP" code="DIGIT2" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                                 </accelerator>
-                              </MenuItem>
-                          </items>
-                        </Menu>
+                    <MenuItem mnemonicParsing="false" onAction="#addCustomer" text="Customer">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="DIGIT1" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem mnemonicParsing="false" onAction="#addVehicle" text="Vehicle">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="DIGIT2" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                           </accelerator>
+                        </MenuItem>
                         <MenuItem mnemonicParsing="false" onAction="#addWorkOrder" text="Work Order">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="DIGIT3" control="UP" meta="UP" shift="UP" shortcut="DOWN" />

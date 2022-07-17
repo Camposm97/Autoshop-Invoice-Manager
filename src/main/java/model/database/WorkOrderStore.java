@@ -177,6 +177,32 @@ public class WorkOrderStore {
         return workOrder;
     }
 
+    public List<WorkOrder> getUnCompletedWorkOrders() {
+        List<WorkOrder> list = new LinkedList<>();
+        try {
+            ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where date_completed is null");
+            while (rs.next()) {
+                WorkOrder workOrder = getById((rs.getInt(1)));
+                list.add(workOrder);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int getUncompletedWorkOrderCount() {
+        try {
+            ResultSet rs = c.createStatement().executeQuery("select count(*) from work_order where date_completed is null");
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public List<WorkOrder> getAll() {
         List<WorkOrder> list = new LinkedList<>();
         try {

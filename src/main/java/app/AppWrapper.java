@@ -10,6 +10,12 @@ package app;
  * Implement re-sizing font system in preferences
  * Implement Tab System for work orders (v2.0)
  *
+ * Parse SQLite database to MySQL
+ *
+ * When editing a work order labor description, when the user pressed TAB on the labor description, the program should change focus to the next field
+ *
+ * When we're in the WorkOrder workspace and if we add a new customer or vehicle, then the program should update the searches for customer and vehicle
+ *
  */
 public class AppWrapper {
     public static void main(String[] args) {

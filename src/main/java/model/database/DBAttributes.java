@@ -74,7 +74,7 @@ public class DBAttributes {
 //    public static final String WORK_ORDER_PAYMENT_TYPE = "type";
 
     public static final CustomerTableAttributes CUSTOMER_TABLE = new CustomerTableAttributes();
-    public static final VehicleTableAttributes VEHICLE_TABLE = new VehicleTableAttributes();
+    public static final OwnedVehicleTableAttributes VEHICLE_TABLE = new OwnedVehicleTableAttributes();
     public static final ItemTableAttributes ITEM_TABLE = new ItemTableAttributes();
     public static final WorkOrderTableAttributes WORK_ORDER_TABLE = new WorkOrderTableAttributes();
     public static final WorkOrderItemTableAttributes WORK_ORDER_ITEM_TABLE = new WorkOrderItemTableAttributes();
@@ -101,7 +101,7 @@ public class DBAttributes {
         }
     }
 
-    public static class VehicleTableAttributes {
+    public static class OwnedVehicleTableAttributes {
         final String VIN = "vin";
         final String YEAR = "year";
         final String MAKE = "make";
@@ -110,11 +110,9 @@ public class DBAttributes {
         final String COLOR = "color";
         final String ENGINE = "engine";
         final String TRANSMISSION = "transmission";
-        final String MILEAGE_IN = "mileage_in";
-        final String MILEAGE_OUT = "mileage_out";
         final String CUSTOMER_ID = "customer_id";
 
-        private VehicleTableAttributes() {}
+        private OwnedVehicleTableAttributes() {}
 
         @Override
         public String toString() { return "vehicle"; }
