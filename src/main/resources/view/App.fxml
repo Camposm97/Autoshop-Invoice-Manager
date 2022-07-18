@@ -45,8 +45,9 @@
           </Menu>
           <Menu mnemonicParsing="false" text="View">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#viewCustomers" text="Customer" />
-                  <MenuItem mnemonicParsing="false" onAction="#viewWorkOrders" text="Work Order" />
+                  <MenuItem mnemonicParsing="false" onAction="#viewMyCompany" text="My Company" />
+              <MenuItem mnemonicParsing="false" onAction="#viewCustomers" text="Customers" />
+                  <MenuItem mnemonicParsing="false" onAction="#viewWorkOrders" text="Work Orders" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Help">

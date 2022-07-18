@@ -5,7 +5,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
-import model.database.DB;
 import model.ui.AlertFactory;
 import model.ui.FX;
 
@@ -14,12 +13,6 @@ public class AppController {
     BorderPane root;
     @FXML
     MenuBar menuBar;
-
-    @FXML
-    public void initialize() {
-        int count = DB.get().workOrders().getUncompletedWorkOrderCount();
-        System.out.println("uncompleted work orders: " + count);
-    }
 
     /**
      * Adds a new customer ot the database
@@ -40,12 +33,12 @@ public class AppController {
         App.setDisplay(FX.view("Work_Order_Workspace.fxml", controller));
     }
 
-    public void viewCustomers() {
-        App.setDisplay(FX.view("Customer_Table.fxml"));
+    public void viewMyCompany() {
+        App.setDisplay(FX.view("My_Company.fxml"));
     }
 
-    public void viewVehicles() {
-
+    public void viewCustomers() {
+        App.setDisplay(FX.view("Customer_Table.fxml"));
     }
 
     public void viewWorkOrders() {
