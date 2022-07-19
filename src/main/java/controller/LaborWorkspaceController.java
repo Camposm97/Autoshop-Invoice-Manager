@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
@@ -24,6 +25,23 @@ public class LaborWorkspaceController {
     public void initialize() {
         tfBilledHrs.setText("1.0");
         tfRate.setText("105.00");
+
+        // Initialize listeners for fields
+        tfLaborCode.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.TAB) {
+                taDesc.requestFocus();
+                taDesc.positionCaret(taDesc.getText().length());
+            }
+        });
+        taDesc.textProperty().addListener((ov,strOld,strCurrent) -> {
+            if (strCurrent.contains("\t")) {
+                taDesc.setText(strOld);
+                tfBilledHrs.requestFocus();
+            }
+        });
+        tfRate.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.TAB) cbTaxable.requestFocus();
+        });
     }
 
     public void saveLabor(WorkOrder workOrder) {
