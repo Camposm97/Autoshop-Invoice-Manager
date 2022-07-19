@@ -17,6 +17,11 @@ package app;
  * When we're in the WorkOrder workspace and if we add a new customer or vehicle, then the program should update the searches for customer and vehicle
  *
  * Include in My_Company.fxml
+ *  Report the number of completed work orders in the current month
+ *
+ *  Display a title saying "Uncompleted work orders" and the amount
+ *  If there are uncompleted work orders, display those work orders using TableView
+ *  If there are no uncompleted work orders, display an empty TableView
  *
  */
 public class AppWrapper {

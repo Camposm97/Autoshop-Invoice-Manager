@@ -6,9 +6,11 @@ import model.work_order.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class WorkOrderStore {
@@ -175,6 +177,42 @@ public class WorkOrderStore {
             e.printStackTrace();
         }
         return workOrder;
+    }
+
+    public int getCompletedWorkOrdersThisYear() {
+        int year = LocalDate.now().getYear();
+        Date date1 = Date.valueOf(LocalDate.of(year, 1, 1));
+        Date date2 = Date.valueOf(LocalDate.of(year, 12, 31));
+        List<WorkOrder> list = getCompletedWorkOrders();
+        list.removeIf(x -> x.getDateCompleted().before(date1));
+        list.removeIf(x -> x.getDateCompleted().after(date2));
+        return list.size();
+    }
+
+    public int getCompletedWorkOrdersThisMonth() {
+        LocalDate currentDate = LocalDate.now();
+        int year = currentDate.getYear();
+        int month = currentDate.getMonthValue();
+        Date date1 = Date.valueOf(LocalDate.of(year, month, 1));
+        Date date2 = Date.valueOf(LocalDate.of(year, month, 31));
+        List<WorkOrder> list = getCompletedWorkOrders();
+        list.removeIf(x -> x.getDateCompleted().before(date1));
+        list.removeIf(x -> x.getDateCompleted().after(date2));
+        return list.size();
+    }
+
+    public List<WorkOrder> getCompletedWorkOrders() {
+        List<WorkOrder> list = new LinkedList<>();
+        try {
+            ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where date_completed is not null");
+            while (rs.next()) {
+                WorkOrder workOrder = getById(rs.getInt(1));
+                list.add(workOrder);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public List<WorkOrder> getUnCompletedWorkOrders() {
