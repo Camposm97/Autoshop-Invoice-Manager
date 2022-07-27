@@ -6,6 +6,7 @@ target
 # Files
 autoshop.db
 preferences.config
+recents.dat
 *.log
 
 # MacOS

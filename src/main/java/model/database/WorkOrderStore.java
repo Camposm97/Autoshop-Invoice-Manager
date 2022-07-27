@@ -362,6 +362,15 @@ public class WorkOrderStore {
             while (laborIterator.hasNext()) {
                 deleteLabor(laborIterator.next());
             }
+
+            /*
+            Check if the work order id is in our recent work orders, if it is then
+            remove it from the recent work orders list
+             */
+            if (App.getRecentWorkOrders().contains(workOrder.getId())) {
+                App.getRecentWorkOrders().removeFirstOccurrence(workOrder.getId());
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
