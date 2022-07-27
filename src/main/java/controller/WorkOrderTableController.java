@@ -7,11 +7,13 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import model.database.DB;
 import model.ui.FX;
 import model.work_order.WorkOrder;
 
 import java.sql.Date;
+import java.util.function.Function;
 
 public class WorkOrderTableController {
     @FXML
@@ -39,6 +41,8 @@ public class WorkOrderTableController {
 
     public WorkOrderTableController() {
         Platform.runLater(() -> {
+            Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
+
             tfFirstName.textProperty().addListener((o, oldText, newText) -> filter());
             tfLastName.textProperty().addListener((o, oldText, newText) -> filter());
             tfCompanyName.textProperty().addListener((o, oldText, newText) -> filter());
@@ -55,9 +59,7 @@ public class WorkOrderTableController {
             colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
             tv.getItems().setAll(DB.get().workOrders().getAll());
             tv.setOnMouseClicked(e -> {
-                if (e.getClickCount() == 2 && e.getButton().equals(MouseButton.PRIMARY)) {
-                    editWorkOrder();
-                }
+                if (selectWorkOrder.apply(e)) editWorkOrder();
             });
             FX.autoResizeColumns(tv);
         });

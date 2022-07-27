@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-
+<?import javafx.scene.text.Font?>
 
 <GridPane hgap="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" vgap="8.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MyCompanyController">
   <columnConstraints>
@@ -27,10 +27,29 @@
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
+      <Label text="Recent Work Orders" GridPane.columnSpan="2">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
+      <TableView fx:id="tvRecentWorkOrders" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="800.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+        <columns>
+          <TableColumn fx:id="colRecentId" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="colRecentCustomer" prefWidth="75.0" text="Customer Name" />
+            <TableColumn fx:id="colRecentCompany" prefWidth="75.0" text="Company" />
+            <TableColumn fx:id="colRecentVehicle" prefWidth="75.0" text="Vehicle" />
+            <TableColumn fx:id="colRecentDateCreated" prefWidth="75.0" text="Date Created" />
+            <TableColumn fx:id="colRecentDateCompleted" prefWidth="75.0" text="Date Completed" />
+            <TableColumn fx:id="colRecentInvoiceTotal" prefWidth="75.0" text="Invoice Total" />
+        </columns>
+      </TableView>
+      <Separator GridPane.columnSpan="2" GridPane.rowIndex="2" />
       <Label contentDisplay="RIGHT" text="Completed Work Orders this Year" GridPane.rowIndex="3">
          <graphic>
             <Label fx:id="lblYear" text="(####):" />
          </graphic>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
       </Label>
       <Label fx:id="lblWorkOrderYearCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4" />
@@ -38,25 +57,28 @@
          <graphic>
             <Label fx:id="lblMonth" text="(*******):" />
          </graphic>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
       </Label>
-      <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
-      <Label text="Incompleted Work Orders:" GridPane.rowIndex="7" />
-      <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.columnSpan="2" GridPane.rowIndex="8">
-        <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
-        </columns>
-      </TableView>
       <Label fx:id="lblWorkOrderMonthCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+      <Label text="Incompleted Work Orders:" GridPane.rowIndex="7">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
       <Label fx:id="lblIncompletedWorkOrderCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-      <Label text="Recent Work Orders" GridPane.columnSpan="2" />
-      <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+      <TableView fx:id="tvIncompletedWorkOrders" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.columnSpan="2" GridPane.rowIndex="8">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+            <TableColumn fx:id="colIncompletedId" prefWidth="75.0" text="ID" />
+            <TableColumn fx:id="colIncompletedCustomer" prefWidth="75.0" text="Customer Name" />
+            <TableColumn fx:id="colIncompletedCompany" prefWidth="75.0" text="Company" />
+            <TableColumn fx:id="colIncompletedVehicle" prefWidth="75.0" text="Vehicle" />
+            <TableColumn fx:id="colIncompletedDateCreated" prefWidth="75.0" text="Date Created" />
+            <TableColumn fx:id="colIncompletedDateCompleted" prefWidth="75.0" text="Date Completed" />
+            <TableColumn fx:id="colIncompletedInvoiceTotal" prefWidth="75.0" text="Invoice Total" />
         </columns>
       </TableView>
-      <Separator GridPane.columnSpan="2" GridPane.rowIndex="2" />
    </children>
    <padding>
       <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

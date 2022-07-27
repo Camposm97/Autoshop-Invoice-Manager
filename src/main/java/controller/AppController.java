@@ -3,7 +3,6 @@ package controller;
 import app.App;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import model.ui.AlertFactory;
@@ -14,12 +13,6 @@ public class AppController {
     BorderPane root;
     @FXML
     MenuBar menuBar;
-
-    @FXML
-    public void initialize() {
-        Parent center = FX.view("My_Company.fxml");
-        root.setCenter(center);
-    }
 
     /**
      * Adds a new customer ot the database

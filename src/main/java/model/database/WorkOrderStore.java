@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class WorkOrderStore {
@@ -215,7 +214,7 @@ public class WorkOrderStore {
         return list;
     }
 
-    public List<WorkOrder> getUnCompletedWorkOrders() {
+    public List<WorkOrder> getIncompletedWorkOrders() {
         List<WorkOrder> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where date_completed is null");
@@ -227,18 +226,6 @@ public class WorkOrderStore {
             e.printStackTrace();
         }
         return list;
-    }
-
-    public int getUncompletedWorkOrderCount() {
-        try {
-            ResultSet rs = c.createStatement().executeQuery("select count(*) from work_order where date_completed is null");
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     public List<WorkOrder> getAll() {
