@@ -9,42 +9,54 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane hgap="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="8.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MyCompanyController">
+
+<GridPane hgap="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" vgap="8.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MyCompanyController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="400.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="400.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label contentDisplay="RIGHT" text="Completed Work Orders this Year">
+      <Label contentDisplay="RIGHT" text="Completed Work Orders this Year" GridPane.rowIndex="3">
          <graphic>
             <Label fx:id="lblYear" text="(####):" />
          </graphic>
       </Label>
-      <Label fx:id="lblWorkOrderYearCount" text="-1" GridPane.columnIndex="1" />
-      <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-      <Label contentDisplay="RIGHT" text="Completed Work Orders this Month" GridPane.rowIndex="2">
+      <Label fx:id="lblWorkOrderYearCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+      <Label contentDisplay="RIGHT" text="Completed Work Orders this Month" GridPane.rowIndex="5">
          <graphic>
             <Label fx:id="lblMonth" text="(*******):" />
          </graphic>
       </Label>
-      <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-      <Label text="Total Incompleted Work Orders:" GridPane.rowIndex="4" />
-      <TableView GridPane.columnSpan="2" GridPane.rowIndex="5">
+      <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+      <Label text="Incompleted Work Orders:" GridPane.rowIndex="7" />
+      <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.columnSpan="2" GridPane.rowIndex="8">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
         </columns>
       </TableView>
-      <Label fx:id="lblWorkOrderMonthCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Label fx:id="lblIncompletedWorkOrderCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Label fx:id="lblWorkOrderMonthCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+      <Label fx:id="lblIncompletedWorkOrderCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <Label text="Recent Work Orders" GridPane.columnSpan="2" />
+      <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+        <columns>
+          <TableColumn prefWidth="75.0" text="C1" />
+          <TableColumn prefWidth="75.0" text="C2" />
+        </columns>
+      </TableView>
+      <Separator GridPane.columnSpan="2" GridPane.rowIndex="2" />
    </children>
    <padding>
       <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
