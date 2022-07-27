@@ -1,5 +1,6 @@
 package model.database;
 
+import app.App;
 import model.customer.Address;
 import model.customer.Customer;
 import model.work_order.*;
@@ -36,7 +37,7 @@ public class WorkOrderStore {
         }
     }
 
-    public void add(@NotNull WorkOrder workOrder) {
+    public WorkOrder add(@NotNull WorkOrder workOrder) {
         try {
             // Add work_order row
             PreparedStatement prepStmt = c.prepareStatement(
@@ -75,7 +76,7 @@ public class WorkOrderStore {
             prepStmt.setString(10, workOrder.getCustomer().getAddress().getState());
             prepStmt.setString(11, workOrder.getCustomer().getAddress().getZip());
             prepStmt.setString(12, workOrder.getVehicle().getVin());
-            prepStmt.setInt(13, workOrder.getVehicle().getYear());
+            prepStmt.setString(13, workOrder.getVehicle().getYear());
             prepStmt.setString(14, workOrder.getVehicle().getMake());
             prepStmt.setString(15, workOrder.getVehicle().getModel());
             prepStmt.setString(16, workOrder.getVehicle().getLicensePlate());
@@ -104,6 +105,7 @@ public class WorkOrderStore {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return workOrder;
     }
 
     public WorkOrder getById(int workOrderId) {
@@ -128,7 +130,7 @@ public class WorkOrderStore {
                 Address address = new Address(street, city, state, zip);
                 Customer customer = new Customer(firstName, lastName, phone, email, company, address);
                 String vin = rsWorkOrder.getString(13);
-                int year = rsWorkOrder.getInt(14);
+                String year = rsWorkOrder.getString(14);
                 String make = rsWorkOrder.getString(15);
                 String model = rsWorkOrder.getString(16);
                 String licensePlate = rsWorkOrder.getString(17);
@@ -228,6 +230,15 @@ public class WorkOrderStore {
         return list;
     }
 
+    public List<WorkOrder> getRecents() {
+        List<WorkOrder> list = new LinkedList<>();
+        for (int x :  App.getRecentWorkOrders()) {
+            WorkOrder workOrder = getById(x);
+            list.add(workOrder);
+        }
+        return list;
+    }
+
     public List<WorkOrder> getAll() {
         List<WorkOrder> list = new LinkedList<>();
         try {
@@ -307,7 +318,7 @@ public class WorkOrderStore {
             prepStmt.setString(9, workOrder.getCustomer().getAddress().getState());
             prepStmt.setString(10, workOrder.getCustomer().getAddress().getZip());
             prepStmt.setString(11, workOrder.getVehicle().getVin());
-            prepStmt.setInt(12, workOrder.getVehicle().getYear());
+            prepStmt.setString(12, workOrder.getVehicle().getYear());
             prepStmt.setString(13, workOrder.getVehicle().getMake());
             prepStmt.setString(14, workOrder.getVehicle().getModel());
             prepStmt.setString(15, workOrder.getVehicle().getLicensePlate());

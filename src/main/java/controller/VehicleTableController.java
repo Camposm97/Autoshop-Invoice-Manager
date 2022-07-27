@@ -20,7 +20,7 @@ public class VehicleTableController {
     @FXML
     TableColumn<Vehicle, String> colVin, colLicensePlate, colColor;
     @FXML
-    TableColumn<Vehicle, Integer> colYear;
+    TableColumn<Vehicle, String> colYear;
     @FXML
     TableColumn<Vehicle, String> colMake, colModel, colEngine, colTransmission, colMileageIn, colMileageOut;
 
@@ -142,7 +142,7 @@ public class VehicleTableController {
 
     public Vehicle buildVehicle() {
         String vin = tfVin.getText();
-        int year = Integer.parseInt(tfYear.getText());
+        String year = tfYear.getText();
         String make = tfMake.getText();
         String model = tfModel.getText();
         String licensePlate = tfLicensePlate.getText();

@@ -92,7 +92,7 @@ public class DB {
                 CUSTOMER_TABLE.ZIP + " text)");
         stmt.execute("create table if not exists " + VEHICLE_TABLE + " (" +
                 VEHICLE_TABLE.VIN + " text primary key," +
-                VEHICLE_TABLE.YEAR + " int," +
+                VEHICLE_TABLE.YEAR + " character(4)," +
                 VEHICLE_TABLE.MAKE + " text," +
                 VEHICLE_TABLE.MODEL + " text," +
                 VEHICLE_TABLE.LICENSE_PLATE + " text," +
@@ -123,7 +123,7 @@ public class DB {
                 WORK_ORDER_TABLE.CUSTOMER_STATE + " text," +
                 WORK_ORDER_TABLE.CUSTOMER_ZIP + " text," +
                 WORK_ORDER_TABLE.VEHICLE_VIN + " text," +
-                WORK_ORDER_TABLE.VEHICLE_YEAR + " int," +
+                WORK_ORDER_TABLE.VEHICLE_YEAR + " character(4)," +
                 WORK_ORDER_TABLE.VEHICLE_MAKE + " text," +
                 WORK_ORDER_TABLE.VEHICLE_MODEL + " text," +
                 WORK_ORDER_TABLE.VEHICLE_LICENSE_PLATE + " text," +

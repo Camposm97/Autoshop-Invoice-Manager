@@ -1,9 +1,13 @@
 package controller;
 
+import app.App;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import model.database.DB;
 import model.ui.FX;
 import model.work_order.WorkOrder;
@@ -12,6 +16,7 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 
 /**
  *
@@ -69,6 +74,8 @@ public class MyCompanyController {
         lblMonth.setText(strMonth);
         lblIncompletedWorkOrderCount.setText(String.valueOf(incompletedWorkOrderCount));
 
+        Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
+
         colRecentId.setCellValueFactory(c -> c.getValue().idProperty());
         colRecentCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
         colRecentCompany.setCellValueFactory(c -> c.getValue().getCustomer().companyProperty());
@@ -76,7 +83,10 @@ public class MyCompanyController {
         colRecentDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
         colRecentDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
         colRecentInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
-//        tvRecentWorkOrders.getItems().setAll(incompletedWorkOrders);
+        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecents());
+        tvRecentWorkOrders.setOnMouseClicked(e -> {
+            if (selectWorkOrder.apply(e)) editWorkOrder(tvRecentWorkOrders);
+        });
 
         colIncompletedId.setCellValueFactory(c -> c.getValue().idProperty());
         colIncompletedCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
@@ -86,8 +96,20 @@ public class MyCompanyController {
         colIncompletedDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
         colIncompletedInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
         tvIncompletedWorkOrders.getItems().setAll(incompletedWorkOrders);
+        tvIncompletedWorkOrders.setOnMouseClicked(e -> {
+            if (selectWorkOrder.apply(e)) editWorkOrder(tvIncompletedWorkOrders);
+        });
 
         FX.autoResizeColumns(tvRecentWorkOrders);
         FX.autoResizeColumns(tvIncompletedWorkOrders);
+    }
+
+    public void editWorkOrder(TableView<WorkOrder> tv) {
+        WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
+        if (workOrder != null) {
+            WorkOrderWorkspaceController controller = new WorkOrderWorkspaceController(workOrder);
+            Parent node = FX.view("Work_Order_Workspace.fxml", controller);
+            App.setDisplay(node);
+        }
     }
 }

@@ -16,7 +16,6 @@ public class App extends Application {
     private static final String TITLE = "Autoshop Invoice Manager";
     private static BorderPane root;
     private static LinkedList<Integer> recentWorkOrders;
-
     public static String getTitle() {
         return TITLE;
     }
@@ -27,6 +26,22 @@ public class App extends Application {
 
     public static void clearDisplay() {
         root.setCenter(null);
+    }
+
+    public static LinkedList<Integer> getRecentWorkOrders() {
+        return recentWorkOrders;
+    }
+
+    public static void displayMyCompany() {
+        App.setDisplay(FX.view("My_Company.fxml"));
+    }
+
+    public static void displayCustomers() {
+        App.setDisplay(FX.view("Customer_Table.fxml"));
+    }
+
+    public static void displayWorkOrders() {
+        App.setDisplay(FX.view("Work_Order_Table.fxml"));
     }
 
     @Override

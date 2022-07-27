@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.function.Function;
 
 public class WorkOrderWorkspaceController {
@@ -174,10 +175,19 @@ public class WorkOrderWorkspaceController {
     public void save() {
         buildWorkOrder();
         if (workOrder.isNew()) {
-            DB.get().workOrders().add(workOrder);
+            workOrder = DB.get().workOrders().add(workOrder);
         } else {
             DB.get().workOrders().update(workOrder);
             DB.get().deleteProductsMarkedForDeletion();
+        }
+        final int RECENT_SIZE = 10;
+        LinkedList<Integer> recentWorkOrders = App.getRecentWorkOrders();
+        if (recentWorkOrders.contains(workOrder.getId())) {
+            recentWorkOrders.removeFirstOccurrence(workOrder.getId());
+        }
+        recentWorkOrders.addFirst(workOrder.getId());
+        if (recentWorkOrders.size() >= RECENT_SIZE) {
+            recentWorkOrders.removeLast();
         }
     }
 
@@ -188,7 +198,7 @@ public class WorkOrderWorkspaceController {
 
     public void close() {
         DB.get().clearAllProductsMarkedForDeletion();
-        App.clearDisplay();
+        App.displayMyCompany();
     }
 
     public Customer buildCustomer() {
@@ -210,7 +220,7 @@ public class WorkOrderWorkspaceController {
         String vin = tfVin.getText();
         String licensePlate = tfLicensePlate.getText();
         String color = tfColor.getText();
-        int year = Integer.parseInt(tfYear.getText());
+        String year = tfYear.getText();
         String make = tfMake.getText();
         String model = tfModel.getText();
         String engine = tfEngine.getText();

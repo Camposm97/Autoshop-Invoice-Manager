@@ -5,10 +5,10 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class Vehicle {
     private String vin;
-    private int year;
+    private String year;
     private String make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut;
 
-    public Vehicle(String vin, int year, String make, String model, String licensePlate, String color, String engine, String transmission, String mileageIn, String mileageOut) {
+    public Vehicle(String vin, String year, String make, String model, String licensePlate, String color, String engine, String transmission, String mileageIn, String mileageOut) {
         this.vin = vin;
         this.year = year;
         this.make = make;
@@ -21,7 +21,7 @@ public class Vehicle {
         this.mileageOut = mileageOut;
     }
 
-    public Vehicle(String vin, int year, String make, String model, String licensePlate, String color, String engine, String transmission) {
+    public Vehicle(String vin, String year, String make, String model, String licensePlate, String color, String engine, String transmission) {
         this.vin = vin;
         this.year = year;
         this.make = make;
@@ -40,11 +40,11 @@ public class Vehicle {
         this.vin = vin;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
@@ -125,8 +125,8 @@ public class Vehicle {
         return new SimpleStringProperty(vin);
     }
 
-    public SimpleObjectProperty<Integer> yearProperty() {
-        return new SimpleObjectProperty<>(year);
+    public SimpleStringProperty yearProperty() {
+        return new SimpleStringProperty(year);
     }
 
     public SimpleStringProperty makeProperty() {

@@ -22,7 +22,7 @@ public class VehicleStore {
                             "(vin, year, make, model, license_plate, color, engine, transmission, customer_id) " +
                             "values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             prepStmt.setString(1, ov.getVehicle().getVin());
-            prepStmt.setInt(2, ov.getVehicle().getYear());
+            prepStmt.setString(2, ov.getVehicle().getYear());
             prepStmt.setString(3, ov.getVehicle().getMake());
             prepStmt.setString(4, ov.getVehicle().getModel());
             prepStmt.setString(5, ov.getVehicle().getLicensePlate());
@@ -43,7 +43,7 @@ public class VehicleStore {
                     "transmission = ?, customer_id = ? " +
                     "where vin=\"" + vehicle.getVin() + "\"");
             prepStmt.setString(1, vehicle.getVin());
-            prepStmt.setInt(2, vehicle.getYear());
+            prepStmt.setString(2, vehicle.getYear());
             prepStmt.setString(3, vehicle.getModel());
             prepStmt.setString(4, vehicle.getLicensePlate());
             prepStmt.setString(5, vehicle.getColor());
@@ -71,7 +71,7 @@ public class VehicleStore {
         try {
             ResultSet rs = c.createStatement().executeQuery("select * from vehicle where vin = \"" + vin + "\"");
             if (rs.next()) {
-                int year = rs.getInt(2);
+                String year = rs.getString(2);
                 String make = rs.getString(3);
                 String model = rs.getString(4);
                 String licensePlate = rs.getString(5);

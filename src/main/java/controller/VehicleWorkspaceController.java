@@ -51,7 +51,7 @@ public class VehicleWorkspaceController {
 
     public void addVehicle() {
         String vin = tfVin.getText();
-        int year = Integer.parseInt(tfYear.getText());
+        String year = tfYear.getText();
         String make = tfMake.getText();
         String model = tfModel.getText();
         String licensePlate = tfLicensePlate.getText();

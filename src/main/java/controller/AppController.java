@@ -34,15 +34,15 @@ public class AppController {
     }
 
     public void viewMyCompany() {
-        App.setDisplay(FX.view("My_Company.fxml"));
+        App.displayMyCompany();
     }
 
     public void viewCustomers() {
-        App.setDisplay(FX.view("Customer_Table.fxml"));
+        App.displayCustomers();
     }
 
     public void viewWorkOrders() {
-        App.setDisplay(FX.view("Work_Order_Table.fxml"));
+        App.displayWorkOrders();
     }
 
     public void preferences() {
