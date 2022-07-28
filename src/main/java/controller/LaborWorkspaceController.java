@@ -6,6 +6,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
+import model.Preferences;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
 
@@ -24,7 +25,7 @@ public class LaborWorkspaceController {
     @FXML
     public void initialize() {
         tfBilledHrs.setText("1.0");
-        tfRate.setText("105.00");
+        tfRate.setText(Preferences.get().getLaborRate().toString());
 
         // Initialize listeners for fields
         tfLaborCode.setOnKeyPressed(e -> {

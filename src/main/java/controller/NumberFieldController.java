@@ -10,9 +10,18 @@ public class NumberFieldController {
     @FXML
     public void initialize() {
         tfNum.textProperty().addListener((o, x, y) -> {
-            if (!y.matches("[0-9]*")) {
+            if (y.isEmpty()) {
+                return;
+            }
+            try {
+                Double.parseDouble(y);
+                if (!y.matches("[0-9]*\\.?[0-9]*")) {
+                    tfNum.setText(x);
+                }
+            } catch (NumberFormatException e) {
                 tfNum.setText(x);
             }
+
         });
     }
 }

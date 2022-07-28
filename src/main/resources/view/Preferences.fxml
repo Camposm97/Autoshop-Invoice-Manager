@@ -38,6 +38,6 @@
       <TextField fx:id="tfRepairShopId" promptText="ID" GridPane.columnIndex="1" GridPane.rowIndex="6" />
       <SearchableComboBox fx:id="cbState" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <Label text="Labor Rate" GridPane.rowIndex="7" />
-      <TextField fx:id="tfLaborRate" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+       <fx:include fx:id="tfLaborRate" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
    </children>
 </GridPane>

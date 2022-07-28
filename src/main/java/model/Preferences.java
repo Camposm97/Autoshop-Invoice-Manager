@@ -17,7 +17,7 @@ public class Preferences {
     private String company, address, city;
     private State state;
     private String zip, phone, repairShopId;
-    private double laborRate;
+    private Double laborRate;
 
     private Preferences() {
         try {
@@ -61,8 +61,12 @@ public class Preferences {
                                 setRepairShopId(value);
                                 break;
                             case "labor-rate":
-                                double laborRate = Double.parseDouble(value);
-                                setLaborRate(laborRate);
+                                try {
+                                    Double laborRate = Double.parseDouble(value);
+                                    setLaborRate(laborRate);
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Failed to parse labor rate");
+                                }
                                 break;
                         }
                     }
@@ -147,11 +151,11 @@ public class Preferences {
         this.repairShopId = repairShopId;
     }
 
-    public double getLaborRate() {
+    public Double getLaborRate() {
         return laborRate;
     }
 
-    public void setLaborRate(double laborRate) {
+    public void setLaborRate(Double laborRate) {
         this.laborRate = laborRate;
     }
 }

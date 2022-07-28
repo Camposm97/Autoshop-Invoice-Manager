@@ -12,7 +12,7 @@ public class PreferencesController {
     @FXML
     ComboBox<State> cbState;
     @FXML
-    TextField tfPhone, tfRepairShopId;
+    TextField tfPhone, tfRepairShopId, tfLaborRate;
 
     @FXML
     public void initialize() {
@@ -31,5 +31,7 @@ public class PreferencesController {
         tfPhone.textProperty().addListener((o, newValue, oldValue) -> Preferences.get().setPhone(newValue));
         tfRepairShopId.setText(Preferences.get().getRepairShopId());
         tfRepairShopId.textProperty().addListener((o, oldValue, newValue) -> Preferences.get().setRepairShopId(newValue));
+        tfLaborRate.setText(Preferences.get().getLaborRate().toString());
+        tfLaborRate.textProperty().addListener((o, oldValue, newValue) -> Preferences.get().setLaborRate(Double.parseDouble(newValue)));
     }
 }
