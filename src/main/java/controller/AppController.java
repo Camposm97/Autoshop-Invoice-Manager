@@ -54,6 +54,7 @@ public class AppController {
     }
 
     public void exit() {
+        App.saveRecentWorkOrders();
         Platform.exit();
     }
 }

@@ -33,7 +33,7 @@ public class WorkOrderPrintController {
 
     @FXML
     public void initialize() {
-        txtDate.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/DD/YYYY")));
+        txtDate.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/u")));
         String workOrderId = String.valueOf(workOrder.getId());
         while (workOrderId.length() < 4) {
             workOrderId = '0' + workOrderId;

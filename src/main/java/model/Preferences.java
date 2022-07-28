@@ -17,6 +17,7 @@ public class Preferences {
     private String company, address, city;
     private State state;
     private String zip, phone, repairShopId;
+    private double laborRate;
 
     private Preferences() {
         try {
@@ -29,6 +30,7 @@ public class Preferences {
                 zip = "";
                 phone = "";
                 repairShopId = "";
+                laborRate = 90.0;
             } else {
                 Scanner in = new Scanner(file);
                 while (in.hasNextLine()) {
@@ -58,6 +60,10 @@ public class Preferences {
                             case "repair-shop-id":
                                 setRepairShopId(value);
                                 break;
+                            case "labor-rate":
+                                double laborRate = Double.parseDouble(value);
+                                setLaborRate(laborRate);
+                                break;
                         }
                     }
                 }
@@ -77,6 +83,7 @@ public class Preferences {
             pw.println("zip=" + zip);
             pw.println("phone=" + phone);
             pw.println("repair-shop-id=" + repairShopId);
+            pw.println("labor-rate=" + laborRate);
             pw.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -138,5 +145,13 @@ public class Preferences {
 
     public void setRepairShopId(String repairShopId) {
         this.repairShopId = repairShopId;
+    }
+
+    public double getLaborRate() {
+        return laborRate;
+    }
+
+    public void setLaborRate(double laborRate) {
+        this.laborRate = laborRate;
     }
 }

@@ -73,16 +73,20 @@ public class App extends Application {
         stage.getIcons().add(img);
         stage.show();
         stage.setOnCloseRequest(e -> {
-            try {
-                File file = new File("recents.dat");
-                FileOutputStream fos = new FileOutputStream(file);
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-                oos.writeObject(recentWorkOrders);
-                oos.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            saveRecentWorkOrders();
         });
+    }
+
+    public static void saveRecentWorkOrders() {
+        try {
+            File file = new File("recents.dat");
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(recentWorkOrders);
+            oos.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

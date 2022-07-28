@@ -253,8 +253,8 @@ public class WorkOrderWorkspaceController {
         tfModel.setText(vehicle.getModel());
         tfEngine.setText(vehicle.getEngine());
         tfTransmission.setText(vehicle.getTransmission());
-//        tfMileageIn.setText(vehicle.getMileageIn());
-//        tfMileageOut.setText(vehicle.getMileageOut());
+        tfMileageIn.setText(vehicle.getMileageIn());
+        tfMileageOut.setText(vehicle.getMileageOut());
     }
 
     public void buildWorkOrder() {
