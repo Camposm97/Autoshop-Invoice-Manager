@@ -8,13 +8,14 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
+<GridPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
       <GridPane hgap="5.0">
@@ -47,7 +48,7 @@
             <Insets bottom="5.0" />
          </GridPane.margin>
       </GridPane>
-      <TableView fx:id="tv" editable="true" stylesheets="@App.css" GridPane.rowIndex="1">
+      <TableView fx:id="tv" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" stylesheets="@App.css" GridPane.rowIndex="1">
          <columns>
             <TableColumn fx:id="colFirstName" prefWidth="100.0" text="First Name" />
             <TableColumn fx:id="colLastName" prefWidth="100.0" text="Last Name" />
@@ -63,6 +64,21 @@
       <!--      <TableColumn fx:id="colState" prefWidth="100" text="State" />-->
       <!--      <TableColumn fx:id="colZip" prefWidth="100" text="Zip" />-->
          </columns>
+         <GridPane.margin>
+            <Insets bottom="8.0" />
+         </GridPane.margin>
+      </TableView>
+      <TableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.rowIndex="2">
+        <columns>
+          <TableColumn prefWidth="75.0" text="VIN" />
+          <TableColumn prefWidth="75.0" text="License Plate" />
+            <TableColumn prefWidth="75.0" text="Color" />
+            <TableColumn prefWidth="75.0" text="Year" />
+            <TableColumn prefWidth="75.0" text="Make" />
+            <TableColumn prefWidth="75.0" text="Model" />
+            <TableColumn prefWidth="75.0" text="Engine" />
+            <TableColumn prefWidth="75.0" text="Transmission" />
+        </columns>
       </TableView>
    </children>
    <padding>

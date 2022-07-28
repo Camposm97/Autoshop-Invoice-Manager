@@ -21,10 +21,10 @@
     <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <Label contentDisplay="RIGHT" text="Completed Work Orders this Year">
@@ -51,7 +51,7 @@
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Label>
-      <TableView fx:id="tvRecentWorkOrders" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="800.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+      <TableView fx:id="tvRecentWorkOrders" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
         <columns>
           <TableColumn fx:id="colRecentId" prefWidth="75.0" text="ID" />
           <TableColumn fx:id="colRecentCustomer" prefWidth="75.0" text="Customer Name" />
@@ -68,7 +68,7 @@
             <Font name="System Bold" size="12.0" />
          </font></Label>
       <Label fx:id="lblIncompletedWorkOrderCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-      <TableView fx:id="tvIncompletedWorkOrders" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.columnSpan="2" GridPane.rowIndex="8">
+      <TableView fx:id="tvIncompletedWorkOrders" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" GridPane.columnSpan="2" GridPane.rowIndex="8">
         <columns>
             <TableColumn fx:id="colIncompletedId" prefWidth="75.0" text="ID" />
             <TableColumn fx:id="colIncompletedCustomer" prefWidth="75.0" text="Customer Name" />
