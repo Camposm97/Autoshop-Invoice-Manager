@@ -104,7 +104,7 @@ public class AlertFactory {
         builder.setHeaderText("Ready to print Work Order #" + workOrder.getId());
         ScrollPane root = new ScrollPane(node);
         root.setFitToWidth(true);
-        root.setPrefHeight(400);
+        root.setPrefHeight(600);
 
         builder.setContent(root);
         builder.setPrintWorkOrderBtns();
@@ -142,7 +142,6 @@ public class AlertFactory {
     }
 
     public static void showAbout() {
-
         AlertBuilder builder = new AlertBuilder()
                 .setTitle("About")
                 .setHeaderText(App.getTitle())

@@ -73,10 +73,8 @@ public class WorkOrderPrintController {
             Labor lbr = laborIterator.next();
             Text txtCode = new Text(lbr.getName());
             Text txtDesc = new Text(lbr.getDesc());
-            Text txtRate = new Text(format1(lbr.getRate()));
-            Text txtBilledHrs = new Text(String.valueOf(lbr.getBilledHrs()));
             Text txtSubtotal = new Text(format1(lbr.subtotal()));
-            gridPaneLabor.addRow(i, txtCode, txtDesc, txtRate, txtBilledHrs, txtSubtotal);
+            gridPaneLabor.addRow(i, txtCode, txtDesc, txtSubtotal);
         }
         txtPartsTotal.setText(format2(workOrder.partsSubtotal()));
         txtLaborTotal.setText(format2(workOrder.laborSubtotal()));

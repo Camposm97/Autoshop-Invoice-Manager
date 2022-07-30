@@ -25,9 +25,9 @@ public class AutoPartWorkspaceController {
 
     @FXML
     public void initialize() {
-        tfPartRetailPrice.setText("0.00");
-        tfPartListCost.setText("0.00");
-        tfPartQuantity.setText("1");
+        tfPartRetailPrice.setText(null);
+        tfPartListCost.setText(null);
+        tfPartQuantity.setText(null);
         tfPartNumber.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(newValue, tfPartDesc.getText())));
         tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(tfPartNumber.getText(), newValue)));
         colPartNumber.setCellValueFactory(e -> e.getValue().nameProperty());
@@ -67,9 +67,23 @@ public class AutoPartWorkspaceController {
         int id = Integer.parseInt(lblId.getText());
         String partNumber = tfPartNumber.getText();
         String desc = tfPartDesc.getText();
-        double retailPrice = Double.parseDouble(tfPartRetailPrice.getText());
-        double listCost = Double.parseDouble(tfPartListCost.getText());
-        int quantity = Integer.parseInt(tfPartQuantity.getText());
+        double retailPrice, listCost;
+        int quantity;
+        try {
+            retailPrice = Double.parseDouble(tfPartRetailPrice.getText());
+        } catch (NumberFormatException e) {
+            retailPrice = 0.0;
+        }
+        try {
+            listCost = Double.parseDouble(tfPartListCost.getText());
+        } catch (NumberFormatException e) {
+            listCost = 0.0;
+        }
+        try {
+            quantity = Integer.parseInt(tfPartQuantity.getText());
+        } catch (NumberFormatException e) {
+            quantity = 0;
+        }
         boolean taxable = cbPartTaxable.isSelected();
         AutoPart autoPart = new AutoPart(partNumber, desc, retailPrice, listCost, quantity, taxable);
         autoPart.setId(id);

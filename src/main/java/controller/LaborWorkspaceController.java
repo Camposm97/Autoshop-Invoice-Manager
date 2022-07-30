@@ -68,8 +68,17 @@ public class LaborWorkspaceController {
         int id = Integer.parseInt(lblId.getText());
         String laborCode = tfLaborCode.getText();
         String desc = taDesc.getText();
-        double billedHrs = Double.parseDouble(tfBilledHrs.getText());
-        double rate = Double.parseDouble(tfRate.getText());
+        double billedHrs, rate;
+        try {
+            billedHrs = Double.parseDouble(tfBilledHrs.getText());
+        } catch (NumberFormatException e) {
+            billedHrs = 0.0;
+        }
+        try {
+            rate = Double.parseDouble(tfRate.getText());
+        } catch (NumberFormatException e) {
+            rate = 0.0;
+        }
         boolean taxable = cbTaxable.isSelected();
         Labor labor = new Labor(laborCode, desc, billedHrs, rate, taxable);
         labor.setId(id);

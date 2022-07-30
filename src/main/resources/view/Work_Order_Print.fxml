@@ -155,8 +155,6 @@
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="90.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="60.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="60.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="50.0" />
               </columnConstraints>
               <rowConstraints>
@@ -165,9 +163,7 @@
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Labor Code" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hourly Rate" GridPane.columnIndex="2" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Billred Hrs." GridPane.columnIndex="3" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total" GridPane.columnIndex="4" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total" GridPane.columnIndex="2" />
                </children>
             </GridPane>
          </children>
@@ -176,19 +172,19 @@
       <AnchorPane fx:id="anchorTotals" maxHeight="-Infinity" prefHeight="125.0" styleClass="information_form" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="395.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="622.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Parts Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
-            <Text fx:id="txtPartsTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 1000.00" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
+            <Text fx:id="txtPartsTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Labor Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="16.0" />
-            <Text fx:id="txtLaborTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 1000.00" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="16.0" />
+            <Text fx:id="txtLaborTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="16.0" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Subtotal" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="40.0" />
-            <Text fx:id="txtSubtotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 2000.00" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="40.0" />
+            <Text fx:id="txtSubtotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="40.0" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sales Tax" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="52.0" />
-            <Text fx:id="txtSalesTax" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 172.50" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="52.0" />
+            <Text fx:id="txtSalesTax" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="52.0" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Work Order Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="76.0" />
-            <Text fx:id="txtWorkOrderTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 2172.00" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="76.0" />
+            <Text fx:id="txtWorkOrderTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="76.0" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Payments" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="88.0" />
-            <Text fx:id="txtTotalPayment" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 0.00" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="88.0" />
+            <Text fx:id="txtTotalPayment" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="88.0" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Amount Due" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="100.0" />
-            <Text fx:id="txtAmountDue" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ 2172.00" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="100.0" />
+            <Text fx:id="txtAmountDue" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="100.0" />
          </children></AnchorPane>
    </children>
 </AnchorPane>

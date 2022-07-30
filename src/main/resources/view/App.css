@@ -16,11 +16,6 @@
     -fx-font-size: 8pt;
 }
 
-.number_field_valid {
-    -fx-border-color:;
-    -fx-background-color:;
-}
-
 .number_field_invalid {
     -fx-border-color: red;
     -fx-background-color: #FFF0F0;
