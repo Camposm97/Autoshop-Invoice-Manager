@@ -51,9 +51,11 @@
             <Label text="Part Description" GridPane.rowIndex="1" />
             <TextField fx:id="tfPartDesc" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Retail Price" GridPane.rowIndex="2" />
-            <TextField fx:id="tfPartRetailPrice" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <fx:include fx:id="tfPartRetailPrice" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+<!--            <TextField fx:id="tfPartRetailPrice" GridPane.columnIndex="1" GridPane.rowIndex="2" />-->
             <Label text="List Cost" GridPane.rowIndex="3" />
-            <TextField fx:id="tfPartListCost" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <fx:include fx:id="tfPartListCost" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+             <!--            <TextField fx:id="tfPartListCost" GridPane.columnIndex="1" GridPane.rowIndex="3" />-->
             <Label text="Quantity" GridPane.rowIndex="4" />
             <fx:include fx:id="tfPartQuantity" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="Item Taxable" GridPane.rowIndex="5" />
