@@ -144,13 +144,70 @@ public class CustomerTableController {
 
     public void initVehicleTable() {
         colVin.setCellValueFactory(c -> c.getValue().vinProperty());
+
         colLicensePlate.setCellValueFactory(c -> c.getValue().licensePlateProperty());
+        colLicensePlate.setCellFactory(TextFieldTableCell.forTableColumn());
+        colLicensePlate.setOnEditCommit(e -> {
+            int index = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(index);
+            v.setLicensePlate(e.getNewValue());
+            DB.get().vehicles().update(v);
+        });
+
         colColor.setCellValueFactory(c -> c.getValue().colorProperty());
+        colColor.setCellFactory(TextFieldTableCell.forTableColumn());
+        colColor.setOnEditCommit(e -> {
+            int index = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(index);
+            v.setColor(e.getNewValue());
+            DB.get().vehicles().update(v);
+        });
+
         colYear.setCellValueFactory(c -> c.getValue().yearProperty());
+        colYear.setCellFactory(TextFieldTableCell.forTableColumn());
+        colYear.setOnEditCommit(e -> {
+            int index = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(index);
+            v.setYear(e.getNewValue());
+            DB.get().vehicles().update(v);
+        });
+
         colMake.setCellValueFactory(c -> c.getValue().makeProperty());
+        colMake.setCellFactory(TextFieldTableCell.forTableColumn());
+        colMake.setOnEditCommit(e -> {
+            int index = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(index);
+            v.setMake(e.getNewValue());
+            DB.get().vehicles().update(v);
+        });
+
         colModel.setCellValueFactory(c -> c.getValue().modelProperty());
+        colModel.setCellFactory(TextFieldTableCell.forTableColumn());
+        colModel.setOnEditCommit(e -> {
+            int index = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(index);
+            v.setModel(e.getNewValue());
+            DB.get().vehicles().update(v);
+        });
+
         colEngine.setCellValueFactory(c -> c.getValue().engineProperty());
+        colEngine.setCellFactory(TextFieldTableCell.forTableColumn());
+        colEngine.setOnEditCommit(e -> {
+            int index = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(index);
+            v.setEngine(e.getNewValue());
+            DB.get().vehicles().update(v);
+        });
+
         colTransmission.setCellValueFactory(c -> c.getValue().transmissionProperty());
+        colTransmission.setCellFactory(TextFieldTableCell.forTableColumn());
+        colTransmission.setOnEditCommit(e -> {
+            int index = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(index);
+            v.setTransmission(e.getNewValue());
+            DB.get().vehicles().update(v);
+        });
+
     }
 
     public void connect(@NotNull VehicleWorkspaceController controller) {

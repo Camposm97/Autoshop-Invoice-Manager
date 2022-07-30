@@ -13,6 +13,8 @@ package app;
  * should update the searches for customer and vehicle
  *
  * Implement configurable tax rate (LATER)
+ * Each work order should have their own tax rate where its default tax rate
+ * will be the configration tax rate
  */
 public class AppWrapper {
     public static void main(String[] args) {

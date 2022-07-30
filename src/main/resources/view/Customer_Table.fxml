@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="root" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
+<GridPane fx:id="root" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -50,25 +50,21 @@
       </GridPane>
       <TableView fx:id="tvCustomer" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" stylesheets="@App.css" GridPane.rowIndex="1">
          <columns>
-            <TableColumn fx:id="colFirstName" prefWidth="100.0" text="First Name" />
-            <TableColumn fx:id="colLastName" prefWidth="100.0" text="Last Name" />
-            <TableColumn fx:id="colPhone" prefWidth="100.0" text="Phone" />
-            <TableColumn fx:id="colEmail" prefWidth="100.0" text="Email" />
-            <TableColumn fx:id="colCompany" prefWidth="100.0" text="Company" />
-            <TableColumn fx:id="colAddress" prefWidth="100.0" text="Address" />
-            <TableColumn fx:id="colCity" prefWidth="100.0" text="City" />
-            <TableColumn fx:id="colState" prefWidth="100.0" text="State" />
-            <TableColumn fx:id="colZip" prefWidth="100.0" text="Zip" />
-      <!--      <TableColumn fx:id="colStreet" prefWidth="100" text="Street" />-->
-      <!--      <TableColumn fx:id="colCity" prefWidth="100" text="City" />-->
-      <!--      <TableColumn fx:id="colState" prefWidth="100" text="State" />-->
-      <!--      <TableColumn fx:id="colZip" prefWidth="100" text="Zip" />-->
+            <TableColumn fx:id="colFirstName" prefWidth="75.0" text="First Name" />
+            <TableColumn fx:id="colLastName" prefWidth="75.0" text="Last Name" />
+            <TableColumn fx:id="colPhone" prefWidth="75.0" text="Phone" />
+            <TableColumn fx:id="colEmail" prefWidth="75.0" text="Email" />
+            <TableColumn fx:id="colCompany" prefWidth="75.0" text="Company" />
+            <TableColumn fx:id="colAddress" prefWidth="75.0" text="Address" />
+            <TableColumn fx:id="colCity" prefWidth="75.0" text="City" />
+            <TableColumn fx:id="colState" prefWidth="75.0" text="State" />
+            <TableColumn fx:id="colZip" prefWidth="75.0" text="Zip" />
          </columns>
          <GridPane.margin>
-            <Insets bottom="8.0" />
+            <Insets bottom="5.0" />
          </GridPane.margin>
       </TableView>
-      <TableView fx:id="tvVehicle" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.rowIndex="2">
+      <TableView fx:id="tvVehicle" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.rowIndex="2">
         <columns>
           <TableColumn fx:id="colVin" prefWidth="75.0" text="VIN" />
           <TableColumn fx:id="colLicensePlate" prefWidth="75.0" text="License Plate" />

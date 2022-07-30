@@ -40,15 +40,15 @@ public class VehicleStore {
         try {
             PreparedStatement prepStmt = c.prepareStatement("update vehicle set " +
                     "year = ?, model = ?, license_plate = ?, color = ?, engine = ?, " +
-                    "transmission = ?, customer_id = ? " +
+                    "transmission = ? " +
                     "where vin=\"" + vehicle.getVin() + "\"");
-            prepStmt.setString(1, vehicle.getVin());
-            prepStmt.setString(2, vehicle.getYear());
-            prepStmt.setString(3, vehicle.getModel());
-            prepStmt.setString(4, vehicle.getLicensePlate());
-            prepStmt.setString(5, vehicle.getColor());
-            prepStmt.setString(6, vehicle.getEngine());
-            prepStmt.setString(7, vehicle.getTransmission());
+            prepStmt.setString(1, vehicle.getYear());
+            prepStmt.setString(2, vehicle.getModel());
+            prepStmt.setString(3, vehicle.getLicensePlate());
+            prepStmt.setString(4, vehicle.getColor());
+            prepStmt.setString(5, vehicle.getEngine());
+            prepStmt.setString(6, vehicle.getTransmission());
+
 //            prepStmt.setString(8, vehicle.getMileageIn());
 //            prepStmt.setString(9, vehicle.getMileageOut());
 

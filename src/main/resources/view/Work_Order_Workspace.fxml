@@ -24,7 +24,7 @@
     <children>
         <SplitPane dividerPositions="0.8">
             <items>
-                <VBox maxWidth="-Infinity" spacing="15.0" styleClass="add_pane" stylesheets="@App.css">
+                <VBox maxWidth="-Infinity" spacing="15.0" stylesheets="@App.css">
                     <children>
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#print" text="Print Work Order" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addPart" text="Add Part" />
@@ -36,7 +36,7 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                     </padding>
                 </VBox>
-                <TabPane styleClass="add_pane" stylesheets="@App.css" tabClosingPolicy="UNAVAILABLE">
+                <TabPane stylesheets="@App.css" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                         <Tab text="Customer / Vehicle Info">
                             <content>

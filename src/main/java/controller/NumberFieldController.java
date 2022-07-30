@@ -10,7 +10,7 @@ public class NumberFieldController {
     @FXML
     public void initialize() {
         tfNum.textProperty().addListener((o, x, y) -> {
-            if (y.isEmpty()) {
+            if (y == null || y.isEmpty()) {
                 return;
             }
             try {
