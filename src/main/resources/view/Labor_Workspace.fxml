@@ -48,8 +48,8 @@
             <Label text="Billed Hrs" GridPane.rowIndex="2" />
             <Label text="Labor Rate" GridPane.rowIndex="3" />
             <TextField fx:id="tfLaborCode" GridPane.columnIndex="1" />
-            <TextField fx:id="tfBilledHrs" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="tfRate" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <fx:include fx:id="tfBilledHrs" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <fx:include fx:id="tfRate" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextArea fx:id="taDesc" prefHeight="75.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <CheckBox fx:id="cbTaxable" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
