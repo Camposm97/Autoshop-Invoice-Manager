@@ -29,7 +29,10 @@ import java.util.LinkedList;
 import java.util.function.Function;
 
 public class WorkOrderWorkspaceController {
+    protected int chosenCustomerId;
     protected WorkOrder workOrder;
+    protected CustomerTableController customerTableController;
+    protected VehicleTableController vehicleTableController;
     @FXML
     TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfAddress, tfCity, tfState, tfZip;
     @FXML
@@ -139,6 +142,7 @@ public class WorkOrderWorkspaceController {
 
         if (workOrder.isNew()) {
             tfWorkOrderId.setText(String.valueOf(DB.get().workOrders().getNextId()));
+            btVeh.setDisable(true);
         } else {
             loadCustomer(workOrder.getCustomer());
             loadVehicle(workOrder.getVehicle());
@@ -151,19 +155,22 @@ public class WorkOrderWorkspaceController {
 
         FXMLLoader fxmlLoader = FX.load("Customer_Table.fxml");
         customerPopOver = new PopOver(fxmlLoader.load());
-        CustomerTableController customerTableController = fxmlLoader.getController();
+        customerTableController = fxmlLoader.getController();
         customerTableController.connect(this);
         fxmlLoader = FX.load("Vehicle_Table.fxml");
         vehiclePopOver = new PopOver(fxmlLoader.load());
-        VehicleTableController vehicleTableController = fxmlLoader.getController();
+        vehicleTableController = fxmlLoader.getController();
         vehicleTableController.connect(this);
     }
 
     public void showCustomer() throws IOException {
+        btVeh.setDisable(true);
+        customerTableController.refresh();
         customerPopOver.show(btCus);
     }
 
     public void showVehicle() throws IOException {
+        vehicleTableController.refresh(chosenCustomerId);
         vehiclePopOver.show(btVeh);
     }
 
@@ -233,6 +240,8 @@ public class WorkOrderWorkspaceController {
     }
 
     public void loadCustomer(@NotNull Customer customer) {
+        this.chosenCustomerId = customer.getId();
+        this.btVeh.setDisable(false);
         tfFirstName.setText(customer.getFirstName());
         tfLastName.setText(customer.getLastName());
         tfPhone.setText(customer.getPhone());

@@ -210,6 +210,10 @@ public class CustomerTableController {
 
     }
 
+    public void refresh() {
+        tvCustomer.getItems().setAll(DB.get().customers().getAll());
+    }
+
     public void connect(@NotNull VehicleWorkspaceController controller) {
         disableEditing();
         tvCustomer.setOnMouseClicked(e -> {
@@ -217,6 +221,7 @@ public class CustomerTableController {
                 Customer customer = getSelectedCustomer();
                 if (customer != null) {
                     controller.loadCustomer(customer);
+
                     controller.customerPopOver.hide();
                 }
             }

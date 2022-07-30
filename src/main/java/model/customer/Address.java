@@ -62,6 +62,9 @@ public class Address {
 
     @Override
     public String toString() {
+        if (street.isEmpty() && city.isEmpty() && state.isEmpty() && zip.isEmpty()) {
+            return "";
+        }
         return street + " " + city + ", " + state + " " + zip;
     }
 }

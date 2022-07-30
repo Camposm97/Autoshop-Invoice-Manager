@@ -39,15 +39,16 @@ public class VehicleStore {
     public void update(@NotNull Vehicle vehicle) {
         try {
             PreparedStatement prepStmt = c.prepareStatement("update vehicle set " +
-                    "year = ?, model = ?, license_plate = ?, color = ?, engine = ?, " +
+                    "year = ?, make = ?, model = ?, license_plate = ?, color = ?, engine = ?, " +
                     "transmission = ? " +
                     "where vin=\"" + vehicle.getVin() + "\"");
             prepStmt.setString(1, vehicle.getYear());
-            prepStmt.setString(2, vehicle.getModel());
-            prepStmt.setString(3, vehicle.getLicensePlate());
-            prepStmt.setString(4, vehicle.getColor());
-            prepStmt.setString(5, vehicle.getEngine());
-            prepStmt.setString(6, vehicle.getTransmission());
+            prepStmt.setString(2, vehicle.getMake());
+            prepStmt.setString(3, vehicle.getModel());
+            prepStmt.setString(4, vehicle.getLicensePlate());
+            prepStmt.setString(5, vehicle.getColor());
+            prepStmt.setString(6, vehicle.getEngine());
+            prepStmt.setString(7, vehicle.getTransmission());
 
 //            prepStmt.setString(8, vehicle.getMileageIn());
 //            prepStmt.setString(9, vehicle.getMileageOut());
@@ -135,6 +136,31 @@ public class VehicleStore {
                             "and transmission like \"" + vehicle.getTransmission() + "%\""
 //                            "and mileage_in like \"" + vehicle.getMileageIn() + "%\" " +
 //                            "and mileage_out like \"" + vehicle.getMileageOut() + "%\""
+            );
+            while (rs.next()) {
+                String vin = rs.getString(1);
+                list.add(getByVin(vin));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Vehicle> filterWithCustomerId(Vehicle vehicle, int customerId) {
+        List<Vehicle> list = new LinkedList<>();
+        try {
+            ResultSet rs = c.createStatement().executeQuery(
+                    "select vin from vehicle " +
+                            "where vin like \"" + vehicle.getVin() + "%\" " +
+                            "and year like \"" + vehicle.getYear() + "%\" " +
+                            "and make like \"" + vehicle.getMake() + "%\" " +
+                            "and model like \"" + vehicle.getModel() + "%\" " +
+                            "and license_plate like \"" + vehicle.getLicensePlate() + "%\" " +
+                            "and color like \"" + vehicle.getColor() + "%\" " +
+                            "and engine like \"" + vehicle.getEngine() + "%\" " +
+                            "and transmission like \"" + vehicle.getTransmission() + "%\" " +
+                            "and customer_id = " + customerId
             );
             while (rs.next()) {
                 String vin = rs.getString(1);

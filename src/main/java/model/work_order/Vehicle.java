@@ -1,6 +1,5 @@
 package model.work_order;
 
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Vehicle {
@@ -113,7 +112,12 @@ public class Vehicle {
     }
 
     public String getMileageInAndOut() {
-        return mileageIn + '/' + mileageOut + " (" + (Integer.parseInt(mileageOut) - Integer.parseInt(mileageIn)) + ')';
+        try {
+            return mileageIn + '/' + mileageOut + " (" + (Integer.parseInt(mileageOut) - Integer.parseInt(mileageIn)) + ')';
+        } catch (NumberFormatException e) {
+            System.out.println("Failed to get mileage in and out difference");
+            return "";
+        }
     }
 
     @Override
