@@ -18,19 +18,21 @@ public class Preferences {
     private State state;
     private String zip, phone, repairShopId;
     private Double laborRate;
+//    private Double taxRate;
 
     private Preferences() {
         try {
             this.file = new File("preferences.config");
             if (!file.exists()) {
-                company = "";
-                address = "";
-                city = "";
+                company = "Your Company";
+                address = "123 Some Street";
+                city = "Some City";
                 state = State.UNKNOWN;
-                zip = "";
-                phone = "";
-                repairShopId = "";
+                zip = "11355";
+                phone = "000-000-0000";
+                repairShopId = "0000000";
                 laborRate = 90.0;
+//                taxRate = 1.08625;
             } else {
                 Scanner in = new Scanner(file);
                 while (in.hasNextLine()) {
@@ -68,6 +70,14 @@ public class Preferences {
                                     System.out.println("Failed to parse labor rate");
                                 }
                                 break;
+//                            case "tax-rate":
+//                                try {
+//                                    Double taxRate = Double.parseDouble(value);
+//                                    setTaxRate(taxRate);
+//                                } catch (NumberFormatException e) {
+//                                    System.out.println("Failed to parse tax rate");
+//                                }
+//                                break;
                         }
                     }
                 }
@@ -92,7 +102,6 @@ public class Preferences {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     public String getCompany() {
@@ -158,4 +167,8 @@ public class Preferences {
     public void setLaborRate(Double laborRate) {
         this.laborRate = laborRate;
     }
+
+//    public Double getTaxRate() { return taxRate; }
+//
+//    public void setTaxRate(Double taxRate) { this.taxRate = taxRate; }
 }

@@ -33,5 +33,6 @@ public class PreferencesController {
         tfRepairShopId.textProperty().addListener((o, oldValue, newValue) -> Preferences.get().setRepairShopId(newValue));
         tfLaborRate.setText(Preferences.get().getLaborRate().toString());
         tfLaborRate.textProperty().addListener((o, oldValue, newValue) -> Preferences.get().setLaborRate(Double.parseDouble(newValue)));
+//        tfTaxRate.textProperty().addListener((o, oldValue, newValue) -> Preferences.get().setTaxRate(Double.parseDouble(newValue)));
     }
 }

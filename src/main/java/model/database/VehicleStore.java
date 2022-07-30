@@ -103,6 +103,23 @@ public class VehicleStore {
         return list;
     }
 
+    public List<Vehicle> getAllByCustomerId(int customerId) {
+        List<Vehicle> list = new LinkedList<>();
+        try {
+            PreparedStatement prepStmt = c.prepareStatement("select vin from vehicle where customer_id = ?");
+            prepStmt.setInt(1, customerId);
+            ResultSet rs = prepStmt.executeQuery();
+            while (rs.next()) {
+                String vin = rs.getString(1);
+                Vehicle v = getByVin(vin);
+                list.add(v);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public List<Vehicle> filter(Vehicle vehicle) {
         List<Vehicle> list = new LinkedList<>();
         try {

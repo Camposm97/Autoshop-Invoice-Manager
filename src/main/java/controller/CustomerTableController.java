@@ -8,11 +8,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.GridPane;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.ui.AlertBuilder;
 import model.ui.FX;
+import model.work_order.Vehicle;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -20,23 +22,34 @@ import java.util.Optional;
 
 public class CustomerTableController {
     @FXML
+    GridPane root;
+    @FXML
     TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfStreet, tfCity, tfState, tfZip;
     @FXML
-    TableView<Customer> tv;
+    TableView<Customer> tvCustomer;
     @FXML
     TableColumn<Customer, String> colFirstName, colLastName, colPhone, colEmail, colCompany, colAddress, colCity, colState, colZip;
-
+    @FXML
+    TableView<Vehicle> tvVehicle;
+    @FXML
+    TableColumn<Vehicle, String> colVin, colLicensePlate, colColor, colYear, colMake, colModel, colEngine, colTransmission;
     @FXML
     public void initialize() {
-        tfFirstName.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
-        tfLastName.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
-        tfPhone.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
-        tfEmail.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
-        tfCompany.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
-        tfStreet.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
-        tfCity.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
-        tfState.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
-        tfZip.textProperty().addListener((o, oldValue, newValue) -> tv.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfFirstName.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfLastName.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfPhone.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfEmail.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfCompany.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfStreet.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfCity.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfState.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+        tfZip.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
+
+        initCustomerTable();
+        initVehicleTable();
+    }
+
+    public void initCustomerTable() {
         colFirstName.setCellValueFactory(c -> c.getValue().firstNameProperty());
         colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
         colFirstName.setOnEditCommit(e -> {
@@ -109,19 +122,40 @@ public class CustomerTableController {
             customer.getAddress().setZip(e.getNewValue());
             DB.get().customers().update(customer);
         });
-        tv.getItems().setAll(DB.get().customers().getAll());
-        FX.autoResizeColumns(tv);
+        tvCustomer.getItems().setAll(DB.get().customers().getAll());
+        FX.autoResizeColumns(tvCustomer);
         ContextMenu cm = initContextMenu();
-        tv.setOnContextMenuRequested(e -> {
-            if (tv.getSelectionModel().getSelectedItem() != null) {
-                cm.show(tv.getScene().getWindow(), MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY());
+        tvCustomer.setOnContextMenuRequested(e -> {
+            if (tvCustomer.getSelectionModel().getSelectedItem() != null) {
+                cm.show(tvCustomer.getScene().getWindow(), MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY());
             }
         });
+        tvCustomer.setOnMouseClicked(e -> {
+            if (root.getChildren().contains(tvVehicle)) {
+                if (tvCustomer.getSelectionModel().getSelectedItem() != null) {
+                    int customerId = getSelectedCustomer().getId();
+                    // Get all vehicles with that customer id and display in vehicle table
+                    tvVehicle.getItems().setAll(DB.get().vehicles().getAllByCustomerId(customerId));
+                    FX.autoResizeColumns(tvVehicle);
+                }
+            }
+        });
+    }
+
+    public void initVehicleTable() {
+        colVin.setCellValueFactory(c -> c.getValue().vinProperty());
+        colLicensePlate.setCellValueFactory(c -> c.getValue().licensePlateProperty());
+        colColor.setCellValueFactory(c -> c.getValue().colorProperty());
+        colYear.setCellValueFactory(c -> c.getValue().yearProperty());
+        colMake.setCellValueFactory(c -> c.getValue().makeProperty());
+        colModel.setCellValueFactory(c -> c.getValue().modelProperty());
+        colEngine.setCellValueFactory(c -> c.getValue().engineProperty());
+        colTransmission.setCellValueFactory(c -> c.getValue().transmissionProperty());
     }
 
     public void connect(@NotNull VehicleWorkspaceController controller) {
         disableEditing();
-        tv.setOnMouseClicked(e -> {
+        tvCustomer.setOnMouseClicked(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
                 Customer customer = getSelectedCustomer();
                 if (customer != null) {
@@ -130,11 +164,12 @@ public class CustomerTableController {
                 }
             }
         });
+        root.getChildren().remove(tvVehicle);
     }
 
     public void connect(@NotNull WorkOrderWorkspaceController controller) {
         disableEditing();
-        tv.setOnMouseClicked(e -> {
+        tvCustomer.setOnMouseClicked(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
                 Customer customer = getSelectedCustomer();
                 if (customer != null) {
@@ -143,6 +178,7 @@ public class CustomerTableController {
                 }
             }
         });
+        root.getChildren().remove(tvVehicle);
     }
 
     public void disableEditing() {
@@ -172,7 +208,7 @@ public class CustomerTableController {
     }
 
     public Customer getSelectedCustomer() {
-        return tv.getSelectionModel().getSelectedItem();
+        return tvCustomer.getSelectionModel().getSelectedItem();
     }
 
     public ContextMenu initContextMenu() {
@@ -186,7 +222,7 @@ public class CustomerTableController {
     private class DeleteCustomerHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent e) {
-            Customer cus = tv.getSelectionModel().getSelectedItem();
+            Customer cus = tvCustomer.getSelectionModel().getSelectedItem();
             AlertBuilder builder = new AlertBuilder();
             builder.setAlertType(Alert.AlertType.CONFIRMATION)
                     .setTitle("Delete Customer")
@@ -197,7 +233,7 @@ public class CustomerTableController {
             result.ifPresent(x -> {
                 if (!x.getButtonData().isCancelButton()) {
                     DB.get().customers().deleteById(cus.getId());
-                    tv.getItems().removeIf(c -> c.getId() == cus.getId());
+                    tvCustomer.getItems().removeIf(c -> c.getId() == cus.getId());
                 }
             });
         }

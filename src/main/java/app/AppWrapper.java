@@ -9,9 +9,10 @@ package app;
  *
  * Parse SQLite database to MySQL
  *
- * When we're in the WorkOrder workspace and if we add a new customer or vehicle, then the program should update the searches for customer and vehicle
+ * When we're in the WorkOrder workspace and if we add a new customer or vehicle, then the program
+ * should update the searches for customer and vehicle
  *
- * Implement configurable tax rate
+ * Implement configurable tax rate (LATER)
  */
 public class AppWrapper {
     public static void main(String[] args) {
