@@ -1,8 +1,6 @@
 package model.database;
 
-import model.work_order.AutoPart;
-import model.work_order.Labor;
-import model.work_order.Product;
+import model.work_order.*;
 
 import java.io.File;
 import java.sql.Connection;
@@ -34,6 +32,7 @@ public class DB {
 
     private Statement stmt;
     private List<Product> productsMarkedForDeletion;
+    private List<WorkOrderPayment> paymentsMarkedForDeletion;
 
     private DB() {
         try {
@@ -155,8 +154,8 @@ public class DB {
                 WORK_ORDER_PAYMENT_TABLE.PAYMENT_ID + " integer primary key autoincrement," +
                 WORK_ORDER_PAYMENT_TABLE.WORK_ORDER_ID + " integer," +
                 WORK_ORDER_PAYMENT_TABLE.PAYMENT_DATE + " date," +
-                WORK_ORDER_PAYMENT_TABLE.PAYMENT_AMOUNT + " real," +
                 WORK_ORDER_PAYMENT_TABLE.PAYMENT_TYPE + " character(5)," +
+                WORK_ORDER_PAYMENT_TABLE.PAYMENT_AMOUNT + " real," +
                 "foreign key(" + WORK_ORDER_PAYMENT_TABLE.WORK_ORDER_ID + ") references " + WORK_ORDER_TABLE + "(" + WORK_ORDER_TABLE.WORK_ORDER_ID + "))");
     }
 
@@ -180,6 +179,20 @@ public class DB {
             }
         });
         clearAllProductsMarkedForDeletion();
+    }
+
+    public void addPaymentMarkedForDeletion(WorkOrderPayment payment) {
+        paymentsMarkedForDeletion.add(payment);
+    }
+
+    public void clearAllPaymentsMarkedForDeletion() {
+        paymentsMarkedForDeletion.clear();
+    }
+
+    public void deletionPaymentMarkedForDeletion() {
+        paymentsMarkedForDeletion.forEach(x -> {
+            workOrders.deletePaymentById(x.getId());
+        });
     }
 
     public CustomerStore customers() {

@@ -68,6 +68,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     Button btCus, btVeh;
     @FXML
     PopOver customerPopOver, vehiclePopOver;
+    @FXML
+    TableView<WorkOrderPayment> tvPayment;
 
     public WorkOrderWorkspaceController() { // New Work Order
         this.workOrder = new WorkOrder();
@@ -142,7 +144,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         });
 
         tfTaxRate.setEditable(false);
-        tfTaxRate.setText(Preferences.get().getTaxRate().toString());
+        tfTaxRate.setText(Preferences.get().getTaxRatePrettyString());
 
         if (workOrder.isNew()) {
             tfWorkOrderId.setText(String.valueOf(DB.get().workOrders().getNextId()));
@@ -332,6 +334,33 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         }
     }
 
+    public void addPayment() {
+        // Show dialog
+        AlertFactory.showAddPayment(workOrder);
+        updateTotals();
+    }
+
+    public void editPayment() {
+        // Show dialog
+        WorkOrderPayment payment = tvPayment.getSelectionModel().getSelectedItem();
+        if (payment != null) {
+            AlertFactory.showEditPayment(workOrder, payment);
+            updateTotals();
+        }
+    }
+
+    public void deletePayment() {
+        WorkOrderPayment payment = tvPayment.getSelectionModel().getSelectedItem();
+        if (payment != null) {
+            if (!payment.isNew()) {
+                // Add to payments marked for deletion
+                DB.get().addPaymentMarkedForDeletion(payment);
+            }
+            workOrder.removePayment(payment);
+            updateTotals();
+        }
+    }
+
     public void updateTotals() {
         tfPartsTotal.setText(String.format("%.2f", workOrder.partsSubtotal()));
         tfTaxTotal.setText(String.format("%.2f", workOrder.tax()));
@@ -343,6 +372,6 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @Override
     public void update() {
         updateTotals();
-        tfTaxRate.setText(Preferences.get().getTaxRate().toString());
+        tfTaxRate.setText(Preferences.get().getTaxRatePrettyString());
     }
 }

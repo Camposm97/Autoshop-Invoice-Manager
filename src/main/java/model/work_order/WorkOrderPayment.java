@@ -1,27 +1,34 @@
 package model.work_order;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.Date;
 
-public class WorkOrderPayment {
+public class WorkOrderPayment implements Comparable<WorkOrderPayment> {
     private int id;
     private int workOrderId;
+    private Payment type;
     private Date date;
     private double amount;
-    private Payment type;
 
-    public WorkOrderPayment(int id, int workOrderId, Date date, double amount, Payment type) {
+    public WorkOrderPayment(int id, int workOrderId, Date date, Payment type, double amount) {
         this.id = id;
         this.workOrderId = workOrderId;
         this.date = date;
-        this.amount = amount;
         this.type = type;
+        this.amount = amount;
     }
 
-    public WorkOrderPayment(int workOrderId, Date dateOfPayment, double amount, Payment payment) {
+    public WorkOrderPayment(int workOrderId, Date dateOfPayment, Payment type, double amount) {
+        this.id = -1;
         this.workOrderId = workOrderId;
         this.date = dateOfPayment;
+        this.type = type;
         this.amount = amount;
-        this.type = payment;
+    }
+
+    public boolean isNew() {
+        return id <= 0;
     }
 
     public int getId() {
@@ -48,6 +55,14 @@ public class WorkOrderPayment {
         this.date = date;
     }
 
+    public Payment getType() {
+        return type;
+    }
+
+    public void setType(Payment type) {
+        this.type = type;
+    }
+
     public double getAmount() {
         return amount;
     }
@@ -56,11 +71,8 @@ public class WorkOrderPayment {
         this.amount = amount;
     }
 
-    public Payment getType() {
-        return type;
-    }
-
-    public void setType(Payment type) {
-        this.type = type;
+    @Override
+    public int compareTo(@NotNull WorkOrderPayment o) {
+        return Integer.compare(id, o.id);
     }
 }

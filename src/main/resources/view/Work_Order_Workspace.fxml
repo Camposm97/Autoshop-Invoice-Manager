@@ -356,18 +356,78 @@
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
                                     </columnConstraints>
                                     <rowConstraints>
+                              <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Label text="Work Order #" />
-                                        <Label text="Date Created" GridPane.rowIndex="1" />
-                                        <Label text="Date Completed" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                                        <DatePicker fx:id="dateCompletedPicker" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                                        <TextField fx:id="tfWorkOrderId" editable="false" GridPane.columnIndex="1" />
-                                        <TextField fx:id="tfDateCreated" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Tax Rate" GridPane.columnIndex="2" />
-                              <fx:include fx:id="tfTaxRate" source="NumberField.fxml" GridPane.columnIndex="3" />
+                              <Label styleClass="title_label" text="Work Order Details" GridPane.columnSpan="2">
+                                 <font>
+                                    <Font name="System Bold" />
+                                 </font>
+                                 <graphic>
+                                    <Glyph fontFamily="FontAwesome" icon="TASKS" />
+                                 </graphic>
+                              </Label>
+                                        <Label text="Work Order #" GridPane.rowIndex="1" />
+                                        <Label text="Date Created" GridPane.rowIndex="2" />
+                              <Label text="Tax Rate" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <Label text="Date Completed" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                        <TextField fx:id="tfWorkOrderId" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <TextField fx:id="tfDateCreated" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <TextField fx:id="tfTaxRate" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                        <DatePicker fx:id="dateCompletedPicker" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                              <Separator prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="3" />
+                              <Label layoutX="18.0" layoutY="23.0" styleClass="title_label" text="Payment Information" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font name="System Bold" />
+                                 </font>
+                                 <graphic>
+                                    <Glyph fontFamily="FontAwesome" icon="CREDIT_CARD" />
+                                 </graphic>
+                              </Label>
+                              <VBox alignment="TOP_CENTER" spacing="15.0" GridPane.rowIndex="5" GridPane.rowSpan="2">
+                                 <children>
+                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add" onAction="#addPayment">
+                                       <graphic>
+                                          <Glyph fontFamily="FontAwesome" icon="PLUS" />
+                                       </graphic>
+                                    </Button>
+                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Edit" onAction="#editPayment">
+                                       <graphic>
+                                          <Glyph fontFamily="FontAwesome" icon="EDIT" />
+                                       </graphic>
+                                    </Button>
+                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete" onAction="#deletePayment">
+                                       <graphic>
+                                          <Glyph fontFamily="FontAwesome" icon="TRASH" />
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                 </padding>
+                              </VBox>
+                              <TableView fx:id="tvPayment" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="2">
+                                <columns>
+                                  <TableColumn prefWidth="75.0" text="Date" />
+                                  <TableColumn prefWidth="150.0" text="Payment Method" />
+                                    <TableColumn minWidth="0.0" prefWidth="150.0" text="Payment Amount" />
+                                </columns>
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin>
+                              </TableView>
+                              <Label text="Total Payments" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+                              <Label text="Invoice Balance" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                              <TextField fx:id="tfTotalPayment" GridPane.columnIndex="3" GridPane.rowIndex="7" editable="false "/>
+                              <TextField fx:id="tfInvoiceBalance" GridPane.columnIndex="3" GridPane.rowIndex="8" editable="false "/>
                                     </children>
                                     <padding>
                                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

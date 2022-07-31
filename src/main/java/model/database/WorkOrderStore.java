@@ -29,6 +29,7 @@ public class WorkOrderStore {
         }
     }
 
+    // TODO Look this over and maybe delete it
     public int getNextId() {
         try {
             return getMaxId() + 1;
@@ -467,33 +468,48 @@ public class WorkOrderStore {
     public void addPayment(@NotNull WorkOrderPayment payment) {
         try {
             PreparedStatement stmt = c.prepareStatement("""
-                    insert into work_order_payment (work_order_id, date_of_payment, amount, type) values (?, ?, ?, ?)
+                    insert into work_order_payment (work_order_id, date_of_payment, type, amount) values (?, ?, ?, ?)
                     """);
             stmt.setInt(1, payment.getWorkOrderId());
             stmt.setDate(2, payment.getDate());
-            stmt.setDouble(3, payment.getAmount());
-            stmt.setString(4, payment.getType().name());
+            stmt.setString(3, payment.getType().name());
+            stmt.setDouble(4, payment.getAmount());
             stmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public WorkOrderPayment getPaymentById(int id) {
+        WorkOrderPayment workOrderPayment = null;
+        try {
+            ResultSet rs = c.createStatement().executeQuery("select * from work_order_payment where work_order_payment_id = " + id);
+            int workOrderId = rs.getInt(1);
+            Date date = rs.getDate(2);
+            Payment type = Payment.valueOf(rs.getString(3));
+            double amount = rs.getDouble(4);
+            workOrderPayment = new WorkOrderPayment(id, workOrderId, date, type, amount);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            return workOrderPayment;
+        }
+    }
+
     public List<WorkOrderPayment> getPaymentsByWorkOrderId(int workOrderId) {
         List<WorkOrderPayment> list = new LinkedList<>();
         try {
-            ResultSet rs = c.createStatement().executeQuery("select * from work_order_payment where work_order_id = " + workOrderId);
+            ResultSet rs = c.createStatement().executeQuery("select work_order_payment_id from work_order_payment where work_order_id = " + workOrderId);
             while (rs.next()) {
                 int id = rs.getInt(1);
-                Date date = rs.getDate(3);
-                double amount = rs.getDouble(4);
-                Payment type = Payment.valueOf(rs.getString(5));
-                list.add(new WorkOrderPayment(id, workOrderId, date, amount, type));
+                WorkOrderPayment x = getPaymentById(id);
+                list.add(x);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            return list;
         }
-        return list;
     }
 
     public void updatePayment(WorkOrderPayment payment) {
@@ -501,12 +517,12 @@ public class WorkOrderStore {
             PreparedStatement stmt = c.prepareStatement("""
                     update work_order_payment set 
                     date_of_payment = ?,
-                    amount = ?,
                     type = ?
+                    amount = ?,
                     """);
             stmt.setDate(1, payment.getDate());
-            stmt.setDouble(2, payment.getAmount());
-            stmt.setString(3, payment.getType().name());
+            stmt.setString(2, payment.getType().name());
+            stmt.setDouble(3, payment.getAmount());
             stmt.execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -515,7 +531,7 @@ public class WorkOrderStore {
 
     public void deletePaymentById(int id) {
         try {
-            c.createStatement().execute("delete from work_order_payment where work_order_payment_id =" + id);
+            c.createStatement().execute("delete from work_order_payment where work_order_payment_id = " + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

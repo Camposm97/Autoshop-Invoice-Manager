@@ -19,6 +19,7 @@ public class WorkOrder implements Billable {
     private Vehicle vehicle;
     private ObservableList<AutoPart> itemList;
     private ObservableList<Labor> laborList;
+    private ObservableList<WorkOrderPayment> paymentList;
 
     public WorkOrder() {
         this.dateCreated = Date.valueOf(LocalDate.now().toString());
@@ -27,6 +28,7 @@ public class WorkOrder implements Billable {
         this.vehicle = null;
         this.itemList = FXCollections.observableArrayList();
         this.laborList = FXCollections.observableArrayList();
+        this.paymentList = FXCollections.observableArrayList();
     }
 
     public WorkOrder(Customer customer, Vehicle vehicle) {
@@ -36,6 +38,7 @@ public class WorkOrder implements Billable {
         this.vehicle = vehicle;
         this.itemList = FXCollections.observableArrayList();
         this.laborList = FXCollections.observableArrayList();
+        this.paymentList = FXCollections.observableArrayList();
     }
 
     public int getId() {
@@ -126,6 +129,29 @@ public class WorkOrder implements Billable {
 
     public Iterator<Labor> laborIterator() {
         return laborList.iterator();
+    }
+
+    public boolean addPayment(WorkOrderPayment payment) {
+        return paymentList.add(payment);
+    }
+
+    public void updatePayment(WorkOrderPayment oldPayment, WorkOrderPayment newPayment) {
+        ListIterator<WorkOrderPayment> iterator = paymentList.listIterator();
+        while (iterator.hasNext()) {
+            WorkOrderPayment x = iterator.next();
+            if (x.equals(oldPayment)) {
+                iterator.set(newPayment);
+                break;
+            }
+        }
+    }
+
+    public boolean removePayment(WorkOrderPayment payment) {
+        return paymentList.remove(payment);
+    }
+
+    public Iterator<WorkOrderPayment> paymentIterator() {
+        return paymentList.iterator();
     }
 
     public SimpleObjectProperty<Integer> idProperty() {

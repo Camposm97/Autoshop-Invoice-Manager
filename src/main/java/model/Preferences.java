@@ -200,6 +200,10 @@ public class Preferences {
         return taxRate;
     }
 
+    public String getTaxRatePrettyString() {
+        return (taxRate * 100) - 100 + " %";
+    }
+
     public void setTaxRate(Double taxRate) {
         this.tempTaxRate = taxRate;
     }

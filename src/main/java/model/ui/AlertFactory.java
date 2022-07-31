@@ -14,6 +14,7 @@ import model.*;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
+import model.work_order.WorkOrderPayment;
 
 import java.util.Optional;
 
@@ -92,6 +93,33 @@ public class AlertFactory {
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 controller.updateLabor(workOrder, selectedLabor);
+            }
+        });
+    }
+
+    public static void showAddPayment(WorkOrder workOrder) {
+        PaymentWorkspaceController controller = new PaymentWorkspaceController();
+        Parent node = FX.view("Payment_Workspace.fxml", controller);
+        AlertBuilder builder = new AlertBuilder();
+        Alert alert = builder.buildAddDialog("Add Payment", node);
+        Optional<ButtonType> rs = alert.showAndWait();
+        rs.ifPresent(e -> {
+            if (e.getButtonData().isDefaultButton()) {
+                controller.savePayment(workOrder);
+            }
+        });
+    }
+
+    public static void showEditPayment(WorkOrder workOrder, WorkOrderPayment selectedPayment) {
+        PaymentWorkspaceController controller = new PaymentWorkspaceController();
+        Parent node = FX.view("Payment_Workspace.fxml", controller);
+        AlertBuilder builder = new AlertBuilder();
+        Alert alert = builder.buildAddDialog("Update Payment", node);
+        controller.loadPayment(selectedPayment);
+        Optional<ButtonType> rs = alert.showAndWait();
+        rs.ifPresent(e -> {
+            if (e.getButtonData().isDefaultButton()) {
+                controller.updatePayment(workOrder, selectedPayment);
             }
         });
     }
