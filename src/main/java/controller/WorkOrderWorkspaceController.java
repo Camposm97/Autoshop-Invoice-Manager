@@ -7,16 +7,15 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
+import model.PrefObservable;
+import model.Preferences;
 import model.State;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.ui.AlertFactory;
 import model.ui.FX;
-import model.work_order.AutoPart;
-import model.work_order.Labor;
-import model.work_order.Vehicle;
-import model.work_order.WorkOrder;
+import model.work_order.*;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.textfield.TextFields;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.function.Function;
 
-public class WorkOrderWorkspaceController {
+public class WorkOrderWorkspaceController implements PrefObservable {
     protected int chosenCustomerId;
     protected WorkOrder workOrder;
     protected CustomerTableController customerTableController;
@@ -63,6 +62,8 @@ public class WorkOrderWorkspaceController {
     TextField tfWorkOrderId, tfDateCreated;
     @FXML
     DatePicker dateCompletedPicker;
+    @FXML
+    TextField tfTaxRate;
     @FXML
     Button btCus, btVeh;
     @FXML
@@ -114,7 +115,7 @@ public class WorkOrderWorkspaceController {
         // Set double-click function for parts and labor tables
         // Set Parts and Labor Items
         final int DOUBLE_CLICK = 2;
-        Function<MouseEvent, Boolean> doubleClicked = x -> x.getButton().equals(MouseButton.PRIMARY) && x.getClickCount() == DOUBLE_CLICK;
+        Function<MouseEvent, Boolean> doubleClicked = x  -> x.getButton().equals(MouseButton.PRIMARY) && x.getClickCount() == DOUBLE_CLICK;
         tvParts.setOnMouseClicked(e -> {
             if (doubleClicked.apply(e))
                 editPart();
@@ -140,6 +141,9 @@ public class WorkOrderWorkspaceController {
             }
         });
 
+        tfTaxRate.setEditable(false);
+        tfTaxRate.setText(Preferences.get().getTaxRate().toString());
+
         if (workOrder.isNew()) {
             tfWorkOrderId.setText(String.valueOf(DB.get().workOrders().getNextId()));
             btVeh.setDisable(true);
@@ -161,6 +165,8 @@ public class WorkOrderWorkspaceController {
         vehiclePopOver = new PopOver(fxmlLoader.load());
         vehicleTableController = fxmlLoader.getController();
         vehicleTableController.connect(this);
+
+        Preferences.get().addObserver(this);
     }
 
     public void showCustomer() throws IOException {
@@ -204,6 +210,7 @@ public class WorkOrderWorkspaceController {
     }
 
     public void close() {
+        Preferences.get().removeObserver(this);
         DB.get().clearAllProductsMarkedForDeletion();
         App.displayMyCompany();
     }
@@ -331,5 +338,11 @@ public class WorkOrderWorkspaceController {
         tfLaborTotal.setText(String.format("%.2f", workOrder.laborSubtotal()));
         tfSubtotal.setText(String.format("%.2f", workOrder.subtotal()));
         tfTotal.setText(String.format("%.2f", workOrder.bill()));
+    }
+
+    @Override
+    public void update() {
+        updateTotals();
+        tfTaxRate.setText(Preferences.get().getTaxRate().toString());
     }
 }

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="5.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PreferencesController">
+<GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PreferencesController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -36,10 +36,10 @@
       <TextField fx:id="tfCompany" GridPane.columnIndex="1" />
       <TextField fx:id="tfAddress" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextField fx:id="tfCity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <SearchableComboBox fx:id="cbState" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <TextField fx:id="tfZip" GridPane.columnIndex="1" GridPane.rowIndex="4" />
       <fx:include fx:id="tfPhone" source="PhoneField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="5" />
       <TextField fx:id="tfRepairShopId" promptText="ID" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <SearchableComboBox fx:id="cbState" GridPane.columnIndex="1" GridPane.rowIndex="3" />
        <fx:include fx:id="tfLaborRate" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="7" />
       <fx:include fx:id="tfTaxRate" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="8" />
    </children>

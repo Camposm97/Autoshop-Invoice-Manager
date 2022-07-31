@@ -1,10 +1,16 @@
 package model;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Preferences {
     private static Preferences preferences;
+    private static final String SRC = "preferences.config";
 
     public static Preferences get() {
         if (preferences == null) {
@@ -13,25 +19,34 @@ public class Preferences {
         return preferences;
     }
 
-    private File file;
-    private String company, address, city;
-    private State state;
-    private String zip, phone, repairShopId;
-    private Double laborRate;
-    private Double taxRate;
+    private String company, address, city, tempCompany, tempAddress, tempCity;
+    private State state, tempState;
+    private String zip, phone, repairShopId, tempZip, tempPhone, tempRepairShopId;
+    private Double laborRate, tempLaborRate;
+    private Double taxRate, tempTaxRate;
+    private List<PrefObservable> observables;
 
     private Preferences() {
+        init();
+        load();
+    }
+
+    public void init() {
+        company = "Your Company";
+        address = "123 Some Street";
+        city = "Some City";
+        state = State.UNKNOWN;
+        zip = "11355";
+        phone = "000-000-0000";
+        repairShopId = "0000000";
+        laborRate = 90.0;
+        taxRate = 1.08625;
+        observables = new LinkedList<>();
+    }
+
+    public void load() {
         try {
-            this.file = new File("preferences.config");
-            company = "Your Company";
-            address = "123 Some Street";
-            city = "Some City";
-            state = State.UNKNOWN;
-            zip = "11355";
-            phone = "000-000-0000";
-            repairShopId = "0000000";
-            laborRate = 90.0;
-            taxRate = 1.08625;
+            File file = new File(SRC);
             if (file.exists()) {
                 Scanner in = new Scanner(file);
                 while (in.hasNextLine()) {
@@ -42,29 +57,29 @@ public class Preferences {
                         String value = arr[1];
                         switch (prop) {
                             case "company":
-                                setCompany(value);
+                                this.company = value;
                                 break;
                             case "address":
-                                setAddress(value);
+                                this.address = value;
                             case "city":
-                                setCity(value);
+                                this.city = value;
                                 break;
                             case "state":
-                                setState(State.valueOfName(value));
+                                this.state = State.valueOfName(value);
                                 break;
                             case "zip":
-                                setZip(value);
+                                this.zip = value;
                                 break;
                             case "phone":
-                                setPhone(value);
+                                this.phone = value;
                                 break;
                             case "repair-shop-id":
-                                setRepairShopId(value);
+                                this.repairShopId = value;
                                 break;
                             case "labor-rate":
                                 try {
                                     Double laborRate = Double.parseDouble(value);
-                                    setLaborRate(laborRate);
+                                    this.laborRate = laborRate;
                                 } catch (NumberFormatException e) {
                                     System.out.println("Failed to parse labor rate");
                                 }
@@ -72,7 +87,7 @@ public class Preferences {
                             case "tax-rate":
                                 try {
                                     Double taxRate = Double.parseDouble(value);
-                                    setTaxRate(taxRate);
+                                    this.taxRate = taxRate;
                                 } catch (NumberFormatException e) {
                                     System.out.println("Failed to parse tax rate");
                                 }
@@ -88,7 +103,16 @@ public class Preferences {
 
     public void save() {
         try {
-            PrintWriter pw = new PrintWriter(file);
+            if (tempCompany != null) company = tempCompany;
+            if (tempAddress != null) address = tempAddress;
+            if (tempCity != null) city = tempCity;
+            if (tempState != null) state = tempState;
+            if (tempZip != null) zip = tempZip;
+            if (tempPhone != null) phone = tempPhone;
+            if (tempRepairShopId != null) repairShopId = tempRepairShopId;
+            if (tempLaborRate != null) laborRate = tempLaborRate;
+            if (tempTaxRate != null) taxRate = tempTaxRate;
+            PrintWriter pw = new PrintWriter(SRC);
             pw.println("company=" + company);
             pw.println("address=" + address);
             pw.println("city=" + city);
@@ -99,6 +123,10 @@ public class Preferences {
             pw.println("labor-rate=" + laborRate);
             pw.println("tax-rate=" + taxRate);
             pw.close();
+            System.out.println("Saved preferences");
+            for (PrefObservable o : observables) {
+                o.update();
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -109,7 +137,7 @@ public class Preferences {
     }
 
     public void setCompany(String company) {
-        this.company = company;
+        this.tempCompany = company;
     }
 
     public String getAddress() {
@@ -117,7 +145,7 @@ public class Preferences {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        this.tempAddress = address;
     }
 
     public String getCity() {
@@ -125,7 +153,7 @@ public class Preferences {
     }
 
     public void setCity(String city) {
-        this.city = city;
+        this.tempCity = city;
     }
 
     public State getState() {
@@ -133,7 +161,7 @@ public class Preferences {
     }
 
     public void setState(State state) {
-        this.state = state;
+        this.tempState = state;
     }
 
     public String getZip() {
@@ -141,7 +169,7 @@ public class Preferences {
     }
 
     public void setZip(String zip) {
-        this.zip = zip;
+        this.tempZip = zip;
     }
 
     public String getPhone() {
@@ -149,7 +177,7 @@ public class Preferences {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.tempPhone = phone;
     }
 
     public String getRepairShopId() {
@@ -157,7 +185,7 @@ public class Preferences {
     }
 
     public void setRepairShopId(String repairShopId) {
-        this.repairShopId = repairShopId;
+        this.tempRepairShopId = repairShopId;
     }
 
     public Double getLaborRate() {
@@ -165,10 +193,22 @@ public class Preferences {
     }
 
     public void setLaborRate(Double laborRate) {
-        this.laborRate = laborRate;
+        this.tempLaborRate = laborRate;
     }
 
-    public Double getTaxRate() { return taxRate; }
+    public Double getTaxRate() {
+        return taxRate;
+    }
 
-    public void setTaxRate(Double taxRate) { this.taxRate = taxRate; }
+    public void setTaxRate(Double taxRate) {
+        this.tempTaxRate = taxRate;
+    }
+
+    public void addObserver(PrefObservable observable) {
+        this.observables.add(observable);
+    }
+
+    public void removeObserver(PrefObservable observable) {
+        this.observables.remove(observable);
+    }
 }

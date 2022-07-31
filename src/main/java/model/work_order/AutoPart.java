@@ -2,12 +2,13 @@ package model.work_order;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import model.Preferences;
 
 public class AutoPart extends Product implements Comparable<AutoPart> {
     private double retailPrice;
     private double listPrice;
-    private boolean taxable;
     private int quantity;
+    private boolean taxable;
 
     public AutoPart(String name, String desc, double retailPrice, double listPrice, int quantity, boolean taxable) {
         super(name, desc);
@@ -61,7 +62,7 @@ public class AutoPart extends Product implements Comparable<AutoPart> {
 
     @Override
     public double bill() {
-        return taxable ? TAX_RATE * (retailPrice * quantity) : retailPrice * quantity;
+        return taxable ? Preferences.get().getTaxRate() * (retailPrice * quantity) : retailPrice * quantity;
     }
 
     @Override
