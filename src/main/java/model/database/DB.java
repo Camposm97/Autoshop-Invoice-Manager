@@ -44,6 +44,7 @@ public class DB {
             Class.forName("org.sqlite.JDBC");
             this.c = DriverManager.getConnection("jdbc:sqlite:" + file);
             this.productsMarkedForDeletion = new LinkedList<>();
+            this.paymentsMarkedForDeletion = new LinkedList<>();
             this.customers = new CustomerStore(c);
             this.vehicles = new VehicleStore(c);
             this.autoParts = new AutoPartStore(c);
@@ -189,7 +190,7 @@ public class DB {
         paymentsMarkedForDeletion.clear();
     }
 
-    public void deletionPaymentMarkedForDeletion() {
+    public void deletePaymentMarkedForDeletion() {
         paymentsMarkedForDeletion.forEach(x -> {
             workOrders.deletePaymentById(x.getId());
         });

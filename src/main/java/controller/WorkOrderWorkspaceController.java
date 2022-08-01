@@ -70,6 +70,14 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     PopOver customerPopOver, vehiclePopOver;
     @FXML
     TableView<WorkOrderPayment> tvPayment;
+    @FXML
+    TableColumn<WorkOrderPayment, String> colPaymentDate;
+    @FXML
+    TableColumn<WorkOrderPayment, Payment> colPaymentType;
+    @FXML
+    TableColumn<WorkOrderPayment, String> colPaymentAmount;
+    @FXML
+    TextField tfTotalPayment, tfInvoiceBalance;
 
     public WorkOrderWorkspaceController() { // New Work Order
         this.workOrder = new WorkOrder();
@@ -113,21 +121,27 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         colLaborBilledHrs.setCellValueFactory(c -> c.getValue().billedHrsProperty());
         colLaborRate.setCellValueFactory(c -> c.getValue().rateProperty());
         colLaborTotal.setCellValueFactory(c -> c.getValue().subtotalProperty());
+        colPaymentDate.setCellValueFactory(c -> c.getValue().dateProperty());
+        colPaymentType.setCellValueFactory(c -> c.getValue().typeProperty());
+        colPaymentAmount.setCellValueFactory(c -> c.getValue().amountProperty());
 
         // Set double-click function for parts and labor tables
         // Set Parts and Labor Items
         final int DOUBLE_CLICK = 2;
-        Function<MouseEvent, Boolean> doubleClicked = x  -> x.getButton().equals(MouseButton.PRIMARY) && x.getClickCount() == DOUBLE_CLICK;
+        Function<MouseEvent, Boolean> f = x -> x.getButton().equals(MouseButton.PRIMARY) && x.getClickCount() == DOUBLE_CLICK;
         tvParts.setOnMouseClicked(e -> {
-            if (doubleClicked.apply(e))
-                editPart();
+            if (f.apply(e)) editPart();
         });
         tvParts.setItems(workOrder.itemList());
         tvLabor.setOnMouseClicked(e -> {
-            if (doubleClicked.apply(e))
-                editLabor();
+            if (f.apply(e)) editLabor();
         });
         tvLabor.setItems(workOrder.laborList());
+
+        tvPayment.setOnMouseClicked(e -> {
+            if (f.apply(e)) editPayment();
+        });
+        tvPayment.setItems(workOrder.paymentList());
 
         // Set date created value to current date
         tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
@@ -156,6 +170,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             if (workOrder.getDateCompleted() != null) {
                 dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
             }
+            btVeh.setDisable(true);
             updateTotals();
         }
 
@@ -194,16 +209,9 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         } else {
             DB.get().workOrders().update(workOrder);
             DB.get().deleteProductsMarkedForDeletion();
+            DB.get().deletePaymentMarkedForDeletion();
         }
-        final int RECENT_SIZE = 10;
-        LinkedList<Integer> recentWorkOrders = App.getRecentWorkOrders();
-        if (recentWorkOrders.contains(workOrder.getId())) {
-            recentWorkOrders.removeFirstOccurrence(workOrder.getId());
-        }
-        recentWorkOrders.addFirst(workOrder.getId());
-        if (recentWorkOrders.size() >= RECENT_SIZE) {
-            recentWorkOrders.removeLast();
-        }
+        addToRecents();
     }
 
     public void saveAndClose() {
@@ -214,7 +222,20 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     public void close() {
         Preferences.get().removeObserver(this);
         DB.get().clearAllProductsMarkedForDeletion();
+        DB.get().clearAllPaymentsMarkedForDeletion();
         App.displayMyCompany();
+    }
+
+    public void addToRecents() {
+        final int RECENT_SIZE = 10;
+        LinkedList<Integer> recentWorkOrders = App.getRecentWorkOrders();
+        if (recentWorkOrders.contains(workOrder.getId())) {
+            recentWorkOrders.removeFirstOccurrence(workOrder.getId());
+        }
+        recentWorkOrders.addFirst(workOrder.getId());
+        if (recentWorkOrders.size() >= RECENT_SIZE) {
+            recentWorkOrders.removeLast();
+        }
     }
 
     public Customer buildCustomer() {
@@ -335,13 +356,11 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     }
 
     public void addPayment() {
-        // Show dialog
         AlertFactory.showAddPayment(workOrder);
         updateTotals();
     }
 
     public void editPayment() {
-        // Show dialog
         WorkOrderPayment payment = tvPayment.getSelectionModel().getSelectedItem();
         if (payment != null) {
             AlertFactory.showEditPayment(workOrder, payment);
@@ -362,11 +381,14 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     }
 
     public void updateTotals() {
-        tfPartsTotal.setText(String.format("%.2f", workOrder.partsSubtotal()));
-        tfTaxTotal.setText(String.format("%.2f", workOrder.tax()));
-        tfLaborTotal.setText(String.format("%.2f", workOrder.laborSubtotal()));
-        tfSubtotal.setText(String.format("%.2f", workOrder.subtotal()));
-        tfTotal.setText(String.format("%.2f", workOrder.bill()));
+        Function<Double, String> f = x -> String.format("%.2f", x);
+        tfPartsTotal.setText(f.apply(workOrder.partsSubtotal()));
+        tfTaxTotal.setText(f.apply(workOrder.tax()));
+        tfLaborTotal.setText(f.apply(workOrder.laborSubtotal()));
+        tfSubtotal.setText(f.apply(workOrder.subtotal()));
+        tfTotal.setText(f.apply(workOrder.bill()));
+        tfTotalPayment.setText(f.apply(workOrder.totalPayments()));
+        tfInvoiceBalance.setText(f.apply(workOrder.balance()));
     }
 
     @Override

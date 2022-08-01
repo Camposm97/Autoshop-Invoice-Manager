@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Optional;
+import java.util.OptionalDouble;
 
 public class WorkOrder implements Billable {
     private int id;
@@ -183,6 +185,8 @@ public class WorkOrder implements Billable {
         return laborList;
     }
 
+    public ObservableList<WorkOrderPayment> paymentList() { return paymentList; }
+
     public double partsSubtotal() {
         return itemList.isEmpty() ? 0 : itemList.stream().map(x -> x.subtotal()).reduce((x,y) -> x+y).get();
     }
@@ -221,6 +225,19 @@ public class WorkOrder implements Billable {
             total += labor.bill();
         }
         return total;
+    }
+
+    public double totalPayments() {
+        OptionalDouble rs = paymentList.stream().mapToDouble(x -> x.getAmount()).reduce((x, y) -> x + y);
+        if (rs.isPresent()) {
+            return rs.getAsDouble();
+        } else {
+            return 0;
+        }
+    }
+
+    public double balance() {
+        return bill() - totalPayments();
     }
 
     @Override

@@ -11,6 +11,7 @@ import model.work_order.WorkOrder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+import java.util.function.Function;
 
 public class WorkOrderPrintController {
     WorkOrder workOrder;
@@ -58,14 +59,18 @@ public class WorkOrderPrintController {
         txtEngine.setText(workOrder.getVehicle().getEngine());
         txtTransmission.setText(workOrder.getVehicle().getTransmission());
         txtMileageInAndOut.setText(workOrder.getVehicle().getMileageInAndOut());
+
+        Function<Double, String> f = x -> String.format("%.2f", x);
+        Function<Double, String> g = x -> String.format("$ %.2f", x);
+
         Iterator<AutoPart> autoPartIterator = workOrder.autoPartIterator();
         for (int i = 1; autoPartIterator.hasNext(); i++) {
             AutoPart a = autoPartIterator.next();
             Text txtName = new Text(a.getName());
             Text txtDesc = new Text(a.getDesc());
-            Text txtUnitPrice = new Text(format1(a.getRetailPrice()));
+            Text txtUnitPrice = new Text(f.apply(a.getRetailPrice()));
             Text txtQty = new Text(String.valueOf(a.getQuantity()));
-            Text txtSubtotal = new Text(format1(a.subtotal()));
+            Text txtSubtotal = new Text(f.apply(a.subtotal()));
             gridPaneParts.addRow(i, txtName, txtDesc, txtUnitPrice, txtQty, txtSubtotal);
         }
         Iterator<Labor> laborIterator = workOrder.laborIterator();
@@ -73,29 +78,23 @@ public class WorkOrderPrintController {
             Labor lbr = laborIterator.next();
             Text txtCode = new Text(lbr.getName());
             Text txtDesc = new Text(lbr.getDesc());
-            Text txtSubtotal = new Text(format1(lbr.subtotal()));
+            Text txtSubtotal = new Text(f.apply(lbr.subtotal()));
             gridPaneLabor.addRow(i, txtCode, txtDesc, txtSubtotal);
         }
-        txtPartsTotal.setText(format2(workOrder.partsSubtotal()));
-        txtLaborTotal.setText(format2(workOrder.laborSubtotal()));
-        txtSubtotal.setText(format2(workOrder.subtotal()));
-        txtSalesTax.setText(format2(workOrder.tax()));
-        txtWorkOrderTotal.setText(format2(workOrder.bill()));
+        txtPartsTotal.setText(g.apply(workOrder.partsSubtotal()));
+        txtLaborTotal.setText(g.apply(workOrder.laborSubtotal()));
+        txtSubtotal.setText(g.apply(workOrder.subtotal()));
+        txtSalesTax.setText(g.apply(workOrder.tax()));
+        txtWorkOrderTotal.setText(g.apply(workOrder.bill()));
+        txtTotalPayment.setText(g.apply(workOrder.totalPayments()));
+        txtAmountDue.setText(g.apply(workOrder.balance()));
     }
 
     public String getAddress() {
         return Preferences.get().getAddress() + ' ' + Preferences.get().getCity() + ' ' + Preferences.get().getState() + ' ' + Preferences.get().getZip();
     }
 
-     public String getShopDetail() {
-        return Preferences.get().getState().getAbbreviation() + " Repair Shop #" + Preferences.get().getRepairShopId();
-     }
-
-    public String format1(double x) {
-        return String.format("%.2f", x);
-    }
-
-    public String format2(double x) {
-        return String.format("$ %.2f", x);
+    public String getShopDetail() {
+     return Preferences.get().getState().getAbbreviation() + " Repair Shop #" + Preferences.get().getRepairShopId();
     }
 }
