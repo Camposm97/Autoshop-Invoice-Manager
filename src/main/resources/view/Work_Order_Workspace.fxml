@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <SplitPane dividerPositions="0.8">
             <items>
@@ -394,17 +394,17 @@
                               </Label>
                               <VBox alignment="TOP_CENTER" spacing="15.0" GridPane.rowIndex="5" GridPane.rowSpan="2">
                                  <children>
-                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add" onAction="#addPayment">
+                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addPayment" text="Add">
                                        <graphic>
                                           <Glyph fontFamily="FontAwesome" icon="PLUS" />
                                        </graphic>
                                     </Button>
-                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Edit" onAction="#editPayment">
+                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editPayment" text="Edit">
                                        <graphic>
                                           <Glyph fontFamily="FontAwesome" icon="EDIT" />
                                        </graphic>
                                     </Button>
-                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete" onAction="#deletePayment">
+                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deletePayment" text="Delete">
                                        <graphic>
                                           <Glyph fontFamily="FontAwesome" icon="TRASH" />
                                        </graphic>
@@ -416,9 +416,9 @@
                               </VBox>
                               <TableView fx:id="tvPayment" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="2">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="Date" />
-                                  <TableColumn prefWidth="150.0" text="Payment Method" />
-                                    <TableColumn minWidth="0.0" prefWidth="150.0" text="Payment Amount" />
+                                  <TableColumn fx:id="colPaymentDate" prefWidth="75.0" text="Date" />
+                                  <TableColumn fx:id="colPaymentType" prefWidth="150.0" text="Payment Method" />
+                                    <TableColumn fx:id="colPaymentAmount" minWidth="0.0" prefWidth="150.0" text="Payment Amount" />
                                 </columns>
                                  <GridPane.margin>
                                     <Insets />
@@ -426,8 +426,8 @@
                               </TableView>
                               <Label text="Total Payments" GridPane.columnIndex="2" GridPane.rowIndex="7" />
                               <Label text="Invoice Balance" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-                              <TextField fx:id="tfTotalPayment" GridPane.columnIndex="3" GridPane.rowIndex="7" editable="false "/>
-                              <TextField fx:id="tfInvoiceBalance" GridPane.columnIndex="3" GridPane.rowIndex="8" editable="false "/>
+                              <TextField fx:id="tfTotalPayment" editable="false " GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                              <TextField fx:id="tfInvoiceBalance" editable="false " GridPane.columnIndex="3" GridPane.rowIndex="8" />
                                     </children>
                                     <padding>
                                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
