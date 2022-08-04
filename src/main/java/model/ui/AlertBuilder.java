@@ -1,9 +1,10 @@
 package model.ui;
 
+import app.App;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.*;
+import model.Preferences;
+import model.GUIScale;
 
 import java.util.function.Function;
 
@@ -77,6 +78,7 @@ public class AlertBuilder {
 
     public AlertBuilder setContent(Node content) {
         this.content = content;
+//        this.content.getStyleClass().add(Scale.getStyleClass(Preferences.get().getScale()));
         return this;
     }
 
@@ -97,7 +99,10 @@ public class AlertBuilder {
         } else {
             alert.getDialogPane().setContent(content);
         }
-        alert.getButtonTypes().setAll(btList);
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(App.class.getResource("../view/App.css").toExternalForm());
+        dialogPane.getStyleClass().add(GUIScale.getStyleClass(Preferences.get().getGuiScale()));
+        System.out.println(dialogPane);
         return alert;
     }
 }

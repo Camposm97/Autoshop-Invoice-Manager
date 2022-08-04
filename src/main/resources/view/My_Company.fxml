@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane hgap="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" vgap="8.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MyCompanyController">
+<GridPane hgap="8.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@App.css" vgap="8.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MyCompanyController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
@@ -29,21 +29,21 @@
    <children>
       <HBox spacing="4.0">
          <children>
-            <Label text="Completed Work Orders this Year"/>
-            <Label fx:id="lblYear" text="(####):" />
+            <Label styleClass="title_label" text="Completed Work Orders this Year" />
+            <Label fx:id="lblYear" styleClass="title_label" text="(####):" />
          </children>
       </HBox>
       <Label fx:id="lblWorkOrderYearCount" text="-1" GridPane.columnIndex="1" />
       <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1" />
       <HBox spacing="4.0" GridPane.rowIndex="2">
          <children>
-            <Label text="Completed Work Orders this Month"/>
-            <Label fx:id="lblMonth" text="(*******):" />
+            <Label styleClass="title_label" text="Completed Work Orders this Month" />
+            <Label fx:id="lblMonth" styleClass="title_label" text="(*******):" />
          </children>
       </HBox>
       <Label fx:id="lblWorkOrderMonthCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-      <Label text="Recent Work Orders" GridPane.columnSpan="2" GridPane.rowIndex="4"/>
+      <Label styleClass="title_label" text="Recent Work Orders" GridPane.columnSpan="2" GridPane.rowIndex="4" />
       <TableView fx:id="tvRecentWorkOrders" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
         <columns>
           <TableColumn fx:id="colRecentId" prefWidth="75.0" text="ID" />
@@ -56,7 +56,7 @@
         </columns>
       </TableView>
       <Separator GridPane.columnSpan="2" GridPane.rowIndex="6" />
-      <Label text="Incompleted Work Orders:" GridPane.rowIndex="7"/>
+      <Label styleClass="title_label" text="Incompleted Work Orders:" GridPane.rowIndex="7" />
       <Label fx:id="lblIncompletedWorkOrderCount" text="-1" GridPane.columnIndex="1" GridPane.rowIndex="7" />
       <TableView fx:id="tvIncompletedWorkOrders" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="250.0" GridPane.columnSpan="2" GridPane.rowIndex="8">
         <columns>

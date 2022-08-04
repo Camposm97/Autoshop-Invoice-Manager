@@ -17,9 +17,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <SplitPane dividerPositions="0.8">
             <items>
@@ -62,7 +63,7 @@
                                                         <Glyph fontFamily="FontAwesome" icon="USER" />
                                                     </graphic>
                                                 </Label>
-                                                <Button fx:id="btCus" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#showCustomer">
+                                                <Button fx:id="btCus" mnemonicParsing="false" onAction="#showCustomer">
                                                     <graphic>
                                                         <Glyph fontFamily="FontAwesome" icon="BARS" />
                                                     </graphic>
@@ -353,14 +354,14 @@
                                     </columnConstraints>
                                     <rowConstraints>
                               <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
                               <Label styleClass="title_label" text="Work Order Details" GridPane.columnSpan="2">

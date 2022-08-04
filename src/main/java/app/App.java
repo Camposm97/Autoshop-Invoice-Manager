@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.GUIScale;
 import model.database.DB;
 import model.ui.FX;
 
@@ -44,6 +45,11 @@ public class App extends Application {
         App.setDisplay(FX.view("Work_Order_Table.fxml"));
     }
 
+    public static void setScale(String styleClass) {
+        root.getStyleClass().removeAll(GUIScale.styleClasses());
+        root.getStyleClass().add(styleClass);
+    }
+
     @Override
     public void init() {
         DB.init();
@@ -66,7 +72,7 @@ public class App extends Application {
     public void start(Stage stage) {
         App.root = (BorderPane) FX.view("App.fxml");
         App.setDisplay(FX.view("My_Company.fxml"));
-        Scene scene = new Scene(root, 1160, 768);
+        Scene scene = new Scene(root, 1600, 900);
         stage.setScene(scene);
         stage.setTitle(TITLE);
         Image img = new Image("red_car.png");

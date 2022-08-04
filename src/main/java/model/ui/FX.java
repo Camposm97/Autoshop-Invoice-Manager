@@ -45,7 +45,7 @@ public class FX {
     }
 
     public static void autoResizeColumns(TableView<?> tv) {
-        final double OFFSET = 20.0;
+        final double OFFSET = 75.0;
         tv.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         tv.getColumns().stream().forEach((col) -> {
             Text t = new Text(col.getText());

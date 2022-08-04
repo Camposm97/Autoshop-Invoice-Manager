@@ -1,5 +1,7 @@
 package model;
 
+import app.App;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,11 +26,13 @@ public class Preferences {
     private String zip, phone, repairShopId, tempZip, tempPhone, tempRepairShopId;
     private Double laborRate, tempLaborRate;
     private Double taxRate, tempTaxRate;
+    private GUIScale guiScale, tempGuiScale;
     private List<PrefObservable> observables;
 
     private Preferences() {
         init();
         load();
+        App.setScale(GUIScale.getStyleClass(this.guiScale));
     }
 
     public void init() {
@@ -41,6 +45,7 @@ public class Preferences {
         repairShopId = "0000000";
         laborRate = 90.0;
         taxRate = 1.08625;
+        guiScale = GUIScale.Small;
         observables = new LinkedList<>();
     }
 
@@ -92,6 +97,14 @@ public class Preferences {
                                     System.out.println("Failed to parse tax rate");
                                 }
                                 break;
+                            case "gui-scale":
+                                try {
+                                    this.guiScale = GUIScale.valueOf(value);
+                                    if (guiScale == null) throw new Exception();
+                                } catch (Exception e) {
+                                    this.guiScale = GUIScale.Small;
+                                }
+                                break;
                         }
                     }
                 }
@@ -112,6 +125,7 @@ public class Preferences {
             if (tempRepairShopId != null) repairShopId = tempRepairShopId;
             if (tempLaborRate != null) laborRate = tempLaborRate;
             if (tempTaxRate != null) taxRate = tempTaxRate;
+            if (tempGuiScale != null) guiScale = tempGuiScale;
             PrintWriter pw = new PrintWriter(SRC);
             pw.println("company=" + company);
             pw.println("address=" + address);
@@ -122,6 +136,7 @@ public class Preferences {
             pw.println("repair-shop-id=" + repairShopId);
             pw.println("labor-rate=" + laborRate);
             pw.println("tax-rate=" + taxRate);
+            pw.println("gui-scale=" + guiScale);
             pw.close();
             System.out.println("Saved preferences");
             for (PrefObservable o : observables) {
@@ -129,6 +144,9 @@ public class Preferences {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        } finally {
+            String styleClass = GUIScale.getStyleClass(this.guiScale);
+            App.setScale(styleClass);
         }
     }
 
@@ -206,6 +224,14 @@ public class Preferences {
 
     public void setTaxRate(Double taxRate) {
         this.tempTaxRate = taxRate;
+    }
+
+    public GUIScale getGuiScale() {
+        return guiScale;
+    }
+
+    public void setGuiScale(GUIScale guiScale) {
+        this.tempGuiScale = guiScale;
     }
 
     public void addObserver(PrefObservable observable) {
