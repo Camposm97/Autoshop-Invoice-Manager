@@ -9,6 +9,7 @@ public class NumberFieldController {
 
     @FXML
     public void initialize() {
+        tfNum.getStyleClass().add("number_field_invalid");
         tfNum.textProperty().addListener((o, x, y) -> {
             if (y == null || y.isEmpty()) {
                 tfNum.getStyleClass().add("number_field_invalid");

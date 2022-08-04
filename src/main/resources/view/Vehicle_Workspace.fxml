@@ -43,7 +43,7 @@
       <Label text="Engine:" GridPane.rowIndex="7" />
       <Label text="Transmission:" GridPane.rowIndex="8" />
       <TextField fx:id="tfVin" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-      <TextField fx:id="tfYear" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+      <fx:include fx:id="tfYear" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
       <TextField fx:id="tfMake" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
       <TextField fx:id="tfModel" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
       <TextField fx:id="tfLicensePlate" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5" />

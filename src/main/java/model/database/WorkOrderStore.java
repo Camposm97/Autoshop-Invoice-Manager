@@ -95,13 +95,20 @@ public class WorkOrderStore {
             Iterator<AutoPart> itemIterator = workOrder.autoPartIterator();
             while (itemIterator.hasNext()) {
                 AutoPart item = itemIterator.next();
-                saveAutoPart(workOrder.getId(), item);
+                addAutoPart(workOrder.getId(), item);
             }
             // Add work_order_labor row(s)
             Iterator<Labor> laborIterator = workOrder.laborIterator();
             while (laborIterator.hasNext()) {
                 Labor labor = laborIterator.next();
                 addLabor(workOrder.getId(), labor);
+            }
+
+            // Add work_order_payment row(s)
+            Iterator<WorkOrderPayment> paymentIterator = workOrder.paymentIterator();
+            while (paymentIterator.hasNext()) {
+                WorkOrderPayment payment = paymentIterator.next();
+                addPayment(workOrder.getId(), payment);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -173,6 +180,17 @@ public class WorkOrderStore {
                     Labor labor = new Labor(laborCode, desc, billedHrs, rate, taxable);
                     labor.setId(id);
                     workOrder.addLabor(labor);
+                }
+
+                ResultSet rsPayment = c.createStatement().executeQuery("select * from work_order_payment " +
+                        "where work_order_id = " + workOrderId);
+                while (rsPayment.next()) {
+                    int id = rsPayment.getInt(1);
+                    Date date = rsPayment.getDate(3);
+                    Payment type = Payment.valueOf(rsPayment.getString(4));
+                    double amount = rsPayment.getDouble(5);
+                    WorkOrderPayment payment = new WorkOrderPayment(id, date, type, amount);
+                    workOrder.addPayment(payment);
                 }
             }
         } catch (SQLException e) {
@@ -335,7 +353,7 @@ public class WorkOrderStore {
             while (autoPartIterator.hasNext()) {
                 AutoPart autoPart = autoPartIterator.next();
                 if (autoPart.isNew())
-                    saveAutoPart(workOrder.getId(), autoPart);
+                    addAutoPart(workOrder.getId(), autoPart);
                 else
                     updateAutoPart(autoPart);
             }
@@ -346,6 +364,14 @@ public class WorkOrderStore {
                     addLabor(workOrder.getId(), labor);
                 else
                     updateLabor(labor);
+            }
+            Iterator<WorkOrderPayment> paymentIterator = workOrder.paymentIterator();
+            while (paymentIterator.hasNext()) {
+                WorkOrderPayment payment = paymentIterator.next();
+                if (payment.isNew())
+                    addPayment(workOrder.getId(), payment);
+                else
+                    updatePayment(payment);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -377,7 +403,7 @@ public class WorkOrderStore {
         }
     }
 
-    public void saveAutoPart(int workOrderId, @NotNull AutoPart item) throws SQLException {
+    public void addAutoPart(int workOrderId, @NotNull AutoPart item) throws SQLException {
         PreparedStatement prepStmt = c.prepareStatement(
                 "insert into work_order_item (" +
                         "work_order_id," +
@@ -465,12 +491,12 @@ public class WorkOrderStore {
         c.createStatement().execute("delete from work_order_labor where work_order_labor_id = " + labor.getId());
     }
 
-    public void addPayment(@NotNull WorkOrderPayment payment) {
+    public void addPayment(int workOrderId, @NotNull WorkOrderPayment payment) {
         try {
             PreparedStatement stmt = c.prepareStatement("""
                     insert into work_order_payment (work_order_id, date_of_payment, type, amount) values (?, ?, ?, ?)
                     """);
-            stmt.setInt(1, payment.getWorkOrderId());
+            stmt.setInt(1, workOrderId);
             stmt.setDate(2, payment.getDate());
             stmt.setString(3, payment.getType().name());
             stmt.setDouble(4, payment.getAmount());
@@ -484,11 +510,10 @@ public class WorkOrderStore {
         WorkOrderPayment workOrderPayment = null;
         try {
             ResultSet rs = c.createStatement().executeQuery("select * from work_order_payment where work_order_payment_id = " + id);
-            int workOrderId = rs.getInt(1);
-            Date date = rs.getDate(2);
-            Payment type = Payment.valueOf(rs.getString(3));
-            double amount = rs.getDouble(4);
-            workOrderPayment = new WorkOrderPayment(id, workOrderId, date, type, amount);
+            Date date = rs.getDate(3);
+            Payment type = Payment.valueOf(rs.getString(4));
+            double amount = rs.getDouble(5);
+            workOrderPayment = new WorkOrderPayment(id, date, type, amount);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -517,12 +542,13 @@ public class WorkOrderStore {
             PreparedStatement stmt = c.prepareStatement("""
                     update work_order_payment set 
                     date_of_payment = ?,
-                    type = ?
-                    amount = ?,
+                    type = ?,
+                    amount = ? where work_order_payment_id = ?
                     """);
             stmt.setDate(1, payment.getDate());
             stmt.setString(2, payment.getType().name());
             stmt.setDouble(3, payment.getAmount());
+            stmt.setInt(4, payment.getId());
             stmt.execute();
         } catch (Exception e) {
             e.printStackTrace();
