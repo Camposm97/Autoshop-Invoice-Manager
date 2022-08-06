@@ -140,7 +140,16 @@ public class AlertFactory {
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
+                var set = Printer.getAllPrinters();
+                System.out.println(set);
                 PrinterJob printerJob = PrinterJob.createPrinterJob();
+                if (printerJob == null) {
+                    AlertBuilder a = new AlertBuilder();
+                    a.setTitle("Error");
+                    a.setHeaderText("No Printer Available");
+                    a.build().showAndWait();
+                    return;
+                }
                 if (printerJob.showPrintDialog(alert.getOwner())) {
                     WritableImage wi = node.snapshot(null, null);
                     ImageView iv = new ImageView(wi);
