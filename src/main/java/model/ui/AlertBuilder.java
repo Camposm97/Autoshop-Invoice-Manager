@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import model.Preferences;
 import model.GUIScale;
 
+import java.net.URL;
 import java.util.function.Function;
 
 public class AlertBuilder {
@@ -100,9 +101,9 @@ public class AlertBuilder {
             alert.getDialogPane().setContent(content);
         }
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(App.class.getResource("../view/App.css").toExternalForm());
+        URL url = App.class.getClassLoader().getResource("view/App.css");
+        dialogPane.getStylesheets().add(url.toExternalForm());
         dialogPane.getStyleClass().add(GUIScale.getStyleClass(Preferences.get().getGuiScale()));
-        System.out.println(dialogPane);
         return alert;
     }
 }
