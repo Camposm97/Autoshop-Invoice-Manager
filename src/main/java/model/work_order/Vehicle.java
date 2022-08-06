@@ -1,8 +1,9 @@
 package model.work_order;
 
 import javafx.beans.property.SimpleStringProperty;
+import org.jetbrains.annotations.NotNull;
 
-public class Vehicle {
+public class Vehicle implements Comparable<Vehicle> {
     private String vin;
     private String year;
     private String make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut;
@@ -163,5 +164,10 @@ public class Vehicle {
 
     public SimpleStringProperty mileageOutProperty() {
         return new SimpleStringProperty(mileageOut);
+    }
+
+    @Override
+    public int compareTo(@NotNull Vehicle o) {
+        return vin.compareTo(((Vehicle) o).getVin());
     }
 }

@@ -59,9 +59,17 @@ public class VehicleStore {
         }
     }
 
-    public void deleteById(String vin) {
+    public void deleteByVin(String vin) {
         try {
             c.createStatement().execute("delete from vehicle where vin=\"" + vin + "\"");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteByCustomerId(int id) {
+        try {
+            c.createStatement().execute("delete from vehicle where customer_id = " + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
