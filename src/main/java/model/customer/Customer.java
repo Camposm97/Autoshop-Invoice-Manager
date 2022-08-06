@@ -2,8 +2,9 @@ package model.customer;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import org.jetbrains.annotations.NotNull;
 
-public class Customer {
+public class Customer implements Comparable<Customer> {
     private int id;
     private String firstName, lastName, phone, email, company;
     private Address address;
@@ -147,5 +148,10 @@ public class Customer {
                 ", company='" + company + '\'' +
                 ", address=" + address +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NotNull Customer o) {
+        return Integer.compare(id, o.id);
     }
 }

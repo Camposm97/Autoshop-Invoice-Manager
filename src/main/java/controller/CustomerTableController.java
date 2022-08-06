@@ -1,14 +1,13 @@
 package controller;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import app.App;
 import javafx.fxml.FXML;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
@@ -17,7 +16,6 @@ import model.ui.FX;
 import model.work_order.Vehicle;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.Optional;
 
 public class CustomerTableController {
@@ -33,6 +31,11 @@ public class CustomerTableController {
     TableView<Vehicle> tvVehicle;
     @FXML
     TableColumn<Vehicle, String> colVin, colLicensePlate, colColor, colYear, colMake, colModel, colEngine, colTransmission;
+    @FXML
+    Button btDelCustomer, btWorkOrderWithCustomer, btDelVehicle, btWorkOrderWithCustomerAndVehicle;
+    @FXML
+    HBox hBoxCustomerBtns, hBoxVehicleBtns;
+
     @FXML
     public void initialize() {
         tfFirstName.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
@@ -124,19 +127,16 @@ public class CustomerTableController {
         });
         tvCustomer.getItems().setAll(DB.get().customers().getAll());
         FX.autoResizeColumns(tvCustomer);
-        ContextMenu cm = initContextMenu();
-        tvCustomer.setOnContextMenuRequested(e -> {
-            if (tvCustomer.getSelectionModel().getSelectedItem() != null) {
-                cm.show(tvCustomer.getScene().getWindow(), MouseInfo.getPointerInfo().getLocation().getX(), MouseInfo.getPointerInfo().getLocation().getY());
-            }
-        });
+
         tvCustomer.setOnMouseClicked(e -> {
             if (root.getChildren().contains(tvVehicle)) {
-                if (tvCustomer.getSelectionModel().getSelectedItem() != null) {
+                if (getSelectedCustomer() != null) {
                     int customerId = getSelectedCustomer().getId();
                     // Get all vehicles with that customer id and display in vehicle table
                     tvVehicle.getItems().setAll(DB.get().vehicles().getAllByCustomerId(customerId));
                     FX.autoResizeColumns(tvVehicle);
+                    btDelCustomer.setDisable(false);
+                    btWorkOrderWithCustomer.setDisable(false);
                 }
             }
         });
@@ -208,6 +208,14 @@ public class CustomerTableController {
             DB.get().vehicles().update(v);
         });
 
+        tvVehicle.setOnMouseClicked(e -> {
+            if (root.getChildren().contains(tvCustomer)) {
+                if (getSelectedVehicle() != null) {
+                    btDelVehicle.setDisable(false);
+                    btWorkOrderWithCustomerAndVehicle.setDisable(false);
+                }
+            }
+        });
     }
 
     public void refresh() {
@@ -226,7 +234,9 @@ public class CustomerTableController {
                 }
             }
         });
+        root.getChildren().remove(hBoxCustomerBtns);
         root.getChildren().remove(tvVehicle);
+        root.getChildren().remove(hBoxVehicleBtns);
     }
 
     public void connect(@NotNull WorkOrderWorkspaceController controller) {
@@ -240,7 +250,9 @@ public class CustomerTableController {
                 }
             }
         });
+        root.getChildren().remove(hBoxCustomerBtns);
         root.getChildren().remove(tvVehicle);
+        root.getChildren().remove(hBoxVehicleBtns);
     }
 
     public void disableEditing() {
@@ -273,31 +285,55 @@ public class CustomerTableController {
         return tvCustomer.getSelectionModel().getSelectedItem();
     }
 
-    public ContextMenu initContextMenu() {
-        MenuItem miDelete = new MenuItem("Delete");
-        miDelete.setOnAction(new DeleteCustomerHandler());
-        ContextMenu cm = new ContextMenu();
-        cm.getItems().add(miDelete);
-        return cm;
+    public Vehicle getSelectedVehicle() {
+        return tvVehicle.getSelectionModel().getSelectedItem();
     }
 
-    private class DeleteCustomerHandler implements EventHandler<ActionEvent> {
-        @Override
-        public void handle(ActionEvent e) {
-            Customer cus = tvCustomer.getSelectionModel().getSelectedItem();
-            AlertBuilder builder = new AlertBuilder();
-            builder.setAlertType(Alert.AlertType.CONFIRMATION)
-                    .setTitle("Delete Customer")
-                    .setHeaderText("Are you sure you want to delete this customer?")
-                    .setContentText(cus.toFormattedString())
-                    .setYesNoBtns();
-            Optional<ButtonType> result = builder.build().showAndWait();
-            result.ifPresent(x -> {
-                if (!x.getButtonData().isCancelButton()) {
-                    DB.get().customers().deleteById(cus.getId());
-                    tvCustomer.getItems().removeIf(c -> c.getId() == cus.getId());
-                }
-            });
-        }
+    public void deleteCustomer() {
+        // Delete Customer and Vehicles owned by customer
+        Customer cus = getSelectedCustomer();
+        AlertBuilder builder = new AlertBuilder();
+        builder.setAlertType(Alert.AlertType.CONFIRMATION)
+                .setTitle("Delete Customer")
+                .setHeaderText("Are you sure you want to delete this customer?")
+                .setContentText(cus.toFormattedString() + "\n" + "Deleting a customer also delete all associated vehicles.")
+                .setYesNoBtns();
+        Optional<ButtonType> rs = builder.build().showAndWait();
+        rs.ifPresent(e -> {
+            if (!e.getButtonData().isCancelButton()) {
+                DB.get().vehicles().deleteByCustomerId(cus.getId());
+                DB.get().customers().deleteById(cus.getId());
+                tvCustomer.getItems().remove(cus);
+                tvVehicle.getItems().clear();
+            }
+        });
+    }
+
+    public void deleteVehicle() {
+        Vehicle v = getSelectedVehicle();
+        AlertBuilder builder = new AlertBuilder();
+        builder.setAlertType(Alert.AlertType.CONFIRMATION).setTitle("Delete Vehicle").setHeaderText("Are you sure you want to delete this vehicle?").setContentText(v.toString()).setYesNoBtns();
+        Optional<ButtonType> rs = builder.build().showAndWait();
+        rs.ifPresent(e -> {
+            if (!e.getButtonData().isCancelButton()) {
+                DB.get().vehicles().deleteByVin(v.getVin());
+                tvVehicle.getItems().remove(v);
+            }
+        });
+    }
+
+    public void createWorkOrderWithCustomer() {
+        WorkOrderWorkspaceController controller = new WorkOrderWorkspaceController();
+        Parent node = FX.view("Work_Order_Workspace.fxml", controller);
+        controller.loadCustomer(getSelectedCustomer());
+        App.setDisplay(node);
+    }
+
+    public void createWorkOrderWithCustomerAndVehicle() {
+        WorkOrderWorkspaceController controller = new WorkOrderWorkspaceController();
+        Parent node = FX.view("Work_Order_Workspace.fxml", controller);
+        controller.loadCustomer(getSelectedCustomer());
+        controller.loadVehicle(getSelectedVehicle());
+        App.setDisplay(node);
     }
 }
