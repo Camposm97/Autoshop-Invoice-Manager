@@ -27,6 +27,7 @@ public class AutoPartWorkspaceController {
     public void initialize() {
         tfPartNumber.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(newValue, tfPartDesc.getText())));
         tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(tfPartNumber.getText(), newValue)));
+        tfPartQuantity.setText("1");
         colPartNumber.setCellValueFactory(e -> e.getValue().nameProperty());
         colPartDesc.setCellValueFactory(e -> e.getValue().descProperty());
         colPartRetailPrice.setCellValueFactory(e -> e.getValue().retailPriceProperty());

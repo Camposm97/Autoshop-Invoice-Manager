@@ -59,9 +59,9 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     TextField tfPartsTotal, tfTaxTotal, tfDiscount, tfLaborTotal, tfSubtotal, tfTotal;
     @FXML
-    TextField tfWorkOrderId, tfDateCreated;
+    TextField tfWorkOrderId;
     @FXML
-    DatePicker dateCompletedPicker;
+    DatePicker dateCreated, dateCompletedPicker;
     @FXML
     TextField tfTaxRate;
     @FXML
@@ -144,7 +144,11 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         tvPayment.setItems(workOrder.paymentList());
 
         // Set date created value to current date
-        tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
+//        tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
+        dateCreated.setValue(workOrder.getDateCreated().toLocalDate());
+        dateCreated.setOnAction(e -> {
+            workOrder.setDateCreated(Date.valueOf(dateCreated.getValue()));
+        });
         dateCompletedPicker.setConverter(new StringConverter<>() {
             @Override
             public String toString(LocalDate x) {

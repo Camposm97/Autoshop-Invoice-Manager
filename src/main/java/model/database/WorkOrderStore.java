@@ -305,6 +305,7 @@ public class WorkOrderStore {
         try {
             PreparedStatement prepStmt = c.prepareStatement(
                     "update work_order set " +
+                            "date_created = ?, " +
                             "date_completed = ?," +
                             "customer_first_name = ?," +
                             "customer_last_name = ?," +
@@ -326,27 +327,28 @@ public class WorkOrderStore {
                             "vehicle_mileage_in = ?," +
                             "vehicle_mileage_out = ? " +
                             "where work_order_id = ?");
-            prepStmt.setDate(1, workOrder.getDateCompleted());
-            prepStmt.setString(2, workOrder.getCustomer().getFirstName());
-            prepStmt.setString(3, workOrder.getCustomer().getLastName());
-            prepStmt.setString(4, workOrder.getCustomer().getPhone());
-            prepStmt.setString(5, workOrder.getCustomer().getEmail());
-            prepStmt.setString(6, workOrder.getCustomer().getCompany());
-            prepStmt.setString(7, workOrder.getCustomer().getAddress().getStreet());
-            prepStmt.setString(8, workOrder.getCustomer().getAddress().getCity());
-            prepStmt.setString(9, workOrder.getCustomer().getAddress().getState());
-            prepStmt.setString(10, workOrder.getCustomer().getAddress().getZip());
-            prepStmt.setString(11, workOrder.getVehicle().getVin());
-            prepStmt.setString(12, workOrder.getVehicle().getYear());
-            prepStmt.setString(13, workOrder.getVehicle().getMake());
-            prepStmt.setString(14, workOrder.getVehicle().getModel());
-            prepStmt.setString(15, workOrder.getVehicle().getLicensePlate());
-            prepStmt.setString(16, workOrder.getVehicle().getColor());
-            prepStmt.setString(17, workOrder.getVehicle().getEngine());
-            prepStmt.setString(18, workOrder.getVehicle().getTransmission());
-            prepStmt.setString(19, workOrder.getVehicle().getMileageIn());
-            prepStmt.setString(20, workOrder.getVehicle().getMileageOut());
-            prepStmt.setInt(21, workOrder.getId());
+            prepStmt.setDate(1, workOrder.getDateCreated());
+            prepStmt.setDate(2, workOrder.getDateCompleted());
+            prepStmt.setString(3, workOrder.getCustomer().getFirstName());
+            prepStmt.setString(4, workOrder.getCustomer().getLastName());
+            prepStmt.setString(5, workOrder.getCustomer().getPhone());
+            prepStmt.setString(6, workOrder.getCustomer().getEmail());
+            prepStmt.setString(7, workOrder.getCustomer().getCompany());
+            prepStmt.setString(8, workOrder.getCustomer().getAddress().getStreet());
+            prepStmt.setString(9, workOrder.getCustomer().getAddress().getCity());
+            prepStmt.setString(10, workOrder.getCustomer().getAddress().getState());
+            prepStmt.setString(11, workOrder.getCustomer().getAddress().getZip());
+            prepStmt.setString(12, workOrder.getVehicle().getVin());
+            prepStmt.setString(13, workOrder.getVehicle().getYear());
+            prepStmt.setString(14, workOrder.getVehicle().getMake());
+            prepStmt.setString(15, workOrder.getVehicle().getModel());
+            prepStmt.setString(16, workOrder.getVehicle().getLicensePlate());
+            prepStmt.setString(17, workOrder.getVehicle().getColor());
+            prepStmt.setString(18, workOrder.getVehicle().getEngine());
+            prepStmt.setString(19, workOrder.getVehicle().getTransmission());
+            prepStmt.setString(20, workOrder.getVehicle().getMileageIn());
+            prepStmt.setString(21, workOrder.getVehicle().getMileageOut());
+            prepStmt.setInt(22, workOrder.getId());
             prepStmt.execute();
 
             Iterator<AutoPart> autoPartIterator = workOrder.autoPartIterator();

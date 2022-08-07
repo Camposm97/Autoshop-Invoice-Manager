@@ -15,114 +15,204 @@
       <URL value="@App.css" />
    </stylesheets>
    <children>
-      <Text fx:id="txtDate" strokeType="OUTSIDE" strokeWidth="0.0" text="8/19/2020 7:03:32 PM" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="2.0">
+      <Text fx:id="txtDate" strokeType="OUTSIDE" strokeWidth="0.0" text="8/19/2020" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="2.0">
          <font>
-            <Font size="12.0" />
+            <Font size="10.0" />
          </font>
       </Text>
       <VBox alignment="CENTER" spacing="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
          <children>
             <Text fx:id="txtOwnerCompany" strokeType="OUTSIDE" strokeWidth="0.0" text="Precison Automotive Services Inc.">
                <font>
-                  <Font name="System Bold" size="13.0" />
+                  <Font name="System Bold" size="12.0" />
                </font>
             </Text>
             <Text fx:id="txtOwnerAddress" strokeType="OUTSIDE" strokeWidth="0.0" text="123 Mainstreet Ave. City, State Zip">
                <font>
-                  <Font size="12.0" />
+                  <Font size="10.0" />
                </font></Text>
             <Text fx:id="txtOwnerPhone" strokeType="OUTSIDE" strokeWidth="0.0" text="123-456-7890">
                <font>
-                  <Font size="12.0" />
+                  <Font size="10.0" />
                </font></Text>
             <Text fx:id="txtShop" strokeType="OUTSIDE" strokeWidth="0.0" text="NYS Repair Shop #3493940">
                <font>
-                  <Font size="12.0" />
+                  <Font size="10.0" />
                </font>
             </Text>
          </children>
       </VBox>
       <Text fx:id="txtWorkOrderId" strokeType="OUTSIDE" strokeWidth="0.0" text=" Work Order # 0000" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
          <font>
-            <Font size="12.0" />
+            <Font size="10.0" />
          </font></Text>
       <AnchorPane fx:id="anchorCustomer" maxHeight="-Infinity" styleClass="information_form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="90.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
             <Label contentDisplay="RIGHT" text="Name:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="20.0">
                <graphic>
-                  <Text fx:id="txtName" strokeType="OUTSIDE" strokeWidth="0.0" text="Christopher Shufflebottom" />
+                  <Text fx:id="txtName" strokeType="OUTSIDE" strokeWidth="0.0" text="Christopher Shufflebottom">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" layoutX="190.0" text="Phone:" AnchorPane.topAnchor="20.0">
                <graphic>
-                  <Text fx:id="txtPhone" strokeType="OUTSIDE" strokeWidth="0.0" text="000-000-0000" />
+                  <Text fx:id="txtPhone" strokeType="OUTSIDE" strokeWidth="0.0" text="000-000-0000">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" layoutX="320.0" text="Email:" AnchorPane.topAnchor="20.0">
                <graphic>
-                  <Text fx:id="txtEmail" strokeType="OUTSIDE" strokeWidth="0.0" text="christopher.cunningham@gmail.com" />
+                  <Text fx:id="txtEmail" strokeType="OUTSIDE" strokeWidth="0.0" text="christopher.cunningham@gmail.com">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" text="Company:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="36.0">
                <graphic>
-                  <Text fx:id="txtCompany" strokeType="OUTSIDE" strokeWidth="0.0" text="Precision Automotive Services Inc." />
+                  <Text fx:id="txtCompany" strokeType="OUTSIDE" strokeWidth="0.0" text="Precision Automotive Services Inc.">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" text="Billing Address:" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="52.0">
                <graphic>
-                  <Text fx:id="txtBillingAddress" strokeType="OUTSIDE" strokeWidth="0.0" text="789 Montauk Highway Westhampton Beach, Massachusetts 11345" />
+                  <Text fx:id="txtBillingAddress" strokeType="OUTSIDE" strokeWidth="0.0" text="789 Montauk Highway Westhampton Beach, Massachusetts 11345">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="anchorVehicle" maxHeight="-Infinity" styleClass="information_form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="165.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Vehicle Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Vehicle Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
             <Label contentDisplay="RIGHT" text="VIN:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="20.0">
                <graphic>
-                  <Text fx:id="txtVin" strokeType="OUTSIDE" strokeWidth="0.0" text="QWERTY34JH98WE" />
+                  <Text fx:id="txtVin" strokeType="OUTSIDE" strokeWidth="0.0" text="QWERTY34JH98WE">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" text="Year:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="36.0">
                <graphic>
-                  <Text fx:id="txtYear" strokeType="OUTSIDE" strokeWidth="0.0" text="2014" />
+                  <Text fx:id="txtYear" strokeType="OUTSIDE" strokeWidth="0.0" text="2014">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" text="Make:" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="52.0">
                <graphic>
-                  <Text fx:id="txtMake" strokeType="OUTSIDE" strokeWidth="0.0" text="Mercedes-Benz" />
+                  <Text fx:id="txtMake" strokeType="OUTSIDE" strokeWidth="0.0" text="Mercedes-Benz">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" layoutX="150.0" text="Model:" AnchorPane.topAnchor="20.0">
                <graphic>
-                  <Text fx:id="txtModel" strokeType="OUTSIDE" strokeWidth="0.0" text="Grand C4 Picasso" />
+                  <Text fx:id="txtModel" strokeType="OUTSIDE" strokeWidth="0.0" text="Grand C4 Picasso">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" layoutX="150.0" text="License Plate:" AnchorPane.topAnchor="36.0">
                <graphic>
-                  <Text fx:id="txtLicensePlate" strokeType="OUTSIDE" strokeWidth="0.0" text="ETD3423" />
+                  <Text fx:id="txtLicensePlate" strokeType="OUTSIDE" strokeWidth="0.0" text="ETD3423">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" layoutX="300.0" text="Engine:" AnchorPane.topAnchor="20.0">
                <graphic>
-                  <Text fx:id="txtEngine" strokeType="OUTSIDE" strokeWidth="0.0" text="4.0 L" />
+                  <Text fx:id="txtEngine" strokeType="OUTSIDE" strokeWidth="0.0" text="4.0 L">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" layoutX="150.0" text="Color:" AnchorPane.bottomAnchor="4.0" AnchorPane.topAnchor="52.0">
                <graphic>
-                  <Text fx:id="txtColor" strokeType="OUTSIDE" strokeWidth="0.0" text="White" />
+                  <Text fx:id="txtColor" strokeType="OUTSIDE" strokeWidth="0.0" text="White">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" layoutX="300.0" layoutY="10.0" text="Transmission:" AnchorPane.topAnchor="36.666666666666664">
                <graphic>
-                  <Text fx:id="txtTransmission" strokeType="OUTSIDE" strokeWidth="0.0" text="4WD Automatic" />
+                  <Text fx:id="txtTransmission" strokeType="OUTSIDE" strokeWidth="0.0" text="4WD Automatic">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
             <Label contentDisplay="RIGHT" layoutX="300.0" layoutY="20.0" text="Mileage In/Out:" AnchorPane.bottomAnchor="4.0" AnchorPane.topAnchor="52.0">
                <graphic>
-                  <Text fx:id="txtMileageInAndOut" strokeType="OUTSIDE" strokeWidth="0.0" text="139000-139005 (5)" />
+                  <Text fx:id="txtMileageInAndOut" strokeType="OUTSIDE" strokeWidth="0.0" text="139000-139005 (5)">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </graphic>
+               <font>
+                  <Font size="10.0" />
+               </font>
             </Label>
          </children>
       </AnchorPane>
@@ -137,14 +227,29 @@
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="50.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Part Number" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="QTY" GridPane.columnIndex="3" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Unit Price" GridPane.columnIndex="2" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total" GridPane.columnIndex="4" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Part Number">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="QTY" GridPane.columnIndex="3">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Unit Price" GridPane.columnIndex="2">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total" GridPane.columnIndex="4">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </children>
             </GridPane>
          </children>
@@ -161,9 +266,18 @@
                 <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Labor Code" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total" GridPane.columnIndex="2" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Labor Code">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total" GridPane.columnIndex="2">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Text>
                </children>
             </GridPane>
          </children>
@@ -171,20 +285,62 @@
       <AnchorPane fx:id="anchorProblem" prefHeight="125.0" prefWidth="391.0" styleClass="information_form" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="622.0" />
       <AnchorPane fx:id="anchorTotals" maxHeight="-Infinity" prefHeight="125.0" styleClass="information_form" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="395.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="622.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Parts Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0" />
-            <Text fx:id="txtPartsTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Labor Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="16.0" />
-            <Text fx:id="txtLaborTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="16.0" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Subtotal" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="40.0" />
-            <Text fx:id="txtSubtotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="40.0" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sales Tax" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="52.0" />
-            <Text fx:id="txtSalesTax" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="52.0" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Work Order Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="76.0" />
-            <Text fx:id="txtWorkOrderTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="76.0" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Payments" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="88.0" />
-            <Text fx:id="txtTotalPayment" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="88.0" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Amount Due" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="100.0" />
-            <Text fx:id="txtAmountDue" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="100.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Parts Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text fx:id="txtPartsTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Labor Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="16.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text fx:id="txtLaborTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="16.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Subtotal" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="40.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text fx:id="txtSubtotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="40.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sales Tax" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="52.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text fx:id="txtSalesTax" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="52.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Work Order Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="76.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text fx:id="txtWorkOrderTotal" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="76.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Payments" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="88.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text fx:id="txtTotalPayment" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="88.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Amount Due" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="100.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
+            <Text fx:id="txtAmountDue" strokeType="OUTSIDE" strokeWidth="0.0" text="\$ ####.##" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="100.0">
+               <font>
+                  <Font size="10.0" />
+               </font></Text>
          </children></AnchorPane>
    </children>
 </AnchorPane>

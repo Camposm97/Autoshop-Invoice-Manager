@@ -374,7 +374,7 @@
                               <Label text="Tax Rate" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                         <Label text="Date Completed" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                         <TextField fx:id="tfWorkOrderId" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                        <TextField fx:id="tfDateCreated" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <DatePicker fx:id="dateCreated" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <TextField fx:id="tfTaxRate" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                         <DatePicker fx:id="dateCompletedPicker" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                               <Separator prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="3" />

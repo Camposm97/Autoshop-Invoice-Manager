@@ -2,6 +2,7 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
@@ -71,6 +72,11 @@ public class WorkOrderPrintController {
             Text txtUnitPrice = new Text(f.apply(a.getRetailPrice()));
             Text txtQty = new Text(String.valueOf(a.getQuantity()));
             Text txtSubtotal = new Text(f.apply(a.subtotal()));
+            txtName.setFont(Font.font(10));
+            txtDesc.setFont(Font.font(10));
+            txtUnitPrice.setFont(Font.font(10));
+            txtQty.setFont(Font.font(10));
+            txtSubtotal.setFont(Font.font(10));
             gridPaneParts.addRow(i, txtName, txtDesc, txtUnitPrice, txtQty, txtSubtotal);
         }
         Iterator<Labor> laborIterator = workOrder.laborIterator();
@@ -79,6 +85,9 @@ public class WorkOrderPrintController {
             Text txtCode = new Text(lbr.getName());
             Text txtDesc = new Text(lbr.getDesc());
             Text txtSubtotal = new Text(f.apply(lbr.subtotal()));
+            txtCode.setFont(Font.font(10));
+            txtDesc.setFont(Font.font(10));
+            txtSubtotal.setFont(Font.font(10));
             gridPaneLabor.addRow(i, txtCode, txtDesc, txtSubtotal);
         }
         txtPartsTotal.setText(g.apply(workOrder.partsSubtotal()));
