@@ -61,7 +61,7 @@ public class WorkOrderTableController {
             tv.setOnMouseClicked(e -> {
                 if (selectWorkOrder.apply(e)) editWorkOrder();
             });
-            FX.autoResizeColumns(tv);
+            FX.autoResizeColumns(tv,75);
         });
     }
 

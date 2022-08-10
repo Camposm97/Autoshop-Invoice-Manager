@@ -7,9 +7,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
+import model.ui.FX;
 import model.work_order.AutoPart;
 import model.database.DB;
 import model.work_order.WorkOrder;
+
+import java.util.Arrays;
 
 public class AutoPartWorkspaceController {
     @FXML
@@ -25,8 +28,15 @@ public class AutoPartWorkspaceController {
 
     @FXML
     public void initialize() {
-        tfPartNumber.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(newValue, tfPartDesc.getText())));
-        tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(tfPartNumber.getText(), newValue)));
+        tfPartNumber.textProperty().addListener((o, oldValue, newValue) -> {
+            tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(newValue, tfPartDesc.getText()));
+            FX.autoResizeColumns(tvParts, 30);
+        });
+        tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> {
+            tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(tfPartNumber.getText(), newValue));
+            FX.autoResizeColumns(tvParts, 30);
+            genID();
+        });
         tfPartQuantity.setText("1");
         colPartNumber.setCellValueFactory(e -> e.getValue().nameProperty());
         colPartDesc.setCellValueFactory(e -> e.getValue().descProperty());
@@ -87,5 +97,12 @@ public class AutoPartWorkspaceController {
         autoPart.setId(id);
         DB.get().autoParts().add(autoPart);
         return autoPart;
+    }
+
+    public void genID() {
+        final String REGEX = "[\\s++]";
+        String s = tfPartNumber.getText();
+        String[] tokens = s.split(REGEX);
+        System.out.println(Arrays.toString(tokens));
     }
 }

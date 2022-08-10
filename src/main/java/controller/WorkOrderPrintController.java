@@ -17,7 +17,7 @@ import java.util.function.Function;
 public class WorkOrderPrintController {
     WorkOrder workOrder;
     @FXML
-    Text txtDate, txtOwnerCompany, txtOwnerAddress, txtOwnerPhone, txtShop;
+    Text txtDate, txtOwnerCompany, txtOwnerAddress, txtOwnerPhone, txtShop, txtTitle;
     @FXML
     Text txtWorkOrderId;
     @FXML
@@ -46,6 +46,7 @@ public class WorkOrderPrintController {
         txtOwnerAddress.setText(getAddress());
         txtOwnerPhone.setText(Preferences.get().getPhone());
         txtShop.setText(getShopDetail());
+        txtTitle.setText(Preferences.get().getSpecialTitle());
         txtName.setText(workOrder.getCustomer().getName());
         txtPhone.setText(workOrder.getCustomer().getPhone());
         txtEmail.setText(workOrder.getCustomer().getEmail());
@@ -87,6 +88,7 @@ public class WorkOrderPrintController {
             Text txtSubtotal = new Text(f.apply(lbr.subtotal()));
             txtCode.setFont(Font.font(10));
             txtDesc.setFont(Font.font(10));
+            txtDesc.setWrappingWidth(100);
             txtSubtotal.setFont(Font.font(10));
             gridPaneLabor.addRow(i, txtCode, txtDesc, txtSubtotal);
         }
@@ -104,6 +106,6 @@ public class WorkOrderPrintController {
     }
 
     public String getShopDetail() {
-     return Preferences.get().getState().getAbbreviation() + " Repair Shop #" + Preferences.get().getRepairShopId();
+     return Preferences.get().getState().getAbbreviation() + "S Repair Shop #" + Preferences.get().getRepairShopId();
     }
 }

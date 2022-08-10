@@ -126,7 +126,7 @@ public class CustomerTableController {
             DB.get().customers().update(customer);
         });
         tvCustomer.getItems().setAll(DB.get().customers().getAll());
-        FX.autoResizeColumns(tvCustomer);
+        FX.autoResizeColumns(tvCustomer,75);
 
         tvCustomer.setOnMouseClicked(e -> {
             if (root.getChildren().contains(tvVehicle)) {
@@ -134,7 +134,7 @@ public class CustomerTableController {
                     int customerId = getSelectedCustomer().getId();
                     // Get all vehicles with that customer id and display in vehicle table
                     tvVehicle.getItems().setAll(DB.get().vehicles().getAllByCustomerId(customerId));
-                    FX.autoResizeColumns(tvVehicle);
+                    FX.autoResizeColumns(tvVehicle,75);
                     btDelCustomer.setDisable(false);
                     btWorkOrderWithCustomer.setDisable(false);
                 }

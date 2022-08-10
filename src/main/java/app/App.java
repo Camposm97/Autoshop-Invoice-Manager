@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.GUIScale;
+import model.Preferences;
 import model.database.DB;
 import model.ui.FX;
 
@@ -19,6 +20,10 @@ public class App extends Application {
     private static LinkedList<Integer> recentWorkOrders;
     public static String getTitle() {
         return TITLE;
+    }
+
+    public static void setDisableMenu(boolean flag) {
+        root.getTop().setDisable(flag);
     }
 
     public static void setDisplay(Node node) {
@@ -78,9 +83,8 @@ public class App extends Application {
         Image img = new Image("red_car.png");
         stage.getIcons().add(img);
         stage.show();
-        stage.setOnCloseRequest(e -> {
-            saveRecentWorkOrders();
-        });
+        stage.setOnCloseRequest(e -> saveRecentWorkOrders());
+        System.out.println(Preferences.get());
     }
 
     public static void saveRecentWorkOrders() {
