@@ -20,13 +20,13 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <SplitPane dividerPositions="0.8">
             <items>
                 <VBox maxWidth="-Infinity" spacing="15.0" stylesheets="@App.css">
                     <children>
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#print" text="Print Work Order" />
+                        <Button fx:id="btPrint" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#print" text="Print Work Order" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addPart" text="Add Part" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addLabor" text="Add Labor" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#saveAndClose" text="Save &amp; Close" />
