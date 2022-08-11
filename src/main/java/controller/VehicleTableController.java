@@ -50,7 +50,7 @@ public class VehicleTableController {
     public void refresh(int customerId) {
         this.chosenCustomerId = customerId;
         tv.getItems().setAll(DB.get().vehicles().getAllByCustomerId(customerId));
-        FX.autoResizeColumns(tv);
+        FX.autoResizeColumns(tv,75);
     }
 
     public void connect(WorkOrderWorkspaceController controller) {

@@ -1,9 +1,12 @@
 package controller;
 
 import app.App;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
@@ -32,6 +35,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     protected WorkOrder workOrder;
     protected CustomerTableController customerTableController;
     protected VehicleTableController vehicleTableController;
+    @FXML
+    Button btPrint;
     @FXML
     TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfAddress, tfCity, tfState, tfZip;
     @FXML
@@ -79,6 +84,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     TextField tfTotalPayment, tfInvoiceBalance;
 
+    KeyCodeCombination printAccel = new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN);
+
     public WorkOrderWorkspaceController() { // New Work Order
         this.workOrder = new WorkOrder();
     }
@@ -93,6 +100,9 @@ public class WorkOrderWorkspaceController implements PrefObservable {
      */
     @FXML
     public void initialize() throws IOException {
+        App.setDisableMenu(true);
+        Platform.runLater(() -> btPrint.getScene().getAccelerators().put(printAccel, () -> btPrint.fire()));
+
         // Bind TextFields for auto-completion
         TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueStreets());
         TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
@@ -227,6 +237,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         Preferences.get().removeObserver(this);
         DB.get().clearAllProductsMarkedForDeletion();
         DB.get().clearAllPaymentsMarkedForDeletion();
+        btPrint.getScene().getAccelerators().remove(printAccel);
+        App.setDisableMenu(false);
         App.displayMyCompany();
     }
 

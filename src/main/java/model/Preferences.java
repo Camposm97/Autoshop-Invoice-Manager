@@ -24,6 +24,7 @@ public class Preferences {
     private String company, address, city, tempCompany, tempAddress, tempCity;
     private State state, tempState;
     private String zip, phone, repairShopId, tempZip, tempPhone, tempRepairShopId;
+    private String title, tempTitle;
     private Double laborRate, tempLaborRate;
     private Double taxRate, tempTaxRate;
     private GUIScale guiScale, tempGuiScale;
@@ -43,6 +44,7 @@ public class Preferences {
         zip = "11355";
         phone = "000-000-0000";
         repairShopId = "0000000";
+        title = "Title Goes Here";
         laborRate = 90.0;
         taxRate = 1.08625;
         guiScale = GUIScale.Small;
@@ -80,6 +82,9 @@ public class Preferences {
                                 break;
                             case "repair-shop-id":
                                 this.repairShopId = value;
+                                break;
+                            case "title":
+                                this.title = value;
                                 break;
                             case "labor-rate":
                                 try {
@@ -123,6 +128,7 @@ public class Preferences {
             if (tempZip != null) zip = tempZip;
             if (tempPhone != null) phone = tempPhone;
             if (tempRepairShopId != null) repairShopId = tempRepairShopId;
+            if (tempTitle != null) title = tempTitle;
             if (tempLaborRate != null) laborRate = tempLaborRate;
             if (tempTaxRate != null) taxRate = tempTaxRate;
             if (tempGuiScale != null) guiScale = tempGuiScale;
@@ -134,6 +140,7 @@ public class Preferences {
             pw.println("zip=" + zip);
             pw.println("phone=" + phone);
             pw.println("repair-shop-id=" + repairShopId);
+            pw.println("title=" + title);
             pw.println("labor-rate=" + laborRate);
             pw.println("tax-rate=" + taxRate);
             pw.println("gui-scale=" + guiScale);
@@ -204,6 +211,14 @@ public class Preferences {
 
     public void setRepairShopId(String repairShopId) {
         this.tempRepairShopId = repairShopId;
+    }
+
+    public String getSpecialTitle() {
+        return title;
+    }
+
+    public void setSpecialTitle(String title) {
+        this.tempTitle = title;
     }
 
     public Double getLaborRate() {

@@ -21,6 +21,10 @@ public class AutoPartStore {
                 update(part);
                 return;
             }
+            rs = c.createStatement().executeQuery("select desc from item where desc = \'" + part.getDesc() + "\'");
+            if (rs.next()) {
+                update(part);
+            }
             PreparedStatement prepStmt = c.prepareStatement(
                     "insert into item " +
                             "(item_name,desc,retail_price,list_price,taxable,quantity) " +

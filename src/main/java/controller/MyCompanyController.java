@@ -100,8 +100,8 @@ public class MyCompanyController {
             if (selectWorkOrder.apply(e)) editWorkOrder(tvIncompletedWorkOrders);
         });
 
-        FX.autoResizeColumns(tvRecentWorkOrders);
-        FX.autoResizeColumns(tvIncompletedWorkOrders);
+        FX.autoResizeColumns(tvRecentWorkOrders,75);
+        FX.autoResizeColumns(tvIncompletedWorkOrders,75);
     }
 
     public void editWorkOrder(TableView<WorkOrder> tv) {
