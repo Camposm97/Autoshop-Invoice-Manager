@@ -7,12 +7,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
+import model.database.DB;
 import model.ui.FX;
 import model.work_order.AutoPart;
-import model.database.DB;
 import model.work_order.WorkOrder;
-
-import java.util.Arrays;
 
 public class AutoPartWorkspaceController {
     @FXML
@@ -28,13 +26,13 @@ public class AutoPartWorkspaceController {
 
     @FXML
     public void initialize() {
-        tfPartNumber.textProperty().addListener((o, oldValue, newValue) -> {
-            tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(newValue, tfPartDesc.getText()));
-            FX.autoResizeColumns(tvParts, 30);
-        });
+//        tfPartNumber.textProperty().addListener((o, oldValue, newValue) -> {
+//            tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(newValue, tfPartDesc.getText()));
+//            FX.autoResizeColumns(tvParts, 30);
+//        });
         tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> {
             tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(tfPartNumber.getText(), newValue));
-            FX.autoResizeColumns(tvParts, 30);
+            FX.autoResizeColumns(tvParts, 100);
             genID();
         });
         tfPartQuantity.setText("1");
@@ -100,9 +98,38 @@ public class AutoPartWorkspaceController {
     }
 
     public void genID() {
-        final String REGEX = "[\\s++]";
-        String s = tfPartNumber.getText();
-        String[] tokens = s.split(REGEX);
-        System.out.println(Arrays.toString(tokens));
+        final String REGEX = "\\s+";
+        String s = tfPartDesc.getText();
+        String[] tokens = s.trim().split(REGEX);
+        var strId = new StringBuilder();
+        for (int i = 0; i < tokens.length; i++) {
+            String x = tokens[i].toUpperCase();
+            var len = x.length();
+            try {
+                var n = Integer.parseInt(x);
+                strId.append(n);
+            } catch (NumberFormatException e) {
+                char[] arr = x.toCharArray();
+                if (len <= 2) {
+                    strId.append(x);
+                } else if (len == 3) {
+                    if (x.contains("A/C"))
+                        strId.append("AC");
+                    else
+                        strId.append(x);
+                } else if (len > 3 && len <= 5) {
+                    strId.append(arr[0]);
+                    strId.append(arr[1]);
+                    strId.append(arr[2]);
+                    strId.append(arr[len-1]);
+                } else {
+                    strId.append(arr[0]);
+                    strId.append(arr[1]);
+                    strId.append(arr[len-2]);
+                    strId.append(arr[len-1]);
+                }
+            }
+        }
+        tfPartNumber.setText(strId.toString());
     }
 }
