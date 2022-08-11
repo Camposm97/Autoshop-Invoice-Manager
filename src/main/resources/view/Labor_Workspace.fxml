@@ -3,19 +3,19 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" stylesheets="App.css">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -23,15 +23,10 @@
   </rowConstraints>
    <children>
       <Text fx:id="lblId" strokeType="OUTSIDE" strokeWidth="0.0" text="0" visible="false" />
-      <Label text="Labor Details">
-         <font>
-            <Font name="System Bold" />
-         </font>
-      </Label>
-      <Separator prefWidth="200.0" GridPane.columnIndex="1" />
+      <Label text="Labor Details" styleClass="title_label"/>
       <GridPane hgap="5.0" vgap="5.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
         </columnConstraints>
         <rowConstraints>
@@ -43,14 +38,18 @@
         </rowConstraints>
          <children>
             <Label text="Labor Code" />
-            <Label text="Printed Description" GridPane.rowIndex="1" />
+            <HBox GridPane.rowIndex="1">
+               <children>
+                  <Label text="Printed Description" />
+               </children>
+            </HBox>
             <Label text="Labor Taxable" GridPane.rowIndex="4" />
             <Label text="Billed Hrs" GridPane.rowIndex="2" />
             <Label text="Labor Rate" GridPane.rowIndex="3" />
             <TextField fx:id="tfLaborCode" GridPane.columnIndex="1" />
             <fx:include fx:id="tfBilledHrs" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <fx:include fx:id="tfRate" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextArea fx:id="taDesc" prefHeight="75.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextArea fx:id="taDesc" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <CheckBox fx:id="cbTaxable" mnemonicParsing="false" selected="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
          <GridPane.margin>

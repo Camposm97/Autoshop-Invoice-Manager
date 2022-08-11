@@ -2,6 +2,7 @@ package controller;
 
 import app.App;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -101,7 +102,9 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     public void initialize() throws IOException {
         App.setDisableMenu(true);
-        Platform.runLater(() -> btPrint.getScene().getAccelerators().put(printAccel, () -> btPrint.fire()));
+        Platform.runLater(() -> {
+            btPrint.getScene().getAccelerators().put(printAccel, () -> btPrint.fire());
+        });
 
         // Bind TextFields for auto-completion
         TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueStreets());
@@ -152,6 +155,9 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             if (f.apply(e)) editPayment();
         });
         tvPayment.setItems(workOrder.paymentList());
+        tvPayment.getItems().addListener((ListChangeListener<WorkOrderPayment>) change -> {
+            FX.autoResizeColumns(tvPayment, 100);
+        });
 
         // Set date created value to current date
 //        tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
