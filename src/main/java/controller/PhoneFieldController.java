@@ -11,6 +11,7 @@ public class PhoneFieldController {
     @FXML
     public void initialize() {
         tfPhone.textProperty().addListener((o, oldValue, newValue) -> {
+            if (newValue == null) return;
             if (newValue.length() == 3) {
                 tfPhone.appendText("-");
             }

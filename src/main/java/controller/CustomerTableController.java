@@ -8,11 +8,13 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.ui.AlertBuilder;
 import model.ui.FX;
+import model.ui.PhoneFieldTableCell;
 import model.work_order.Vehicle;
 import org.jetbrains.annotations.NotNull;
 
@@ -70,7 +72,12 @@ public class CustomerTableController {
             DB.get().customers().update(customer);
         });
         colPhone.setCellValueFactory(c -> c.getValue().phoneProperty());
-        colPhone.setCellFactory(TextFieldTableCell.forTableColumn());
+        colPhone.setCellFactory(new Callback<TableColumn<Customer, String>, TableCell<Customer, String>>() {
+            @Override
+            public TableCell<Customer, String> call(TableColumn<Customer, String> customerStringTableColumn) {
+                return new PhoneFieldTableCell<>();
+            }
+        });
         colPhone.setOnEditCommit(e -> {
             int index = e.getTablePosition().getRow();
             Customer customer = e.getTableView().getItems().get(index);
