@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import org.controlsfx.control.tableview2.TableView2?>
 
-<GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VehicleTableController">
+<GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="10.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VehicleTableController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
@@ -31,8 +31,6 @@
       <TextField fx:id="tfModel" promptText="Model" GridPane.columnIndex="5" />
       <TextField fx:id="tfEngine" promptText="Engine" GridPane.columnSpan="2" GridPane.rowIndex="1" />
       <TextField fx:id="tfTransmission" promptText="Transmission" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-      <TextField fx:id="tfMileageIn" promptText="Mileage In" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-      <TextField fx:id="tfMileageOut" promptText="Mileage Out" GridPane.columnIndex="5" GridPane.rowIndex="1" />
       <TableView2 fx:id="tv" GridPane.columnSpan="6" GridPane.rowIndex="2">
          <columns>
             <TableColumn fx:id="colVin" prefWidth="75.0" text="VIN" />
@@ -43,8 +41,6 @@
             <TableColumn fx:id="colModel" prefWidth="75.0" text="Model" />
             <TableColumn fx:id="colEngine" prefWidth="75.0" text="Engine" />
             <TableColumn fx:id="colTransmission" prefWidth="75.0" text="Transmission" />
-            <TableColumn fx:id="colMileageIn" prefWidth="75.0" text="Mileage In" />
-            <TableColumn fx:id="colMileageOut" prefWidth="75.0" text="Mileage Out" />
          </columns>
       </TableView2>
    </children>

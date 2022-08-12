@@ -88,7 +88,7 @@ public class WorkOrderPrintController {
             Text txtSubtotal = new Text(f.apply(lbr.subtotal()));
             txtCode.setFont(Font.font(10));
             txtDesc.setFont(Font.font(10));
-            txtDesc.setWrappingWidth(100);
+            txtDesc.setWrappingWidth(400);
             txtSubtotal.setFont(Font.font(10));
             gridPaneLabor.addRow(i, txtCode, txtDesc, txtSubtotal);
         }

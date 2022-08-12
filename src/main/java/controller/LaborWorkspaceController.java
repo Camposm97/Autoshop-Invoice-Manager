@@ -7,8 +7,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import model.Preferences;
+import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
+
+import java.util.Iterator;
 
 public class LaborWorkspaceController {
     @FXML
@@ -21,9 +24,12 @@ public class LaborWorkspaceController {
     TextField tfBilledHrs, tfRate;
     @FXML
     CheckBox cbTaxable;
+    @FXML
+    CheckBox cbAutoGen;
 
     @FXML
     public void initialize() {
+        tfLaborCode.setText("0");
         tfBilledHrs.setText("1.0");
         tfRate.setText(Preferences.get().getLaborRate().toString());
 
@@ -46,12 +52,12 @@ public class LaborWorkspaceController {
     }
 
     public void saveLabor(WorkOrder workOrder) {
-        Labor labor = buildLabor();
+        Labor labor = buildLabor(workOrder);
         workOrder.addLabor(labor);
     }
 
     public void updateLabor(WorkOrder workOrder, Labor oldLabor) {
-        Labor newLabor = buildLabor();
+        Labor newLabor = buildLabor(workOrder);
         workOrder.updateLabor(oldLabor, newLabor);
     }
 
@@ -64,10 +70,22 @@ public class LaborWorkspaceController {
         cbTaxable.setSelected(labor.isTaxable());
     }
 
-    public Labor buildLabor() {
+    public Labor buildLabor(WorkOrder workOrder) {
         int id = Integer.parseInt(lblId.getText());
         String laborCode = tfLaborCode.getText();
         String desc = taDesc.getText();
+
+        if (cbAutoGen.isSelected()) {
+            Iterator<AutoPart> iter = workOrder.autoPartIterator();
+            StringBuilder sb = new StringBuilder("Installed ");
+            while (iter.hasNext()) {
+                sb.append(iter.next().getDesc());
+                if (iter.hasNext())
+                    sb.append(", ");
+            }
+            desc = sb.toString();
+        }
+
         double billedHrs, rate;
         try {
             billedHrs = Double.parseDouble(tfBilledHrs.getText());
@@ -83,5 +101,10 @@ public class LaborWorkspaceController {
         Labor labor = new Labor(laborCode, desc, billedHrs, rate, taxable);
         labor.setId(id);
         return labor;
+    }
+
+    public void genDesc() {
+        taDesc.setDisable(cbAutoGen.isSelected());
+        taDesc.clear();
     }
 }

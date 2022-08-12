@@ -10,7 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.util.StringConverter;
 import model.PrefObservable;
 import model.Preferences;
 import model.State;
@@ -27,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.function.Function;
 
@@ -155,9 +153,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             if (f.apply(e)) editPayment();
         });
         tvPayment.setItems(workOrder.paymentList());
-        tvPayment.getItems().addListener((ListChangeListener<WorkOrderPayment>) change -> {
-            FX.autoResizeColumns(tvPayment, 100);
-        });
+        FX.autoResizeColumns(tvPayment, 75);
+        tvPayment.getItems().addListener((ListChangeListener<WorkOrderPayment>) change -> FX.autoResizeColumns(tvPayment, 75));
 
         // Set date created value to current date
 //        tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
@@ -165,23 +162,23 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         dateCreated.setOnAction(e -> {
             workOrder.setDateCreated(Date.valueOf(dateCreated.getValue()));
         });
-        dateCompletedPicker.setConverter(new StringConverter<>() {
-            @Override
-            public String toString(LocalDate x) {
-                return x != null ? x.format(DateTimeFormatter.ofPattern("MM/dd/u")) : null;
-            }
-
-            @Override
-            public LocalDate fromString(String s) {
-                return LocalDate.now();
-            }
-        });
+//        dateCompletedPicker.setConverter(new StringConverter<>() {
+//            @Override
+//            public String toString(LocalDate x) {
+//                return x != null ? x.format(DateTimeFormatter.ofPattern("MM/dd/u")) : null;
+//            }
+//
+//            @Override
+//            public LocalDate fromString(String s) {
+//                return LocalDate.now();
+//            }
+//        });
 
         tfTaxRate.setEditable(false);
         tfTaxRate.setText(Preferences.get().getTaxRatePrettyString());
 
         if (workOrder.isNew()) {
-            tfWorkOrderId.setText(String.valueOf(DB.get().workOrders().getNextId()));
+//            tfWorkOrderId.setText(String.valueOf(DB.get().workOrders().getNextId()));
             btVeh.setDisable(true);
         } else {
             loadCustomer(workOrder.getCustomer());
@@ -196,10 +193,14 @@ public class WorkOrderWorkspaceController implements PrefObservable {
 
         FXMLLoader fxmlLoader = FX.load("Customer_Table.fxml");
         customerPopOver = new PopOver(fxmlLoader.load());
+        customerPopOver.setHeaderAlwaysVisible(true);
+        customerPopOver.setTitle("Customer Picker");
         customerTableController = fxmlLoader.getController();
         customerTableController.connect(this);
         fxmlLoader = FX.load("Vehicle_Table.fxml");
         vehiclePopOver = new PopOver(fxmlLoader.load());
+        vehiclePopOver.setHeaderAlwaysVisible(true);
+        vehiclePopOver.setTitle("Vehicle Picker");
         vehicleTableController = fxmlLoader.getController();
         vehicleTableController.connect(this);
 

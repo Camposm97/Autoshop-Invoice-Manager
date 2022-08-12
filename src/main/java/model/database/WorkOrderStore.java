@@ -39,6 +39,7 @@ public class WorkOrderStore {
     }
 
     public WorkOrder add(@NotNull WorkOrder workOrder) {
+        System.out.println(workOrder.getCustomer().getId());
         try {
             // Add work_order row
             PreparedStatement prepStmt = c.prepareStatement(

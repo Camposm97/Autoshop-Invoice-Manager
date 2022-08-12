@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <stylesheets>
       <URL value="@App.css" />
    </stylesheets>
@@ -22,10 +22,7 @@
       </Text>
       <VBox alignment="CENTER" spacing="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
          <children>
-            <Text fx:id="txtOwnerCompany" strokeType="OUTSIDE" strokeWidth="0.0" text="Precison Automotive Services Inc.">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
+            <Text fx:id="txtOwnerCompany" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Company Goes Here" styleClass="title_label">
             </Text>
             <Text fx:id="txtOwnerAddress" strokeType="OUTSIDE" strokeWidth="0.0" text="123 Mainstreet Ave. City, State Zip">
                <font>
@@ -53,7 +50,7 @@
          </font></Text>
       <AnchorPane fx:id="anchorCustomer" maxHeight="-Infinity" styleClass="information_form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="90.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title_label" text="Customer Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
                <font>
                   <Font size="10.0" />
                </font></Text>
@@ -116,7 +113,7 @@
       </AnchorPane>
       <AnchorPane fx:id="anchorVehicle" maxHeight="-Infinity" styleClass="information_form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="165.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Vehicle Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title_label" text="Vehicle Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
                <font>
                   <Font size="10.0" />
                </font></Text>
@@ -235,25 +232,25 @@
                 <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Part Number">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title_label" text="Part Number">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="1">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title_label" text="Description" GridPane.columnIndex="1">
                      <font>
                         <Font size="10.0" />
                      </font>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="QTY" GridPane.columnIndex="3">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title_label" text="QTY" GridPane.columnIndex="3">
                      <font>
                         <Font size="10.0" />
                      </font></Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Unit Price" GridPane.columnIndex="2">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title_label" text="Unit Price" GridPane.columnIndex="2">
                      <font>
                         <Font size="10.0" />
                      </font></Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total" GridPane.columnIndex="4">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title_label" text="Total" GridPane.columnIndex="4">
                      <font>
                         <Font size="10.0" />
                      </font></Text>
@@ -273,15 +270,15 @@
                 <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Labor Code">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title_label" text="Labor Code">
                      <font>
                         <Font size="10.0" />
                      </font></Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="1">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title_label" text="Description" GridPane.columnIndex="1">
                      <font>
                         <Font size="10.0" />
                      </font></Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total" GridPane.columnIndex="2">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title_label" text="Total" GridPane.columnIndex="2">
                      <font>
                         <Font size="10.0" />
                      </font></Text>

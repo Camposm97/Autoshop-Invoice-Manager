@@ -125,8 +125,9 @@ public class CustomerTableController {
             customer.getAddress().setZip(e.getNewValue());
             DB.get().customers().update(customer);
         });
+        final var OFFSET = 75;
         tvCustomer.getItems().setAll(DB.get().customers().getAll());
-        FX.autoResizeColumns(tvCustomer,40);
+        FX.autoResizeColumns(tvCustomer, OFFSET);
 
         tvCustomer.setOnMouseClicked(e -> {
             if (root.getChildren().contains(tvVehicle)) {
@@ -134,7 +135,7 @@ public class CustomerTableController {
                     int customerId = getSelectedCustomer().getId();
                     // Get all vehicles with that customer id and display in vehicle table
                     tvVehicle.getItems().setAll(DB.get().vehicles().getAllByCustomerId(customerId));
-                    FX.autoResizeColumns(tvVehicle,40);
+                    FX.autoResizeColumns(tvVehicle, OFFSET);
                     btDelCustomer.setDisable(false);
                     btWorkOrderWithCustomer.setDisable(false);
                 }
