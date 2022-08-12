@@ -103,7 +103,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     public void initialize() throws IOException {
         App.setDisableMenu(true);
         Platform.runLater(() -> {
-            btPrint.getScene().getAccelerators().put(printAccel, () -> btPrint.fire());
+            App.getScene().getAccelerators().put(printAccel, () -> btPrint.fire());
         });
 
         // Bind TextFields for auto-completion

@@ -38,6 +38,10 @@ public class App extends Application {
         return recentWorkOrders;
     }
 
+    public static Scene getScene() {
+        return root.getScene();
+    }
+
     public static void displayMyCompany() {
         App.setDisplay(FX.view("My_Company.fxml"));
     }

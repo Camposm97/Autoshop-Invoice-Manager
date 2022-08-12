@@ -238,11 +238,13 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Part Number">
                      <font>
                         <Font size="10.0" />
-                     </font></Text>
+                     </font>
+                  </Text>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.columnIndex="1">
                      <font>
                         <Font size="10.0" />
-                     </font></Text>
+                     </font>
+                  </Text>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="QTY" GridPane.columnIndex="3">
                      <font>
                         <Font size="10.0" />

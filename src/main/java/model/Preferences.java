@@ -256,4 +256,21 @@ public class Preferences {
     public void removeObserver(PrefObservable observable) {
         this.observables.remove(observable);
     }
+
+    @Override
+    public String toString() {
+        return "Preferences {" +
+                "\n\t" + company +
+                ",\n\t" + address +
+                ",\n\t" + city +
+                ",\n\t" + state +
+                ",\n\t" + zip +
+                ",\n\t" + phone +
+                ",\n\t" + repairShopId +
+                ",\n\t" + title +
+                ",\n\t" + laborRate +
+                ",\n\t" + taxRate +
+                ",\n\t" + guiScale +
+                "\n}";
+    }
 }
