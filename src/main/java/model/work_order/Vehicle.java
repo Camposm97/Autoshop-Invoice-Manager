@@ -4,9 +4,16 @@ import javafx.beans.property.SimpleStringProperty;
 import org.jetbrains.annotations.NotNull;
 
 public class Vehicle implements Comparable<Vehicle> {
+    private int id;
     private String vin;
     private String year;
     private String make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut;
+
+    public Vehicle(int id, String vin, String year, String make, String model, String licensePlate, String color, String engine, String transmission) {
+        this(vin,year,make,model,licensePlate,color,engine,transmission);
+        this.id = id;
+    }
+
 
     public Vehicle(String vin, String year, String make, String model, String licensePlate, String color, String engine, String transmission, String mileageIn, String mileageOut) {
         this.vin = vin;
@@ -30,6 +37,14 @@ public class Vehicle implements Comparable<Vehicle> {
         this.color = color;
         this.engine = engine;
         this.transmission = transmission;
+    }
+
+    public int getId () {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getVin() {

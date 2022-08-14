@@ -202,16 +202,22 @@ public class WorkOrder implements Billable {
 
     @Override
     public double tax() {
-        double itemTaxSum = itemList.isEmpty() ? 0 : itemList.stream()
-                .filter(item -> item.isTaxable())
-                .map(item -> item.tax())
-                .reduce((x, y) -> x + y)
-                .get();
-        double laborTaxSum = laborList.isEmpty() ? 0 : laborList.stream()
-                .filter(labor -> labor.isTaxable())
-                .map(labor -> labor.tax())
-                .reduce((x, y) -> x + y)
-                .get();
+        double itemTaxSum = 0;
+        if (!itemList.isEmpty()) {
+            Optional<Double> rs = itemList.stream()
+                    .filter(item -> item.isTaxable())
+                    .map(item -> item.tax())
+                    .reduce((x, y) -> x + y);
+            if (rs.isPresent()) itemTaxSum = rs.get();
+        }
+        double laborTaxSum = 0;
+        if (!laborList.isEmpty()) {
+            Optional<Double> rs = laborList.stream()
+                    .filter(labor -> labor.isTaxable())
+                    .map(labor -> labor.tax())
+                    .reduce((x, y) -> x + y);
+            if (rs.isPresent()) laborTaxSum = rs.get();
+        }
         return itemTaxSum + laborTaxSum;
     }
 

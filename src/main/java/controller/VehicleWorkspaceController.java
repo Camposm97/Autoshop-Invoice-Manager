@@ -33,7 +33,7 @@ public class VehicleWorkspaceController {
         TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
         TextFields.bindAutoCompletion(tfColor, DB.get().vehicles().getUniqueColor());
         TextFields.bindAutoCompletion(tfEngine, DB.get().vehicles().getUniqueEngine());
-        TextFields.bindAutoCompletion(tfTransmission, DB.get().vehicles().getUniqueYear());
+        TextFields.bindAutoCompletion(tfTransmission, DB.get().vehicles().getUniqueTransmission());
         try {
             FXMLLoader fxml = FX.load(("Customer_Table.fxml"));
             this.customerPopOver = new PopOver(fxml.load());
@@ -58,8 +58,6 @@ public class VehicleWorkspaceController {
         String color = tfColor.getText();
         String engine = tfEngine.getText();
         String transmission = tfTransmission.getText();
-//        String mileageIn = tfMileageIn.getText();
-//        String mileageOut = tfMileageOut.getText();
         Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission);
         int customerId = this.customer.getId();
         OwnedVehicle ownedVehicle = new OwnedVehicle(customerId, vehicle);

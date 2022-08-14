@@ -51,7 +51,6 @@ public class AlertFactory {
                 FX.view("Auto_Part_Workspace.fxml", controller)).showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
-                System.out.println("Save Part");
                 controller.savePart(workOrder);
             }
         });

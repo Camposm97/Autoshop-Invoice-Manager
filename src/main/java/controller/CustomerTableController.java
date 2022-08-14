@@ -8,13 +8,12 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.ui.AlertBuilder;
 import model.ui.FX;
-import model.ui.PhoneFieldTableCell;
+import model.ui.TableCellFactory;
 import model.work_order.Vehicle;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +35,7 @@ public class CustomerTableController {
     @FXML
     Button btDelCustomer, btWorkOrderWithCustomer, btDelVehicle, btWorkOrderWithCustomerAndVehicle;
     @FXML
-    HBox hBoxCustomerBtns, hBoxVehicleBtns;
+    HBox hBoxCusControls, hBoxVehControls;
 
     @FXML
     public void initialize() {
@@ -55,86 +54,81 @@ public class CustomerTableController {
     }
 
     public void initCustomerTable() {
+        TableCellFactory factory = new TableCellFactory();
         colFirstName.setCellValueFactory(c -> c.getValue().firstNameProperty());
         colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
         colFirstName.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Customer customer = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Customer customer = e.getTableView().getItems().get(i);
             customer.setFirstName(e.getNewValue());
             DB.get().customers().update(customer);
         });
         colLastName.setCellValueFactory(c -> c.getValue().lastNameProperty());
         colLastName.setCellFactory(TextFieldTableCell.forTableColumn());
         colLastName.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Customer customer = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Customer customer = e.getTableView().getItems().get(i);
             customer.setLastName(e.getNewValue());
             DB.get().customers().update(customer);
         });
         colPhone.setCellValueFactory(c -> c.getValue().phoneProperty());
-        colPhone.setCellFactory(new Callback<TableColumn<Customer, String>, TableCell<Customer, String>>() {
-            @Override
-            public TableCell<Customer, String> call(TableColumn<Customer, String> customerStringTableColumn) {
-                return new PhoneFieldTableCell<>();
-            }
-        });
+        colPhone.setCellFactory(x -> factory.initPhoneTableCell());
         colPhone.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Customer customer = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Customer customer = e.getTableView().getItems().get(i);
             customer.setPhone(e.getNewValue());
             DB.get().customers().update(customer);
         });
         colEmail.setCellValueFactory(c -> c.getValue().emailProperty());
         colEmail.setCellFactory(TextFieldTableCell.forTableColumn());
         colEmail.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Customer customer = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Customer customer = e.getTableView().getItems().get(i);
             customer.setEmail(e.getNewValue());
             DB.get().customers().update(customer);
         });
         colCompany.setCellValueFactory(c -> c.getValue().companyProperty());
         colCompany.setCellFactory(TextFieldTableCell.forTableColumn());
         colCompany.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Customer customer = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Customer customer = e.getTableView().getItems().get(i);
             customer.setCompany(e.getNewValue());
             DB.get().customers().update(customer);
         });
         colAddress.setCellValueFactory(c -> c.getValue().getAddress().streetProperty());
         colAddress.setCellFactory(TextFieldTableCell.forTableColumn());
         colAddress.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Customer customer = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Customer customer = e.getTableView().getItems().get(i);
             customer.getAddress().setStreet(e.getNewValue());
             DB.get().customers().update(customer);
         });
         colCity.setCellValueFactory(c -> c.getValue().getAddress().cityProperty());
         colCity.setCellFactory(TextFieldTableCell.forTableColumn());
         colCity.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Customer customer = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Customer customer = e.getTableView().getItems().get(i);
             customer.getAddress().setCity(e.getNewValue());
             DB.get().customers().update(customer);
         });
         colState.setCellValueFactory(c -> c.getValue().getAddress().stateProperty());
         colState.setCellFactory(TextFieldTableCell.forTableColumn());
         colState.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Customer customer = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Customer customer = e.getTableView().getItems().get(i);
             customer.getAddress().setState(e.getNewValue());
             DB.get().customers().update(customer);
         });
         colZip.setCellValueFactory(c -> c.getValue().getAddress().zipProperty());
         colZip.setCellFactory(TextFieldTableCell.forTableColumn());
         colZip.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Customer customer = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Customer customer = e.getTableView().getItems().get(i);
             customer.getAddress().setZip(e.getNewValue());
             DB.get().customers().update(customer);
         });
-        final var OFFSET = 75;
         tvCustomer.getItems().setAll(DB.get().customers().getAll());
-        FX.autoResizeColumns(tvCustomer, OFFSET);
+        FX.autoResizeColumns(tvCustomer, 10);
 
         tvCustomer.setOnMouseClicked(e -> {
             if (root.getChildren().contains(tvVehicle)) {
@@ -142,7 +136,7 @@ public class CustomerTableController {
                     int customerId = getSelectedCustomer().getId();
                     // Get all vehicles with that customer id and display in vehicle table
                     tvVehicle.getItems().setAll(DB.get().vehicles().getAllByCustomerId(customerId));
-                    FX.autoResizeColumns(tvVehicle, OFFSET);
+                    FX.autoResizeColumns(tvVehicle, 25);
                     btDelCustomer.setDisable(false);
                     btWorkOrderWithCustomer.setDisable(false);
                 }
@@ -151,13 +145,21 @@ public class CustomerTableController {
     }
 
     public void initVehicleTable() {
+        TableCellFactory factory = new TableCellFactory();
         colVin.setCellValueFactory(c -> c.getValue().vinProperty());
+        colVin.setCellFactory(c -> factory.initVinTableCell());
+        colVin.setOnEditCommit(e -> {
+            int i = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(i);
+            v.setVin(e.getNewValue());
+            DB.get().vehicles().update(v);
+        });
 
         colLicensePlate.setCellValueFactory(c -> c.getValue().licensePlateProperty());
-        colLicensePlate.setCellFactory(TextFieldTableCell.forTableColumn());
+        colLicensePlate.setCellFactory(c -> factory.initLicensePlateTableCell());
         colLicensePlate.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Vehicle v = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(i);
             v.setLicensePlate(e.getNewValue());
             DB.get().vehicles().update(v);
         });
@@ -165,8 +167,8 @@ public class CustomerTableController {
         colColor.setCellValueFactory(c -> c.getValue().colorProperty());
         colColor.setCellFactory(TextFieldTableCell.forTableColumn());
         colColor.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Vehicle v = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(i);
             v.setColor(e.getNewValue());
             DB.get().vehicles().update(v);
         });
@@ -174,8 +176,8 @@ public class CustomerTableController {
         colYear.setCellValueFactory(c -> c.getValue().yearProperty());
         colYear.setCellFactory(TextFieldTableCell.forTableColumn());
         colYear.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Vehicle v = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(i);
             v.setYear(e.getNewValue());
             DB.get().vehicles().update(v);
         });
@@ -183,8 +185,8 @@ public class CustomerTableController {
         colMake.setCellValueFactory(c -> c.getValue().makeProperty());
         colMake.setCellFactory(TextFieldTableCell.forTableColumn());
         colMake.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Vehicle v = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(i);
             v.setMake(e.getNewValue());
             DB.get().vehicles().update(v);
         });
@@ -192,8 +194,8 @@ public class CustomerTableController {
         colModel.setCellValueFactory(c -> c.getValue().modelProperty());
         colModel.setCellFactory(TextFieldTableCell.forTableColumn());
         colModel.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Vehicle v = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(i);
             v.setModel(e.getNewValue());
             DB.get().vehicles().update(v);
         });
@@ -201,8 +203,8 @@ public class CustomerTableController {
         colEngine.setCellValueFactory(c -> c.getValue().engineProperty());
         colEngine.setCellFactory(TextFieldTableCell.forTableColumn());
         colEngine.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Vehicle v = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(i);
             v.setEngine(e.getNewValue());
             DB.get().vehicles().update(v);
         });
@@ -210,8 +212,8 @@ public class CustomerTableController {
         colTransmission.setCellValueFactory(c -> c.getValue().transmissionProperty());
         colTransmission.setCellFactory(TextFieldTableCell.forTableColumn());
         colTransmission.setOnEditCommit(e -> {
-            int index = e.getTablePosition().getRow();
-            Vehicle v = e.getTableView().getItems().get(index);
+            int i = e.getTablePosition().getRow();
+            Vehicle v = e.getTableView().getItems().get(i);
             v.setTransmission(e.getNewValue());
             DB.get().vehicles().update(v);
         });
@@ -242,9 +244,9 @@ public class CustomerTableController {
                 }
             }
         });
-        root.getChildren().remove(hBoxCustomerBtns);
+        root.getChildren().remove(hBoxCusControls);
         root.getChildren().remove(tvVehicle);
-        root.getChildren().remove(hBoxVehicleBtns);
+        root.getChildren().remove(hBoxVehControls);
     }
 
     public void connect(@NotNull WorkOrderWorkspaceController controller) {
@@ -258,9 +260,9 @@ public class CustomerTableController {
                 }
             }
         });
-        root.getChildren().remove(hBoxCustomerBtns);
+        root.getChildren().remove(hBoxCusControls);
         root.getChildren().remove(tvVehicle);
-        root.getChildren().remove(hBoxVehicleBtns);
+        root.getChildren().remove(hBoxVehControls);
     }
 
     public void disableEditing() {
@@ -324,7 +326,7 @@ public class CustomerTableController {
         Optional<ButtonType> rs = builder.build().showAndWait();
         rs.ifPresent(e -> {
             if (!e.getButtonData().isCancelButton()) {
-                DB.get().vehicles().deleteByVin(v.getVin());
+                DB.get().vehicles().deleteById(v.getId());
                 tvVehicle.getItems().remove(v);
             }
         });

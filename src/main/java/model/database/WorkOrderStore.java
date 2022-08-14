@@ -154,45 +154,14 @@ public class WorkOrderStore {
                 workOrder.setDateCreated(dateCreated);
                 workOrder.setDateCompleted(dateCompleted);
 
-                ResultSet rsItem = c.createStatement().executeQuery("select * from work_order_item " +
-                        "where work_order_id = " + workOrderId);
-                while (rsItem.next()) {
-                    int id = rsItem.getInt(1);
-                    String name = rsItem.getString(3);
-                    String desc = rsItem.getString(4);
-                    double retailPrice = rsItem.getDouble(5);
-                    double listPrice = rsItem.getDouble(6);
-                    int quantity = rsItem.getInt(7);
-                    boolean taxable = rsItem.getBoolean(8);
-                    AutoPart item = new AutoPart(name, desc, retailPrice, listPrice, quantity, taxable);
-                    item.setId(id);
-                    workOrder.addAutoPart(item);
-                }
+                List<AutoPart> autoParts = getAutoPartsByWorkOrderId(workOrderId);
+                for (AutoPart x : autoParts) workOrder.addAutoPart(x);
 
-                ResultSet rsLabor = c.createStatement().executeQuery("select * from work_order_labor " +
-                        "where work_order_id = " + workOrderId);
-                while (rsLabor.next()) {
-                    int id = rsLabor.getInt(1);
-                    String laborCode = rsLabor.getString(3);
-                    String desc = rsLabor.getString(4);
-                    double billedHrs = rsLabor.getDouble(5);
-                    double rate = rsLabor.getDouble(6);
-                    boolean taxable = rsLabor.getBoolean(7);
-                    Labor labor = new Labor(laborCode, desc, billedHrs, rate, taxable);
-                    labor.setId(id);
-                    workOrder.addLabor(labor);
-                }
+                List<Labor> labors = getLaborsByWorkOrderId(workOrderId);
+                for (Labor x : labors) workOrder.addLabor(x);
 
-                ResultSet rsPayment = c.createStatement().executeQuery("select * from work_order_payment " +
-                        "where work_order_id = " + workOrderId);
-                while (rsPayment.next()) {
-                    int id = rsPayment.getInt(1);
-                    Date date = rsPayment.getDate(3);
-                    Payment type = Payment.valueOf(rsPayment.getString(4));
-                    double amount = rsPayment.getDouble(5);
-                    WorkOrderPayment payment = new WorkOrderPayment(id, date, type, amount);
-                    workOrder.addPayment(payment);
-                }
+                List<WorkOrderPayment> payments = getPaymentsByWorkOrderId(workOrderId);
+                for (WorkOrderPayment x : payments) workOrder.addPayment(x);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -268,6 +237,24 @@ public class WorkOrderStore {
                 WorkOrder workOrder = getById(workOrderId);
                 list.add(workOrder);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<WorkOrder> filter(String firstName, String lastName, String company) {
+        List<WorkOrder> list = new LinkedList<>();
+        try {
+             ResultSet rs = c.createStatement().executeQuery(
+                     "select work_order_id from work_order where " +
+                         "customer_first_name like \"" + firstName + "%\" and " +
+                         "customer_last_name like \"" + lastName + "%\" and " +
+                         "customer_company like \"" + company + "%\"");
+             while (rs.next()) {
+                 WorkOrder workOrder = getById(rs.getInt(1));
+                 list.add(workOrder);
+             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -428,6 +415,42 @@ public class WorkOrderStore {
         prepStmt.execute();
     }
 
+    public AutoPart getAutoPartById(int id) {
+        AutoPart autoPart = null;
+        try {
+            ResultSet rs = c.createStatement().executeQuery("select * from work_order_item where work_order_item_id = " + id);
+            while (rs.next()) {
+                String name = rs.getString(3);
+                String desc = rs.getString(4);
+                double retailPrice = rs.getDouble(5);
+                double listPrice = rs.getDouble(6);
+                int quantity = rs.getInt(7);
+                boolean taxable = rs.getBoolean(8);
+                autoPart = new AutoPart(name, desc, retailPrice, listPrice, quantity, taxable);
+                autoPart.setId(id);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            return autoPart;
+        }
+    }
+
+    public List<AutoPart> getAutoPartsByWorkOrderId(int workOrderId) {
+        List<AutoPart> list = new LinkedList<>();
+        try {
+            ResultSet rs = c.createStatement().executeQuery("select work_order_item_id from work_order_item where work_order_id = " + workOrderId);
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                AutoPart autoPart = getAutoPartById(id);
+                list.add(autoPart);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public void updateAutoPart(@NotNull AutoPart item) throws SQLException {
         PreparedStatement prepStmt = c.prepareStatement(
                 "update work_order_item set " +
@@ -470,6 +493,43 @@ public class WorkOrderStore {
         prepStmt.setDouble(5, labor.getRate());
         prepStmt.setBoolean(6, labor.isTaxable());
         prepStmt.execute();
+    }
+
+    public Labor getLaborById(int id) {
+        Labor labor = null;
+        try {
+            ResultSet rs = c.createStatement().executeQuery("select * from work_order_labor where work_order_labor_id = " + id);
+            while (rs.next()) {
+                String laborCode = rs.getString(3);
+                String desc = rs.getString(4);
+                double billedHrs = rs.getDouble(5);
+                double rate = rs.getDouble(6);
+                boolean taxable = rs.getBoolean(7);
+                labor = new Labor(laborCode, desc, billedHrs, rate, taxable);
+                labor.setId(id);
+                return labor;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+             return labor;
+        }
+    }
+
+    public List<Labor> getLaborsByWorkOrderId(int workOrderId) {
+        List<Labor> list = new LinkedList<>();
+        try {
+            ResultSet rs = c.createStatement().executeQuery("select work_order_labor_id from work_order_labor " +
+                    "where work_order_id = " + workOrderId);
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                Labor labor = getLaborById(id);
+                list.add(labor);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
     }
 
     public void updateLabor(@NotNull Labor labor) throws SQLException {

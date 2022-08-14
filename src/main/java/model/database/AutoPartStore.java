@@ -57,13 +57,12 @@ public class AutoPartStore {
         }
     }
 
-    public List<AutoPart> getFilteredAutoParts(String s1, String s2) {
+    public List<AutoPart> getFilteredAutoParts(String arg0) {
         List<AutoPart> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery(
                     "select * from item where " +
-                            "item_name like \"" + s1 + "%\" " +
-                            "and desc like \"%" + s2 + "%\"");
+                            "desc like \"%" + arg0 + "%\"");
             while (rs.next()) {
                 String partNumber = rs.getString("item_name");
                 String desc = rs.getString("desc");

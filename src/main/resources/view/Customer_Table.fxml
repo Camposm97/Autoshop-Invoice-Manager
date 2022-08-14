@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="root" vgap="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
+<GridPane fx:id="root" vgap="5.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -71,22 +71,22 @@
       <TableView fx:id="tvVehicle" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.rowIndex="3">
         <columns>
           <TableColumn fx:id="colVin" prefWidth="75.0" text="VIN" />
-          <TableColumn fx:id="colLicensePlate" prefWidth="75.0" text="License Plate" />
-            <TableColumn fx:id="colColor" prefWidth="75.0" text="Color" />
             <TableColumn fx:id="colYear" prefWidth="75.0" text="Year" />
             <TableColumn fx:id="colMake" prefWidth="75.0" text="Make" />
             <TableColumn fx:id="colModel" prefWidth="75.0" text="Model" />
+          <TableColumn fx:id="colLicensePlate" prefWidth="75.0" text="License Plate" />
+            <TableColumn fx:id="colColor" prefWidth="75.0" text="Color" />
             <TableColumn fx:id="colEngine" prefWidth="75.0" text="Engine" />
             <TableColumn fx:id="colTransmission" prefWidth="75.0" text="Transmission" />
         </columns>
       </TableView>
-      <HBox fx:id="hBoxVehicleBtns" alignment="CENTER_RIGHT" spacing="5.0" GridPane.rowIndex="4">
+      <HBox fx:id="hBoxVehControls" alignment="CENTER_RIGHT" spacing="5.0" GridPane.rowIndex="4">
          <children>
           <Button fx:id="btDelVehicle" disable="true" mnemonicParsing="false" onAction="#deleteVehicle" text="Delete Vehicle" />
             <Button fx:id="btWorkOrderWithCustomerAndVehicle" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithCustomerAndVehicle" text="Create Work Order with Customer &amp; Vehicle" />
          </children>
       </HBox>
-      <HBox fx:id="hBoxCustomerBtns" alignment="CENTER_RIGHT" spacing="5.0" GridPane.rowIndex="2">
+      <HBox fx:id="hBoxCusControls" alignment="CENTER_RIGHT" spacing="5.0" GridPane.rowIndex="2">
          <children>
           <Button fx:id="btDelCustomer" disable="true" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete Customer" />
             <Button fx:id="btWorkOrderWithCustomer" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithCustomer" text="Create Work Order with Customer" />

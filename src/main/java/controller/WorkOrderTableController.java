@@ -83,12 +83,18 @@ public class WorkOrderTableController {
     }
 
     public void filter() {
-        var firstName = tfFirstName.getText();
-        var lastName = tfLastName.getText();
-        var company = tfCompanyName.getText();
-        var dateFilter = cbDateCreated.getValue();
-        var date = Date.valueOf(dateCreatedPicker.getValue());
-        var list = DB.get().workOrders().filter(firstName, lastName, company, dateFilter, date);
-        tv.getItems().setAll(list);
+        String firstName = tfFirstName.getText();
+        String lastName = tfLastName.getText();
+        String company = tfCompanyName.getText();
+        String dateFilter = cbDateCreated.getValue();
+        Date date = null;
+        if (dateCreatedPicker.getValue() == null) {
+            var list = DB.get().workOrders().filter(firstName, lastName, company);
+            tv.getItems().setAll(list);
+        } else {
+            date = Date.valueOf(dateCreatedPicker.getValue());
+            var list = DB.get().workOrders().filter(firstName, lastName, company, dateFilter, date);
+            tv.getItems().setAll(list);
+        }
     }
 }

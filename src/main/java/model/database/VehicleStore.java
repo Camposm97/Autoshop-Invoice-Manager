@@ -39,29 +39,26 @@ public class VehicleStore {
     public void update(@NotNull Vehicle vehicle) {
         try {
             PreparedStatement prepStmt = c.prepareStatement("update vehicle set " +
-                    "year = ?, make = ?, model = ?, license_plate = ?, color = ?, engine = ?, " +
+                    "vin = ?, year = ?, make = ?, model = ?, license_plate = ?, color = ?, engine = ?, " +
                     "transmission = ? " +
-                    "where vin=\"" + vehicle.getVin() + "\"");
-            prepStmt.setString(1, vehicle.getYear());
-            prepStmt.setString(2, vehicle.getMake());
-            prepStmt.setString(3, vehicle.getModel());
-            prepStmt.setString(4, vehicle.getLicensePlate());
-            prepStmt.setString(5, vehicle.getColor());
-            prepStmt.setString(6, vehicle.getEngine());
-            prepStmt.setString(7, vehicle.getTransmission());
-
-//            prepStmt.setString(8, vehicle.getMileageIn());
-//            prepStmt.setString(9, vehicle.getMileageOut());
-
+                    "where vehicle_id=\"" + vehicle.getId() + "\"");
+            prepStmt.setString(1, vehicle.getVin());
+            prepStmt.setString(2, vehicle.getYear());
+            prepStmt.setString(3, vehicle.getMake());
+            prepStmt.setString(4, vehicle.getModel());
+            prepStmt.setString(5, vehicle.getLicensePlate());
+            prepStmt.setString(6, vehicle.getColor());
+            prepStmt.setString(7, vehicle.getEngine());
+            prepStmt.setString(8, vehicle.getTransmission());
             prepStmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void deleteByVin(String vin) {
+    public void deleteById(int id) {
         try {
-            c.createStatement().execute("delete from vehicle where vin=\"" + vin + "\"");
+            c.createStatement().execute("delete from vehicle where vehicle_id=\"" + id + "\"");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -75,21 +72,20 @@ public class VehicleStore {
         }
     }
 
-    public Vehicle getByVin(String vin) {
+    public Vehicle getById(int id) {
         Vehicle vehicle = null;
         try {
-            ResultSet rs = c.createStatement().executeQuery("select * from vehicle where vin = \"" + vin + "\"");
+            ResultSet rs = c.createStatement().executeQuery("select * from vehicle where vehicle_id = \"" + id + "\"");
             if (rs.next()) {
-                String year = rs.getString(2);
-                String make = rs.getString(3);
-                String model = rs.getString(4);
-                String licensePlate = rs.getString(5);
-                String color = rs.getString(6);
-                String engine = rs.getString(7);
-                String transmission = rs.getString(8);
-//                String mileageIn = rs.getString(9);
-//                String mileageOut = rs.getString(10);
-                vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission);
+                String vin = rs.getString("vin");
+                String year = rs.getString("year");
+                String make = rs.getString("make");
+                String model = rs.getString("model");
+                String licensePlate = rs.getString("license_plate");
+                String color = rs.getString("color");
+                String engine = rs.getString("engine");
+                String transmission = rs.getString("transmission");
+                vehicle = new Vehicle(id, vin, year, make, model, licensePlate, color, engine, transmission);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,11 +96,10 @@ public class VehicleStore {
     public List<Vehicle> getAll() {
         List<Vehicle> list = new LinkedList<>();
         try {
-            ResultSet rs = c.createStatement().executeQuery("select vin from vehicle");
+            ResultSet rs = c.createStatement().executeQuery("select vehicle_id from vehicle");
             while (rs.next()) {
-                String vin = rs.getString(1);
-                System.out.println(vin);
-                list.add(getByVin(vin));
+                int id = rs.getInt(1);
+                list.add(getById(id));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,12 +110,12 @@ public class VehicleStore {
     public List<Vehicle> getAllByCustomerId(int customerId) {
         List<Vehicle> list = new LinkedList<>();
         try {
-            PreparedStatement prepStmt = c.prepareStatement("select vin from vehicle where customer_id = ?");
+            PreparedStatement prepStmt = c.prepareStatement("select vehicle_id from vehicle where customer_id = ?");
             prepStmt.setInt(1, customerId);
             ResultSet rs = prepStmt.executeQuery();
             while (rs.next()) {
-                String vin = rs.getString(1);
-                Vehicle v = getByVin(vin);
+                int id = rs.getInt(1);
+                Vehicle v = getById(id);
                 list.add(v);
             }
         } catch (SQLException e) {
@@ -133,7 +128,7 @@ public class VehicleStore {
         List<Vehicle> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery(
-                    "select vin from vehicle " +
+                    "select vehicle_id from vehicle " +
                             "where vin like \"" + vehicle.getVin() + "%\" " +
                             "and year like \"" + vehicle.getYear() + "%\" " +
                             "and make like \"" + vehicle.getMake() + "%\" " +
@@ -146,8 +141,8 @@ public class VehicleStore {
 //                            "and mileage_out like \"" + vehicle.getMileageOut() + "%\""
             );
             while (rs.next()) {
-                String vin = rs.getString(1);
-                list.add(getByVin(vin));
+                int id = rs.getInt(1);
+                list.add(getById(id));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -159,7 +154,7 @@ public class VehicleStore {
         List<Vehicle> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery(
-                    "select vin from vehicle " +
+                    "select vehicle_id from vehicle " +
                             "where vin like \"" + vehicle.getVin() + "%\" " +
                             "and year like \"" + vehicle.getYear() + "%\" " +
                             "and make like \"" + vehicle.getMake() + "%\" " +
@@ -171,8 +166,8 @@ public class VehicleStore {
                             "and customer_id = " + customerId
             );
             while (rs.next()) {
-                String vin = rs.getString(1);
-                list.add(getByVin(vin));
+                int id = rs.getInt(1);
+                list.add(getById(id));
             }
         } catch (SQLException e) {
             e.printStackTrace();

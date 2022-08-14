@@ -91,7 +91,8 @@ public class DB {
                 CUSTOMER_TABLE.STATE + " text," +
                 CUSTOMER_TABLE.ZIP + " text)");
         stmt.execute("create table if not exists " + VEHICLE_TABLE + " (" +
-                VEHICLE_TABLE.VIN + " text primary key," +
+                VEHICLE_TABLE.VEHICLE_ID + " integer primary key autoincrement," +
+                VEHICLE_TABLE.VIN + " text," +
                 VEHICLE_TABLE.YEAR + " character(4)," +
                 VEHICLE_TABLE.MAKE + " text," +
                 VEHICLE_TABLE.MODEL + " text," +
