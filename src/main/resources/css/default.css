@@ -1,0 +1,23 @@
+.scale-100 {
+    -fx-font-size: 12px;
+}
+
+.scale-125 {
+    -fx-font-size: 14px;
+}
+
+.scale-150 {
+    -fx-font-size: 16px;
+}
+
+.scale-175 {
+    -fx-font-size: 18px;
+}
+
+.scale-200 {
+    -fx-font-size: 20px;
+}
+
+.title_label {
+    -fx-font-weight: bold;
+}

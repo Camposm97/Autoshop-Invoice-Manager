@@ -56,7 +56,7 @@
             <Insets bottom="5.0" />
          </GridPane.margin>
       </GridPane>
-      <TableView fx:id="tv" stylesheets="@App.css" GridPane.rowIndex="1">
+      <TableView fx:id="tv" stylesheets="@../css/default.css" GridPane.rowIndex="1">
          <columns>
             <TableColumn fx:id="colId" prefWidth="75.0" text="ID" />
             <TableColumn fx:id="colCustomer" prefWidth="200.0" text="Customer Name" />

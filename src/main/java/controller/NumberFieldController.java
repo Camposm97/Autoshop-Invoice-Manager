@@ -24,7 +24,6 @@ public class NumberFieldController {
             } catch (NumberFormatException e) {
                 tfNum.setText(x);
             }
-
         });
     }
 }

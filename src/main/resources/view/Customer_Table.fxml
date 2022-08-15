@@ -52,7 +52,7 @@
             <Insets />
          </GridPane.margin>
       </GridPane>
-      <TableView fx:id="tvCustomer" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" stylesheets="@App.css" GridPane.rowIndex="1">
+      <TableView fx:id="tvCustomer" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" stylesheets="@../css/default.css" GridPane.rowIndex="1">
          <columns>
             <TableColumn fx:id="colFirstName" prefWidth="75.0" text="First Name" />
             <TableColumn fx:id="colLastName" prefWidth="75.0" text="Last Name" />

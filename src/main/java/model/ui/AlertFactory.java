@@ -3,13 +3,20 @@ package model.ui;
 import app.App;
 import controller.*;
 import javafx.print.*;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Paint;
+import javafx.scene.transform.Scale;
+import javafx.stage.Stage;
 import model.*;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
@@ -124,46 +131,57 @@ public class AlertFactory {
     }
 
     public static void showPrintWorkOrder(WorkOrder workOrder, WorkOrderWorkspaceController c) {
-        WorkOrderPrintController controller = new WorkOrderPrintController(workOrder);
-        Node node = FX.view("Work_Order_Print.fxml", controller);
-        AlertBuilder builder = new AlertBuilder();
-        builder.setTitle("Print Work Order");
-        builder.setHeaderText("Ready to print Work Order #" + workOrder.getId());
-        ScrollPane root = new ScrollPane(node);
-        root.setFitToWidth(true);
-        root.setPrefViewportHeight(600);
-
-        builder.setContent(root);
-        builder.setPrintWorkOrderBtns();
-        Alert alert = builder.build();
+        final var SCALE = 1.5;
+        WorkOrderFormController controller = new WorkOrderFormController(workOrder);
+        Parent formPane = FX.view("Work_Order_Form.fxml", controller);
+        formPane.getTransforms().add(new Scale(SCALE, SCALE));
+        Group group = new Group(formPane);
+        ScrollPane scrollPane = new ScrollPane(group);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setPrefViewportHeight(640);
+        Alert alert = new AlertBuilder()
+                .setTitle("Print Work Order")
+                .setHeaderText("Ready to print Work Order #" + workOrder.getId())
+                .setContent(scrollPane)
+                .setPrintWorkOrderBtns()
+                .build();
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
-                var set = Printer.getAllPrinters();
-                System.out.println(set);
                 PrinterJob printerJob = PrinterJob.createPrinterJob();
-                if (printerJob == null) {
+                if (printerJob != null) {
+                    if (printerJob.showPrintDialog(App.getScene().getWindow())) {
+                        WorkOrderFormController tempController = new WorkOrderFormController(workOrder);
+                        Parent tempForm = FX.view("Work_Order_Form.fxml", tempController);
+                        tempForm.getTransforms().add(new Scale(SCALE, SCALE));
+                        tempController.lightMode();
+                        Group tempGroup = new Group(tempForm);
+                        ScrollPane tempScrollPane = new ScrollPane(tempGroup);
+                        Alert tempAlert = new AlertBuilder().setContent(tempScrollPane).build();
+                        tempAlert.show();
+                        tempAlert.close();
+                        WritableImage wi = tempForm.snapshot(null,null);
+                        ImageView iv = new ImageView(wi);
+                        PageLayout pageLayout = printerJob.getPrinter().createPageLayout(Paper.NA_LETTER,
+                                PageOrientation.PORTRAIT, Printer.MarginType.HARDWARE_MINIMUM);
+                        printerJob.getJobSettings().setPageLayout(pageLayout);
+                        iv.setFitWidth(pageLayout.getPrintableWidth());
+                        iv.setFitHeight(pageLayout.getPrintableHeight());
+                        if (printerJob.printPage(iv)) {
+                            System.out.println(Printer.MarginType.HARDWARE_MINIMUM);
+                            System.out.println(printerJob.getJobSettings().getPageLayout().toString());
+                            printerJob.endJob();
+                            c.save();
+                        }
+                    }
+                } else {
                     AlertBuilder a = new AlertBuilder();
                     a.setTitle("Error");
                     a.setHeaderText("No Printer Available");
                     a.build().showAndWait();
-                    return;
                 }
-                if (printerJob.showPrintDialog(alert.getOwner())) {
-                    WritableImage wi = node.snapshot(null, null);
-                    ImageView iv = new ImageView(wi);
-                    PageLayout pageLayout = printerJob.getPrinter().createPageLayout(Paper.NA_LETTER,
-                            PageOrientation.PORTRAIT, Printer.MarginType.HARDWARE_MINIMUM);
-                    printerJob.getJobSettings().setPageLayout(pageLayout);
-                    iv.setFitWidth(pageLayout.getPrintableWidth());
-                    iv.setFitHeight(pageLayout.getPrintableHeight());
-                    if (printerJob.printPage(iv)) {
-                        System.out.println(Printer.MarginType.HARDWARE_MINIMUM);
-                        System.out.println(printerJob.getJobSettings().getPageLayout().toString());
-                        printerJob.endJob();
-                        c.save();
-                    }
-                }
+
             }
         });
     }
@@ -171,7 +189,7 @@ public class AlertFactory {
     public static void showPreferences() {
         AlertBuilder builder = new AlertBuilder()
                 .setTitle("Preferences")
-                .setHeaderText("Repairshop Settings")
+                .setHeaderText("Repair-shop Settings")
                 .setDefaultBtn()
                 .setContent(FX.view("Preferences.fxml"));
         builder.build().showAndWait().ifPresent(e -> Preferences.get().save());

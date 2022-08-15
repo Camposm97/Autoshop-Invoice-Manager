@@ -1,0 +1,21 @@
+#root {
+    -fx-font-size: 10px;
+}
+
+#lblOwnerCompany {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.information-form {
+    -fx-border-color: black;
+    -fx-border-width: 0.5px;
+}
+
+.titled-lbl {
+    -fx-font-weight: bold;
+}
+
+.light-mode {
+    -fx-text-fill: black;
+}

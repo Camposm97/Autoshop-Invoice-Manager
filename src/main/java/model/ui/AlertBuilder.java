@@ -1,12 +1,9 @@
 package model.ui;
 
-import app.App;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import model.Preferences;
-import model.GUIScale;
 
-import java.net.URL;
 import java.util.function.Function;
 
 public class AlertBuilder {
@@ -79,7 +76,6 @@ public class AlertBuilder {
 
     public AlertBuilder setContent(Node content) {
         this.content = content;
-//        this.content.getStyleClass().add(Scale.getStyleClass(Preferences.get().getScale()));
         return this;
     }
 
@@ -99,11 +95,13 @@ public class AlertBuilder {
             alert.setContentText(contentText);
         } else {
             alert.getDialogPane().setContent(content);
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.getStylesheets().add(FX.loadCSS("default.css"));
+            if (Preferences.get().getTheme().equals(Theme.DARK)) {
+                dialogPane.getStylesheets().add(FX.loadCSS("dark-mode.css"));
+            }
+            dialogPane.getStyleClass().add(GUIScale.getStyleClass(Preferences.get().getGuiScale()));
         }
-        DialogPane dialogPane = alert.getDialogPane();
-        URL url = App.class.getClassLoader().getResource("view/App.css");
-        dialogPane.getStylesheets().add(url.toExternalForm());
-        dialogPane.getStyleClass().add(GUIScale.getStyleClass(Preferences.get().getGuiScale()));
         return alert;
     }
 }

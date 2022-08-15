@@ -6,10 +6,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import model.GUIScale;
+import model.ui.GUIScale;
 import model.Preferences;
 import model.database.DB;
 import model.ui.FX;
+import model.ui.Theme;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -59,22 +60,21 @@ public class App extends Application {
         root.getStyleClass().add(styleClass);
     }
 
+    public static void setTheme(Theme theme) {
+        switch (theme) {
+            case LIGHT:
+                root.getStylesheets().remove(FX.loadCSS("dark-mode.css"));
+                break;
+            case DARK:
+                root.getStylesheets().add(FX.loadCSS("dark-mode.css"));
+                break;
+        }
+    }
+
     @Override
     public void init() {
         DB.init();
-        try {
-            File file = new File("recents.dat");
-            if (file.exists()) {
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                recentWorkOrders = (LinkedList<Integer>)  ois.readObject();
-                ois.close();
-            } else {
-                recentWorkOrders = new LinkedList<>();
-            }
-        } catch (IOException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
+        loadRecentWorkOrders();
     }
 
     @Override
@@ -89,6 +89,22 @@ public class App extends Application {
         stage.show();
         stage.setOnCloseRequest(e -> saveRecentWorkOrders());
         System.out.println(Preferences.get());
+    }
+
+    public static void loadRecentWorkOrders() {
+        try {
+            File file = new File("recents.dat");
+            if (file.exists()) {
+                FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                recentWorkOrders = (LinkedList<Integer>)  ois.readObject();
+                ois.close();
+            } else {
+                recentWorkOrders = new LinkedList<>();
+            }
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
     }
 
     public static void saveRecentWorkOrders() {

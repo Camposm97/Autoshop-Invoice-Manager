@@ -1,6 +1,8 @@
 package model;
 
 import app.App;
+import model.ui.GUIScale;
+import model.ui.Theme;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,12 +30,14 @@ public class Preferences {
     private Double laborRate, tempLaborRate;
     private Double taxRate, tempTaxRate;
     private GUIScale guiScale, tempGuiScale;
+    private Theme theme, tempTheme;
     private List<PrefObservable> observables;
 
     private Preferences() {
         init();
         load();
         App.setScale(GUIScale.getStyleClass(this.guiScale));
+        App.setTheme(theme);
     }
 
     public void init() {
@@ -47,7 +51,8 @@ public class Preferences {
         title = "Title Goes Here";
         laborRate = 90.0;
         taxRate = 1.08625;
-        guiScale = GUIScale.Small;
+        guiScale = GUIScale.SMALL;
+        theme = Theme.LIGHT;
         observables = new LinkedList<>();
     }
 
@@ -105,11 +110,16 @@ public class Preferences {
                             case "gui-scale":
                                 try {
                                     this.guiScale = GUIScale.valueOf(value);
-                                    if (guiScale == null) throw new Exception();
-                                } catch (Exception e) {
-                                    this.guiScale = GUIScale.Small;
+                                } catch (IllegalArgumentException e) {
+                                    guiScale = GUIScale.SMALL;
                                 }
                                 break;
+                            case "theme":
+                                try {
+                                    this.theme = Theme.valueOf(value);
+                                } catch (IllegalArgumentException e) {
+                                    theme = Theme.LIGHT;
+                                }
                         }
                     }
                 }
@@ -132,6 +142,7 @@ public class Preferences {
             if (tempLaborRate != null) laborRate = tempLaborRate;
             if (tempTaxRate != null) taxRate = tempTaxRate;
             if (tempGuiScale != null) guiScale = tempGuiScale;
+            if (tempTheme != null) theme = tempTheme;
             PrintWriter pw = new PrintWriter(SRC);
             pw.println("company=" + company);
             pw.println("address=" + address);
@@ -144,6 +155,7 @@ public class Preferences {
             pw.println("labor-rate=" + laborRate);
             pw.println("tax-rate=" + taxRate);
             pw.println("gui-scale=" + guiScale);
+            pw.println("theme=" + theme);
             pw.close();
             System.out.println("Saved preferences");
             for (PrefObservable o : observables) {
@@ -154,6 +166,7 @@ public class Preferences {
         } finally {
             String styleClass = GUIScale.getStyleClass(this.guiScale);
             App.setScale(styleClass);
+            App.setTheme(theme);
         }
     }
 
@@ -247,6 +260,14 @@ public class Preferences {
 
     public void setGuiScale(GUIScale guiScale) {
         this.tempGuiScale = guiScale;
+    }
+
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Theme theme) {
+        this.tempTheme = theme;
     }
 
     public void addObserver(PrefObservable observable) {

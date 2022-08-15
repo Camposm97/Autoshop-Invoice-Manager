@@ -4,8 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import model.Preferences;
-import model.GUIScale;
+import model.ui.GUIScale;
 import model.State;
+import model.ui.Theme;
 
 public class PreferencesController {
     @FXML
@@ -16,6 +17,9 @@ public class PreferencesController {
     TextField tfPhone, tfRepairShopId, tfTitle, tfLaborRate, tfTaxRate;
     @FXML
     ComboBox<GUIScale> cbScale;
+    @FXML
+    ComboBox<Theme> cbTheme;
+
 
     @FXML
     public void initialize() {
@@ -48,8 +52,11 @@ public class PreferencesController {
                 Preferences.get().setTaxRate(Double.parseDouble(newValue));
             } catch (NumberFormatException e) {}
         });
-        cbScale.getItems().setAll(GUIScale.list());
+        cbScale.setItems(GUIScale.list());
         cbScale.setValue(Preferences.get().getGuiScale());
         cbScale.setOnAction(e -> Preferences.get().setGuiScale(cbScale.getValue()));
+        cbTheme.setItems(Theme.list());
+        cbTheme.setValue(Preferences.get().getTheme());
+        cbTheme.setOnAction(e -> Preferences.get().setTheme(cbTheme.getValue()));
     }
 }

@@ -1,5 +1,6 @@
 package model.ui;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TableView;
@@ -29,6 +30,11 @@ public class FX {
         } catch (NullPointerException e) {
             return null;
         }
+    }
+
+    public static String loadCSS(String src) {
+        URL url = FX.class.getClassLoader().getResource("css/" + src);
+        return url.toExternalForm();
     }
 
     public static Parent view(String src, Object controller) {
