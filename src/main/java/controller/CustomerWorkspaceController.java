@@ -14,7 +14,8 @@ public class CustomerWorkspaceController {
 
     @FXML
     public void initialize() {
-        TextFields.bindAutoCompletion(tfStreet, DB.get().customers().getUniqueStreets());
+        TextFields.bindAutoCompletion(tfCompany, DB.get().customers().getUniqueCompanies());
+        TextFields.bindAutoCompletion(tfStreet, DB.get().customers().getUniqueAddresses());
         TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
         TextFields.bindAutoCompletion(tfState, State.list());
         TextFields.bindAutoCompletion(tfZip, DB.get().customers().getUniqueZips());

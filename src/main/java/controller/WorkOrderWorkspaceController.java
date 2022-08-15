@@ -29,6 +29,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 public class WorkOrderWorkspaceController implements PrefObservable {
     protected int chosenCustomerId;
     protected WorkOrder workOrder;
@@ -100,12 +101,11 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     public void initialize() throws IOException {
         App.setDisableMenu(true);
-        Platform.runLater(() -> {
-            App.getScene().getAccelerators().put(printAccel, () -> btPrint.fire());
-        });
+        Platform.runLater(() -> App.getScene().getAccelerators().put(printAccel, () -> btPrint.fire()));
 
         // Bind TextFields for auto-completion
-        TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueStreets());
+        TextFields.bindAutoCompletion(tfCompany, DB.get().customers().getUniqueCompanies());
+        TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueAddresses());
         TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
         TextFields.bindAutoCompletion(tfState, State.list());
         TextFields.bindAutoCompletion(tfZip, DB.get().customers().getUniqueZips());
@@ -157,22 +157,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         tvPayment.getItems().addListener((ListChangeListener<WorkOrderPayment>) change -> FX.autoResizeColumns(tvPayment, 75));
 
         // Set date created value to current date
-//        tfDateCreated.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
         dateCreated.setValue(workOrder.getDateCreated().toLocalDate());
-        dateCreated.setOnAction(e -> {
-            workOrder.setDateCreated(Date.valueOf(dateCreated.getValue()));
-        });
-//        dateCompletedPicker.setConverter(new StringConverter<>() {
-//            @Override
-//            public String toString(LocalDate x) {
-//                return x != null ? x.format(DateTimeFormatter.ofPattern("MM/dd/u")) : null;
-//            }
-//
-//            @Override
-//            public LocalDate fromString(String s) {
-//                return LocalDate.now();
-//            }
-//        });
+        dateCreated.setOnAction(e -> workOrder.setDateCreated(Date.valueOf(dateCreated.getValue())));
 
         tfTaxRate.setEditable(false);
         tfTaxRate.setText(Preferences.get().getTaxRatePrettyString());
@@ -207,13 +193,13 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         Preferences.get().addObserver(this);
     }
 
-    public void showCustomer() throws IOException {
+    public void showCustomer() {
         btVeh.setDisable(true);
         customerTableController.refresh();
         customerPopOver.show(btCus);
     }
 
-    public void showVehicle() throws IOException {
+    public void showVehicle() {
         vehicleTableController.refresh(chosenCustomerId);
         vehiclePopOver.show(btVeh);
     }
@@ -272,8 +258,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         String state = tfState.getText();
         String zip = tfZip.getText();
         Address address = new Address(street, city, state, zip);
-        Customer customer = new Customer(firstName, lastName, phone, email, company, address);
-        return customer;
+        return new Customer(firstName, lastName, phone, email, company, address);
     }
 
     public Vehicle buildVehicle() {
@@ -287,36 +272,34 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         String transmission = tfTransmission.getText();
         String mileageIn = tfMileageIn.getText();
         String mileageOut = tfMileageOut.getText();
-        Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color,
-                engine, transmission, mileageIn, mileageOut);
-        return vehicle;
+        return new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
     }
 
-    public void loadCustomer(@NotNull Customer customer) {
-        this.chosenCustomerId = customer.getId();
+    public void loadCustomer(@NotNull Customer c) {
+        this.chosenCustomerId = c.getId();
         this.btVeh.setDisable(false);
-        tfFirstName.setText(customer.getFirstName());
-        tfLastName.setText(customer.getLastName());
-        tfPhone.setText(customer.getPhone());
-        tfEmail.setText(customer.getEmail());
-        tfCompany.setText(customer.getCompany());
-        tfAddress.setText(customer.getAddress().getStreet());
-        tfCity.setText(customer.getAddress().getCity());
-        tfState.setText(customer.getAddress().getState());
-        tfZip.setText(customer.getAddress().getZip());
+        tfFirstName.setText(c.getFirstName());
+        tfLastName.setText(c.getLastName());
+        tfPhone.setText(c.getPhone());
+        tfEmail.setText(c.getEmail());
+        tfCompany.setText(c.getCompany());
+        tfAddress.setText(c.getAddress().getStreet());
+        tfCity.setText(c.getAddress().getCity());
+        tfState.setText(c.getAddress().getState());
+        tfZip.setText(c.getAddress().getZip());
     }
 
-    public void loadVehicle(@NotNull Vehicle vehicle) {
-        tfVin.setText(vehicle.getVin());
-        tfLicensePlate.setText(vehicle.getLicensePlate());
-        tfColor.setText(vehicle.getColor());
-        tfYear.setText(String.valueOf(vehicle.getYear()));
-        tfMake.setText(vehicle.getMake());
-        tfModel.setText(vehicle.getModel());
-        tfEngine.setText(vehicle.getEngine());
-        tfTransmission.setText(vehicle.getTransmission());
-        tfMileageIn.setText(vehicle.getMileageIn());
-        tfMileageOut.setText(vehicle.getMileageOut());
+    public void loadVehicle(@NotNull Vehicle v) {
+        tfVin.setText(v.getVin());
+        tfLicensePlate.setText(v.getLicensePlate());
+        tfColor.setText(v.getColor());
+        tfYear.setText(String.valueOf(v.getYear()));
+        tfMake.setText(v.getMake());
+        tfModel.setText(v.getModel());
+        tfEngine.setText(v.getEngine());
+        tfTransmission.setText(v.getTransmission());
+        tfMileageIn.setText(v.getMileageIn());
+        tfMileageOut.setText(v.getMileageOut());
     }
 
     public void buildWorkOrder() {

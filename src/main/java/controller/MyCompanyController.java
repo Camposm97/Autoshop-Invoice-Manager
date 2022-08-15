@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.function.Function;
 
 /**
- *
+ * Lists completed work orders in the year and month, also displays recently edited work orders and incompleted work orders
  */
 public class MyCompanyController {
     @FXML

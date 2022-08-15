@@ -174,7 +174,21 @@ public class CustomerStore {
         return list;
     }
 
-    public List<String> getUniqueStreets() {
+    public List<String> getUniqueCompanies() {
+        List<String> list = new LinkedList<>();
+        try {
+            ResultSet rs = c.createStatement().executeQuery("select distinct " + CUSTOMER_TABLE.COMPANY + " from " + CUSTOMER_TABLE + " order by " + CUSTOMER_TABLE.COMPANY);
+            while (rs.next()) {
+                String x = rs.getString(1);
+                list.add(x);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<String> getUniqueAddresses() {
         List<String> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery("select distinct " + CUSTOMER_TABLE.STREET +
