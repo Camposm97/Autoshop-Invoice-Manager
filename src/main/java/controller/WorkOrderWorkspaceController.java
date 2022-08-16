@@ -16,6 +16,8 @@ import model.State;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
+import model.tps.AddAutoPartTransaction;
+import model.tps.AddLaborTransaction;
 import model.tps.TPS;
 import model.ui.AlertFactory;
 import model.ui.FX;
@@ -27,13 +29,18 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public class WorkOrderWorkspaceController implements PrefObservable {
     protected int chosenCustomerId;
     protected WorkOrder workOrder;
+    protected TPS tps;
+    protected List<Product> productsMarkedForDeletion;
+    protected List<Payment> paymentsMarkedForDeletion;
     protected CustomerTableController customerTableController;
     protected VehicleTableController vehicleTableController;
     @FXML
@@ -85,16 +92,22 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     TextField tfTotalPayment, tfInvoiceBalance;
 
-    KeyCodeCombination printAccel = new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN);
-    KeyCodeCombination undoAccel = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
-    KeyCodeCombination redoAccel = new KeyCodeCombination(KeyCode.Y, KeyCodeCombination.SHORTCUT_DOWN);
+    private final KeyCodeCombination ACCEL_PRINT = new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN);
+    private final KeyCodeCombination ACCEL_UNDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
+    private final KeyCodeCombination ACCEL_REDO = new KeyCodeCombination(KeyCode.Y, KeyCodeCombination.SHORTCUT_DOWN);
 
     public WorkOrderWorkspaceController() { // New Work Order
         this.workOrder = new WorkOrder();
+        this.tps = new TPS();
+        this.productsMarkedForDeletion = new LinkedList<>();
+        this.paymentsMarkedForDeletion = new LinkedList<>();
     }
 
     public WorkOrderWorkspaceController(WorkOrder workOrder) { // Update Work Order
         this.workOrder = workOrder;
+        this.tps = new TPS();
+        this.productsMarkedForDeletion = new LinkedList<>();
+        this.paymentsMarkedForDeletion = new LinkedList<>();
     }
 
     /**
@@ -105,15 +118,9 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     public void initialize() throws IOException {
         App.setDisableMenu(true);
         Platform.runLater(() -> {
-            App.getScene().getAccelerators().put(printAccel, () -> btPrint.fire());
-            App.getScene().getAccelerators().put(undoAccel, () -> {
-                System.out.println("do undo");
-                workOrder.getTps().undoTransaction();
-            });
-            App.getScene().getAccelerators().put(redoAccel, () -> {
-                System.out.println("do redo");
-                workOrder.getTps().doTransaction();
-            });
+            App.getScene().getAccelerators().put(ACCEL_PRINT, () -> btPrint.fire());
+            App.getScene().getAccelerators().put(ACCEL_UNDO, () -> tps.undoTransaction());
+            App.getScene().getAccelerators().put(ACCEL_REDO, () -> tps.doTransaction());
         });
 
         // Bind TextFields for auto-completion
@@ -206,13 +213,13 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         Preferences.get().addObserver(this);
     }
 
-    public void showCustomer() {
+    public void showCustomerPopOver() {
         btVeh.setDisable(true);
         customerTableController.refresh();
         customerPopOver.show(btCus);
     }
 
-    public void showVehicle() {
+    public void showVehiclePopOver() {
         vehicleTableController.refresh(chosenCustomerId);
         vehiclePopOver.show(btVeh);
     }
@@ -243,9 +250,9 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         Preferences.get().removeObserver(this);
         DB.get().clearAllProductsMarkedForDeletion();
         DB.get().clearAllPaymentsMarkedForDeletion();
-        App.getScene().getAccelerators().remove(printAccel);
-        App.getScene().getAccelerators().remove(undoAccel);
-        App.getScene().getAccelerators().remove(redoAccel);
+        App.getScene().getAccelerators().remove(ACCEL_PRINT);
+        App.getScene().getAccelerators().remove(ACCEL_UNDO);
+        App.getScene().getAccelerators().remove(ACCEL_REDO);
         App.setDisableMenu(false);
         App.displayMyCompany();
     }
@@ -329,7 +336,12 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     }
 
     public void addPart() {
-        AlertFactory.showAddPart(workOrder);
+        Function<AutoPart, Void> callback = x -> {
+            AddAutoPartTransaction transaction = new AddAutoPartTransaction(workOrder, x);
+            tps.addTransaction(transaction);
+            return null;
+        };
+        AlertFactory.showAddPart(callback);
         updateTotals();
     }
 
@@ -353,7 +365,22 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     }
 
     public void addLabor() {
-        AlertFactory.showAddLabor(workOrder);
+        Function<Labor, Void> callback = x -> {
+            if (x.getDesc().equals("AUTO_GENERATE")) {
+                Iterator<AutoPart> iterator = workOrder.autoPartIterator();
+                StringBuilder sb = new StringBuilder("Installed ");
+                while (iterator.hasNext()) {
+                    sb.append(iterator.next().getDesc());
+                    if (iterator.hasNext())
+                        sb.append(", ");
+                }
+                x.setDesc(sb.toString());
+            }
+            AddLaborTransaction transaction = new AddLaborTransaction(workOrder, x);
+            tps.addTransaction(transaction);
+            return null;
+        };
+        AlertFactory.showAddLabor(callback);
         updateTotals();
     }
 

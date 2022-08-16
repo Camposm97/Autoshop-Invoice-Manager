@@ -9,9 +9,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
 import model.database.DB;
 import model.tps.AddAutoPartTransaction;
+import model.tps.TPS;
 import model.ui.FX;
 import model.work_order.AutoPart;
 import model.work_order.WorkOrder;
+
+import java.util.function.Function;
 
 public class AutoPartWorkspaceController {
     @FXML
@@ -46,10 +49,9 @@ public class AutoPartWorkspaceController {
         });
     }
 
-    public void savePart(WorkOrder workOrder) {
+    public void savePart(Function<AutoPart, Void> callback) {
         AutoPart autoPart = buildPart();
-        AddAutoPartTransaction transaction = new AddAutoPartTransaction(workOrder, autoPart);
-        workOrder.getTps().addTransaction(transaction);
+        callback.apply(autoPart);
     }
 
     public void updatePart(WorkOrder workOrder, AutoPart oldItem) {

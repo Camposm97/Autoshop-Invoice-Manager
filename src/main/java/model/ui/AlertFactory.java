@@ -18,12 +18,14 @@ import javafx.scene.paint.Paint;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import model.*;
+import model.tps.TPS;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
 import model.work_order.WorkOrderPayment;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public class AlertFactory {
     public static void showAddCustomer() {
@@ -50,7 +52,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showAddPart(WorkOrder workOrder) {
+    public static void showAddPart(Function<AutoPart, Void> callback) {
         AutoPartWorkspaceController controller = new AutoPartWorkspaceController();
         AlertBuilder builder = new AlertBuilder();
         Optional<ButtonType> rs = builder.buildAddDialog(
@@ -58,7 +60,7 @@ public class AlertFactory {
                 FX.view("Auto_Part_Workspace.fxml", controller)).showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
-                controller.savePart(workOrder);
+                controller.savePart(callback);
             }
         });
     }
@@ -76,7 +78,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showAddLabor(WorkOrder workOrder) {
+    public static void showAddLabor(Function<Labor, Void> callback) {
         LaborWorkspaceController controller = new LaborWorkspaceController();
         Parent node = FX.view("Labor_Workspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -84,7 +86,7 @@ public class AlertFactory {
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
-                controller.saveLabor(workOrder);
+                controller.saveLabor(callback);
             }
         });
     }

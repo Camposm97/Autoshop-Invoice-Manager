@@ -8,11 +8,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import model.Preferences;
 import model.tps.AddLaborTransaction;
+import model.tps.TPS;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
 
 import java.util.Iterator;
+import java.util.function.Function;
 
 public class LaborWorkspaceController {
     @FXML
@@ -52,14 +54,13 @@ public class LaborWorkspaceController {
         });
     }
 
-    public void saveLabor(WorkOrder workOrder) {
-        Labor labor = buildLabor(workOrder);
-        AddLaborTransaction transaction = new AddLaborTransaction(workOrder, labor);
-        workOrder.getTps().addTransaction(transaction);
+    public void saveLabor(Function<Labor, Void> callback) {
+        Labor labor = buildLabor();
+        callback.apply(labor);
     }
 
     public void updateLabor(WorkOrder workOrder, Labor oldLabor) {
-        Labor newLabor = buildLabor(workOrder);
+        Labor newLabor = buildLabor();
         workOrder.updateLabor(oldLabor, newLabor);
     }
 
@@ -72,20 +73,21 @@ public class LaborWorkspaceController {
         cbTaxable.setSelected(labor.isTaxable());
     }
 
-    public Labor buildLabor(WorkOrder workOrder) {
+    public Labor buildLabor() {
         int id = Integer.parseInt(lblId.getText());
         String laborCode = tfLaborCode.getText();
         String desc = taDesc.getText();
 
         if (cbAutoGen.isSelected()) {
-            Iterator<AutoPart> iter = workOrder.autoPartIterator();
-            StringBuilder sb = new StringBuilder("Installed ");
-            while (iter.hasNext()) {
-                sb.append(iter.next().getDesc());
-                if (iter.hasNext())
-                    sb.append(", ");
-            }
-            desc = sb.toString();
+            desc = "AUTO_GENERATE";
+//            Iterator<AutoPart> iter = workOrder.autoPartIterator();
+//            StringBuilder sb = new StringBuilder("Installed ");
+//            while (iter.hasNext()) {
+//                sb.append(iter.next().getDesc());
+//                if (iter.hasNext())
+//                    sb.append(", ");
+//            }
+//            desc = sb.toString();
         }
 
         double billedHrs, rate;

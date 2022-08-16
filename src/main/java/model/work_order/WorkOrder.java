@@ -23,7 +23,6 @@ public class WorkOrder implements Billable {
     private ObservableList<AutoPart> itemList;
     private ObservableList<Labor> laborList;
     private ObservableList<WorkOrderPayment> paymentList;
-    private TPS tps;
 
     public WorkOrder() {
         this.dateCreated = Date.valueOf(LocalDate.now().toString());
@@ -33,7 +32,6 @@ public class WorkOrder implements Billable {
         this.itemList = FXCollections.observableArrayList();
         this.laborList = FXCollections.observableArrayList();
         this.paymentList = FXCollections.observableArrayList();
-        this.tps = new TPS();
     }
 
     public WorkOrder(Customer customer, Vehicle vehicle) {
@@ -44,7 +42,6 @@ public class WorkOrder implements Billable {
         this.itemList = FXCollections.observableArrayList();
         this.laborList = FXCollections.observableArrayList();
         this.paymentList = FXCollections.observableArrayList();
-        this.tps = new TPS();
     }
 
     public int getId() {
@@ -261,9 +258,5 @@ public class WorkOrder implements Billable {
                 ", itemList=" + itemList +
                 ", laborList=" + laborList +
                 '}';
-    }
-
-    public TPS getTps() {
-        return tps;
     }
 }
