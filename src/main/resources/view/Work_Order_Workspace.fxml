@@ -249,12 +249,12 @@
                                                         <Glyph fontFamily="FontAwesome" icon="PLUS" />
                                                     </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#editPart" text="Edit">
+                                                <Button fx:id="btEditAutoPart" mnemonicParsing="false" onAction="#editPart" text="Edit">
                                                     <graphic>
                                                         <Glyph fontFamily="FontAwesome" icon="EDIT" />
                                                     </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#deletePart" text="Delete">
+                                                <Button fx:id="btDelAutoPart" mnemonicParsing="false" onAction="#deletePart" text="Delete">
                                                     <graphic>
                                                         <Glyph fontFamily="FontAwesome" icon="TRASH" />
                                                     </graphic>
@@ -283,12 +283,12 @@
                                                         <Glyph fontFamily="FontAwesome" icon="PLUS" />
                                                     </graphic>
                                                 </Button>
-                                                <Button maxWidth="-Infinity" mnemonicParsing="false" onAction="#editLabor" text="Edit">
+                                                <Button fx:id="btEditLabor" maxWidth="-Infinity" mnemonicParsing="false" onAction="#editLabor" text="Edit">
                                                     <graphic>
                                                         <Glyph fontFamily="FontAwesome" icon="EDIT" />
                                                     </graphic>
                                                 </Button>
-                                                <Button mnemonicParsing="false" onAction="#deleteLabor" text="Delete">
+                                                <Button fx:id="btDelLabor" mnemonicParsing="false" onAction="#deleteLabor" text="Delete">
                                                     <graphic>
                                                         <Glyph fontFamily="FontAwesome" icon="TRASH" />
                                                     </graphic>
@@ -390,12 +390,12 @@
                                           <Glyph fontFamily="FontAwesome" icon="PLUS" />
                                        </graphic>
                                     </Button>
-                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editPayment" text="Edit">
+                                    <Button fx:id="btEditPayment" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#editPayment" text="Edit">
                                        <graphic>
                                           <Glyph fontFamily="FontAwesome" icon="EDIT" />
                                        </graphic>
                                     </Button>
-                                    <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deletePayment" text="Delete">
+                                    <Button fx:id="btDelPayment" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#deletePayment" text="Delete">
                                        <graphic>
                                           <Glyph fontFamily="FontAwesome" icon="TRASH" />
                                        </graphic>

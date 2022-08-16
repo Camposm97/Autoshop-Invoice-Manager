@@ -1,6 +1,8 @@
 package controller;
 
 import app.App;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -77,7 +79,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     TextField tfTaxRate;
     @FXML
-    Button btCus, btVeh;
+    Button btCus, btVeh, btEditAutoPart, btDelAutoPart, btEditLabor, btDelLabor, btEditPayment, btDelPayment;
     @FXML
     PopOver customerPopOver, vehiclePopOver;
     @FXML
@@ -163,12 +165,45 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         Function<MouseEvent, Boolean> doubleClicked = x -> x.getButton().equals(MouseButton.PRIMARY) && x.getClickCount() == DOUBLE_CLICK;
         tvParts.setOnMouseClicked(e -> {
             if (doubleClicked.apply(e)) editPart();
+            if (tvParts.getSelectionModel().getSelectedItem() != null) {
+                btEditAutoPart.setDisable(false);
+                btDelAutoPart.setDisable(false);
+            } else {
+                btEditAutoPart.setDisable(true);
+                btDelAutoPart.setDisable(true);
+            }
+        });
+        tvParts.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.BACK_SPACE))
+                deletePart();
         });
         tvLabor.setOnMouseClicked(e -> {
             if (doubleClicked.apply(e)) editLabor();
+            if (tvLabor.getSelectionModel().getSelectedItem() != null) {
+                btEditLabor.setDisable(false);
+                btDelLabor.setDisable(false);
+            } else {
+                btEditLabor.setDisable(true);
+                btDelLabor.setDisable(true);
+            }
+        });
+        tvLabor.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.BACK_SPACE))
+                deleteLabor();
         });
         tvPayment.setOnMouseClicked(e -> {
             if (doubleClicked.apply(e)) editPayment();
+            if (tvPayment.getSelectionModel().getSelectedItem() != null) {
+                btEditPayment.setDisable(false);
+                btDelPayment.setDisable(false);
+            } else {
+                btEditPayment.setDisable(true);
+                btDelPayment.setDisable(true);
+            }
+        });
+        tvPayment.setOnKeyPressed(e -> {
+            if (e.getCode().equals(KeyCode.BACK_SPACE))
+                deletePayment();
         });
 
 
@@ -186,6 +221,12 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         tfTaxRate.setText(Preferences.get().getTaxRatePrettyString());
 
         btVeh.setDisable(true);
+        btEditAutoPart.setDisable(true);
+        btDelAutoPart.setDisable(true);
+        btEditLabor.setDisable(true);
+        btDelLabor.setDisable(true);
+        btEditPayment.setDisable(true);
+        btDelPayment.setDisable(true);
 
 
         FXMLLoader fxmlLoader = FX.load("Customer_Table.fxml");
