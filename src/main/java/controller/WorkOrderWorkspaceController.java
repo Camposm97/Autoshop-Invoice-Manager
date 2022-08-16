@@ -6,10 +6,7 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import model.PrefObservable;
 import model.Preferences;
 import model.State;
@@ -36,6 +33,9 @@ import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public class WorkOrderWorkspaceController implements PrefObservable {
+    private static final KeyCodeCombination ACCEL_PRINT = new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN);
+    private static final KeyCodeCombination ACCEL_UNDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
+    private static final KeyCodeCombination ACCEL_REDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN);
     protected int chosenCustomerId;
     protected WorkOrder workOrder;
     protected TPS tps;
@@ -92,23 +92,19 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     TextField tfTotalPayment, tfInvoiceBalance;
 
-    private final KeyCodeCombination ACCEL_PRINT = new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN);
-    private final KeyCodeCombination ACCEL_UNDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
-    private final KeyCodeCombination ACCEL_REDO = new KeyCodeCombination(KeyCode.Y, KeyCodeCombination.SHORTCUT_DOWN);
-
-    public WorkOrderWorkspaceController() { // New Work Order
+    public WorkOrderWorkspaceController() {
         this.workOrder = new WorkOrder();
         this.tps = new TPS();
         this.productsMarkedForDeletion = new LinkedList<>();
         this.paymentsMarkedForDeletion = new LinkedList<>();
     }
 
-    public WorkOrderWorkspaceController(WorkOrder workOrder) { // Update Work Order
-        this.workOrder = workOrder;
-        this.tps = new TPS();
-        this.productsMarkedForDeletion = new LinkedList<>();
-        this.paymentsMarkedForDeletion = new LinkedList<>();
-    }
+//    public WorkOrderWorkspaceController(WorkOrder workOrder) { // Update Work Order
+//        this.workOrder = workOrder;
+//        this.tps = new TPS();
+//        this.productsMarkedForDeletion = new LinkedList<>();
+//        this.paymentsMarkedForDeletion = new LinkedList<>();
+//    }
 
     /**
      * Initializes what columns hold what values binds tables to
@@ -159,20 +155,22 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         // Set double-click function for parts and labor tables
         // Set Parts and Labor Items
         final int DOUBLE_CLICK = 2;
-        Function<MouseEvent, Boolean> f = x -> x.getButton().equals(MouseButton.PRIMARY) && x.getClickCount() == DOUBLE_CLICK;
+        Function<MouseEvent, Boolean> doubleClicked = x -> x.getButton().equals(MouseButton.PRIMARY) && x.getClickCount() == DOUBLE_CLICK;
         tvParts.setOnMouseClicked(e -> {
-            if (f.apply(e)) editPart();
+            if (doubleClicked.apply(e)) editPart();
         });
-        tvParts.setItems(workOrder.itemList());
         tvLabor.setOnMouseClicked(e -> {
-            if (f.apply(e)) editLabor();
+            if (doubleClicked.apply(e)) editLabor();
         });
-        tvLabor.setItems(workOrder.laborList());
-
         tvPayment.setOnMouseClicked(e -> {
-            if (f.apply(e)) editPayment();
+            if (doubleClicked.apply(e)) editPayment();
         });
+
+
+        tvParts.setItems(workOrder.itemList());
+        tvLabor.setItems(workOrder.laborList());
         tvPayment.setItems(workOrder.paymentList());
+
         FX.autoResizeColumns(tvPayment, 75);
         tvPayment.getItems().addListener((ListChangeListener<WorkOrderPayment>) change -> FX.autoResizeColumns(tvPayment, 75));
 
@@ -180,22 +178,22 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         dateCreated.setValue(workOrder.getDateCreated().toLocalDate());
         dateCreated.setOnAction(e -> workOrder.setDateCreated(Date.valueOf(dateCreated.getValue())));
 
-        tfTaxRate.setEditable(false);
         tfTaxRate.setText(Preferences.get().getTaxRatePrettyString());
 
-        if (workOrder.isNew()) {
-//            tfWorkOrderId.setText(String.valueOf(DB.get().workOrders().getNextId()));
-            btVeh.setDisable(true);
-        } else {
-            loadCustomer(workOrder.getCustomer());
-            loadVehicle(workOrder.getVehicle());
-            tfWorkOrderId.setText(String.valueOf(workOrder.getId()));
-            if (workOrder.getDateCompleted() != null) {
-                dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
-            }
-            btVeh.setDisable(true);
-            updateTotals();
-        }
+//        if (workOrder.isNew()) {
+////            tfWorkOrderId.setText(String.valueOf(DB.get().workOrders().getNextId()));
+//            btVeh.setDisable(true);
+//        } else {
+//            loadCustomer(workOrder.getCustomer());
+//            loadVehicle(workOrder.getVehicle());
+//            tfWorkOrderId.setText(String.valueOf(workOrder.getId()));
+//            if (workOrder.getDateCompleted() != null) {
+//                dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
+//            }
+//            updateTotals();
+//        }
+        btVeh.setDisable(true);
+
 
         FXMLLoader fxmlLoader = FX.load("Customer_Table.fxml");
         customerPopOver = new PopOver(fxmlLoader.load());
@@ -209,7 +207,6 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         vehiclePopOver.setTitle("Vehicle Picker");
         vehicleTableController = fxmlLoader.getController();
         vehicleTableController.connect(this);
-
         Preferences.get().addObserver(this);
     }
 
@@ -225,7 +222,6 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     }
 
     public void print() {
-        save();
         AlertFactory.showPrintWorkOrder(workOrder, this);
     }
 
@@ -269,32 +265,30 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         }
     }
 
-    public Customer buildCustomer() {
-        String firstName = tfFirstName.getText();
-        String lastName = tfLastName.getText();
-        String phone = tfPhone.getText();
-        String email = tfEmail.getText();
-        String company = tfCompany.getText();
-        String street = tfAddress.getText();
-        String city = tfCity.getText();
-        String state = tfState.getText();
-        String zip = tfZip.getText();
-        Address address = new Address(street, city, state, zip);
-        return new Customer(firstName, lastName, phone, email, company, address);
+    public void loadWorkOrder(@NotNull WorkOrder workOrder) {
+        this.workOrder = workOrder;
+        loadCustomer(workOrder.getCustomer());
+        loadVehicle(workOrder.getVehicle());
+        tfWorkOrderId.setText(workOrder.getId().toString());
+        if (workOrder.isCompleted()) {
+            dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
+        }
+        tvParts.setItems(workOrder.itemList());
+        tvLabor.setItems(workOrder.laborList());
+        tvPayment.setItems(workOrder.paymentList());
+        dateCreated.setValue(workOrder.getDateCreated().toLocalDate());
+        updateTotals();
     }
 
-    public Vehicle buildVehicle() {
-        String vin = tfVin.getText();
-        String licensePlate = tfLicensePlate.getText();
-        String color = tfColor.getText();
-        String year = tfYear.getText();
-        String make = tfMake.getText();
-        String model = tfModel.getText();
-        String engine = tfEngine.getText();
-        String transmission = tfTransmission.getText();
-        String mileageIn = tfMileageIn.getText();
-        String mileageOut = tfMileageOut.getText();
-        return new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
+    public void buildWorkOrder() {
+        Customer customer = buildCustomer();
+        Vehicle vehicle = buildVehicle();
+        workOrder.setCustomer(customer);
+        workOrder.setVehicle(vehicle);
+        LocalDate dateCompleted = dateCompletedPicker.getValue();
+        if (dateCompleted != null) {
+            workOrder.setDateCompleted(Date.valueOf(dateCompleted));
+        }
     }
 
     public void loadCustomer(@NotNull Customer c) {
@@ -311,6 +305,20 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         tfZip.setText(c.getAddress().getZip());
     }
 
+    public Customer buildCustomer() {
+        String firstName = tfFirstName.getText();
+        String lastName = tfLastName.getText();
+        String phone = tfPhone.getText();
+        String email = tfEmail.getText();
+        String company = tfCompany.getText();
+        String street = tfAddress.getText();
+        String city = tfCity.getText();
+        String state = tfState.getText();
+        String zip = tfZip.getText();
+        Address address = new Address(street, city, state, zip);
+        return new Customer(firstName, lastName, phone, email, company, address);
+    }
+
     public void loadVehicle(@NotNull Vehicle v) {
         tfVin.setText(v.getVin());
         tfLicensePlate.setText(v.getLicensePlate());
@@ -324,15 +332,18 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         tfMileageOut.setText(v.getMileageOut());
     }
 
-    public void buildWorkOrder() {
-        Customer customer = buildCustomer();
-        Vehicle vehicle = buildVehicle();
-        workOrder.setCustomer(customer);
-        workOrder.setVehicle(vehicle);
-        LocalDate dateCompleted = dateCompletedPicker.getValue();
-        if (dateCompleted != null) {
-            workOrder.setDateCompleted(Date.valueOf(dateCompleted));
-        }
+    public Vehicle buildVehicle() {
+        String vin = tfVin.getText();
+        String licensePlate = tfLicensePlate.getText();
+        String color = tfColor.getText();
+        String year = tfYear.getText();
+        String make = tfMake.getText();
+        String model = tfModel.getText();
+        String engine = tfEngine.getText();
+        String transmission = tfTransmission.getText();
+        String mileageIn = tfMileageIn.getText();
+        String mileageOut = tfMileageOut.getText();
+        return new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
     }
 
     public void addPart() {

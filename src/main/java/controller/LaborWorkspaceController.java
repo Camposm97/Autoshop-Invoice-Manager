@@ -7,13 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import model.Preferences;
-import model.tps.AddLaborTransaction;
-import model.tps.TPS;
-import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
 
-import java.util.Iterator;
 import java.util.function.Function;
 
 public class LaborWorkspaceController {
@@ -80,14 +76,6 @@ public class LaborWorkspaceController {
 
         if (cbAutoGen.isSelected()) {
             desc = "AUTO_GENERATE";
-//            Iterator<AutoPart> iter = workOrder.autoPartIterator();
-//            StringBuilder sb = new StringBuilder("Installed ");
-//            while (iter.hasNext()) {
-//                sb.append(iter.next().getDesc());
-//                if (iter.hasNext())
-//                    sb.append(", ");
-//            }
-//            desc = sb.toString();
         }
 
         double billedHrs, rate;

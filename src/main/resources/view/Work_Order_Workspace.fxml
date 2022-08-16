@@ -20,17 +20,17 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderWorkspaceController">
     <children>
         <SplitPane dividerPositions="0.135">
             <items>
                 <VBox maxWidth="-Infinity" prefWidth="150.0" spacing="15.0" stylesheets="@../css/default.css">
                     <children>
                         <Button fx:id="btPrint" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#print" text="Print..." />
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addPart" text="Add Part" />
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addLabor" text="Add Labor" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#saveAndClose" text="Save &amp; Close" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#close" text="Cancel &amp; Close" />
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addPart" text="Add Part" />
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addLabor" text="Add Labor" />
                     </children>
                     <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -63,7 +63,7 @@
                                                         <Glyph fontFamily="FontAwesome" icon="USER" />
                                                     </graphic>
                                                 </Label>
-                                                <Button fx:id="btCus" mnemonicParsing="false" onAction="#showCustomer">
+                                                <Button fx:id="btCus" mnemonicParsing="false" onAction="#showCustomerPopOver">
                                                     <graphic>
                                                         <Glyph fontFamily="FontAwesome" icon="BARS" />
                                                     </graphic>
@@ -138,7 +138,7 @@
                                                         <Glyph fontFamily="FontAwesome" icon="CAR" />
                                                     </graphic>
                                                 </Label>
-                                                <Button fx:id="btVeh" mnemonicParsing="false" onAction="#showVehicle">
+                                                <Button fx:id="btVeh" mnemonicParsing="false" onAction="#showVehiclePopOver">
                                                     <graphic>
                                                         <Glyph fontFamily="FontAwesome" icon="BARS" />
                                                     </graphic>
@@ -375,7 +375,7 @@
                                         <Label text="Date Completed" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                         <TextField fx:id="tfWorkOrderId" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <DatePicker fx:id="dateCreated" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <TextField fx:id="tfTaxRate" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                              <TextField fx:id="tfTaxRate" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                         <DatePicker fx:id="dateCompletedPicker" editable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                               <Separator prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="3" />
                               <Label layoutX="18.0" layoutY="23.0" styleClass="title_label" text="Payment Information" GridPane.columnSpan="2" GridPane.rowIndex="4">

@@ -2,6 +2,7 @@ package controller;
 
 import app.App;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -12,6 +13,7 @@ import model.database.DB;
 import model.ui.FX;
 import model.work_order.WorkOrder;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
@@ -107,9 +109,15 @@ public class MyCompanyController {
     public void editWorkOrder(TableView<WorkOrder> tv) {
         WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
         if (workOrder != null) {
-            WorkOrderWorkspaceController controller = new WorkOrderWorkspaceController(workOrder);
-            Parent node = FX.view("Work_Order_Workspace.fxml", controller);
-            App.setDisplay(node);
+            try {
+                FXMLLoader loader = FX.load("Work_Order_Workspace.fxml");
+                Parent node = loader.load();
+                WorkOrderWorkspaceController controller = loader.getController();
+                controller.loadWorkOrder(workOrder);
+                App.setDisplay(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

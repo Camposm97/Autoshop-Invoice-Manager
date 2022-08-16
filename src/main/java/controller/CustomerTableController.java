@@ -2,6 +2,7 @@ package controller;
 
 import app.App;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -17,6 +18,7 @@ import model.ui.TableCellFactory;
 import model.work_order.Vehicle;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class CustomerTableController {
@@ -333,17 +335,27 @@ public class CustomerTableController {
     }
 
     public void createWorkOrderWithCustomer() {
-        WorkOrderWorkspaceController controller = new WorkOrderWorkspaceController();
-        Parent node = FX.view("Work_Order_Workspace.fxml", controller);
-        controller.loadCustomer(getSelectedCustomer());
-        App.setDisplay(node);
+        FXMLLoader loader = FX.load("Work_Order_Workspace.fxml");
+        try {
+            Parent node = loader.load();
+            WorkOrderWorkspaceController c = loader.getController();
+            c.loadCustomer(getSelectedCustomer());
+            App.setDisplay(node);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createWorkOrderWithCustomerAndVehicle() {
-        WorkOrderWorkspaceController controller = new WorkOrderWorkspaceController();
-        Parent node = FX.view("Work_Order_Workspace.fxml", controller);
-        controller.loadCustomer(getSelectedCustomer());
-        controller.loadVehicle(getSelectedVehicle());
-        App.setDisplay(node);
+        FXMLLoader loader = FX.load("Work_Order_Workspace.fxml");
+        try {
+            Parent node = loader.load();
+            WorkOrderWorkspaceController c = loader.getController();
+            c.loadCustomer(getSelectedCustomer());
+            c.loadVehicle(getSelectedVehicle());
+            App.setDisplay(node);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

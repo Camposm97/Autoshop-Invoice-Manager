@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.customer.Customer;
-import model.tps.TPS;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -16,7 +15,7 @@ import java.util.Optional;
 import java.util.OptionalDouble;
 
 public class WorkOrder implements Billable {
-    private int id;
+    private Integer id;
     private Date dateCreated, dateCompleted;
     private Customer customer;
     private Vehicle vehicle;
@@ -25,6 +24,7 @@ public class WorkOrder implements Billable {
     private ObservableList<WorkOrderPayment> paymentList;
 
     public WorkOrder() {
+        this.id = 0;
         this.dateCreated = Date.valueOf(LocalDate.now().toString());
         this.dateCompleted = null;
         this.customer = null;
@@ -35,6 +35,7 @@ public class WorkOrder implements Billable {
     }
 
     public WorkOrder(Customer customer, Vehicle vehicle) {
+        this.id = 0;
         this.dateCreated = Date.valueOf(LocalDate.now().toString());
         this.dateCompleted = null;
         this.customer = customer;
@@ -44,11 +45,11 @@ public class WorkOrder implements Billable {
         this.paymentList = FXCollections.observableArrayList();
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -258,5 +259,9 @@ public class WorkOrder implements Billable {
                 ", itemList=" + itemList +
                 ", laborList=" + laborList +
                 '}';
+    }
+
+    public boolean isCompleted() {
+        return dateCompleted != null;
     }
 }

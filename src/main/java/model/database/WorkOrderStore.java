@@ -342,26 +342,29 @@ public class WorkOrderStore {
             Iterator<AutoPart> autoPartIterator = workOrder.autoPartIterator();
             while (autoPartIterator.hasNext()) {
                 AutoPart autoPart = autoPartIterator.next();
-                if (autoPart.isNew())
+                if (autoPart.isNew()) {
                     addAutoPart(workOrder.getId(), autoPart);
-                else
+                } else {
                     updateAutoPart(autoPart);
+                }
             }
             Iterator<Labor> laborIterator = workOrder.laborIterator();
             while (laborIterator.hasNext()) {
                 Labor labor = laborIterator.next();
-                if (labor.isNew())
+                if (labor.isNew()) {
                     addLabor(workOrder.getId(), labor);
-                else
+                } else {
                     updateLabor(labor);
+                }
             }
             Iterator<WorkOrderPayment> paymentIterator = workOrder.paymentIterator();
             while (paymentIterator.hasNext()) {
                 WorkOrderPayment payment = paymentIterator.next();
-                if (payment.isNew())
+                if (payment.isNew()) {
                     addPayment(workOrder.getId(), payment);
-                else
+                } else {
                     updatePayment(payment);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

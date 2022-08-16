@@ -4,6 +4,7 @@ import app.App;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -12,6 +13,7 @@ import model.database.DB;
 import model.ui.FX;
 import model.work_order.WorkOrder;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.function.Function;
 
@@ -68,9 +70,15 @@ public class WorkOrderTableController {
     public void editWorkOrder() {
         WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
         if (workOrder != null) {
-            WorkOrderWorkspaceController controller = new WorkOrderWorkspaceController(workOrder);
-            Parent node = FX.view("Work_Order_Workspace.fxml", controller);
-            App.setDisplay(node);
+            try {
+                FXMLLoader loader = FX.load("Work_Order_Workspace.fxml");
+                Parent node = loader.load();
+                WorkOrderWorkspaceController c = loader.getController();
+                c.loadWorkOrder(workOrder);
+                App.setDisplay(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

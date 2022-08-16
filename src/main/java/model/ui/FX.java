@@ -1,6 +1,5 @@
 package model.ui;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TableView;
@@ -21,6 +20,19 @@ public class FX {
         }
     }
 
+    public static Parent view(String src, Object controller) {
+        try {
+            URL url = FX.class.getClassLoader().getResource("view/" + src);
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setController(controller);
+            fxmlLoader.setLocation(url);
+            return fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Pane();
+        }
+    }
+
     public static FXMLLoader load(String src) {
         try {
             URL url = FX.class.getClassLoader().getResource("view/" + src);
@@ -35,19 +47,6 @@ public class FX {
     public static String loadCSS(String src) {
         URL url = FX.class.getClassLoader().getResource("css/" + src);
         return url.toExternalForm();
-    }
-
-    public static Parent view(String src, Object controller) {
-        try {
-            URL url = FX.class.getClassLoader().getResource("view/" + src);
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setController(controller);
-            fxmlLoader.setLocation(url);
-            return fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new Pane();
-        }
     }
 
     public static void autoResizeColumns(TableView<?> tv, final double OFFSET) {

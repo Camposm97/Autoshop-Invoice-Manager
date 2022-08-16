@@ -30,8 +30,8 @@ public class AppController {
     }
 
     public void addWorkOrder() {
-        WorkOrderWorkspaceController controller = new WorkOrderWorkspaceController();
-        App.setDisplay(FX.view("Work_Order_Workspace.fxml", controller));
+//        WorkOrderWorkspaceController controller = new WorkOrderWorkspaceController();
+        App.setDisplay(FX.view("Work_Order_Workspace.fxml"));
         DB.get().clearAllProductsMarkedForDeletion();
         DB.get().clearAllPaymentsMarkedForDeletion();
     }
