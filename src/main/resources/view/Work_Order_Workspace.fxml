@@ -36,7 +36,7 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                     </padding>
                 </VBox>
-                <TabPane stylesheets="@../css/default.css" tabClosingPolicy="UNAVAILABLE">
+                <TabPane fx:id="tabPane" stylesheets="@../css/default.css" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                         <Tab text="Customer / Vehicle Info">
                             <content>
@@ -223,7 +223,7 @@
                                 </GridPane>
                             </content>
                         </Tab>
-                        <Tab text="Parts and Labor">
+                        <Tab fx:id="tabPartsAndLabor" text="Parts and Labor">
                             <content>
                                 <GridPane>
                                     <columnConstraints>
@@ -343,7 +343,7 @@
                                 </GridPane>
                             </content>
                         </Tab>
-                        <Tab text="Work Order &amp; Payment Info">
+                        <Tab fx:id="tabWorkOrderInfo" text="Work Order &amp; Payment Info">
                             <content>
                                 <GridPane hgap="5.0" maxHeight="-Infinity" vgap="5.0">
                                     <columnConstraints>

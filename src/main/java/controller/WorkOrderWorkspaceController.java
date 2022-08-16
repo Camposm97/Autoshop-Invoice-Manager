@@ -1,7 +1,6 @@
 package controller;
 
 import app.App;
-import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,9 +12,7 @@ import model.State;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
-import model.tps.AddAutoPartTransaction;
-import model.tps.AddLaborTransaction;
-import model.tps.TPS;
+import model.tps.*;
 import model.ui.AlertFactory;
 import model.ui.FX;
 import model.work_order.*;
@@ -38,11 +35,13 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     private static final KeyCodeCombination ACCEL_REDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN);
     protected int chosenCustomerId;
     protected WorkOrder workOrder;
-    protected TPS tps;
+    protected TPS tpsProducts, tpsPayments;
     protected List<Product> productsMarkedForDeletion;
     protected List<WorkOrderPayment> paymentsMarkedForDeletion;
     protected CustomerTableController customerTableController;
     protected VehicleTableController vehicleTableController;
+    @FXML
+    Tab tabPartsAndLabor, tabWorkOrderInfo;
     @FXML
     Button btPrint;
     @FXML
@@ -94,7 +93,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
 
     public WorkOrderWorkspaceController() {
         this.workOrder = new WorkOrder();
-        this.tps = new TPS();
+        this.tpsProducts = new TPS();
+        this.tpsPayments = new TPS();
         this.productsMarkedForDeletion = new LinkedList<>();
         this.paymentsMarkedForDeletion = new LinkedList<>();
     }
@@ -106,10 +106,22 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     public void initialize() throws IOException {
         App.setDisableMenu(true);
-        Platform.runLater(() -> {
-            App.getScene().getAccelerators().put(ACCEL_PRINT, () -> btPrint.fire());
-            App.getScene().getAccelerators().put(ACCEL_UNDO, () -> tps.undoTransaction());
-            App.getScene().getAccelerators().put(ACCEL_REDO, () -> tps.doTransaction());
+        App.getScene().getAccelerators().put(ACCEL_PRINT, () -> btPrint.fire());
+        App.getScene().getAccelerators().put(ACCEL_UNDO, () -> {
+            if (tabPartsAndLabor.isSelected()) {
+                tpsProducts.undoTransaction();
+            } else if (tabWorkOrderInfo.isSelected()) {
+                tpsPayments.undoTransaction();
+            }
+            updateTotals();
+        });
+        App.getScene().getAccelerators().put(ACCEL_REDO, () -> {
+            if (tabPartsAndLabor.isSelected()) {
+                tpsProducts.doTransaction();
+            } else if (tabWorkOrderInfo.isSelected()) {
+                tpsPayments.doTransaction();
+            }
+            updateTotals();
         });
 
         // Bind TextFields for auto-completion
@@ -328,7 +340,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     public void addPart() {
         Function<AutoPart, Void> callback = x -> {
             AddAutoPartTransaction transaction = new AddAutoPartTransaction(workOrder, x);
-            tps.addTransaction(transaction);
+            tpsProducts.addTransaction(transaction);
             return null;
         };
         AlertFactory.showAddPart(callback);
@@ -339,7 +351,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         AutoPart selectedItem = tvParts.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             Function<AutoPart, Void> callback = x -> {
-                workOrder.updateAutoPart(selectedItem, x);
+                UpdateAutoPartTransaction transaction = new UpdateAutoPartTransaction(workOrder, selectedItem, x);
+                tpsProducts.addTransaction(transaction);
               return null;
             };
             AlertFactory.showEditPart(callback, selectedItem);
@@ -350,10 +363,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     public void deletePart() {
         AutoPart autoPart = tvParts.getSelectionModel().getSelectedItem();
         if (autoPart != null) {
-            if (!autoPart.isNew()) {
-                productsMarkedForDeletion.add(autoPart);
-            }
-            workOrder.removeAutoPart(autoPart);
+            DeleteAutoPartTransaction transaction = new DeleteAutoPartTransaction(workOrder, autoPart, productsMarkedForDeletion);
+            tpsProducts.addTransaction(transaction);
             updateTotals();
         }
     }
@@ -371,7 +382,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
                 x.setDesc(sb.toString());
             }
             AddLaborTransaction transaction = new AddLaborTransaction(workOrder, x);
-            tps.addTransaction(transaction);
+            tpsProducts.addTransaction(transaction);
             return null;
         };
         AlertFactory.showAddLabor(callback);
@@ -392,7 +403,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
                     }
                     x.setDesc(sb.toString());
                 }
-                workOrder.updateLabor(labor, x);
+                UpdateLaborTransaction transaction = new UpdateLaborTransaction(workOrder, labor, x);
+                tpsProducts.addTransaction(transaction);
                 return null;
             };
             AlertFactory.showEditLabor(callback, labor);
@@ -403,23 +415,33 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     public void deleteLabor() {
         Labor labor = tvLabor.getSelectionModel().getSelectedItem();
         if (labor != null) {
-            if (!labor.isNew()) {
-                productsMarkedForDeletion.add(labor);
-            }
-            workOrder.removeLabor(labor);
+            DeleteLaborTransaction transaction = new DeleteLaborTransaction(workOrder, labor, productsMarkedForDeletion);
+            tpsProducts.addTransaction(transaction);
             updateTotals();
         }
     }
 
     public void addPayment() {
-        AlertFactory.showAddPayment(workOrder);
+        Function<WorkOrderPayment, Void> callback = x -> {
+            AddPaymentTransaction transaction = new AddPaymentTransaction(workOrder, x);
+            tpsPayments.addTransaction(transaction);
+            return null;
+        };
+        AlertFactory.showAddPayment(callback);
         updateTotals();
     }
 
     public void editPayment() {
         WorkOrderPayment payment = tvPayment.getSelectionModel().getSelectedItem();
         if (payment != null) {
-            AlertFactory.showEditPayment(workOrder, payment);
+            Function<WorkOrderPayment, Void> callback = x -> {
+                System.out.println(payment);
+                System.out.println(x);
+                UpdatePaymentTransaction transaction = new UpdatePaymentTransaction(workOrder, payment, x);
+                tpsPayments.addTransaction(transaction);
+                return null;
+            };
+            AlertFactory.showEditPayment(callback, payment);
             updateTotals();
         }
     }
@@ -427,10 +449,12 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     public void deletePayment() {
         WorkOrderPayment payment = tvPayment.getSelectionModel().getSelectedItem();
         if (payment != null) {
-            if (!payment.isNew()) {
-                paymentsMarkedForDeletion.add(payment);
-            }
-            workOrder.removePayment(payment);
+            DeletePaymentTransaction transaction = new DeletePaymentTransaction(workOrder, payment, paymentsMarkedForDeletion);
+            tpsPayments.addTransaction(transaction);
+//            if (!payment.isNew()) {
+//                paymentsMarkedForDeletion.add(payment);
+//            }
+//            workOrder.removePayment(payment);
             updateTotals();
         }
     }

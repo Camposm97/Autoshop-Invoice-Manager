@@ -6,14 +6,15 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 import model.work_order.Payment;
-import model.work_order.WorkOrder;
 import model.work_order.WorkOrderPayment;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.function.Function;
 
 public class PaymentWorkspaceController {
+    private int paymentId;
     @FXML
     DatePicker datePicker;
     @FXML
@@ -38,21 +39,22 @@ public class PaymentWorkspaceController {
         cb.getItems().setAll(Payment.list());
     }
 
-    public void savePayment(WorkOrder workOrder) {
+    public void savePayment(Function<WorkOrderPayment, Void> callback) {
         WorkOrderPayment payment = buildPayment();
-        workOrder.addPayment(payment);
+//        workOrder.addPayment(payment);
+        callback.apply(payment);
     }
 
     public void loadPayment(WorkOrderPayment payment) {
+        this.paymentId = payment.getId();
         datePicker.setValue(payment.getDate().toLocalDate());
         cb.setValue(payment.getType());
         tfAmount.setText(String.valueOf(payment.getAmount()));
     }
 
-    public void updatePayment(WorkOrder workOrder, WorkOrderPayment oldPayment) {
+    public void updatePayment(Function<WorkOrderPayment, Void> callback) {
         WorkOrderPayment newPayment = buildPayment();
-        newPayment.setId(oldPayment.getId());
-        workOrder.updatePayment(oldPayment, newPayment);
+        callback.apply(newPayment);
     }
 
     public WorkOrderPayment buildPayment() {
@@ -64,6 +66,6 @@ public class PaymentWorkspaceController {
         } catch (NumberFormatException e) {
             amount = 0.0;
         }
-        return new WorkOrderPayment(date, type, amount);
+        return new WorkOrderPayment(paymentId, date, type, amount);
     }
 }

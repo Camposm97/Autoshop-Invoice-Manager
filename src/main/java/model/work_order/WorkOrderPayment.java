@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleStringProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class WorkOrderPayment implements Comparable<WorkOrderPayment> {
@@ -74,6 +73,16 @@ public class WorkOrderPayment implements Comparable<WorkOrderPayment> {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "WorkOrderPayment{" +
+                "id=" + id +
+                ", type=" + type +
+                ", date=" + date +
+                ", amount=" + amount +
+                '}';
     }
 
     @Override

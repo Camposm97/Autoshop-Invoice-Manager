@@ -8,41 +8,19 @@ public class TPS {
         void doTransaction();
         void undoTransaction();
     }
+
     private List<Transaction> transactions;
     private int numTransactions;
     private int mostRecentTransaction;
-    private boolean performingDo, performingUndo;
 
     public TPS() {
         this.transactions = new LinkedList<>();
         this.numTransactions = 0;
         this.mostRecentTransaction = -1;
-        this.performingDo = false;
-        this.performingUndo = false;
-    }
-
-    public int getSize() {
-        return transactions.size();
-    }
-
-    public int getRedoSize() {
-        return getSize() - mostRecentTransaction - 1;
-    }
-
-    public int getUndoSize() {
-        return mostRecentTransaction + 1;
-    }
-
-    public boolean isPerformingDo() {
-        return performingDo;
-    }
-
-    public boolean isPerformingUndo() {
-        return performingUndo;
     }
 
     public boolean hasTransactionToRedo() {
-        return mostRecentTransaction + 1 < numTransactions;
+        return (mostRecentTransaction + 1) < numTransactions;
     }
 
     public boolean hasTransactionToUndo() {
@@ -50,20 +28,17 @@ public class TPS {
     }
 
     public void addTransaction(Transaction t) {
-        if ((this.mostRecentTransaction < 0)
-                || (this.mostRecentTransaction < (this.transactions.size() - 1))) {
+        if ((this.mostRecentTransaction < 0) || (this.mostRecentTransaction < (this.transactions.size() - 1))) {
             for (int i = this.transactions.size() - 1; i > this.mostRecentTransaction; i--) {
                 this.transactions = this.transactions.subList(i, 1);
             }
             this.numTransactions = this.mostRecentTransaction + 2;
-        }
-        else {
+        } else {
             this.numTransactions++;
         }
 
         // ADD THE TRANSACTION
-        this.transactions.add(t);
-//        this.transactions[this.mostRecentTransaction+1] = transaction;
+        this.transactions.add(mostRecentTransaction+1, t);
 
         // AND EXECUTE IT
         doTransaction();
@@ -78,11 +53,9 @@ public class TPS {
      */
     public void doTransaction() {
         if (this.hasTransactionToRedo()) {
-            this.performingDo = true;
             Transaction transaction = transactions.get(mostRecentTransaction + 1);
             transaction.doTransaction();
             this.mostRecentTransaction++;
-            this.performingDo = false;
         }
     }
 
@@ -92,11 +65,9 @@ public class TPS {
      */
     public void undoTransaction() {
         if (this.hasTransactionToUndo()) {
-            this.performingUndo = true;
             Transaction transaction = transactions.get(mostRecentTransaction);
             transaction.undoTransaction();
             this.mostRecentTransaction--;
-            this.performingUndo = false;
         }
     }
 

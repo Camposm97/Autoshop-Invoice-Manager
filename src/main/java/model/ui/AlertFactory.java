@@ -98,7 +98,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showAddPayment(WorkOrder workOrder) {
+    public static void showAddPayment(Function<WorkOrderPayment, Void> callback) {
         PaymentWorkspaceController controller = new PaymentWorkspaceController();
         Parent node = FX.view("Payment_Workspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -106,12 +106,12 @@ public class AlertFactory {
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
-                controller.savePayment(workOrder);
+                controller.savePayment(callback);
             }
         });
     }
 
-    public static void showEditPayment(WorkOrder workOrder, WorkOrderPayment selectedPayment) {
+    public static void showEditPayment(Function<WorkOrderPayment, Void> callback, WorkOrderPayment selectedPayment) {
         PaymentWorkspaceController controller = new PaymentWorkspaceController();
         Parent node = FX.view("Payment_Workspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -120,7 +120,7 @@ public class AlertFactory {
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
-                controller.updatePayment(workOrder, selectedPayment);
+                controller.updatePayment(callback);
             }
         });
     }
