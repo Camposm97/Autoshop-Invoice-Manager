@@ -435,8 +435,6 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         WorkOrderPayment payment = tvPayment.getSelectionModel().getSelectedItem();
         if (payment != null) {
             Function<WorkOrderPayment, Void> callback = x -> {
-                System.out.println(payment);
-                System.out.println(x);
                 UpdatePaymentTransaction transaction = new UpdatePaymentTransaction(workOrder, payment, x);
                 tpsPayments.addTransaction(transaction);
                 return null;

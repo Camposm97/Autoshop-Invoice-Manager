@@ -1,14 +1,10 @@
 package model.tps;
 
+import javax.swing.tree.TreeNode;
 import java.util.LinkedList;
 import java.util.List;
 
 public class TPS {
-    public interface Transaction {
-        void doTransaction();
-        void undoTransaction();
-    }
-
     private List<Transaction> transactions;
     private int numTransactions;
     private int mostRecentTransaction;
@@ -28,13 +24,13 @@ public class TPS {
     }
 
     public void addTransaction(Transaction t) {
-        if ((this.mostRecentTransaction < 0) || (this.mostRecentTransaction < (this.transactions.size() - 1))) {
-            for (int i = this.transactions.size() - 1; i > this.mostRecentTransaction; i--) {
-                this.transactions = this.transactions.subList(i, 1);
+        if ((mostRecentTransaction < 0) || (mostRecentTransaction < (transactions.size() - 1))) {
+            for (int i = transactions.size() - 1; i > mostRecentTransaction; i--) {
+                transactions.remove(i);
             }
-            this.numTransactions = this.mostRecentTransaction + 2;
+            numTransactions = mostRecentTransaction + 2;
         } else {
-            this.numTransactions++;
+            numTransactions++;
         }
 
         // ADD THE TRANSACTION
@@ -44,13 +40,6 @@ public class TPS {
         doTransaction();
     }
 
-    /**
-     * doTransaction
-     *
-     * Does the current transaction on the stack and advances the transaction
-     * counter. Note this function may be invoked as a result of either adding
-     * a transaction (which also does it), or redoing a transaction.
-     */
     public void doTransaction() {
         if (this.hasTransactionToRedo()) {
             Transaction transaction = transactions.get(mostRecentTransaction + 1);
@@ -71,26 +60,6 @@ public class TPS {
         }
     }
 
-    /**
-     * clearAllTransactions
-     *
-     * Removes all the transactions from the TPS, leaving it with none.
-     */
-    public void clearAllTransactions() {
-        // REMOVE ALL THE TRANSACTIONS
-        this.transactions.clear();
-
-        // MAKE SURE TO RESET THE LOCATION OF THE
-        // TOP OF THE TPS STACK TOO
-        this.mostRecentTransaction = -1;
-        this.numTransactions = 0;
-    }
-
-    /**
-     * toString
-     *
-     * Builds and returns a textual representation of the full TPS and its stack.
-     */
     @Override
     public String toString() {
         String text = "--Number of Transactions: " + this.numTransactions + "\n";
@@ -101,5 +70,10 @@ public class TPS {
             text += "----" + jT.toString() + "\n";
         }
         return text;
+    }
+
+    public interface Transaction {
+        void doTransaction();
+        void undoTransaction();
     }
 }
