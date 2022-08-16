@@ -42,7 +42,7 @@
                       <MenuItem mnemonicParsing="false" text="Customers" />
                         <MenuItem mnemonicParsing="false" text="Vehicles" />
                         <MenuItem mnemonicParsing="false" text="Work Orders" />
-                        <MenuItem mnemonicParsing="false" text="Auto Part Suggestion" />
+                        <MenuItem mnemonicParsing="false" text="Auto Part Suggestions" />
                     </items>
                   </Menu>
                   <SeparatorMenuItem mnemonicParsing="false" />
