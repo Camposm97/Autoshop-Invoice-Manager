@@ -5,7 +5,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
-import model.database.DB;
 import model.ui.AlertFactory;
 import model.ui.FX;
 
@@ -30,10 +29,7 @@ public class AppController {
     }
 
     public void addWorkOrder() {
-//        WorkOrderWorkspaceController controller = new WorkOrderWorkspaceController();
         App.setDisplay(FX.view("Work_Order_Workspace.fxml"));
-        DB.get().clearAllProductsMarkedForDeletion();
-        DB.get().clearAllPaymentsMarkedForDeletion();
     }
 
     public void viewMyCompany() {

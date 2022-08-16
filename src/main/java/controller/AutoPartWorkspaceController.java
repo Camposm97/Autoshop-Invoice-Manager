@@ -8,11 +8,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
 import model.database.DB;
-import model.tps.AddAutoPartTransaction;
-import model.tps.TPS;
 import model.ui.FX;
 import model.work_order.AutoPart;
-import model.work_order.WorkOrder;
 
 import java.util.function.Function;
 
@@ -54,9 +51,9 @@ public class AutoPartWorkspaceController {
         callback.apply(autoPart);
     }
 
-    public void updatePart(WorkOrder workOrder, AutoPart oldItem) {
-        AutoPart newItem = buildPart();
-        workOrder.updateItem(oldItem, newItem);
+    public void updatePart(Function<AutoPart, Void> callback) {
+        AutoPart newAutoPart = buildPart();
+        callback.apply(newAutoPart);
     }
 
     public void loadPart(AutoPart ap) {

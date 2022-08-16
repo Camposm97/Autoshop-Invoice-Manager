@@ -1,13 +1,15 @@
 package model.database;
 
-import model.work_order.*;
+import model.work_order.AutoPart;
+import model.work_order.Labor;
+import model.work_order.Product;
+import model.work_order.WorkOrderPayment;
 
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
 import java.util.List;
 
 import static model.database.DBAttributes.*;
@@ -31,8 +33,6 @@ public class DB {
     private WorkOrderStore workOrders;
 
     private Statement stmt;
-    private List<Product> productsMarkedForDeletion;
-    private List<WorkOrderPayment> paymentsMarkedForDeletion;
 
     private DB() {
         try {
@@ -43,8 +43,6 @@ public class DB {
             }
             Class.forName("org.sqlite.JDBC");
             this.c = DriverManager.getConnection("jdbc:sqlite:" + file);
-            this.productsMarkedForDeletion = new LinkedList<>();
-            this.paymentsMarkedForDeletion = new LinkedList<>();
             this.customers = new CustomerStore(c);
             this.vehicles = new VehicleStore(c);
             this.autoParts = new AutoPartStore(c);
@@ -161,40 +159,23 @@ public class DB {
                 "foreign key(" + WORK_ORDER_PAYMENT_TABLE.WORK_ORDER_ID + ") references " + WORK_ORDER_TABLE + "(" + WORK_ORDER_TABLE.WORK_ORDER_ID + "))");
     }
 
-    public void addProductMarkedForDeletion(Product product) {
-        productsMarkedForDeletion.add(product);
-    }
-
-    public void clearAllProductsMarkedForDeletion() {
-        productsMarkedForDeletion.clear();
-    }
-
-    public void deleteProductsMarkedForDeletion() {
-        productsMarkedForDeletion.forEach(product -> {
+    public void deleteProductsMarkedForDeletion(List<Product> list) {
+        list.forEach(x -> {
             try {
-                if (product instanceof AutoPart)
-                    workOrders.deleteAutoPart((AutoPart) product);
-                else if (product instanceof Labor)
-                    workOrders.deleteLabor((Labor) product);
+                if (x instanceof AutoPart)
+                    workOrders.deleteAutoPart((AutoPart) x);
+                else if (x instanceof Labor)
+                    workOrders.deleteLabor((Labor) x);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
-        clearAllProductsMarkedForDeletion();
+        list.clear();
     }
 
-    public void addPaymentMarkedForDeletion(WorkOrderPayment payment) {
-        paymentsMarkedForDeletion.add(payment);
-    }
-
-    public void clearAllPaymentsMarkedForDeletion() {
-        paymentsMarkedForDeletion.clear();
-    }
-
-    public void deletePaymentMarkedForDeletion() {
-        paymentsMarkedForDeletion.forEach(x -> {
-            workOrders.deletePaymentById(x.getId());
-        });
+    public void deletePaymentMarkedForDeletion(List<WorkOrderPayment> list) {
+        list.forEach(x -> workOrders.deletePaymentById(x.getId()));
+        list.clear();
     }
 
     public CustomerStore customers() {

@@ -40,7 +40,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     protected WorkOrder workOrder;
     protected TPS tps;
     protected List<Product> productsMarkedForDeletion;
-    protected List<Payment> paymentsMarkedForDeletion;
+    protected List<WorkOrderPayment> paymentsMarkedForDeletion;
     protected CustomerTableController customerTableController;
     protected VehicleTableController vehicleTableController;
     @FXML
@@ -98,13 +98,6 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         this.productsMarkedForDeletion = new LinkedList<>();
         this.paymentsMarkedForDeletion = new LinkedList<>();
     }
-
-//    public WorkOrderWorkspaceController(WorkOrder workOrder) { // Update Work Order
-//        this.workOrder = workOrder;
-//        this.tps = new TPS();
-//        this.productsMarkedForDeletion = new LinkedList<>();
-//        this.paymentsMarkedForDeletion = new LinkedList<>();
-//    }
 
     /**
      * Initializes what columns hold what values binds tables to
@@ -180,18 +173,6 @@ public class WorkOrderWorkspaceController implements PrefObservable {
 
         tfTaxRate.setText(Preferences.get().getTaxRatePrettyString());
 
-//        if (workOrder.isNew()) {
-////            tfWorkOrderId.setText(String.valueOf(DB.get().workOrders().getNextId()));
-//            btVeh.setDisable(true);
-//        } else {
-//            loadCustomer(workOrder.getCustomer());
-//            loadVehicle(workOrder.getVehicle());
-//            tfWorkOrderId.setText(String.valueOf(workOrder.getId()));
-//            if (workOrder.getDateCompleted() != null) {
-//                dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
-//            }
-//            updateTotals();
-//        }
         btVeh.setDisable(true);
 
 
@@ -231,8 +212,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             workOrder = DB.get().workOrders().add(workOrder);
         } else {
             DB.get().workOrders().update(workOrder);
-            DB.get().deleteProductsMarkedForDeletion();
-            DB.get().deletePaymentMarkedForDeletion();
+            DB.get().deleteProductsMarkedForDeletion(productsMarkedForDeletion);
+            DB.get().deletePaymentMarkedForDeletion(paymentsMarkedForDeletion);
         }
         addToRecents();
     }
@@ -244,8 +225,6 @@ public class WorkOrderWorkspaceController implements PrefObservable {
 
     public void close() {
         Preferences.get().removeObserver(this);
-        DB.get().clearAllProductsMarkedForDeletion();
-        DB.get().clearAllPaymentsMarkedForDeletion();
         App.getScene().getAccelerators().remove(ACCEL_PRINT);
         App.getScene().getAccelerators().remove(ACCEL_UNDO);
         App.getScene().getAccelerators().remove(ACCEL_REDO);
@@ -359,7 +338,11 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     public void editPart() {
         AutoPart selectedItem = tvParts.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-            AlertFactory.showEditPart(workOrder, selectedItem);
+            Function<AutoPart, Void> callback = x -> {
+                workOrder.updateAutoPart(selectedItem, x);
+              return null;
+            };
+            AlertFactory.showEditPart(callback, selectedItem);
             updateTotals();
         }
     }
@@ -368,7 +351,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         AutoPart autoPart = tvParts.getSelectionModel().getSelectedItem();
         if (autoPart != null) {
             if (!autoPart.isNew()) {
-                DB.get().addProductMarkedForDeletion(autoPart);
+                productsMarkedForDeletion.add(autoPart);
             }
             workOrder.removeAutoPart(autoPart);
             updateTotals();
@@ -398,7 +381,21 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     public void editLabor() {
         Labor labor = tvLabor.getSelectionModel().getSelectedItem();
         if (labor != null) {
-            AlertFactory.showEditLabor(workOrder, labor);
+            Function<Labor, Void> callback = x -> {
+                if (x.getDesc().equals("AUTO_GENERATE")) {
+                    Iterator<AutoPart> iterator = workOrder.autoPartIterator();
+                    StringBuilder sb = new StringBuilder("Installed ");
+                    while (iterator.hasNext()) {
+                        sb.append(iterator.next().getDesc());
+                        if (iterator.hasNext())
+                            sb.append(", ");
+                    }
+                    x.setDesc(sb.toString());
+                }
+                workOrder.updateLabor(labor, x);
+                return null;
+            };
+            AlertFactory.showEditLabor(callback, labor);
             updateTotals();
         }
     }
@@ -407,7 +404,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         Labor labor = tvLabor.getSelectionModel().getSelectedItem();
         if (labor != null) {
             if (!labor.isNew()) {
-                DB.get().addProductMarkedForDeletion(labor);
+                productsMarkedForDeletion.add(labor);
             }
             workOrder.removeLabor(labor);
             updateTotals();
@@ -431,8 +428,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         WorkOrderPayment payment = tvPayment.getSelectionModel().getSelectedItem();
         if (payment != null) {
             if (!payment.isNew()) {
-                // Add to payments marked for deletion
-                DB.get().addPaymentMarkedForDeletion(payment);
+                paymentsMarkedForDeletion.add(payment);
             }
             workOrder.removePayment(payment);
             updateTotals();

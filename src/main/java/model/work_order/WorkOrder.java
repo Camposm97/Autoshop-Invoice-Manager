@@ -93,7 +93,7 @@ public class WorkOrder implements Billable {
         return itemList.add(item);
     }
 
-    public void updateItem(AutoPart oldItem, AutoPart newItem) {
+    public void updateAutoPart(AutoPart oldItem, AutoPart newItem) {
         ListIterator<AutoPart> iterator = itemList.listIterator();
         while (iterator.hasNext()) {
             AutoPart currentItem = iterator.next();

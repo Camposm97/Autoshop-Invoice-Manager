@@ -8,7 +8,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import model.Preferences;
 import model.work_order.Labor;
-import model.work_order.WorkOrder;
 
 import java.util.function.Function;
 
@@ -55,9 +54,9 @@ public class LaborWorkspaceController {
         callback.apply(labor);
     }
 
-    public void updateLabor(WorkOrder workOrder, Labor oldLabor) {
+    public void updateLabor(Function<Labor, Void> callback) {
         Labor newLabor = buildLabor();
-        workOrder.updateLabor(oldLabor, newLabor);
+        callback.apply(newLabor);
     }
 
     public void loadLabor(Labor labor) {
@@ -67,6 +66,8 @@ public class LaborWorkspaceController {
         tfBilledHrs.setText(String.valueOf(labor.getBilledHrs()));
         tfRate.setText(String.valueOf(labor.getRate()));
         cbTaxable.setSelected(labor.isTaxable());
+        cbAutoGen.setSelected(false);
+        taDesc.setDisable(false);
     }
 
     public Labor buildLabor() {

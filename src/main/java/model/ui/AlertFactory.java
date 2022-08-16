@@ -4,21 +4,14 @@ import app.App;
 import controller.*;
 import javafx.print.*;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Paint;
 import javafx.scene.transform.Scale;
-import javafx.stage.Stage;
-import model.*;
-import model.tps.TPS;
+import model.Preferences;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
@@ -65,7 +58,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showEditPart(WorkOrder workOrder, AutoPart selectedItem) {
+    public static void showEditPart(Function<AutoPart, Void> callback, AutoPart selectedItem) {
         AutoPartWorkspaceController controller = new AutoPartWorkspaceController();
         Parent node = FX.view("Auto_Part_Workspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -74,7 +67,7 @@ public class AlertFactory {
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton())
-                controller.updatePart(workOrder, selectedItem);
+                controller.updatePart(callback);
         });
     }
 
@@ -91,7 +84,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showEditLabor(WorkOrder workOrder, Labor selectedLabor) {
+    public static void showEditLabor(Function<Labor, Void> callback, Labor selectedLabor) {
         LaborWorkspaceController controller = new LaborWorkspaceController();
         Parent node = FX.view("Labor_Workspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -100,7 +93,7 @@ public class AlertFactory {
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
-                controller.updateLabor(workOrder, selectedLabor);
+                controller.updateLabor(callback);
             }
         });
     }
