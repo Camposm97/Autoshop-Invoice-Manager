@@ -16,6 +16,7 @@ import model.State;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
+import model.tps.TPS;
 import model.ui.AlertFactory;
 import model.ui.FX;
 import model.work_order.*;
@@ -85,6 +86,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     TextField tfTotalPayment, tfInvoiceBalance;
 
     KeyCodeCombination printAccel = new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN);
+    KeyCodeCombination undoAccel = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
+    KeyCodeCombination redoAccel = new KeyCodeCombination(KeyCode.Y, KeyCodeCombination.SHORTCUT_DOWN);
 
     public WorkOrderWorkspaceController() { // New Work Order
         this.workOrder = new WorkOrder();
@@ -101,7 +104,17 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     public void initialize() throws IOException {
         App.setDisableMenu(true);
-        Platform.runLater(() -> App.getScene().getAccelerators().put(printAccel, () -> btPrint.fire()));
+        Platform.runLater(() -> {
+            App.getScene().getAccelerators().put(printAccel, () -> btPrint.fire());
+            App.getScene().getAccelerators().put(undoAccel, () -> {
+                System.out.println("do undo");
+                workOrder.getTps().undoTransaction();
+            });
+            App.getScene().getAccelerators().put(redoAccel, () -> {
+                System.out.println("do redo");
+                workOrder.getTps().doTransaction();
+            });
+        });
 
         // Bind TextFields for auto-completion
         TextFields.bindAutoCompletion(tfCompany, DB.get().customers().getUniqueCompanies());
@@ -230,7 +243,9 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         Preferences.get().removeObserver(this);
         DB.get().clearAllProductsMarkedForDeletion();
         DB.get().clearAllPaymentsMarkedForDeletion();
-        btPrint.getScene().getAccelerators().remove(printAccel);
+        App.getScene().getAccelerators().remove(printAccel);
+        App.getScene().getAccelerators().remove(undoAccel);
+        App.getScene().getAccelerators().remove(redoAccel);
         App.setDisableMenu(false);
         App.displayMyCompany();
     }
@@ -332,7 +347,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             if (!autoPart.isNew()) {
                 DB.get().addProductMarkedForDeletion(autoPart);
             }
-            workOrder.removeItem(autoPart);
+            workOrder.removeAutoPart(autoPart);
             updateTotals();
         }
     }

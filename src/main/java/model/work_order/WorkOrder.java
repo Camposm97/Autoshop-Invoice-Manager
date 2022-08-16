@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.customer.Customer;
+import model.tps.TPS;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class WorkOrder implements Billable {
     private ObservableList<AutoPart> itemList;
     private ObservableList<Labor> laborList;
     private ObservableList<WorkOrderPayment> paymentList;
+    private TPS tps;
 
     public WorkOrder() {
         this.dateCreated = Date.valueOf(LocalDate.now().toString());
@@ -31,6 +33,7 @@ public class WorkOrder implements Billable {
         this.itemList = FXCollections.observableArrayList();
         this.laborList = FXCollections.observableArrayList();
         this.paymentList = FXCollections.observableArrayList();
+        this.tps = new TPS();
     }
 
     public WorkOrder(Customer customer, Vehicle vehicle) {
@@ -41,6 +44,7 @@ public class WorkOrder implements Billable {
         this.itemList = FXCollections.observableArrayList();
         this.laborList = FXCollections.observableArrayList();
         this.paymentList = FXCollections.observableArrayList();
+        this.tps = new TPS();
     }
 
     public int getId() {
@@ -102,7 +106,7 @@ public class WorkOrder implements Billable {
         }
     }
 
-    public boolean removeItem(AutoPart item) {
+    public boolean removeAutoPart(AutoPart item) {
         return itemList.remove(item);
     }
 
@@ -257,5 +261,9 @@ public class WorkOrder implements Billable {
                 ", itemList=" + itemList +
                 ", laborList=" + laborList +
                 '}';
+    }
+
+    public TPS getTps() {
+        return tps;
     }
 }

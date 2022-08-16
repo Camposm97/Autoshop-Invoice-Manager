@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import model.Preferences;
+import model.tps.AddLaborTransaction;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
@@ -53,7 +54,8 @@ public class LaborWorkspaceController {
 
     public void saveLabor(WorkOrder workOrder) {
         Labor labor = buildLabor(workOrder);
-        workOrder.addLabor(labor);
+        AddLaborTransaction transaction = new AddLaborTransaction(workOrder, labor);
+        workOrder.getTps().addTransaction(transaction);
     }
 
     public void updateLabor(WorkOrder workOrder, Labor oldLabor) {
