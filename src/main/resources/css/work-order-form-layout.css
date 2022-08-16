@@ -1,9 +1,9 @@
 #root {
-    -fx-font-size: 10px;
+    -fx-font-size: 9px;
 }
 
 #lblOwnerCompany {
-    -fx-font-size: 12px;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
 }
 
