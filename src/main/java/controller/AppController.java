@@ -45,8 +45,17 @@ public class AppController {
         }
     }
 
-    public void exportVehicles() {
-
+    public void exportVehicles() throws Exception {
+        DialogFactory f = new DialogFactory();
+        File file = f.initExport("Export Vehicles", "vehicles");
+        if (file != null) {
+            DB.get().vehicles().export(file.getPath());
+            Notifications n = Notifications.create().title("Export Vehicles")
+                    .text("Successfully exported vehicles to " + file.getPath());
+            if (Preferences.get().getTheme() == Theme.Dark)
+                n = n.darkStyle();
+            n.showInformation();
+        }
     }
 
     public void exportAutoPartSuggestions() {

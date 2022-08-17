@@ -2,11 +2,21 @@ package model.database;
 
 import model.customer.OwnedVehicle;
 import model.work_order.Vehicle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+
+import static model.database.DBAttributes.CUSTOMER_TABLE;
+import static model.database.DBAttributes.VEHICLE_TABLE;
 
 public class VehicleStore {
     private Connection c;
@@ -246,5 +256,36 @@ public class VehicleStore {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public void export(String des) throws SQLException, IOException {
+        ResultSet rs = c.createStatement().executeQuery("select * from " + VEHICLE_TABLE);
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet(VEHICLE_TABLE.toString());
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columns = metaData.getColumnCount();
+        Row headerRow = sheet.createRow(0);
+
+        // Write headers
+        for (int i = 1; i <= columns; i++) {
+            String columnName = metaData.getColumnName(i);
+            Cell headerCell = headerRow.createCell(i - 1);
+            headerCell.setCellValue(columnName);
+        }
+
+        int rowIndex = 1;
+
+        // Write vehicles
+        while (rs.next()) {
+            Row row = sheet.createRow(rowIndex++);
+            for (int i = 0; i < metaData.getColumnCount(); i++) {
+                Cell cell = row.createCell(i);
+                cell.setCellValue(rs.getString(i+1));
+            }
+        }
+
+        FileOutputStream fos = new FileOutputStream(des);
+        workbook.write(fos);
+        workbook.close();
     }
 }
