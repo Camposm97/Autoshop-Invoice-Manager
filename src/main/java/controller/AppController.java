@@ -58,12 +58,30 @@ public class AppController {
         }
     }
 
-    public void exportAutoPartSuggestions() {
-
+    public void exportAutoPartSuggestions() throws Exception {
+        DialogFactory f = new DialogFactory();
+        File file = f.initExport("Export Auto Part Suggestions", "auto-part-suggestions.xlsx");
+        if (file != null) {
+            DB.get().autoParts().export(file.getPath());
+            Notifications n = Notifications.create().title("Export Auto Parts")
+                    .text("Successfully exported auto parts to " + file.getPath());
+            if (Preferences.get().getTheme() == Theme.Dark)
+                n = n.darkStyle();
+            n.showInformation();
+        }
     }
 
-    public void exportWorkOrders() {
-
+    public void exportWorkOrders() throws Exception {
+        DialogFactory f = new DialogFactory();
+        File file = f.initExport("Export Work Orders", "work-orders.xlsx");
+        if (file != null) {
+            DB.get().workOrders().export(file.getPath());
+            Notifications n = Notifications.create().title("Export Work Orders")
+                    .text("Successfully exported work orders to " + file.getPath());
+            if (Preferences.get().getTheme() == Theme.Dark)
+                n = n.darkStyle();
+            n.showInformation();
+        }
     }
 
     public void viewMyCompany() {

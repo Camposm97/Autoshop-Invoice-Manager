@@ -28,7 +28,7 @@ public class AutoPartWorkspaceController {
     @FXML
     public void initialize() {
         tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> {
-            tvParts.getItems().setAll(DB.get().autoParts().getFilteredAutoParts(newValue));
+            tvParts.getItems().setAll(DB.get().autoParts().getAutoPartSuggestions(newValue));
             FX.autoResizeColumns(tvParts, 100);
             genID();
         });

@@ -4,6 +4,9 @@ import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.Product;
 import model.work_order.WorkOrderPayment;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 
 import java.io.File;
 import java.sql.*;
@@ -189,5 +192,37 @@ public class DB {
 
     public WorkOrderStore workOrders() {
         return workOrders;
+    }
+
+    public void export(ResultSet rs, XSSFSheet sheet) throws SQLException {
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columns = metaData.getColumnCount();
+        Row headerRow = sheet.createRow(0);
+
+        // Write headers
+        for (int i = 1; i <= columns; i++) {
+            String columnName = metaData.getColumnName(i);
+            Cell headerCell = headerRow.createCell(i - 1);
+            headerCell.setCellValue(columnName);
+        }
+
+        int rowIndex = 1;
+
+        // Write table data
+        while (rs.next()) {
+            Row row = sheet.createRow(rowIndex++);
+            for (int i = 0; i < metaData.getColumnCount(); i++) {
+                String type = metaData.getColumnTypeName(i+1);
+                Cell cell = row.createCell(i);
+                if (type.equals("DATE")) {
+                    Date date = rs.getDate(i + 1);
+                    if (date != null) {
+                        cell.setCellValue(date.toLocalDate().toString());
+                    }
+                } else {
+                    cell.setCellValue(rs.getString(i + 1));
+                }
+            }
+        }
     }
 }

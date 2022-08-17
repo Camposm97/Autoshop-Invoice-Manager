@@ -1,11 +1,20 @@
 package model.database;
 
 import model.work_order.AutoPart;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+
+import static model.database.DBAttributes.CUSTOMER_TABLE;
+import static model.database.DBAttributes.ITEM_TABLE;
 
 public class AutoPartStore {
     private Connection c;
@@ -57,7 +66,7 @@ public class AutoPartStore {
         }
     }
 
-    public List<AutoPart> getFilteredAutoParts(String arg0) {
+    public List<AutoPart> getAutoPartSuggestions(String arg0) {
         List<AutoPart> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery(
@@ -78,4 +87,14 @@ public class AutoPartStore {
         return list;
     }
 
+    public void export(String des) throws SQLException, IOException {
+        ResultSet rs = c.createStatement().executeQuery("select * from " + ITEM_TABLE);
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet(ITEM_TABLE.toString());
+        DB.get().export(rs, sheet);
+
+        FileOutputStream fos = new FileOutputStream(des);
+        workbook.write(fos);
+        workbook.close();
+    }
 }

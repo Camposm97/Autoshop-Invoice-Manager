@@ -244,27 +244,8 @@ public class CustomerStore {
         ResultSet rs = c.createStatement().executeQuery("select * from " + CUSTOMER_TABLE);
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet(CUSTOMER_TABLE.toString());
-        ResultSetMetaData metaData = rs.getMetaData();
-        int columns = metaData.getColumnCount();
-        Row headerRow = sheet.createRow(0);
 
-        // Write headers
-        for (int i = 1; i <= columns; i++) {
-            String columnName = metaData.getColumnName(i);
-            Cell headerCell = headerRow.createCell(i - 1);
-            headerCell.setCellValue(columnName);
-        }
-
-        int rowIndex = 1;
-
-        // Write customers
-        while (rs.next()) {
-            Row row = sheet.createRow(rowIndex++);
-            for (int i = 0; i < metaData.getColumnCount(); i++) {
-                Cell cell = row.createCell(i);
-                cell.setCellValue(rs.getString(i+1));
-            }
-        }
+        DB.get().export(rs, sheet);
 
         FileOutputStream fos = new FileOutputStream(des);
         workbook.write(fos);

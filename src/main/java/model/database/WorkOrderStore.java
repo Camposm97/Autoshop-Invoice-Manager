@@ -4,14 +4,22 @@ import app.App;
 import model.customer.Address;
 import model.customer.Customer;
 import model.work_order.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static model.database.DBAttributes.*;
 
 public class WorkOrderStore {
     private Connection c;
@@ -622,5 +630,28 @@ public class WorkOrderStore {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void export(String des) throws SQLException, IOException {
+        ResultSet rs1 = c.createStatement().executeQuery("select * from " + WORK_ORDER_TABLE);
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet1 = workbook.createSheet(WORK_ORDER_TABLE.toString());
+        DB.get().export(rs1, sheet1);
+
+        ResultSet rs2 = c.createStatement().executeQuery("select * from " + WORK_ORDER_ITEM_TABLE);
+        XSSFSheet sheet2 = workbook.createSheet(WORK_ORDER_ITEM_TABLE.toString());
+        DB.get().export(rs2, sheet2);
+
+        ResultSet rs3 = c.createStatement().executeQuery("select * from " + WORK_ORDER_LABOR_TABLE);
+        XSSFSheet sheet3 = workbook.createSheet(WORK_ORDER_LABOR_TABLE.toString());
+        DB.get().export(rs3, sheet3);
+
+        ResultSet rs4 = c.createStatement().executeQuery("select * from " + WORK_ORDER_PAYMENT_TABLE);
+        XSSFSheet sheet4 = workbook.createSheet(WORK_ORDER_PAYMENT_TABLE.toString());
+        DB.get().export(rs4, sheet4);
+
+        FileOutputStream fos = new FileOutputStream(des);
+        workbook.write(fos);
+        workbook.close();
     }
 }
