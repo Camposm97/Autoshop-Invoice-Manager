@@ -7,19 +7,19 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum GUIScale {
-    SMALL, MEDIUM, LARGE, X_LARGE, XX_LARGE;
+    Small, Medium, Large, X_Large, XX_Large;
 
     public static String getStyleClass(GUIScale scale) {
         switch (scale) {
-            case SMALL:
+            case Small:
                 return "scale-100";
-            case MEDIUM:
+            case Medium:
                 return "scale-125";
-            case LARGE:
+            case Large:
                 return "scale-150";
-            case X_LARGE:
+            case X_Large:
                 return "scale-175";
-            case XX_LARGE:
+            case XX_Large:
                 return "scale-200";
         }
         return "scale-100";

@@ -51,8 +51,8 @@ public class Preferences {
         title = "Title Goes Here";
         laborRate = 90.0;
         taxRate = 1.08625;
-        guiScale = GUIScale.SMALL;
-        theme = Theme.LIGHT;
+        guiScale = GUIScale.Small;
+        theme = Theme.Light;
         observables = new LinkedList<>();
     }
 
@@ -111,14 +111,14 @@ public class Preferences {
                                 try {
                                     this.guiScale = GUIScale.valueOf(value);
                                 } catch (IllegalArgumentException e) {
-                                    guiScale = GUIScale.SMALL;
+                                    guiScale = GUIScale.Small;
                                 }
                                 break;
                             case "theme":
                                 try {
                                     this.theme = Theme.valueOf(value);
                                 } catch (IllegalArgumentException e) {
-                                    theme = Theme.LIGHT;
+                                    theme = Theme.Light;
                                 }
                         }
                     }

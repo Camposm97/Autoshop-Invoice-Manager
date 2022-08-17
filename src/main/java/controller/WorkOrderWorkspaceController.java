@@ -268,7 +268,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             DB.get().deleteProductsMarkedForDeletion(productsMarkedForDeletion);
             DB.get().deletePaymentMarkedForDeletion(paymentsMarkedForDeletion);
         }
-        addToRecents();
+        App.getRecentWorkOrders().add(workOrder.getId());
     }
 
     public void saveAndClose() {
@@ -283,18 +283,6 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         App.getScene().getAccelerators().remove(ACCEL_REDO);
         App.setDisableMenu(false);
         App.displayMyCompany();
-    }
-
-    public void addToRecents() {
-        final int RECENT_SIZE = 10;
-        LinkedList<Integer> recentWorkOrders = App.getRecentWorkOrders();
-        if (recentWorkOrders.contains(workOrder.getId())) {
-            recentWorkOrders.removeFirstOccurrence(workOrder.getId());
-        }
-        recentWorkOrders.addFirst(workOrder.getId());
-        if (recentWorkOrders.size() >= RECENT_SIZE) {
-            recentWorkOrders.removeLast();
-        }
     }
 
     public void loadWorkOrder(@NotNull WorkOrder workOrder) {

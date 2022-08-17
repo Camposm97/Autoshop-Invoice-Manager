@@ -193,7 +193,7 @@ public class AlertFactory {
     public static void showAbout() {
         AlertBuilder builder = new AlertBuilder()
                 .setTitle("About")
-                .setHeaderText(App.getTitle())
+                .setHeaderText(App.TITLE)
                 .setDefaultBtn()
                 .setContent(FX.view("About.fxml"));
         Alert alert = builder.build();

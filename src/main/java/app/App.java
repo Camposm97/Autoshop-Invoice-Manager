@@ -11,17 +11,12 @@ import model.Preferences;
 import model.database.DB;
 import model.ui.FX;
 import model.ui.Theme;
-
-import java.io.*;
-import java.util.LinkedList;
+import model.work_order.RecentWorkOrders;
 
 public class App extends Application {
-    private static final String TITLE = "Autoshop Invoice Manager";
+    public static final String TITLE = "Autoshop Invoice Manager";
     private static BorderPane root;
-    private static LinkedList<Integer> recentWorkOrders;
-    public static String getTitle() {
-        return TITLE;
-    }
+    private static RecentWorkOrders recentWorkOrders;
 
     public static void setDisableMenu(boolean flag) {
         root.getTop().setDisable(flag);
@@ -29,14 +24,6 @@ public class App extends Application {
 
     public static void setDisplay(Node node) {
         root.setCenter(node);
-    }
-
-    public static void clearDisplay() {
-        root.setCenter(null);
-    }
-
-    public static LinkedList<Integer> getRecentWorkOrders() {
-        return recentWorkOrders;
     }
 
     public static Scene getScene() {
@@ -62,10 +49,10 @@ public class App extends Application {
 
     public static void setTheme(Theme theme) {
         switch (theme) {
-            case LIGHT:
+            case Light:
                 root.getStylesheets().remove(FX.loadCSS("dark-mode.css"));
                 break;
-            case DARK:
+            case Dark:
                 root.getStylesheets().add(FX.loadCSS("dark-mode.css"));
                 break;
         }
@@ -74,7 +61,6 @@ public class App extends Application {
     @Override
     public void init() {
         DB.init();
-        loadRecentWorkOrders();
     }
 
     @Override
@@ -87,37 +73,42 @@ public class App extends Application {
         Image img = new Image("red_car.png");
         stage.getIcons().add(img);
         stage.show();
-        stage.setOnCloseRequest(e -> saveRecentWorkOrders());
+        stage.setOnCloseRequest(e -> recentWorkOrders.save());
         System.out.println(Preferences.get());
     }
 
-    public static void loadRecentWorkOrders() {
-        try {
-            File file = new File("recents.dat");
-            if (file.exists()) {
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                recentWorkOrders = (LinkedList<Integer>)  ois.readObject();
-                ois.close();
-            } else {
-                recentWorkOrders = new LinkedList<>();
-            }
-        } catch (IOException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
+    public static RecentWorkOrders getRecentWorkOrders() {
+        if (recentWorkOrders == null) recentWorkOrders = new RecentWorkOrders();
+        return recentWorkOrders;
     }
 
-    public static void saveRecentWorkOrders() {
-        try {
-            File file = new File("recents.dat");
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(recentWorkOrders);
-            oos.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public static void loadRecentWorkOrders() {
+//        try {
+//            File file = new File("recents.dat");
+//            if (file.exists()) {
+//                FileInputStream fis = new FileInputStream(file);
+//                ObjectInputStream ois = new ObjectInputStream(fis);
+//                recentWorkOrders = (LinkedList<Integer>)  ois.readObject();
+//                ois.close();
+//            } else {
+//                recentWorkOrders = new LinkedList<>();
+//            }
+//        } catch (IOException | ClassNotFoundException ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
+//    public static void saveRecentWorkOrders() {
+//        try {
+//            File file = new File("recents.dat");
+//            FileOutputStream fos = new FileOutputStream(file);
+//            ObjectOutputStream oos = new ObjectOutputStream(fos);
+//            oos.writeObject(recentWorkOrders);
+//            oos.close();
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     public static void main(String[] args) {
         launch();

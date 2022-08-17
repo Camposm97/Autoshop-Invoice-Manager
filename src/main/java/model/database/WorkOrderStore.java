@@ -221,10 +221,10 @@ public class WorkOrderStore {
 
     public List<WorkOrder> getRecents() {
         List<WorkOrder> list = new LinkedList<>();
-        for (int x :  App.getRecentWorkOrders()) {
+        App.getRecentWorkOrders().iterator().forEachRemaining(x -> {
             WorkOrder workOrder = getById(x);
             list.add(workOrder);
-        }
+        });
         return list;
     }
 
@@ -383,13 +383,8 @@ public class WorkOrderStore {
                 deleteLabor(laborIterator.next());
             }
 
-            /*
-            Check if the work order id is in our recent work orders, if it is then
-            remove it from the recent work orders list
-             */
-            if (App.getRecentWorkOrders().contains(workOrder.getId())) {
-                App.getRecentWorkOrders().removeFirstOccurrence(workOrder.getId());
-            }
+            // Remove work order id from recent work orders
+            App.getRecentWorkOrders().remove(workOrder.getId());
 
         } catch (SQLException e) {
             e.printStackTrace();

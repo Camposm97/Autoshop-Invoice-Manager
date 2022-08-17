@@ -97,7 +97,7 @@ public class AlertBuilder {
             alert.getDialogPane().setContent(content);
             DialogPane dialogPane = alert.getDialogPane();
             dialogPane.getStylesheets().add(FX.loadCSS("default.css"));
-            if (Preferences.get().getTheme().equals(Theme.DARK)) {
+            if (Preferences.get().getTheme().equals(Theme.Dark)) {
                 dialogPane.getStylesheets().add(FX.loadCSS("dark-mode.css"));
             }
             dialogPane.getStyleClass().add(GUIScale.getStyleClass(Preferences.get().getGuiScale()));
