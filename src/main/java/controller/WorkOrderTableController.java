@@ -71,11 +71,11 @@ public class WorkOrderTableController {
         WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
         if (workOrder != null) {
             try {
-                FXMLLoader loader = FX.load("Work_Order_Workspace.fxml");
+                FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
                 Parent node = loader.load();
                 WorkOrderWorkspaceController c = loader.getController();
                 c.loadWorkOrder(workOrder);
-                App.setDisplay(node);
+                App.display(node);
             } catch (IOException e) {
                 e.printStackTrace();
             }

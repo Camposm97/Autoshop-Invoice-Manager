@@ -310,7 +310,8 @@ public class CustomerTableController {
                 .setHeaderText("Are you sure you want to delete this customer?")
                 .setContentText(cus.toFormattedString() + "\n" + "Deleting a customer also delete all associated vehicles.")
                 .setYesNoBtns();
-        Optional<ButtonType> rs = builder.build().showAndWait();
+        Alert alert = builder.build();
+        Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
             if (!e.getButtonData().isCancelButton()) {
                 DB.get().vehicles().deleteByCustomerId(cus.getId());
@@ -335,25 +336,25 @@ public class CustomerTableController {
     }
 
     public void createWorkOrderWithCustomer() {
-        FXMLLoader loader = FX.load("Work_Order_Workspace.fxml");
+        FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
         try {
             Parent node = loader.load();
             WorkOrderWorkspaceController c = loader.getController();
             c.loadCustomer(getSelectedCustomer());
-            App.setDisplay(node);
+            App.display(node);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void createWorkOrderWithCustomerAndVehicle() {
-        FXMLLoader loader = FX.load("Work_Order_Workspace.fxml");
+        FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
         try {
             Parent node = loader.load();
             WorkOrderWorkspaceController c = loader.getController();
             c.loadCustomer(getSelectedCustomer());
             c.loadVehicle(getSelectedVehicle());
-            App.setDisplay(node);
+            App.display(node);
         } catch (IOException e) {
             e.printStackTrace();
         }

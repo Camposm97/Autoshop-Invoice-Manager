@@ -35,7 +35,7 @@ public class VehicleWorkspaceController {
         TextFields.bindAutoCompletion(tfEngine, DB.get().vehicles().getUniqueEngine());
         TextFields.bindAutoCompletion(tfTransmission, DB.get().vehicles().getUniqueTransmission());
         try {
-            FXMLLoader fxml = FX.load(("Customer_Table.fxml"));
+            FXMLLoader fxml = FX.load(("CustomerTable.fxml"));
             this.customerPopOver = new PopOver(fxml.load());
             customerPopOver.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
             CustomerTableController customerTableController = fxml.getController();

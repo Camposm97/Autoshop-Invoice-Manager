@@ -95,13 +95,13 @@ public class AlertBuilder {
             alert.setContentText(contentText);
         } else {
             alert.getDialogPane().setContent(content);
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.getStylesheets().add(FX.loadCSS("default.css"));
-            if (Preferences.get().getTheme().equals(Theme.Dark)) {
-                dialogPane.getStylesheets().add(FX.loadCSS("dark-mode.css"));
-            }
-            dialogPane.getStyleClass().add(GUIScale.getStyleClass(Preferences.get().getGuiScale()));
         }
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(FX.loadCSS("default.css"));
+        if (Preferences.get().getTheme().equals(Theme.Dark)) {
+            dialogPane.getStylesheets().add(FX.loadCSS("dark-mode.css"));
+        }
+        dialogPane.getStyleClass().add(GUIScale.getStyleClass(Preferences.get().getGuiScale()));
         return alert;
     }
 }

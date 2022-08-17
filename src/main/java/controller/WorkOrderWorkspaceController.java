@@ -1,8 +1,6 @@
 package controller;
 
 import app.App;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +30,7 @@ import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public class WorkOrderWorkspaceController implements PrefObservable {
+    private static final KeyCodeCombination ACCEL_SAVE = new KeyCodeCombination(KeyCode.W, KeyCodeCombination.SHORTCUT_DOWN);
     private static final KeyCodeCombination ACCEL_PRINT = new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN);
     private static final KeyCodeCombination ACCEL_UNDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
     private static final KeyCodeCombination ACCEL_REDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN);
@@ -108,6 +107,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     public void initialize() throws IOException {
         App.setDisableMenu(true);
+        App.getScene().getAccelerators().put(ACCEL_SAVE, () -> saveAndClose());
         App.getScene().getAccelerators().put(ACCEL_PRINT, () -> btPrint.fire());
         App.getScene().getAccelerators().put(ACCEL_UNDO, () -> {
             if (tabPartsAndLabor.isSelected()) {
@@ -229,13 +229,13 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         btDelPayment.setDisable(true);
 
 
-        FXMLLoader fxmlLoader = FX.load("Customer_Table.fxml");
+        FXMLLoader fxmlLoader = FX.load("CustomerTable.fxml");
         customerPopOver = new PopOver(fxmlLoader.load());
         customerPopOver.setHeaderAlwaysVisible(true);
         customerPopOver.setTitle("Customer Picker");
         customerTableController = fxmlLoader.getController();
         customerTableController.connect(this);
-        fxmlLoader = FX.load("Vehicle_Table.fxml");
+        fxmlLoader = FX.load("VehicleTable.fxml");
         vehiclePopOver = new PopOver(fxmlLoader.load());
         vehiclePopOver.setHeaderAlwaysVisible(true);
         vehiclePopOver.setTitle("Vehicle Picker");
@@ -278,11 +278,12 @@ public class WorkOrderWorkspaceController implements PrefObservable {
 
     public void close() {
         Preferences.get().removeObserver(this);
+        App.getScene().getAccelerators().remove(ACCEL_SAVE);
         App.getScene().getAccelerators().remove(ACCEL_PRINT);
         App.getScene().getAccelerators().remove(ACCEL_UNDO);
         App.getScene().getAccelerators().remove(ACCEL_REDO);
         App.setDisableMenu(false);
-        App.displayMyCompany();
+        App.display(FX.view("MyCompany.fxml"));
     }
 
     public void loadWorkOrder(@NotNull WorkOrder workOrder) {

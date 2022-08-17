@@ -50,7 +50,7 @@ public class AlertFactory {
         AlertBuilder builder = new AlertBuilder();
         Optional<ButtonType> rs = builder.buildAddDialog(
                 "Add Part",
-                FX.view("Auto_Part_Workspace.fxml", controller)).showAndWait();
+                FX.view("AutoPartWorkspace.fxml", controller)).showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 controller.savePart(callback);
@@ -60,7 +60,7 @@ public class AlertFactory {
 
     public static void showEditPart(Function<AutoPart, Void> callback, AutoPart selectedItem) {
         AutoPartWorkspaceController controller = new AutoPartWorkspaceController();
-        Parent node = FX.view("Auto_Part_Workspace.fxml", controller);
+        Parent node = FX.view("AutoPartWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
         Alert alert = builder.buildAddDialog("Update Part", node);
         controller.loadPart(selectedItem);
@@ -73,7 +73,7 @@ public class AlertFactory {
 
     public static void showAddLabor(Function<Labor, Void> callback) {
         LaborWorkspaceController controller = new LaborWorkspaceController();
-        Parent node = FX.view("Labor_Workspace.fxml", controller);
+        Parent node = FX.view("LaborWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
         Alert alert = builder.buildAddDialog("Add Labor", node);
         Optional<ButtonType> rs = alert.showAndWait();
@@ -86,7 +86,7 @@ public class AlertFactory {
 
     public static void showEditLabor(Function<Labor, Void> callback, Labor selectedLabor) {
         LaborWorkspaceController controller = new LaborWorkspaceController();
-        Parent node = FX.view("Labor_Workspace.fxml", controller);
+        Parent node = FX.view("LaborWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
         Alert alert = builder.buildAddDialog("Update Labor", node);
         controller.loadLabor(selectedLabor);
@@ -100,7 +100,7 @@ public class AlertFactory {
 
     public static void showAddPayment(Function<WorkOrderPayment, Void> callback) {
         PaymentWorkspaceController controller = new PaymentWorkspaceController();
-        Parent node = FX.view("Payment_Workspace.fxml", controller);
+        Parent node = FX.view("PaymentWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
         Alert alert = builder.buildAddDialog("Add Payment", node);
         Optional<ButtonType> rs = alert.showAndWait();
@@ -113,7 +113,7 @@ public class AlertFactory {
 
     public static void showEditPayment(Function<WorkOrderPayment, Void> callback, WorkOrderPayment selectedPayment) {
         PaymentWorkspaceController controller = new PaymentWorkspaceController();
-        Parent node = FX.view("Payment_Workspace.fxml", controller);
+        Parent node = FX.view("PaymentWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
         Alert alert = builder.buildAddDialog("Update Payment", node);
         controller.loadPayment(selectedPayment);
@@ -128,7 +128,7 @@ public class AlertFactory {
     public static void showPrintWorkOrder(WorkOrder workOrder, WorkOrderWorkspaceController c) {
         final var SCALE = 1.5;
         WorkOrderFormController controller = new WorkOrderFormController(workOrder);
-        Parent formPane = FX.view("Work_Order_Form.fxml", controller);
+        Parent formPane = FX.view("WorkOrderForm.fxml", controller);
         formPane.getTransforms().add(new Scale(SCALE, SCALE));
         Group group = new Group(formPane);
         ScrollPane scrollPane = new ScrollPane(group);
@@ -148,7 +148,7 @@ public class AlertFactory {
                 if (printerJob != null) {
                     if (printerJob.showPrintDialog(App.getScene().getWindow())) {
                         WorkOrderFormController tempController = new WorkOrderFormController(workOrder);
-                        Parent tempForm = FX.view("Work_Order_Form.fxml", tempController);
+                        Parent tempForm = FX.view("WorkOrderForm.fxml", tempController);
                         tempForm.getTransforms().add(new Scale(SCALE, SCALE));
                         tempController.lightMode();
                         Group tempGroup = new Group(tempForm);

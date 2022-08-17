@@ -39,10 +39,10 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <Menu mnemonicParsing="false" text="Export">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Customers" />
-                        <MenuItem mnemonicParsing="false" text="Vehicles" />
-                        <MenuItem mnemonicParsing="false" text="Work Orders" />
-                        <MenuItem mnemonicParsing="false" text="Auto Part Suggestions" />
+                      <MenuItem mnemonicParsing="false" onAction="#exportCustomers" text="Customers" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportVehicles" text="Vehicles" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportWorkOrders" text="Work Orders" />
+                        <MenuItem mnemonicParsing="false" onAction="#exportAutoPartSuggestions" text="Auto Part Suggestions" />
                     </items>
                   </Menu>
                   <SeparatorMenuItem mnemonicParsing="false" />

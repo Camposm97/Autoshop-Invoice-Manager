@@ -12,7 +12,7 @@ import java.net.URL;
 public class FX {
     public static Parent view(String src) {
         try {
-            URL url = FX.class.getClassLoader().getResource("view/" + src);
+            URL url = FX.class.getClassLoader().getResource("fxml/" + src);
             return FXMLLoader.load(url);
         } catch (IOException e) {
             e.printStackTrace();
@@ -22,7 +22,7 @@ public class FX {
 
     public static Parent view(String src, Object controller) {
         try {
-            URL url = FX.class.getClassLoader().getResource("view/" + src);
+            URL url = FX.class.getClassLoader().getResource("fxml/" + src);
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setController(controller);
             fxmlLoader.setLocation(url);
@@ -35,7 +35,7 @@ public class FX {
 
     public static FXMLLoader load(String src) {
         try {
-            URL url = FX.class.getClassLoader().getResource("view/" + src);
+            URL url = FX.class.getClassLoader().getResource("fxml/" + src);
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(url);
             return fxmlLoader;

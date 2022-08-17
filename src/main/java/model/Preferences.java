@@ -38,6 +38,7 @@ public class Preferences {
         load();
         App.setScale(GUIScale.getStyleClass(this.guiScale));
         App.setTheme(theme);
+        System.out.println(this);
     }
 
     public void init() {
@@ -280,18 +281,13 @@ public class Preferences {
 
     @Override
     public String toString() {
-        return "Preferences {" +
-                "\n\t" + company +
-                ",\n\t" + address +
-                ",\n\t" + city +
-                ",\n\t" + state +
-                ",\n\t" + zip +
+        return "\n\t" + company + " " + address + " " + city + ", " + state + " " + zip +
                 ",\n\t" + phone +
-                ",\n\t" + repairShopId +
+                ", " + repairShopId +
                 ",\n\t" + title +
                 ",\n\t" + laborRate +
-                ",\n\t" + taxRate +
-                ",\n\t" + guiScale +
-                "\n}";
+                ", " + taxRate +
+                ", " + guiScale +
+                ", " + theme;
     }
 }

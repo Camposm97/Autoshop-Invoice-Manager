@@ -8,40 +8,68 @@ import javafx.scene.layout.BorderPane;
 import model.ui.AlertFactory;
 import model.ui.FX;
 
+import javax.sound.sampled.Port;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.rmi.server.ExportException;
+import java.util.List;
+import java.util.Scanner;
+
 public class AppController {
     @FXML
     BorderPane root;
     @FXML
     MenuBar menuBar;
 
-    /**
-     * Adds a new customer ot the database
-     */
     public void addCustomer() {
         AlertFactory.showAddCustomer();
     }
 
-    /**
-     * Adds a new vehicle for an existing customer
-     */
     public void addVehicle() {
         AlertFactory.showAddVehicle();
     }
 
     public void addWorkOrder() {
-        App.setDisplay(FX.view("Work_Order_Workspace.fxml"));
+        App.display(FX.view("WorkOrderWorkspace.fxml"));
+    }
+
+    public void exportCustomers() throws Exception {
+        ProcessBuilder builder = new ProcessBuilder("ls");
+        builder.redirectErrorStream(true);
+        Process process = builder.start();
+        Scanner s = new Scanner(process.getInputStream());
+        while (s.hasNextLine()) {
+            System.out.println(s.nextLine());
+        }
+        int code = process.waitFor();
+        System.out.println(code);
+    }
+
+    public void exportVehicles() {
+
+    }
+
+    public void exportAutoPartSuggestions() {
+
+    }
+
+    public void exportWorkOrders() {
+
     }
 
     public void viewMyCompany() {
-        App.displayMyCompany();
+        App.display(FX.view("MyCompany.fxml"));
     }
 
     public void viewCustomers() {
-        App.displayCustomers();
+        App.display(FX.view("CustomerTable.fxml"));
     }
 
     public void viewWorkOrders() {
-        App.displayWorkOrders();
+        App.display(FX.view("WorkOrderTable.fxml"));
     }
 
     public void preferences() {

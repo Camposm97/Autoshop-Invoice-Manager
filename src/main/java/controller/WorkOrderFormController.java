@@ -54,20 +54,27 @@ public class WorkOrderFormController {
         lblOwnerPhone.setText(Preferences.get().getPhone());
         lblShop.setText(getShopDetail());
         lblTitle.setText(Preferences.get().getSpecialTitle());
-        lblName.setText(workOrder.getCustomer().getName());
-        lblPhone.setText(workOrder.getCustomer().getPhone());
-        lblEmail.setText(workOrder.getCustomer().getEmail());
-        lblCompany.setText(workOrder.getCustomer().getCompany());
-        lblBillingAddress.setText(workOrder.getCustomer().getAddress().toString());
-        lblVin.setText(workOrder.getVehicle().getVin());
-        lblYear.setText(String.valueOf(workOrder.getVehicle().getYear()));
-        lblMake.setText(workOrder.getVehicle().getMake());
-        lblModel.setText(workOrder.getVehicle().getModel());
-        lblLicensePlate.setText(workOrder.getVehicle().getLicensePlate());
-        lblColor.setText(workOrder.getVehicle().getColor());
-        lblEngine.setText(workOrder.getVehicle().getEngine());
-        lblTransmission.setText(workOrder.getVehicle().getTransmission());
-        lblMileageInAndOut.setText(workOrder.getVehicle().getMileageInAndOut());
+
+        if (workOrder.getCustomer() != null) {
+            lblName.setText(workOrder.getCustomer().getName());
+            lblPhone.setText(workOrder.getCustomer().getPhone());
+            lblEmail.setText(workOrder.getCustomer().getEmail());
+            lblCompany.setText(workOrder.getCustomer().getCompany());
+            lblBillingAddress.setText(workOrder.getCustomer().getAddress().toString());
+        }
+
+        if (workOrder.getVehicle() != null) {
+            lblVin.setText(workOrder.getVehicle().getVin());
+            lblYear.setText(String.valueOf(workOrder.getVehicle().getYear()));
+            lblMake.setText(workOrder.getVehicle().getMake());
+            lblModel.setText(workOrder.getVehicle().getModel());
+            lblLicensePlate.setText(workOrder.getVehicle().getLicensePlate());
+            lblColor.setText(workOrder.getVehicle().getColor());
+            lblEngine.setText(workOrder.getVehicle().getEngine());
+            lblTransmission.setText(workOrder.getVehicle().getTransmission());
+            lblMileageInAndOut.setText(workOrder.getVehicle().getMileageInAndOut());
+        }
+
 
         Function<Double, String> f = x -> String.format("%.2f", x);
         Function<Double, String> g = x -> String.format("$ %.2f", x);
