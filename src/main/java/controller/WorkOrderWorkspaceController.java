@@ -294,6 +294,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         if (workOrder.isCompleted()) {
             dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
         }
+        btVeh.setDisable(true);
         tvParts.setItems(workOrder.itemList());
         tvLabor.setItems(workOrder.laborList());
         tvPayment.setItems(workOrder.paymentList());

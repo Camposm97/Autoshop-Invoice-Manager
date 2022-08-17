@@ -8,6 +8,7 @@ import model.database.DB;
 import model.ui.FX;
 import model.work_order.Vehicle;
 import org.controlsfx.control.tableview2.TableView2;
+import org.controlsfx.control.textfield.TextFields;
 
 public class VehicleTableController {
     protected int chosenCustomerId;

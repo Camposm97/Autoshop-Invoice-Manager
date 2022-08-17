@@ -68,7 +68,7 @@
             <Insets />
          </GridPane.margin>
       </TableView>
-      <TableView fx:id="tvVehicle" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.rowIndex="3">
+      <TableView fx:id="tvVehicle" disable="true" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" GridPane.rowIndex="3">
         <columns>
           <TableColumn fx:id="colVin" prefWidth="75.0" text="VIN" />
             <TableColumn fx:id="colYear" prefWidth="75.0" text="Year" />

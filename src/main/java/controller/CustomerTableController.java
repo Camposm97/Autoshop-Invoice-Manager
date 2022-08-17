@@ -9,6 +9,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import model.State;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
@@ -16,6 +17,7 @@ import model.ui.AlertBuilder;
 import model.ui.FX;
 import model.ui.TableCellFactory;
 import model.work_order.Vehicle;
+import org.controlsfx.control.textfield.TextFields;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -50,7 +52,6 @@ public class CustomerTableController {
         tfCity.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         tfState.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         tfZip.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
-
         initCustomerTable();
         initVehicleTable();
     }
@@ -141,6 +142,9 @@ public class CustomerTableController {
                     FX.autoResizeColumns(tvVehicle, 25);
                     btDelCustomer.setDisable(false);
                     btWorkOrderWithCustomer.setDisable(false);
+                    tvVehicle.setDisable(false);
+                } else {
+                    tvVehicle.setDisable(true);
                 }
             }
         });
