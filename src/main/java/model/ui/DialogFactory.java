@@ -11,16 +11,18 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Scale;
+import javafx.stage.FileChooser;
 import model.Preferences;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
 import model.work_order.WorkOrderPayment;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class AlertFactory {
+public class DialogFactory {
     public static void showAddCustomer() {
         CustomerWorkspaceController controller = new CustomerWorkspaceController();
         AlertBuilder builder = new AlertBuilder();
@@ -33,7 +35,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showAddVehicle() {
+    public static void initAddVehicle() {
         VehicleWorkspaceController controller = new VehicleWorkspaceController();
         AlertBuilder builder = new AlertBuilder();
         Optional<ButtonType> rs = builder.buildAddDialog(
@@ -45,7 +47,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showAddPart(Function<AutoPart, Void> callback) {
+    public static void initAddPart(Function<AutoPart, Void> callback) {
         AutoPartWorkspaceController controller = new AutoPartWorkspaceController();
         AlertBuilder builder = new AlertBuilder();
         Optional<ButtonType> rs = builder.buildAddDialog(
@@ -58,7 +60,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showEditPart(Function<AutoPart, Void> callback, AutoPart selectedItem) {
+    public static void initEditPart(Function<AutoPart, Void> callback, AutoPart selectedItem) {
         AutoPartWorkspaceController controller = new AutoPartWorkspaceController();
         Parent node = FX.view("AutoPartWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -71,7 +73,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showAddLabor(Function<Labor, Void> callback) {
+    public static void initAddLabor(Function<Labor, Void> callback) {
         LaborWorkspaceController controller = new LaborWorkspaceController();
         Parent node = FX.view("LaborWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -84,7 +86,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showEditLabor(Function<Labor, Void> callback, Labor selectedLabor) {
+    public static void initEditLabor(Function<Labor, Void> callback, Labor selectedLabor) {
         LaborWorkspaceController controller = new LaborWorkspaceController();
         Parent node = FX.view("LaborWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -98,7 +100,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showAddPayment(Function<WorkOrderPayment, Void> callback) {
+    public static void initAddPayment(Function<WorkOrderPayment, Void> callback) {
         PaymentWorkspaceController controller = new PaymentWorkspaceController();
         Parent node = FX.view("PaymentWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -111,7 +113,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showEditPayment(Function<WorkOrderPayment, Void> callback, WorkOrderPayment selectedPayment) {
+    public static void initEditPayment(Function<WorkOrderPayment, Void> callback, WorkOrderPayment selectedPayment) {
         PaymentWorkspaceController controller = new PaymentWorkspaceController();
         Parent node = FX.view("PaymentWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
@@ -125,7 +127,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showPrintWorkOrder(WorkOrder workOrder, WorkOrderWorkspaceController c) {
+    public static void initPrintWorkOrder(WorkOrder workOrder, WorkOrderWorkspaceController c) {
         final var SCALE = 1.5;
         WorkOrderFormController controller = new WorkOrderFormController(workOrder);
         Parent formPane = FX.view("WorkOrderForm.fxml", controller);
@@ -181,7 +183,7 @@ public class AlertFactory {
         });
     }
 
-    public static void showPreferences() {
+    public static void initPreferences() {
         AlertBuilder builder = new AlertBuilder()
                 .setTitle("Preferences")
                 .setHeaderText("Repair-shop Settings")
@@ -190,7 +192,7 @@ public class AlertFactory {
         builder.build().showAndWait().ifPresent(e -> Preferences.get().save());
     }
 
-    public static void showAbout() {
+    public static void initAbout() {
         AlertBuilder builder = new AlertBuilder()
                 .setTitle("About")
                 .setHeaderText(App.TITLE)
@@ -199,5 +201,16 @@ public class AlertFactory {
         Alert alert = builder.build();
         alert.setGraphic(new ImageView("red_car.png"));
         alert.showAndWait();
+    }
+
+    public File initExport(String title, String initialFileName) {
+        FileChooser.ExtensionFilter ef1 = new FileChooser.ExtensionFilter("Excel Workbook", "*.xlsx");
+        FileChooser.ExtensionFilter ef2 = new FileChooser.ExtensionFilter("CSV", "*.csv");
+        FileChooser fc = new FileChooser();
+        fc.setInitialFileName(initialFileName);
+        fc.setTitle(title);
+        fc.getExtensionFilters().setAll(ef1, ef2);
+        fc.setSelectedExtensionFilter(ef1);
+        return fc.showSaveDialog(App.getScene().getWindow());
     }
 }

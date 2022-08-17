@@ -13,7 +13,7 @@ import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.tps.*;
-import model.ui.AlertFactory;
+import model.ui.DialogFactory;
 import model.ui.FX;
 import model.work_order.*;
 import org.controlsfx.control.PopOver;
@@ -256,7 +256,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     }
 
     public void print() {
-        AlertFactory.showPrintWorkOrder(workOrder, this);
+        DialogFactory.initPrintWorkOrder(workOrder, this);
     }
 
     public void save() {
@@ -373,7 +373,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             tpsProducts.addTransaction(transaction);
             return null;
         };
-        AlertFactory.showAddPart(callback);
+        DialogFactory.initAddPart(callback);
         updateTotals();
     }
 
@@ -385,7 +385,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
                 tpsProducts.addTransaction(transaction);
               return null;
             };
-            AlertFactory.showEditPart(callback, selectedItem);
+            DialogFactory.initEditPart(callback, selectedItem);
             updateTotals();
         }
     }
@@ -415,7 +415,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             tpsProducts.addTransaction(transaction);
             return null;
         };
-        AlertFactory.showAddLabor(callback);
+        DialogFactory.initAddLabor(callback);
         updateTotals();
     }
 
@@ -437,7 +437,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
                 tpsProducts.addTransaction(transaction);
                 return null;
             };
-            AlertFactory.showEditLabor(callback, labor);
+            DialogFactory.initEditLabor(callback, labor);
             updateTotals();
         }
     }
@@ -457,7 +457,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             tpsPayments.addTransaction(transaction);
             return null;
         };
-        AlertFactory.showAddPayment(callback);
+        DialogFactory.initAddPayment(callback);
         updateTotals();
     }
 
@@ -469,7 +469,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
                 tpsPayments.addTransaction(transaction);
                 return null;
             };
-            AlertFactory.showEditPayment(callback, payment);
+            DialogFactory.initEditPayment(callback, payment);
             updateTotals();
         }
     }

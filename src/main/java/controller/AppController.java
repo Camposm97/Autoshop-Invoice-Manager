@@ -5,18 +5,14 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
-import model.ui.AlertFactory;
+import model.Preferences;
+import model.database.DB;
+import model.ui.DialogFactory;
 import model.ui.FX;
+import model.ui.Theme;
+import org.controlsfx.control.Notifications;
 
-import javax.sound.sampled.Port;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
-import java.rmi.server.ExportException;
-import java.util.List;
-import java.util.Scanner;
+import java.io.File;
 
 public class AppController {
     @FXML
@@ -25,11 +21,11 @@ public class AppController {
     MenuBar menuBar;
 
     public void addCustomer() {
-        AlertFactory.showAddCustomer();
+        DialogFactory.showAddCustomer();
     }
 
     public void addVehicle() {
-        AlertFactory.showAddVehicle();
+        DialogFactory.initAddVehicle();
     }
 
     public void addWorkOrder() {
@@ -37,15 +33,16 @@ public class AppController {
     }
 
     public void exportCustomers() throws Exception {
-        ProcessBuilder builder = new ProcessBuilder("ls");
-        builder.redirectErrorStream(true);
-        Process process = builder.start();
-        Scanner s = new Scanner(process.getInputStream());
-        while (s.hasNextLine()) {
-            System.out.println(s.nextLine());
+        DialogFactory f = new DialogFactory();
+        File file = f.initExport("Export Customers", "customers");
+        if (file != null) {
+            DB.get().customers().export(file.getPath());
+            Notifications n = Notifications.create().title("Export Customers")
+                    .text("Successfully exported customers to " + file.getPath());
+            if (Preferences.get().getTheme() == Theme.Dark)
+                n = n.darkStyle();
+            n.showInformation();
         }
-        int code = process.waitFor();
-        System.out.println(code);
     }
 
     public void exportVehicles() {
@@ -73,11 +70,11 @@ public class AppController {
     }
 
     public void preferences() {
-        AlertFactory.showPreferences();
+        DialogFactory.initPreferences();
     }
 
     public void about() {
-        AlertFactory.showAbout();
+        DialogFactory.initAbout();
     }
 
     public void exit() {

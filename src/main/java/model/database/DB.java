@@ -6,10 +6,7 @@ import model.work_order.Product;
 import model.work_order.WorkOrderPayment;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 import static model.database.DBAttributes.*;
