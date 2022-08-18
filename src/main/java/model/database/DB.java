@@ -61,6 +61,28 @@ public class DB {
         }
     }
 
+    private void connect(String username, String password) throws ClassNotFoundException {
+        var url = "jdbc:mysql://localhost:3306/autoshop";
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        try {
+            Connection c = DriverManager.getConnection(url, username, password);
+            System.out.println("connection is valid? " + c.isValid(1000));
+            System.out.println();
+        } catch (SQLException e1) {
+            try {
+                System.out.println("Failed to connect to autoshop");
+                System.out.println("Re-establishing database...");
+                e1.printStackTrace();
+                url = "jdbc:mysql://localhost:3306/";
+                Connection c = DriverManager.getConnection(url, username, password);
+                System.out.println("connection is valid? " + c.isValid(1000));
+                System.out.println();
+            } catch (SQLException e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+
     private void displayInfo() throws SQLException {
         System.out.println("customer: " + stmt.executeQuery("select count(*) from customer").getInt(1));
         System.out.println("vehicle: " + stmt.executeQuery("select count(*) from vehicle").getInt(1));
