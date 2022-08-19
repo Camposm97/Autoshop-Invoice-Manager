@@ -2,15 +2,13 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import model.Preferences;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
-import model.Preferences;
 import model.work_order.WorkOrder;
 
 import java.time.format.DateTimeFormatter;
@@ -89,6 +87,7 @@ public class WorkOrderFormController {
             Label lblQty = new Label(String.valueOf(a.getQuantity()));
             Label lblSubtotal = new Label(f.apply(a.subtotal()));
             lblDesc.setWrapText(true);
+            lblDesc.setPrefWidth(35);
             gridPaneParts.addRow(i, lblName, lblDesc, lblUnitPrice, lblQty, lblSubtotal);
         }
 
@@ -99,6 +98,7 @@ public class WorkOrderFormController {
             Label lblCode = new Label(lbr.getName());
             Label lblDesc = new Label(lbr.getDesc());
             Label lblSubtotal = new Label(f.apply(lbr.subtotal()));
+            lblDesc.setPrefHeight(35);
             lblDesc.setWrapText(true);
             gridPaneLabor.addRow(i, lblCode, lblDesc, lblSubtotal);
         }

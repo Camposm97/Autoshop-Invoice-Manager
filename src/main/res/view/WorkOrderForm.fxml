@@ -8,14 +8,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@../css/work-order-form-layout.css" />
     </stylesheets>
     <children>
         <Label fx:id="lblDate" text="8/19/2020" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="2.0">
         </Label>
-        <VBox fx:id="header" alignment="CENTER" spacing="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+        <VBox fx:id="header" alignment="CENTER" spacing="2.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
             <children>
                 <Label fx:id="lblOwnerCompany" styleClass="title_label" text="Your Company Goes Here">
                 </Label>
@@ -33,39 +33,39 @@
         </VBox>
         <Label fx:id="lblWorkOrderId" text=" Work Order # 0000" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
         </Label>
-        <AnchorPane fx:id="anchorCustomer" maxHeight="-Infinity" styleClass="information-form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="90.0">
+        <AnchorPane fx:id="anchorCustomer" maxHeight="-Infinity" styleClass="information-form" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="90.0">
             <children>
-                <Label styleClass="title_label" text="Customer Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
+                <Label styleClass="title_label" text="Customer Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="2.0">
                 </Label>
-                <Label contentDisplay="RIGHT" text="Name:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="20.0">
+                <Label contentDisplay="RIGHT" text="Name:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="18.0">
                     <graphic>
                         <Label fx:id="lblName" text="Christopher Shufflebottom">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" layoutX="190.0" text="Phone:" AnchorPane.topAnchor="20.0">
+                <Label contentDisplay="RIGHT" layoutX="190.0" text="Phone:" AnchorPane.topAnchor="18.0">
                     <graphic>
                         <Label fx:id="lblPhone" text="000-000-0000">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" layoutX="320.0" text="Email:" AnchorPane.topAnchor="20.0">
+                <Label contentDisplay="RIGHT" layoutX="320.0" text="Email:" AnchorPane.topAnchor="18.0">
                     <graphic>
                         <Label fx:id="lblEmail" text="christopher.cunningham@gmail.com">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" text="Company:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="36.0">
+                <Label contentDisplay="RIGHT" text="Company:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="34.0">
                     <graphic>
                         <Label fx:id="lblCompany" text="Precision Automotive Services Inc.">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" text="Billing Address:" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="52.0">
+                <Label contentDisplay="RIGHT" text="Billing Address:" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="50.0">
                     <graphic>
                         <Label fx:id="lblBillingAddress" text="789 Montauk Highway Westhampton Beach, Massachusetts 11345">
                         </Label>
@@ -74,67 +74,67 @@
                 </Label>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="anchorVehicle" maxHeight="-Infinity" styleClass="information-form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="165.0">
+        <AnchorPane fx:id="anchorVehicle" maxHeight="-Infinity" styleClass="information-form" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="159.0">
             <children>
-                <Label styleClass="title_label" text="Vehicle Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
+                <Label styleClass="title_label" text="Vehicle Information" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="2.0">
                 </Label>
-                <Label contentDisplay="RIGHT" text="VIN:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="20.0">
+                <Label contentDisplay="RIGHT" text="VIN:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="18.0">
                     <graphic>
                         <Label fx:id="lblVin" text="QWERTY34JH98WE">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" text="Year:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="36.0">
+                <Label contentDisplay="RIGHT" text="Year:" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="34.0">
                     <graphic>
                         <Label fx:id="lblYear" text="2014">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" text="Make:" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="52.0">
+                <Label contentDisplay="RIGHT" text="Make:" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="50.0">
                     <graphic>
                         <Label fx:id="lblMake" text="Mercedes-Benz">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" layoutX="150.0" text="Model:" AnchorPane.topAnchor="20.0">
+                <Label contentDisplay="RIGHT" layoutX="150.0" text="Model:" AnchorPane.topAnchor="18.0">
                     <graphic>
                         <Label fx:id="lblModel" text="Grand C4 Picasso">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" layoutX="150.0" text="License Plate:" AnchorPane.topAnchor="36.0">
+                <Label contentDisplay="RIGHT" layoutX="150.0" text="License Plate:" AnchorPane.topAnchor="34.0">
                     <graphic>
                         <Label fx:id="lblLicensePlate" text="ETD3423">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" layoutX="300.0" text="Engine:" AnchorPane.topAnchor="20.0">
+                <Label contentDisplay="RIGHT" layoutX="300.0" text="Engine:" AnchorPane.topAnchor="18.0">
                     <graphic>
                         <Label fx:id="lblEngine" text="4.0 L">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" layoutX="150.0" text="Color:" AnchorPane.bottomAnchor="4.0" AnchorPane.topAnchor="52.0">
+                <Label contentDisplay="RIGHT" layoutX="150.0" text="Color:" AnchorPane.bottomAnchor="4.0" AnchorPane.topAnchor="50.0">
                     <graphic>
                         <Label fx:id="lblColor" text="White">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" layoutX="300.0" layoutY="10.0" text="Transmission:" AnchorPane.topAnchor="36.666666666666664">
+                <Label contentDisplay="RIGHT" layoutX="300.0" layoutY="10.0" text="Transmission:" AnchorPane.topAnchor="34.0">
                     <graphic>
                         <Label fx:id="lblTransmission" text="4WD Automatic">
                         </Label>
                     </graphic>
 
                 </Label>
-                <Label contentDisplay="RIGHT" layoutX="300.0" layoutY="20.0" text="Mileage In/Out:" AnchorPane.bottomAnchor="4.0" AnchorPane.topAnchor="52.0">
+                <Label contentDisplay="RIGHT" layoutX="300.0" layoutY="20.0" text="Mileage In/Out:" AnchorPane.bottomAnchor="4.0" AnchorPane.topAnchor="50.0">
                     <graphic>
                         <Label fx:id="lblMileageInAndOut" text="139000-139005 (5)">
                         </Label>
@@ -143,7 +143,7 @@
                 </Label>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="anchorParts" maxHeight="-Infinity" prefHeight="250.0" styleClass="information-form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="240.0">
+        <AnchorPane fx:id="anchorParts" maxHeight="-Infinity" prefHeight="262.0" styleClass="information-form" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="228.0">
             <children>
                 <GridPane fx:id="gridPaneParts" hgap="2.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
                     <columnConstraints>
@@ -171,7 +171,7 @@
                 </GridPane>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="anchorLabor" maxHeight="-Infinity" prefHeight="130.0" styleClass="information-form" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="491.0">
+        <AnchorPane fx:id="anchorLabor" maxHeight="-Infinity" prefHeight="130.0" styleClass="information-form" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="491.0">
             <children>
                 <GridPane fx:id="gridPaneLabor" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
                     <columnConstraints>
@@ -193,8 +193,8 @@
                 </GridPane>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="anchorProblem" prefHeight="125.0" prefWidth="391.0" styleClass="information-form" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="622.0" />
-        <AnchorPane fx:id="anchorTotals" maxHeight="-Infinity" prefHeight="125.0" styleClass="information-form" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="395.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="622.0">
+        <AnchorPane fx:id="anchorProblem" prefHeight="125.0" prefWidth="392.0" styleClass="information-form" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="622.0" />
+        <AnchorPane fx:id="anchorTotals" maxHeight="-Infinity" prefHeight="125.0" styleClass="information-form" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="395.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="622.0">
             <children>
                 <Label text="Parts Total" AnchorPane.leftAnchor="4.0" AnchorPane.topAnchor="4.0">
                 </Label>

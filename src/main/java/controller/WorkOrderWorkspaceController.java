@@ -44,7 +44,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @FXML
     Tab tabPartsAndLabor, tabWorkOrderInfo;
     @FXML
-    Button btPrint;
+    Button btPrint, btAddLabor, btSideAddLabor;
     @FXML
     TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfAddress, tfCity, tfState, tfZip;
     @FXML
@@ -159,6 +159,10 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         colPaymentType.setCellValueFactory(c -> c.getValue().typeProperty());
         colPaymentAmount.setCellValueFactory(c -> c.getValue().amountProperty());
 
+        tvParts.setItems(workOrder.itemList());
+        tvLabor.setItems(workOrder.laborList());
+        tvPayment.setItems(workOrder.paymentList());
+
         // Set double-click function for parts and labor tables
         // Set Parts and Labor Items
         final int DOUBLE_CLICK = 2;
@@ -191,6 +195,17 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             if (e.getCode().equals(KeyCode.BACK_SPACE))
                 deleteLabor();
         });
+        tvLabor.getItems().addListener((ListChangeListener<Labor>) change -> {
+            if (change.next()) {
+                if (change.getList().size() >= 1) {
+                    btAddLabor.setDisable(true);
+                    btSideAddLabor.setDisable(true);
+                } else {
+                    btAddLabor.setDisable(false);
+                    btSideAddLabor.setDisable(false);
+                }
+            }
+        });
         tvPayment.setOnMouseClicked(e -> {
             if (doubleClicked.apply(e)) editPayment();
             if (tvPayment.getSelectionModel().getSelectedItem() != null) {
@@ -205,11 +220,6 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             if (e.getCode().equals(KeyCode.BACK_SPACE))
                 deletePayment();
         });
-
-
-        tvParts.setItems(workOrder.itemList());
-        tvLabor.setItems(workOrder.laborList());
-        tvPayment.setItems(workOrder.paymentList());
 
         FX.autoResizeColumns(tvPayment, 75);
         tvPayment.getItems().addListener((ListChangeListener<WorkOrderPayment>) change -> FX.autoResizeColumns(tvPayment, 75));
@@ -256,6 +266,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     }
 
     public void print() {
+        buildWorkOrder();
         DialogFactory.initPrintWorkOrder(workOrder, this);
     }
 

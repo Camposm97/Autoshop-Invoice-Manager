@@ -30,7 +30,7 @@
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#saveAndClose" text="Save &amp; Close" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#close" text="Cancel &amp; Close" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addPart" text="Add Part" />
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addLabor" text="Add Labor" />
+                        <Button fx:id="btSideAddLabor" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addLabor" text="Add Labor" />
                     </children>
                     <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
@@ -278,7 +278,7 @@
                                         <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
                                             <children>
                                                 <Label styleClass="title_label" text="Work Order Labor Items" />
-                                                <Button mnemonicParsing="false" onAction="#addLabor" text="Add">
+                                                <Button fx:id="btAddLabor" mnemonicParsing="false" onAction="#addLabor" text="Add">
                                                     <graphic>
                                                         <Glyph fontFamily="FontAwesome" icon="PLUS" />
                                                     </graphic>
