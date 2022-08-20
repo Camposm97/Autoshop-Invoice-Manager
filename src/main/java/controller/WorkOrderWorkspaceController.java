@@ -195,17 +195,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             if (e.getCode().equals(KeyCode.BACK_SPACE))
                 deleteLabor();
         });
-        tvLabor.getItems().addListener((ListChangeListener<Labor>) change -> {
-            if (change.next()) {
-                if (change.getList().size() >= 1) {
-                    btAddLabor.setDisable(true);
-                    btSideAddLabor.setDisable(true);
-                } else {
-                    btAddLabor.setDisable(false);
-                    btSideAddLabor.setDisable(false);
-                }
-            }
-        });
+        tvLabor.getItems().addListener(laborChangeListener());
         tvPayment.setOnMouseClicked(e -> {
             if (doubleClicked.apply(e)) editPayment();
             if (tvPayment.getSelectionModel().getSelectedItem() != null) {
@@ -252,6 +242,20 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         vehicleTableController = fxmlLoader.getController();
         vehicleTableController.connect(this);
         Preferences.get().addObserver(this);
+    }
+
+    public ListChangeListener<Labor> laborChangeListener() {
+        return e -> {
+            if (e.next()) {
+                if (e.getList().size() >= 1) {
+                    btAddLabor.setDisable(true);
+                    btSideAddLabor.setDisable(true);
+                } else {
+                    btAddLabor.setDisable(false);
+                    btSideAddLabor.setDisable(false);
+                }
+            }
+        };
     }
 
     public void showCustomerPopOver() {
@@ -308,6 +312,14 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         btVeh.setDisable(true);
         tvParts.setItems(workOrder.itemList());
         tvLabor.setItems(workOrder.laborList());
+        tvLabor.getItems().addListener(laborChangeListener());
+        if (tvLabor.getItems().size() >= 1) {
+            btAddLabor.setDisable(true);
+            btSideAddLabor.setDisable(true);
+        } else {
+            btAddLabor.setDisable(false);
+            btSideAddLabor.setDisable(false);
+        }
         tvPayment.setItems(workOrder.paymentList());
         dateCreated.setValue(workOrder.getDateCreated().toLocalDate());
         updateTotals();

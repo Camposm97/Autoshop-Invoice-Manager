@@ -16,6 +16,10 @@
     -fx-font-weight: bold;
 }
 
-.light-mode {
+.light-mode-lbl {
     -fx-text-fill: black;
+}
+
+.light-mode-txt {
+    -fx-fill: black;
 }

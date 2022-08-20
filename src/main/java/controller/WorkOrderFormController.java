@@ -6,7 +6,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import model.Preferences;
+import model.ui.Theme;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
@@ -87,7 +90,6 @@ public class WorkOrderFormController {
             Label lblQty = new Label(String.valueOf(a.getQuantity()));
             Label lblSubtotal = new Label(f.apply(a.subtotal()));
             lblDesc.setWrapText(true);
-            lblDesc.setPrefWidth(35);
             gridPaneParts.addRow(i, lblName, lblDesc, lblUnitPrice, lblQty, lblSubtotal);
         }
 
@@ -96,11 +98,13 @@ public class WorkOrderFormController {
         for (int i = 1; laborIterator.hasNext(); i++) {
             Labor lbr = laborIterator.next();
             Label lblCode = new Label(lbr.getName());
-            Label lblDesc = new Label(lbr.getDesc());
+            Text txtDesc = new Text(lbr.getDesc());
             Label lblSubtotal = new Label(f.apply(lbr.subtotal()));
-            lblDesc.setPrefHeight(35);
-            lblDesc.setWrapText(true);
-            gridPaneLabor.addRow(i, lblCode, lblDesc, lblSubtotal);
+            txtDesc.setWrappingWidth(400);
+            if (Preferences.get().getTheme().equals(Theme.Dark)) txtDesc.setFill(Color.LIGHTGRAY);
+//            txtDesc.getStyleClass().add("text");
+//            txtDesc.setWrapText(true);
+            gridPaneLabor.addRow(i, lblCode, txtDesc, lblSubtotal);
         }
         lblPartsTotal.setText(g.apply(workOrder.partsSubtotal()));
         lblLaborTotal.setText(g.apply(workOrder.laborSubtotal()));
@@ -127,6 +131,8 @@ public class WorkOrderFormController {
                 labels.add((Label) n);
                 if (((Label) n).getGraphic() != null)
                     labels.add((Label) ((Label) n).getGraphic());
+            } else if (n instanceof Text) {
+                n.getStyleClass().add("light-mode-txt");
             }
         }
     }
@@ -134,7 +140,7 @@ public class WorkOrderFormController {
     public void lightMode() {
         List<Label> labels = new LinkedList<>();
         getAllLabels(root, labels);
-        labels.forEach(e -> e.getStyleClass().add("light-mode"));
+        labels.forEach(e -> e.getStyleClass().add("light-mode-lbl"));
         root.setStyle("-fx-background-color: transparent;");
     }
 }
