@@ -12,8 +12,6 @@ import java.io.File;
 import java.sql.*;
 import java.util.List;
 
-import static model.database.DBAttributes.*;
-
 public class DB {
     private static DB singleton;
     private static final String DB_NAME = "autoshop.db";
@@ -61,28 +59,6 @@ public class DB {
         }
     }
 
-    private void connect(String username, String password) throws ClassNotFoundException {
-        var url = "jdbc:mysql://localhost:3306/autoshop";
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try {
-            Connection c = DriverManager.getConnection(url, username, password);
-            System.out.println("connection is valid? " + c.isValid(1000));
-            System.out.println();
-        } catch (SQLException e1) {
-            try {
-                System.out.println("Failed to connect to autoshop");
-                System.out.println("Re-establishing database...");
-                e1.printStackTrace();
-                url = "jdbc:mysql://localhost:3306/";
-                Connection c = DriverManager.getConnection(url, username, password);
-                System.out.println("connection is valid? " + c.isValid(1000));
-                System.out.println();
-            } catch (SQLException e2) {
-                e2.printStackTrace();
-            }
-        }
-    }
-
     private void displayInfo() throws SQLException {
         System.out.println("customer: " + stmt.executeQuery("select count(*) from customer").getInt(1));
         System.out.println("vehicle: " + stmt.executeQuery("select count(*) from vehicle").getInt(1));
@@ -99,86 +75,92 @@ public class DB {
      * @throws SQLException
      */
     private void initTables() throws SQLException {
-        stmt.execute("create table if not exists " + CUSTOMER_TABLE + " (" +
-                CUSTOMER_TABLE.CUSTOMER_ID + " integer primary key autoincrement," +
-                CUSTOMER_TABLE.FIRST_NAME + " text," +
-                CUSTOMER_TABLE.LAST_NAME + " text," +
-                CUSTOMER_TABLE.PHONE + " text," +
-                CUSTOMER_TABLE.EMAIL + " text," +
-                CUSTOMER_TABLE.COMPANY + " text," +
-                CUSTOMER_TABLE.STREET + " text," +
-                CUSTOMER_TABLE.CITY + " text," +
-                CUSTOMER_TABLE.STATE + " text," +
-                CUSTOMER_TABLE.ZIP + " text)");
-        stmt.execute("create table if not exists " + VEHICLE_TABLE + " (" +
-                VEHICLE_TABLE.VEHICLE_ID + " integer primary key autoincrement," +
-                VEHICLE_TABLE.VIN + " text," +
-                VEHICLE_TABLE.YEAR + " character(4)," +
-                VEHICLE_TABLE.MAKE + " text," +
-                VEHICLE_TABLE.MODEL + " text," +
-                VEHICLE_TABLE.LICENSE_PLATE + " text," +
-                VEHICLE_TABLE.COLOR + " text," +
-                VEHICLE_TABLE.ENGINE + " text," +
-                VEHICLE_TABLE.TRANSMISSION + " text," +
-                VEHICLE_TABLE.CUSTOMER_ID + " int," +
-                "foreign key (" + VEHICLE_TABLE.CUSTOMER_ID + ")" + " references " +
-                CUSTOMER_TABLE + "(" + CUSTOMER_TABLE.CUSTOMER_ID + "))");
-        stmt.execute("create table if not exists " + ITEM_TABLE + " (" +
-                ITEM_TABLE.ITEM_NAME + " text primary key," +
-                ITEM_TABLE.ITEM_DESC + " text," +
-                ITEM_TABLE.RETAIL_PRICE + " real," +
-                ITEM_TABLE.LIST_PRICE + " real," +
-                ITEM_TABLE.TAXABLE + " boolean," +
-                ITEM_TABLE.QUANTITY + " integer)");
-        stmt.execute("create table if not exists " +  WORK_ORDER_TABLE + " (" +
-                WORK_ORDER_TABLE.WORK_ORDER_ID + " integer primary key autoincrement," +
-                WORK_ORDER_TABLE.DATE_CREATED + " date," +
-                WORK_ORDER_TABLE.DATE_COMPLETED + " date," +
-                WORK_ORDER_TABLE.CUSTOMER_FIRST_NAME + " text," +
-                WORK_ORDER_TABLE.CUSTOMER_LAST_NAME + " text," +
-                WORK_ORDER_TABLE.CUSTOMER_PHONE + " text," +
-                WORK_ORDER_TABLE.CUSTOMER_EMAIL + " text," +
-                WORK_ORDER_TABLE.CUSTOMER_COMPANY + " text," +
-                WORK_ORDER_TABLE.CUSTOMER_STREET + " text," +
-                WORK_ORDER_TABLE.CUSTOMER_CITY + " text," +
-                WORK_ORDER_TABLE.CUSTOMER_STATE + " text," +
-                WORK_ORDER_TABLE.CUSTOMER_ZIP + " text," +
-                WORK_ORDER_TABLE.VEHICLE_VIN + " text," +
-                WORK_ORDER_TABLE.VEHICLE_YEAR + " character(4)," +
-                WORK_ORDER_TABLE.VEHICLE_MAKE + " text," +
-                WORK_ORDER_TABLE.VEHICLE_MODEL + " text," +
-                WORK_ORDER_TABLE.VEHICLE_LICENSE_PLATE + " text," +
-                WORK_ORDER_TABLE.VEHICLE_COLOR + " text," +
-                WORK_ORDER_TABLE.VEHICLE_ENGINE + " text," +
-                WORK_ORDER_TABLE.VEHICLE_TRANSMISSION + " text," +
-                WORK_ORDER_TABLE.VEHICLE_MILEAGE_IN + " text," +
-                WORK_ORDER_TABLE.VEHICLE_MILEAGE_OUT + " text)");
-        stmt.execute("create table if not exists " + WORK_ORDER_ITEM_TABLE + " (" +
-                WORK_ORDER_ITEM_TABLE.ITEM_ID + " integer primary key autoincrement," +
-                WORK_ORDER_ITEM_TABLE.WORK_ORDER_ID + " integer," +
-                WORK_ORDER_ITEM_TABLE.ITEM_NAME + " text," +
-                WORK_ORDER_ITEM_TABLE.ITEM_DESC + " text," +
-                WORK_ORDER_ITEM_TABLE.ITEM_RETAIL_PRICE + " real," +
-                WORK_ORDER_ITEM_TABLE.ITEM_LIST_PRICE + " real," +
-                WORK_ORDER_ITEM_TABLE.ITEM_QUANTITY + " integer," +
-                WORK_ORDER_ITEM_TABLE.ITEM_TAXABLE + " boolean," +
-                "foreign key(" + WORK_ORDER_ITEM_TABLE.WORK_ORDER_ID + ") references " + WORK_ORDER_TABLE + "(" + WORK_ORDER_TABLE.WORK_ORDER_ID + "))");
-        stmt.execute("create table if not exists " + WORK_ORDER_LABOR_TABLE + " (" +
-                WORK_ORDER_LABOR_TABLE.LABOR_ID + " integer primary key autoincrement," +
-                WORK_ORDER_LABOR_TABLE.WORK_ORDER_ID + " integer," +
-                WORK_ORDER_LABOR_TABLE.LABOR_CODE + " text," +
-                WORK_ORDER_LABOR_TABLE.LABOR_DESC + " text," +
-                WORK_ORDER_LABOR_TABLE.LABOR_BILLED_HRS + " real," +
-                WORK_ORDER_LABOR_TABLE.LABOR_RATE + " real," +
-                WORK_ORDER_LABOR_TABLE.LABOR_TAXABLE + " boolean," +
-                "foreign key(" + WORK_ORDER_LABOR_TABLE.WORK_ORDER_ID + ") references " + WORK_ORDER_TABLE + "(" + WORK_ORDER_TABLE.WORK_ORDER_ID + "))");
-        stmt.execute("create table if not exists " + WORK_ORDER_PAYMENT_TABLE + " (" +
-                WORK_ORDER_PAYMENT_TABLE.PAYMENT_ID + " integer primary key autoincrement," +
-                WORK_ORDER_PAYMENT_TABLE.WORK_ORDER_ID + " integer," +
-                WORK_ORDER_PAYMENT_TABLE.PAYMENT_DATE + " date," +
-                WORK_ORDER_PAYMENT_TABLE.PAYMENT_TYPE + " character(5)," +
-                WORK_ORDER_PAYMENT_TABLE.PAYMENT_AMOUNT + " real," +
-                "foreign key(" + WORK_ORDER_PAYMENT_TABLE.WORK_ORDER_ID + ") references " + WORK_ORDER_TABLE + "(" + WORK_ORDER_TABLE.WORK_ORDER_ID + "))");
+        String s1 = """
+                create table if not exists customer (
+                customer_id integer primary key autoincrement,
+                first_name text,
+                last_name text,
+                phone text,
+                email text,
+                company text,
+                address text,
+                city text,
+                state text,
+                zip text);
+                """;
+        String s2 = """
+                create table if not exists vehicle (
+                vehicle_id integer primary key autoincrement,
+                customer_id integer,
+                vin text,
+                year character(4), make text, model text,
+                license_plate text,
+                color text,
+                engine text,
+                transmission text,
+                foreign key (customer_id) references customer(customer_id));
+                """;
+        String s3 = """
+                create table if not exists item (
+                item_name text primary key,
+                desc text,
+                retail_price real,
+                list_price real,
+                taxable boolean,
+                quantity tinyint);
+                """;
+        String s4 = """
+                create table if not exists work_order (
+                work_order_id integer primary key autoincrement,
+                date_created date,
+                date_completed date,
+                customer_first_name text,customer_last_name text,
+                customer_phone text,customer_email text,customer_company text,
+                customer_address text,customer_city text,customer_state text,customer_zip text,
+                vehicle_vin text,vehicle_year character(4),vehicle_make text,vehicle_model text,
+                vehicle_license_plate text,vehicle_color text,vehicle,
+                vehicle_engine text,vehicle_transmission,
+                vehicle_mileage_in text, vehicle_mileage_out text);
+                """;
+        String s5 = """
+                create table if not exists work_order_item (
+                work_order_item_id integer primary key autoincrement,
+                work_order_id integer,
+                item_name text,
+                desc text,
+                retail_price real,
+                list_price real,
+                quantity tinyint,
+                taxable boolean,
+                foreign key(work_order_id) references work_order(work_order_id));
+                """;
+        String s6 = """
+                create table if not exists work_order_labor (
+                work_order_labor_id integer primary key autoincrement,
+                work_order_id integer,
+                labor_code text,
+                labor_desc text,
+                labor_billed_hrs real,
+                labor_rate real,
+                labor_taxable boolean,
+                foreign key (work_order_id) references work_order(work_order_id));
+                """;
+        String s7 = """
+                create table if not exists work_order_payment (
+                work_order_payment_id integer primary key autoincrement,
+                work_order_id integer,
+                date_of_payment date,
+                type character(5),
+                amount real,
+                foreign key (work_order_id) references work_order(work_order_id));
+                """;
+        stmt.execute(s1);
+        stmt.execute(s2);
+        stmt.execute(s3);
+        stmt.execute(s4);
+        stmt.execute(s5);
+        stmt.execute(s6);
+        stmt.execute(s7);
     }
 
     public void deleteProductsMarkedForDeletion(List<Product> list) {

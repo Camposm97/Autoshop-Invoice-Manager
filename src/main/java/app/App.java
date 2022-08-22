@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.Preferences;
 import model.ui.GUIScale;
 import model.database.DB;
 import model.ui.FX;
@@ -58,12 +59,15 @@ public class App extends Application {
     public void start(Stage stage) {
         App.root = (BorderPane) FX.view("App.fxml");
         App.display(FX.view("MyCompany.fxml"));
+
         Scene scene = new Scene(root, 1600, 900);
         stage.setScene(scene);
         stage.setTitle(TITLE);
         stage.getIcons().add(new Image("red_car.png"));
         stage.show();
         stage.setOnCloseRequest(e -> recentWorkOrders.save());
+
+        Preferences.init();
     }
 
     public static void main(String[] args) {

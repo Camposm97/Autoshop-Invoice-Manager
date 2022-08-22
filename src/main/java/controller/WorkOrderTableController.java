@@ -15,6 +15,7 @@ import model.work_order.WorkOrder;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.function.Function;
 
 public class WorkOrderTableController {
@@ -23,7 +24,7 @@ public class WorkOrderTableController {
     @FXML
     ComboBox<String> cbDateCreated;
     @FXML
-    DatePicker dateCreatedPicker;
+    DatePicker dpBefore, dpAfter;
     @FXML
     TableView<WorkOrder> tv;
     @FXML
@@ -48,10 +49,17 @@ public class WorkOrderTableController {
             tfFirstName.textProperty().addListener((o, oldText, newText) -> filter());
             tfLastName.textProperty().addListener((o, oldText, newText) -> filter());
             tfCompanyName.textProperty().addListener((o, oldText, newText) -> filter());
-            cbDateCreated.setItems(FXCollections.observableArrayList("Exactly", "Before", "After"));
-            cbDateCreated.setValue("Exactly");
-            cbDateCreated.setOnAction(e -> filter());
-            dateCreatedPicker.setOnAction(e -> filter());
+            cbDateCreated.setItems(FXCollections.observableArrayList("Exactly", "Before", "After", "Between"));
+            cbDateCreated.setOnAction(e -> {
+                if (cbDateCreated.getValue().equals("Between")) {
+                    dpAfter.setDisable(false);
+                } else {
+                    dpAfter.setDisable(true);
+                }
+                filter();
+            });
+            dpBefore.setOnAction(e -> filter());
+            dpAfter.setOnAction(e -> filter());
             colId.setCellValueFactory(c -> c.getValue().idProperty());
             colCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
             colCompany.setCellValueFactory(c -> c.getValue().getCustomer().companyProperty());
@@ -95,14 +103,21 @@ public class WorkOrderTableController {
         String lastName = tfLastName.getText();
         String company = tfCompanyName.getText();
         String dateFilter = cbDateCreated.getValue();
-        Date date = null;
-        if (dateCreatedPicker.getValue() == null) {
+        LocalDate localDate1 = dpBefore.getValue();
+        LocalDate localDate2 = dpAfter.getValue();
+        if (cbDateCreated.getValue() == null || localDate1 == null) {
             var list = DB.get().workOrders().filter(firstName, lastName, company);
             tv.getItems().setAll(list);
         } else {
-            date = Date.valueOf(dateCreatedPicker.getValue());
-            var list = DB.get().workOrders().filter(firstName, lastName, company, dateFilter, date);
-            tv.getItems().setAll(list);
+            Date date1 = Date.valueOf(localDate1);
+            if (cbDateCreated.getValue().equals("Between") && localDate2 != null) {
+                Date date2 = Date.valueOf(localDate2);
+                var list = DB.get().workOrders().filter(firstName, lastName, company, date1, date2);
+                tv.getItems().setAll(list);
+            } else {
+                var list = DB.get().workOrders().filter(firstName, lastName, company, dateFilter, date1);
+                tv.getItems().setAll(list);
+            }
         }
     }
 }

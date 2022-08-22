@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderTableController">
+<GridPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderTableController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -23,9 +23,9 @@
    <children>
       <GridPane hgap="8.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
         </columnConstraints>
@@ -39,7 +39,8 @@
             <HBox alignment="CENTER" GridPane.columnIndex="3">
                <children>
                   <ComboBox fx:id="cbDateCreated" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
-                  <DatePicker fx:id="dateCreatedPicker" editable="false" promptText="Date Created" />
+                  <DatePicker fx:id="dpBefore" editable="false" />
+                  <DatePicker fx:id="dpAfter" disable="true" editable="false" />
                </children>
             </HBox>
             <HBox alignment="CENTER" spacing="8.0" GridPane.columnIndex="4">

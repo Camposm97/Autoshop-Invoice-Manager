@@ -2,21 +2,15 @@ package model.database;
 
 import model.customer.OwnedVehicle;
 import model.work_order.Vehicle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
-
-import static model.database.DBAttributes.CUSTOMER_TABLE;
-import static model.database.DBAttributes.VEHICLE_TABLE;
 
 public class VehicleStore {
     private Connection c;
@@ -259,9 +253,9 @@ public class VehicleStore {
     }
 
     public void export(String des) throws SQLException, IOException {
-        ResultSet rs = c.createStatement().executeQuery("select * from " + VEHICLE_TABLE);
+        ResultSet rs = c.createStatement().executeQuery("select * from vehicle");
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet(VEHICLE_TABLE.toString());
+        XSSFSheet sheet = workbook.createSheet("vehicle");
 
         DB.get().export(rs, sheet);
 

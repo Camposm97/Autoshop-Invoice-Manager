@@ -12,8 +12,6 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import static model.database.DBAttributes.CUSTOMER_TABLE;
-
 public class CustomerStore {
     private Connection c;
 
@@ -29,16 +27,12 @@ public class CustomerStore {
     public boolean exists(@NotNull Customer cus) {
         try {
             PreparedStatement prepStmt = c.prepareStatement("""
-                    select %s from %s
-                    where %s =  ? and %s = ?
-                    and %s = ? and %s = ?
-                    and %s = ? and %s = ?
-                    and %s = ? and %s = ? and %s = ?
-                    """.formatted(CUSTOMER_TABLE.CUSTOMER_ID, CUSTOMER_TABLE,
-                    CUSTOMER_TABLE.FIRST_NAME, CUSTOMER_TABLE.LAST_NAME,
-                    CUSTOMER_TABLE.PHONE, CUSTOMER_TABLE.EMAIL,
-                    CUSTOMER_TABLE.COMPANY, CUSTOMER_TABLE.STREET,
-                    CUSTOMER_TABLE.CITY, CUSTOMER_TABLE.STATE, CUSTOMER_TABLE.ZIP));
+                    select customer_id from customer
+                    where first_name =  ? and last_name = ?
+                    and phone = ? and email = ?
+                    and company = ? and address = ?
+                    and city = ? and state = ? and %zip = ?
+                    """);
             prepStmt.setString(1, cus.getFirstName());
             prepStmt.setString(2, cus.getLastName());
             prepStmt.setString(3, cus.getPhone());
@@ -60,11 +54,7 @@ public class CustomerStore {
         try {
             if (!exists(cus)) {
                 PreparedStatement prepStmt = c.prepareStatement(
-                        "insert into " + CUSTOMER_TABLE + "(" +
-                                CUSTOMER_TABLE.FIRST_NAME + "," + CUSTOMER_TABLE.LAST_NAME + "," +
-                                CUSTOMER_TABLE.PHONE + "," + CUSTOMER_TABLE.EMAIL + "," + CUSTOMER_TABLE.COMPANY + "," +
-                                CUSTOMER_TABLE.STREET + "," + CUSTOMER_TABLE.CITY + "," + CUSTOMER_TABLE.STATE + "," + CUSTOMER_TABLE.ZIP + ")" +
-                                "values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        "insert into customer (first_name,last_name,phone,email,company,phone,email,company,address,city,state,zip) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 prepStmt.setString(1, cus.getFirstName());
                 prepStmt.setString(2, cus.getLastName());
                 prepStmt.setString(3, cus.getPhone());
@@ -87,17 +77,17 @@ public class CustomerStore {
     public Customer getById(int id) {
         Customer customer = null;
         try {
-            ResultSet rs = c.createStatement().executeQuery("select * from " + CUSTOMER_TABLE + " where " + CUSTOMER_TABLE.CUSTOMER_ID + " = " + id);
+            ResultSet rs = c.createStatement().executeQuery("select * from customer where customer_id = " + id);
             if (rs.next()) {
-                String firstName = rs.getString(CUSTOMER_TABLE.FIRST_NAME);
-                String lastName = rs.getString(CUSTOMER_TABLE.LAST_NAME);
-                String phone = rs.getString(CUSTOMER_TABLE.PHONE);
-                String email = rs.getString(CUSTOMER_TABLE.EMAIL);
-                String company = rs.getString(CUSTOMER_TABLE.COMPANY);
-                String street = rs.getString(CUSTOMER_TABLE.STREET);
-                String city = rs.getString(CUSTOMER_TABLE.CITY);
-                String state = rs.getString(CUSTOMER_TABLE.STATE);
-                String zip = rs.getString(CUSTOMER_TABLE.ZIP);
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String phone = rs.getString("phone");
+                String email = rs.getString("email");
+                String company = rs.getString("company");
+                String street = rs.getString("address");
+                String city = rs.getString("city");
+                String state = rs.getString("state");
+                String zip = rs.getString("zip");
                 Address address = new Address(street, city, state, zip);
                 customer = new Customer(id, firstName, lastName, phone, email, company, address);
             }
@@ -110,11 +100,11 @@ public class CustomerStore {
     public List<Customer> getAll() {
         List<Customer> list = new LinkedList<>();
         try {
-            ResultSet rs = c.createStatement().executeQuery("select " + CUSTOMER_TABLE.CUSTOMER_ID + " from " + CUSTOMER_TABLE);
+            ResultSet rs = c.createStatement().executeQuery("select customer_id from customer");
             while (rs.next()) {
-                int id = rs.getInt(CUSTOMER_TABLE.CUSTOMER_ID);
+                int id = rs.getInt("customer_id");
                 Customer cus = getById(id);
-                list.add(cus);
+                if (cus != null) list.add(cus);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -123,22 +113,24 @@ public class CustomerStore {
         }
     }
 
-    public void update(@NotNull Customer customer) {
+    public void update(@NotNull Customer c) {
         try {
-            PreparedStatement prepStmt = c.prepareStatement("""
-                    update %s set %s = ?, %s = ?, %s = ?, %s = ?, %s = ?, %s = ?, %s = ?, %s = ?, %s = ? where %s = %d
-                    """.formatted(CUSTOMER_TABLE, CUSTOMER_TABLE.FIRST_NAME, CUSTOMER_TABLE.LAST_NAME, CUSTOMER_TABLE.PHONE,
-                    CUSTOMER_TABLE.EMAIL, CUSTOMER_TABLE.COMPANY, CUSTOMER_TABLE.STREET, CUSTOMER_TABLE.CITY, CUSTOMER_TABLE.STATE,
-                    CUSTOMER_TABLE.ZIP, CUSTOMER_TABLE.CUSTOMER_ID, customer.getId()));
-            prepStmt.setString(1, customer.getFirstName());
-            prepStmt.setString(2, customer.getLastName());
-            prepStmt.setString(3, customer.getPhone());
-            prepStmt.setString(4, customer.getEmail());
-            prepStmt.setString(5, customer.getCompany());
-            prepStmt.setString(6, customer.getAddress().getStreet());
-            prepStmt.setString(7, customer.getAddress().getCity());
-            prepStmt.setString(8, customer.getAddress().getState());
-            prepStmt.setString(9, customer.getAddress().getZip());
+            PreparedStatement prepStmt = this.c.prepareStatement("""
+                    update customer set 
+                    first_name = ?, last_name = ?, phone = ?, 
+                    email = ?, company = ?, address = ?,
+                    city = ?, state = ?, zip = ? where customer_id = ?
+                    """);
+            prepStmt.setString(1, c.getFirstName());
+            prepStmt.setString(2, c.getLastName());
+            prepStmt.setString(3, c.getPhone());
+            prepStmt.setString(4, c.getEmail());
+            prepStmt.setString(5, c.getCompany());
+            prepStmt.setString(6, c.getAddress().getStreet());
+            prepStmt.setString(7, c.getAddress().getCity());
+            prepStmt.setString(8, c.getAddress().getState());
+            prepStmt.setString(9, c.getAddress().getZip());
+            prepStmt.setInt(10, c.getId());
             prepStmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -147,28 +139,28 @@ public class CustomerStore {
 
     public void deleteById(int id) {
         try {
-            c.createStatement().execute("delete from " + CUSTOMER_TABLE + " where " + CUSTOMER_TABLE.CUSTOMER_ID + "=" + id);
+            c.createStatement().execute("delete from customer where customer_id = " + id);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public List<Customer> filter(@NotNull Customer customer) {
+    public List<Customer> filter(@NotNull Customer c) {
         List<Customer> list = new LinkedList<>();
         try {
-            ResultSet rs = c.createStatement().executeQuery(
-                    "select " + CUSTOMER_TABLE.CUSTOMER_ID + " from " + CUSTOMER_TABLE +
-                            " where " + CUSTOMER_TABLE.FIRST_NAME + " like \"" + customer.getFirstName() + "%\"" +
-                            "and " + CUSTOMER_TABLE.LAST_NAME + " like \"" + customer.getLastName() + "%\"" +
-                            "and " + CUSTOMER_TABLE.COMPANY + " like \"" + customer.getCompany() + "%\"" +
-                            "and " + CUSTOMER_TABLE.PHONE + " like \"" + customer.getPhone() + "%\"" +
-                            "and " + CUSTOMER_TABLE.EMAIL + " like \"" + customer.getEmail() + "%\"" +
-                            "and " + CUSTOMER_TABLE.STREET + " like \"" + customer.getAddress().getStreet() + "%\"" +
-                            "and " + CUSTOMER_TABLE.CITY + " like \"" + customer.getAddress().getCity() + "%\"" +
-                            "and " + CUSTOMER_TABLE.STATE + " like \"" + customer.getAddress().getState() + "%\"" +
-                            "and " + CUSTOMER_TABLE.ZIP + " like \"" + customer.getAddress().getZip() + "%\"");
+            ResultSet rs = this.c.createStatement().executeQuery(
+                    "select customer_id from customer " +
+                            "where first_name like \"" + c.getFirstName() + "%\"" +
+                            "and last_name like \"" + c.getLastName() + "%\"" +
+                            "and company like \"" + c.getCompany() + "%\"" +
+                            "and phone like \"" + c.getPhone() + "%\"" +
+                            "and email like \"" + c.getEmail() + "%\"" +
+                            "and address like \"" + c.getAddress().getStreet() + "%\"" +
+                            "and city like \"" + c.getAddress().getCity() + "%\"" +
+                            "and state like \"" + c.getAddress().getState() + "%\"" +
+                            "and zip like \"" + c.getAddress().getZip() + "%\"");
             while (rs.next()) {
-                int id = rs.getInt(CUSTOMER_TABLE.CUSTOMER_ID);
+                int id = rs.getInt(1);
                 Customer cus = getById(id);
                 list.add(cus);
             }
@@ -181,7 +173,7 @@ public class CustomerStore {
     public List<String> getUniqueCompanies() {
         List<String> list = new LinkedList<>();
         try {
-            ResultSet rs = c.createStatement().executeQuery("select distinct " + CUSTOMER_TABLE.COMPANY + " from " + CUSTOMER_TABLE + " order by " + CUSTOMER_TABLE.COMPANY);
+            ResultSet rs = c.createStatement().executeQuery("select distinct company from customer order by company");
             while (rs.next()) {
                 String x = rs.getString(1);
                 list.add(x);
@@ -195,8 +187,11 @@ public class CustomerStore {
     public List<String> getUniqueAddresses() {
         List<String> list = new LinkedList<>();
         try {
-            ResultSet rs = c.createStatement().executeQuery("select distinct " + CUSTOMER_TABLE.STREET +
-                    " from " + CUSTOMER_TABLE + " order by " + CUSTOMER_TABLE.STREET);
+            ResultSet rs = c.createStatement().executeQuery("""
+                    select distinct address
+                    from customer
+                    order by address
+                    """);
             while (rs.next()) {
                 String street = rs.getString(1);
                 list.add(street);
@@ -210,8 +205,10 @@ public class CustomerStore {
     public List<String> getUniqueCities() {
         List<String> list = new LinkedList<>();
         try {
-            ResultSet rs = c.createStatement().executeQuery("select distinct " + CUSTOMER_TABLE.CITY +
-                    " from " + CUSTOMER_TABLE + " order by " + CUSTOMER_TABLE.CITY);
+            ResultSet rs = c.createStatement().executeQuery("""
+                    select distinct city
+                    from customer order by city
+                    """);
             while (rs.next()) {
                 String street = rs.getString(1);
                 list.add(street);
@@ -225,7 +222,9 @@ public class CustomerStore {
     public List<String> getUniqueZips() {
         List<String> list = new LinkedList<>();
         try {
-            ResultSet rs = c.createStatement().executeQuery("select distinct " + CUSTOMER_TABLE.ZIP + " from " + CUSTOMER_TABLE + " order by " + CUSTOMER_TABLE.ZIP);
+            ResultSet rs = c.createStatement().executeQuery("""
+                    select distinct zip from customer order by zip
+                    """);
             while (rs.next()) {
                 String street = rs.getString(1);
                 list.add(street);
@@ -237,9 +236,9 @@ public class CustomerStore {
     }
 
     public void export(String des) throws SQLException, IOException {
-        ResultSet rs = c.createStatement().executeQuery("select * from " + CUSTOMER_TABLE);
+        ResultSet rs = c.createStatement().executeQuery("select * from customer");
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet(CUSTOMER_TABLE.toString());
+        XSSFSheet sheet = workbook.createSheet("customer");
 
         DB.get().export(rs, sheet);
 

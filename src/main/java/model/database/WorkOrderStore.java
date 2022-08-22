@@ -4,8 +4,6 @@ import app.App;
 import model.customer.Address;
 import model.customer.Customer;
 import model.work_order.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jetbrains.annotations.NotNull;
@@ -18,8 +16,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static model.database.DBAttributes.*;
 
 public class WorkOrderStore {
     private Connection c;
@@ -59,7 +55,7 @@ public class WorkOrderStore {
                             "customer_phone," +
                             "customer_email," +
                             "customer_company," +
-                            "customer_street," +
+                            "customer_address," +
                             "customer_city," +
                             "customer_state," +
                             "customer_zip," +
@@ -270,31 +266,25 @@ public class WorkOrderStore {
     }
 
     public List<WorkOrder> filter(String firstName, String lastName, String company, String dateFilter, Date date) {
-        List<WorkOrder> list = new LinkedList<>();
-        try {
-            ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where " +
-                    "customer_first_name like \"" + firstName + "%\" " +
-                    "and customer_last_name like \"" + lastName + "%\" " +
-                    "and customer_company like \"" + company + "%\"");
-            while (rs.next()) {
-                list.add(getById(rs.getInt(1)));
-                list = list.stream().filter(workOrder -> {
-                   switch (dateFilter) {
-                       case "Exactly":
-                           return workOrder.getDateCreated().equals(date);
-                       case "Before":
-                           return workOrder.getDateCreated().before(date);
-                       case "After":
-                           return workOrder.getDateCreated().after(date);
-                       default:
-                           return true;
-                   }
-                }).collect(Collectors.toList());
+        return filter(firstName, lastName, company).stream().filter(x -> {
+            switch (dateFilter) {
+                case "Exactly":
+                    return x.getDateCreated().equals(date);
+                case "Before":
+                    return x.getDateCreated().before(date);
+                case "After":
+                    return x.getDateCreated().after(date);
+                default:
+                    return true;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
+        }).collect(Collectors.toList());
+    }
+
+    public List<WorkOrder> filter(String firstName, String lastName, String company, Date date1, Date date2) {
+        return filter(firstName, lastName, company)
+                .stream()
+                .filter(x -> x.getDateCreated().after(date1) && x.getDateCreated().before(date2))
+                .collect(Collectors.toList());
     }
 
     public void update(@NotNull WorkOrder workOrder) {
@@ -308,7 +298,7 @@ public class WorkOrderStore {
                             "customer_phone = ?," +
                             "customer_email = ?," +
                             "customer_company = ?," +
-                            "customer_street = ?," +
+                            "customer_address = ?," +
                             "customer_city = ?," +
                             "customer_state = ?," +
                             "customer_zip = ?," +
@@ -633,21 +623,21 @@ public class WorkOrderStore {
     }
 
     public void export(String des) throws SQLException, IOException {
-        ResultSet rs1 = c.createStatement().executeQuery("select * from " + WORK_ORDER_TABLE);
+        ResultSet rs1 = c.createStatement().executeQuery("select * from work_order");
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet1 = workbook.createSheet(WORK_ORDER_TABLE.toString());
+        XSSFSheet sheet1 = workbook.createSheet("work_order");
         DB.get().export(rs1, sheet1);
 
-        ResultSet rs2 = c.createStatement().executeQuery("select * from " + WORK_ORDER_ITEM_TABLE);
-        XSSFSheet sheet2 = workbook.createSheet(WORK_ORDER_ITEM_TABLE.toString());
+        ResultSet rs2 = c.createStatement().executeQuery("select * from work_order_item");
+        XSSFSheet sheet2 = workbook.createSheet("work_order_item");
         DB.get().export(rs2, sheet2);
 
-        ResultSet rs3 = c.createStatement().executeQuery("select * from " + WORK_ORDER_LABOR_TABLE);
-        XSSFSheet sheet3 = workbook.createSheet(WORK_ORDER_LABOR_TABLE.toString());
+        ResultSet rs3 = c.createStatement().executeQuery("select * from work_order_labor");
+        XSSFSheet sheet3 = workbook.createSheet("work_order_labor");
         DB.get().export(rs3, sheet3);
 
-        ResultSet rs4 = c.createStatement().executeQuery("select * from " + WORK_ORDER_PAYMENT_TABLE);
-        XSSFSheet sheet4 = workbook.createSheet(WORK_ORDER_PAYMENT_TABLE.toString());
+        ResultSet rs4 = c.createStatement().executeQuery("select * from work_order_payment");
+        XSSFSheet sheet4 = workbook.createSheet("work_order_payment");
         DB.get().export(rs4, sheet4);
 
         FileOutputStream fos = new FileOutputStream(des);

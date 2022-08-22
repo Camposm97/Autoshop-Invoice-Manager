@@ -23,6 +23,10 @@ public class Preferences {
         return preferences;
     }
 
+    public static void init() {
+        preferences = new Preferences();
+    }
+
     private String company, address, city, tempCompany, tempAddress, tempCity;
     private State state, tempState;
     private String zip, phone, repairShopId, tempZip, tempPhone, tempRepairShopId;
@@ -34,14 +38,14 @@ public class Preferences {
     private List<PrefObservable> observables;
 
     private Preferences() {
-        init();
-        load();
+        build();
+        readFile();
         App.setScale(GUIScale.getStyleClass(this.guiScale));
         App.setTheme(theme);
         System.out.println(this);
     }
 
-    public void init() {
+    public void build() {
         company = "Your Company";
         address = "123 Some Street";
         city = "Some City";
@@ -57,7 +61,7 @@ public class Preferences {
         observables = new LinkedList<>();
     }
 
-    public void load() {
+    public void readFile() {
         try {
             File file = new File(SRC);
             if (file.exists()) {

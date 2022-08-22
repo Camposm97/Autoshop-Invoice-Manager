@@ -13,13 +13,10 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import static model.database.DBAttributes.CUSTOMER_TABLE;
-import static model.database.DBAttributes.ITEM_TABLE;
-
 public class AutoPartStore {
     private Connection c;
 
-    public AutoPartStore(@NotNull Connection c) throws SQLException {
+    public AutoPartStore(@NotNull Connection c) {
         this.c = c;
     }
 
@@ -88,9 +85,9 @@ public class AutoPartStore {
     }
 
     public void export(String des) throws SQLException, IOException {
-        ResultSet rs = c.createStatement().executeQuery("select * from " + ITEM_TABLE);
+        ResultSet rs = c.createStatement().executeQuery("select * from item");
         XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet(ITEM_TABLE.toString());
+        XSSFSheet sheet = workbook.createSheet("auto_part_suggestions");
         DB.get().export(rs, sheet);
 
         FileOutputStream fos = new FileOutputStream(des);
