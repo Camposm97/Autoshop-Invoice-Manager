@@ -78,34 +78,36 @@ public class DB {
         String s1 = """
                 create table if not exists customer (
                 customer_id integer primary key autoincrement,
-                first_name text,
-                last_name text,
-                phone text,
-                email text,
-                company text,
-                address text,
-                city text,
-                state text,
-                zip text);
+                first_name varchar(64),
+                last_name varchar(64),
+                phone varchar(16),
+                email varchar(64),
+                company varchar(64),
+                address varchar(64),
+                city varchar(64),
+                state character(32),
+                zip character(9));
                 """;
         String s2 = """
                 create table if not exists vehicle (
                 vehicle_id integer primary key autoincrement,
                 customer_id integer,
-                vin text,
-                year character(4), make text, model text,
-                license_plate text,
-                color text,
-                engine text,
-                transmission text,
+                vin character(17),
+                year character(4), 
+                make character(50), 
+                model character(50),
+                license_plate character(16),
+                color varchar(16),
+                engine varchar(16),
+                transmission varchar(20),
                 foreign key (customer_id) references customer(customer_id));
                 """;
         String s3 = """
                 create table if not exists item (
-                item_name text primary key,
-                desc text,
-                retail_price real,
-                list_price real,
+                item_name varchar(128) primary key,
+                desc varchar(256),
+                retail_price decimal(10,2),
+                list_price decimal(10,2),
                 taxable boolean,
                 quantity tinyint);
                 """;
@@ -114,34 +116,46 @@ public class DB {
                 work_order_id integer primary key autoincrement,
                 date_created date,
                 date_completed date,
-                customer_first_name text,customer_last_name text,
-                customer_phone text,customer_email text,customer_company text,
-                customer_address text,customer_city text,customer_state text,customer_zip text,
-                vehicle_vin text,vehicle_year character(4),vehicle_make text,vehicle_model text,
-                vehicle_license_plate text,vehicle_color text,vehicle,
-                vehicle_engine text,vehicle_transmission,
-                vehicle_mileage_in text, vehicle_mileage_out text);
+                customer_first_name varchar(64),
+                customer_last_name varchar(64),
+                customer_phone varchar(16),
+                customer_email varchar(64),
+                customer_company varchar(64),
+                customer_address varchar(64),
+                customer_city varchar(64),
+                customer_state varchar(32),
+                customer_zip character(9),
+                vehicle_vin character(17),
+                vehicle_year character(4),
+                vehicle_make varchar(64),
+                vehicle_model varchar(64),
+                vehicle_license_plate character(16),
+                vehicle_color varchar(16),
+                vehicle_engine varchar(16),
+                vehicle_transmission varchar(16),
+                vehicle_mileage_in varchar(10),
+                vehicle_mileage_out varchar(10));
                 """;
         String s5 = """
                 create table if not exists work_order_item (
                 work_order_item_id integer primary key autoincrement,
                 work_order_id integer,
-                item_name text,
-                desc text,
-                retail_price real,
-                list_price real,
-                quantity tinyint,
-                taxable boolean,
+                item_name varchar(128),
+                item_desc varchar(256),
+                item_retail_price decimal(10,2),
+                item_list_price decimal(10,2),
+                item_quantity tinyint,
+                item_taxable boolean,
                 foreign key(work_order_id) references work_order(work_order_id));
                 """;
         String s6 = """
                 create table if not exists work_order_labor (
                 work_order_labor_id integer primary key autoincrement,
                 work_order_id integer,
-                labor_code text,
-                labor_desc text,
-                labor_billed_hrs real,
-                labor_rate real,
+                labor_code varchar(10),
+                labor_desc varchar(256),
+                labor_billed_hrs decimal(10,2),
+                labor_rate decimal(10,2),
                 labor_taxable boolean,
                 foreign key (work_order_id) references work_order(work_order_id));
                 """;
@@ -151,9 +165,10 @@ public class DB {
                 work_order_id integer,
                 date_of_payment date,
                 type character(5),
-                amount real,
+                amount decimal(10,2),
                 foreign key (work_order_id) references work_order(work_order_id));
                 """;
+        String s8 = "create table if not exists counter (id varchar(16) primary key, value integer);";
         stmt.execute(s1);
         stmt.execute(s2);
         stmt.execute(s3);
@@ -161,6 +176,8 @@ public class DB {
         stmt.execute(s5);
         stmt.execute(s6);
         stmt.execute(s7);
+        stmt.execute(s8);
+        stmt.execute("insert into counter (id,value) values('work.order.id',1);");
     }
 
     public void deleteProductsMarkedForDeletion(List<Product> list) {

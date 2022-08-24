@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import model.Preferences;
+import model.database.DB;
 import model.ui.Theme;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
@@ -44,12 +45,7 @@ public class WorkOrderFormController {
     @FXML
     public void initialize() {
         lblDate.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
-        String workOrderId = String.valueOf(workOrder.getId());
-        while (workOrderId.length() < 4) {
-            workOrderId = '0' + workOrderId;
-        }
-        workOrderId = "Work Order # " + workOrderId;
-        lblWorkOrderId.setText(workOrderId);
+        lblWorkOrderId.setText(getWorkOrderId());
         lblOwnerCompany.setText(Preferences.get().getCompany());
         lblOwnerAddress.setText(getAddress());
         lblOwnerPhone.setText(Preferences.get().getPhone());
@@ -113,6 +109,16 @@ public class WorkOrderFormController {
         lblWorkOrderTotal.setText(g.apply(workOrder.bill()));
         lblTotalPayment.setText(g.apply(workOrder.totalPayments()));
         lblAmountDue.setText(g.apply(workOrder.balance()));
+    }
+
+    public String getWorkOrderId() {
+        String s = workOrder.getId().toString();
+        if (workOrder.isNew()) s = DB.get().workOrders().getNextId().toString();
+        final int SIZE = 5;
+        while (s.length() < SIZE) {
+            s = '0' + s;
+        }
+        return "Work Order # " + s;
     }
 
     public String getAddress() {

@@ -34,16 +34,34 @@ public class WorkOrderStore {
     }
 
     // TODO Look this over and maybe delete it
-    public int getNextId() {
+    public Integer getNextId() {
+        var x = -1;
         try {
-            return getMaxId() + 1;
+            ResultSet rs = c
+                    .createStatement()
+                    .executeQuery("""
+                            select value from counter 
+                            where id = \"work.order.id\"
+                            """);
+            if (rs.next()) x = rs.getInt(1);
         } catch (SQLException e) {
-            return -1;
+            e.printStackTrace();
+        } finally {
+            return x;
         }
     }
 
+    public void updateNextId() throws SQLException {
+        var x = getNextId() + 1;
+        PreparedStatement stmt = c.prepareStatement("""
+                update counter set value = ? 
+                where id = 'work.order.id'
+                """);
+        stmt.setInt(1, x);
+        stmt.execute();
+    }
+
     public WorkOrder add(@NotNull WorkOrder workOrder) {
-        System.out.println(workOrder.getCustomer().getId());
         try {
             // Add work_order row
             PreparedStatement prepStmt = c.prepareStatement(
@@ -93,6 +111,8 @@ public class WorkOrderStore {
             prepStmt.setString(21, workOrder.getVehicle().getMileageOut());
             prepStmt.execute();
 
+            updateNextId(); // Update next id value
+
             int id = getMaxId();
             workOrder.setId(id);
 
@@ -127,7 +147,6 @@ public class WorkOrderStore {
             ResultSet rsWorkOrder = c.createStatement().executeQuery(
                     "select * from work_order " +
                             "where work_order_id = " + workOrderId);
-
             if (rsWorkOrder.next()) {
                 Date dateCreated = rsWorkOrder.getDate(2);
                 Date dateCompleted = rsWorkOrder.getDate(3);

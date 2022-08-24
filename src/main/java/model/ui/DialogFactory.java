@@ -127,7 +127,7 @@ public class DialogFactory {
         });
     }
 
-    public static void initPrintWorkOrder(WorkOrder workOrder, WorkOrderWorkspaceController c) {
+    public static void initPrintWorkOrder(WorkOrder workOrder) {
         final var SCALE = 1.5;
         WorkOrderFormController controller = new WorkOrderFormController(workOrder);
         Parent formPane = FX.view("WorkOrderForm.fxml", controller);
@@ -169,7 +169,6 @@ public class DialogFactory {
                             System.out.println(Printer.MarginType.HARDWARE_MINIMUM);
                             System.out.println(printerJob.getJobSettings().getPageLayout().toString());
                             printerJob.endJob();
-                            c.save();
                         }
                     }
                 } else {

@@ -9,8 +9,13 @@ public class TableCellFactory {
     public TableCell<Vehicle, String> initVinTableCell() {
         CustomTableCell<Vehicle, String> cell = new CustomTableCell<>();
         cell.setChangeListener((o,x,y) -> {
-            if (y != null)
-                cell.getTf().setText(y.toUpperCase());
+            if (y != null) {
+                if (y.length() > 17) {
+                    cell.getTf().setText(x);
+                } else {
+                    cell.getTf().setText(y.toUpperCase());
+                }
+            }
         });
         return cell;
     }

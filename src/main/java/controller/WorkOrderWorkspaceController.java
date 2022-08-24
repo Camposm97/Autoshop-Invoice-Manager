@@ -1,10 +1,14 @@
 package controller;
 
 import app.App;
+import com.sun.glass.ui.CommonDialogs;
+import javafx.application.Application;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import model.PrefObservable;
 import model.Preferences;
@@ -13,6 +17,7 @@ import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.tps.*;
+import model.ui.AlertBuilder;
 import model.ui.DialogFactory;
 import model.ui.FX;
 import model.work_order.*;
@@ -20,7 +25,11 @@ import org.controlsfx.control.PopOver;
 import org.controlsfx.control.textfield.TextFields;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Iterator;
@@ -138,6 +147,8 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         TextFields.bindAutoCompletion(tfColor, DB.get().vehicles().getUniqueColor());
         TextFields.bindAutoCompletion(tfEngine, DB.get().vehicles().getUniqueEngine());
         TextFields.bindAutoCompletion(tfTransmission, DB.get().vehicles().getUniqueYear());
+
+        tfWorkOrderId.setText(DB.get().workOrders().getNextId().toString());
 
         // Add Listeners to text fields vin and license plate
         tfVin.textProperty().addListener((o,x,y) -> tfVin.setText(y.toUpperCase()));
@@ -271,7 +282,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
 
     public void print() {
         buildWorkOrder();
-        DialogFactory.initPrintWorkOrder(workOrder, this);
+        DialogFactory.initPrintWorkOrder(workOrder);
     }
 
     public void save() {
@@ -299,6 +310,23 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         App.getScene().getAccelerators().remove(ACCEL_REDO);
         App.setDisableMenu(false);
         App.display(FX.view("MyCompany.fxml"));
+    }
+
+    public void email() {
+        Desktop desktop;
+        if (Desktop.isDesktopSupported() && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
+            String email = tfEmail.getText();
+            try {
+                String subject = (Preferences.get().getCompany() + " Invoice #" + tfWorkOrderId.getText());
+                subject = subject.replaceAll("\\s", "%20");
+                String s = "mailto:%s?subject=%s";
+                s = s.formatted(email, subject);
+                URI mailto = new URI(s);
+                desktop.mail(mailto);
+            } catch (URISyntaxException | IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void loadWorkOrder(@NotNull WorkOrder workOrder) {
