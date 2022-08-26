@@ -198,7 +198,7 @@ public class DialogFactory {
                 .setDefaultBtn()
                 .setContent(FX.view("About.fxml"));
         Alert alert = builder.build();
-        alert.setGraphic(new ImageView("red_car.png"));
+        alert.setGraphic(new ImageView("icon.png"));
         alert.showAndWait();
     }
 

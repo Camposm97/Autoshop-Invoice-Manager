@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Label?>
-<VBox xmlns="http://javafx.com/javafx/17">
+<?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.HyperlinkLabel?>
+
+<VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AboutController">
    <children>
-      <Label text="Version 1.0" />
-      <Label text="Developed by Michael Campos" />
+      <Label text="Version 1.0.0" />
+      <HyperlinkLabel onAction="#github" text="Developed by [Michael Campos]" />
       <Label text="Powered by JavaFX, ControlsFX, and SQLite" />
+      <HyperlinkLabel fx:id="attributeIcon" onAction="#attributeIcon" text="Repair icons created by Freepik - [Flaticon]" />
    </children>
 </VBox>

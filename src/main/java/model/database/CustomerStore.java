@@ -31,7 +31,7 @@ public class CustomerStore {
                     where first_name =  ? and last_name = ?
                     and phone = ? and email = ?
                     and company = ? and address = ?
-                    and city = ? and state = ? and %zip = ?
+                    and city = ? and state = ? and zip = ?
                     """);
             prepStmt.setString(1, cus.getFirstName());
             prepStmt.setString(2, cus.getLastName());
@@ -54,7 +54,7 @@ public class CustomerStore {
         try {
             if (!exists(cus)) {
                 PreparedStatement prepStmt = c.prepareStatement(
-                        "insert into customer (first_name,last_name,phone,email,company,phone,email,company,address,city,state,zip) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        "insert into customer (first_name,last_name,phone,email,company,address,city,state,zip) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 prepStmt.setString(1, cus.getFirstName());
                 prepStmt.setString(2, cus.getLastName());
                 prepStmt.setString(3, cus.getPhone());

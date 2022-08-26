@@ -1,7 +1,12 @@
 package model.ui;
 
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import model.Preferences;
 
 import java.util.function.Function;
@@ -102,6 +107,7 @@ public class AlertBuilder {
             dialogPane.getStylesheets().add(FX.loadCSS("dark-mode.css"));
         }
         dialogPane.getStyleClass().add(GUIScale.getStyleClass(Preferences.get().getGuiScale()));
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("icon.png"));
         return alert;
     }
 }

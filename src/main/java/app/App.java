@@ -63,7 +63,7 @@ public class App extends Application {
         Scene scene = new Scene(root, 1600, 900);
         stage.setScene(scene);
         stage.setTitle(TITLE);
-        stage.getIcons().add(new Image("red_car.png"));
+        stage.getIcons().add(new Image("icon.png"));
         stage.show();
         stage.setOnCloseRequest(e -> recentWorkOrders.save());
 
