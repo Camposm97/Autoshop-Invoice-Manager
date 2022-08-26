@@ -45,8 +45,8 @@
             </HBox>
             <HBox alignment="CENTER" spacing="8.0" GridPane.columnIndex="4">
                <children>
-                  <Button mnemonicParsing="false" onAction="#editWorkOrder" text="Edit" />
-                  <Button mnemonicParsing="false" onAction="#deleteWorkOrder" text="Delete" />
+                  <Button fx:id="btEdit" disable="true" mnemonicParsing="false" onAction="#editWorkOrder" text="Edit" />
+                  <Button fx:id="btDelete" disable="true" mnemonicParsing="false" onAction="#deleteWorkOrder" text="Delete" />
                </children>
                <GridPane.margin>
                   <Insets />

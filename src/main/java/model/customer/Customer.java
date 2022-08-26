@@ -4,6 +4,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Function;
+
 public class Customer implements Comparable<Customer> {
     private int id;
     private String firstName, lastName, phone, email, company;
@@ -118,12 +120,24 @@ public class Customer implements Comparable<Customer> {
      * @return all info of customer in a formatted table except customer id.
      */
     public String toFormattedString() {
+        Function<String, Boolean> f = x -> x != null && !x.isEmpty() && !x.isBlank();
         var name = String.format("%s\n", this.getName());
         var phone = String.format("%s\n", this.phone);
         var email = String.format("%s\n", this.email);
         var company = String.format("%s\n", this.company);
         var addr = String.format("%s\n", this.getAddress());
-        return name + phone + email + company + addr;
+        StringBuilder sb = new StringBuilder();
+        if (f.apply(name))
+            sb.append(name);
+        if (f.apply(phone))
+            sb.append(phone);
+        if (f.apply(email))
+            sb.append(email);
+        if (f.apply(company))
+            sb.append(company);
+        if (f.apply(addr))
+            sb.append(addr);
+        return sb.toString();
     }
 
     /**

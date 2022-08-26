@@ -388,7 +388,7 @@ public class WorkOrderStore {
         }
     }
 
-    public void deleteById(@NotNull WorkOrder workOrder) {
+    public void delete(@NotNull WorkOrder workOrder) {
         try {
             c.createStatement().execute("delete from work_order where work_order_id = " + workOrder.getId());
             Iterator<AutoPart> itemIterator = workOrder.autoPartIterator();

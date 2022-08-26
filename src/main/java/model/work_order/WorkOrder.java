@@ -264,4 +264,8 @@ public class WorkOrder implements Billable {
     public boolean isCompleted() {
         return dateCompleted != null;
     }
+
+    public String toFormattedString() {
+        return customer.toFormattedString() + '\n' + vehicleProperty().getValue();
+    }
 }

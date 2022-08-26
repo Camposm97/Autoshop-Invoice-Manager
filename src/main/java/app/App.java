@@ -12,6 +12,7 @@ import model.database.DB;
 import model.ui.FX;
 import model.ui.Theme;
 import model.work_order.RecentWorkOrders;
+import org.controlsfx.control.HyperlinkLabel;
 
 public class App extends Application {
     public static final String TITLE = "Autoshop Invoice Manager";
@@ -66,8 +67,6 @@ public class App extends Application {
         stage.getIcons().add(new Image("icon.png"));
         stage.show();
         stage.setOnCloseRequest(e -> recentWorkOrders.save());
-
-        Preferences.init();
     }
 
     public static void main(String[] args) {

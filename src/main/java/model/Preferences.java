@@ -18,7 +18,7 @@ public class Preferences {
 
     public static Preferences get() {
         if (preferences == null) {
-            preferences = new Preferences();
+            init();
         }
         return preferences;
     }

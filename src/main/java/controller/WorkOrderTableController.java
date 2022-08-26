@@ -10,12 +10,14 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import model.database.DB;
+import model.ui.AlertBuilder;
 import model.ui.FX;
 import model.work_order.WorkOrder;
 
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class WorkOrderTableController {
@@ -41,6 +43,8 @@ public class WorkOrderTableController {
     TableColumn<WorkOrder, String> colDateCompleted;
     @FXML
     TableColumn<WorkOrder, String> colInvoiceTotal;
+    @FXML
+    Button btEdit, btDelete;
 
     public WorkOrderTableController() {
         Platform.runLater(() -> {
@@ -70,6 +74,13 @@ public class WorkOrderTableController {
             tv.getItems().setAll(DB.get().workOrders().getAll());
             tv.setOnMouseClicked(e -> {
                 if (selectWorkOrder.apply(e)) editWorkOrder();
+                if (tv.getSelectionModel().getSelectedItem() != null) {
+                    btEdit.setDisable(false);
+                    btDelete.setDisable(false);
+                } else {
+                    btEdit.setDisable(true);
+                    btDelete.setDisable(true);
+                }
             });
             FX.autoResizeColumns(tv,75);
         });
@@ -91,11 +102,21 @@ public class WorkOrderTableController {
     }
 
     public void deleteWorkOrder() {
-        WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
-        if (workOrder != null) {
-            tv.getItems().remove(workOrder);
-            DB.get().workOrders().deleteById(workOrder);
-        }
+        WorkOrder x = tv.getSelectionModel().getSelectedItem();
+        AlertBuilder builder = new AlertBuilder();
+        builder.setAlertType(Alert.AlertType.CONFIRMATION)
+                .setTitle("Delete Work Order #" + x.getId())
+                .setHeaderText("Are you sure you want to delete work order #" + x.getId() + "?")
+                .setContentText(x.toFormattedString())
+                .setYesNoBtns();
+        Alert alert = builder.build();
+        Optional<ButtonType> rs = alert.showAndWait();
+        rs.ifPresent(e -> {
+            if (!e.getButtonData().isCancelButton()) {
+                tv.getItems().remove(x);
+                DB.get().workOrders().delete(x);
+            }
+        });
     }
 
     public void filter() {

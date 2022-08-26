@@ -22,6 +22,10 @@
     -fx-focused-mark-color : -fx-focused-text-base-color ;
 }
 
+.hyperlink {
+    -fx-text-fill: #8ab4f8;
+}
+
 .text-input:focused {
     -fx-highlight-text-fill: ladder(
         -fx-highlight-fill,
@@ -54,7 +58,7 @@
     -fx-font-size: 18px;
 }
 
-.button{
+.button {
     -fx-focus-traversable: false;
 }
 
