@@ -7,12 +7,11 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.Preferences;
-import model.ui.GUIScale;
 import model.database.DB;
 import model.ui.FX;
+import model.ui.GUIScale;
 import model.ui.Theme;
 import model.work_order.RecentWorkOrders;
-import org.controlsfx.control.HyperlinkLabel;
 
 public class App extends Application {
     public static final String TITLE = "Autoshop Invoice Manager";
@@ -60,8 +59,8 @@ public class App extends Application {
     public void start(Stage stage) {
         App.root = (BorderPane) FX.view("App.fxml");
         App.display(FX.view("MyCompany.fxml"));
-
-        Scene scene = new Scene(root, 1600, 900);
+        Preferences.init();
+        Scene scene = new Scene(root, 1280, 800);
         stage.setScene(scene);
         stage.setTitle(TITLE);
         stage.getIcons().add(new Image("icon.png"));

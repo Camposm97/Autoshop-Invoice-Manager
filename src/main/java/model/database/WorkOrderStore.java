@@ -33,7 +33,6 @@ public class WorkOrderStore {
         }
     }
 
-    // TODO Look this over and maybe delete it
     public Integer getNextId() {
         var x = -1;
         try {
@@ -111,7 +110,7 @@ public class WorkOrderStore {
             prepStmt.setString(21, workOrder.getVehicle().getMileageOut());
             prepStmt.execute();
 
-            updateNextId(); // Update next id value
+            updateNextId(); // Update next work order id value
 
             int id = getMaxId();
             workOrder.setId(id);

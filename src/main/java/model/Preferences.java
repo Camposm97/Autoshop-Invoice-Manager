@@ -17,9 +17,7 @@ public class Preferences {
     private static final String SRC = "preferences.config";
 
     public static Preferences get() {
-        if (preferences == null) {
-            init();
-        }
+        if (preferences == null) init();
         return preferences;
     }
 
