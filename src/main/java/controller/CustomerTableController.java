@@ -142,6 +142,8 @@ public class CustomerTableController {
                     btWorkOrderWithCustomer.setDisable(false);
                     tvVehicle.setDisable(false);
                 } else {
+                    btDelCustomer.setDisable(true);
+                    btWorkOrderWithCustomer.setDisable(true);
                     tvVehicle.setDisable(true);
                 }
             }
@@ -227,6 +229,9 @@ public class CustomerTableController {
                 if (getSelectedVehicle() != null) {
                     btDelVehicle.setDisable(false);
                     btWorkOrderWithCustomerAndVehicle.setDisable(false);
+                } else {
+                    btDelVehicle.setDisable(true);
+                    btWorkOrderWithCustomerAndVehicle.setDisable(true);
                 }
             }
         });

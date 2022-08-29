@@ -1,14 +1,6 @@
 package controller;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import model.Preferences;
-import model.ui.Theme;
-import org.controlsfx.control.HyperlinkLabel;
 
 import java.awt.*;
 import java.io.IOException;
