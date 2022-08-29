@@ -144,33 +144,33 @@ public class WorkOrderStore {
     public WorkOrder getById(int workOrderId) {
         WorkOrder workOrder = null;
         try {
-            ResultSet rsWorkOrder = c.createStatement().executeQuery(
+            ResultSet rs = c.createStatement().executeQuery(
                     "select * from work_order " +
                             "where work_order_id = " + workOrderId);
-            if (rsWorkOrder.next()) {
-                Date dateCreated = rsWorkOrder.getDate(2);
-                Date dateCompleted = rsWorkOrder.getDate(3);
-                String firstName = rsWorkOrder.getString(4);
-                String lastName = rsWorkOrder.getString(5);
-                String phone = rsWorkOrder.getString(6);
-                String email = rsWorkOrder.getString(7);
-                String company = rsWorkOrder.getString(8);
-                String street = rsWorkOrder.getString(9);
-                String city = rsWorkOrder.getString(10);
-                String state = rsWorkOrder.getString(11);
-                String zip = rsWorkOrder.getString(12);
+            if (rs.next()) {
+                Date dateCreated = rs.getDate(2);
+                Date dateCompleted = rs.getDate(3);
+                String firstName = rs.getString(4);
+                String lastName = rs.getString(5);
+                String phone = rs.getString(6);
+                String email = rs.getString(7);
+                String company = rs.getString(8);
+                String street = rs.getString(9);
+                String city = rs.getString(10);
+                String state = rs.getString(11);
+                String zip = rs.getString(12);
                 Address address = new Address(street, city, state, zip);
                 Customer customer = new Customer(firstName, lastName, phone, email, company, address);
-                String vin = rsWorkOrder.getString(13);
-                String year = rsWorkOrder.getString(14);
-                String make = rsWorkOrder.getString(15);
-                String model = rsWorkOrder.getString(16);
-                String licensePlate = rsWorkOrder.getString(17);
-                String color = rsWorkOrder.getString(18);
-                String engine = rsWorkOrder.getString(19);
-                String transmission = rsWorkOrder.getString(20);
-                String mileageIn = rsWorkOrder.getString(21);
-                String mileageOut = rsWorkOrder.getString(22);
+                String vin = rs.getString(13);
+                String year = rs.getString(14);
+                String make = rs.getString(15);
+                String model = rs.getString(16);
+                String licensePlate = rs.getString(17);
+                String color = rs.getString(18);
+                String engine = rs.getString(19);
+                String transmission = rs.getString(20);
+                String mileageIn = rs.getString(21);
+                String mileageOut = rs.getString(22);
                 Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
                 workOrder = new WorkOrder(customer, vehicle);
                 workOrder.setId(workOrderId);
