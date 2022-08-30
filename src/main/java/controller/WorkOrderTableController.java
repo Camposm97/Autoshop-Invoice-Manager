@@ -49,7 +49,6 @@ public class WorkOrderTableController {
     public WorkOrderTableController() {
         Platform.runLater(() -> {
             Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
-
             tfFirstName.textProperty().addListener((o, oldText, newText) -> filter());
             tfLastName.textProperty().addListener((o, oldText, newText) -> filter());
             tfCompanyName.textProperty().addListener((o, oldText, newText) -> filter());
