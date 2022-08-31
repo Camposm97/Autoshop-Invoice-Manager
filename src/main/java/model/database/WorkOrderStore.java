@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class WorkOrderStore {
     private Connection c;
 
-    public WorkOrderStore(@NotNull Connection c) throws SQLException {
+    public WorkOrderStore(@NotNull Connection c) {
         this.c = c;
     }
 
@@ -63,30 +63,18 @@ public class WorkOrderStore {
     public WorkOrder add(@NotNull WorkOrder workOrder) {
         try {
             // Add work_order row
-            PreparedStatement prepStmt = c.prepareStatement(
-                    "insert into work_order (" +
-                            "date_created," +
-                            "date_completed," +
-                            "customer_first_name," +
-                            "customer_last_name," +
-                            "customer_phone," +
-                            "customer_email," +
-                            "customer_company," +
-                            "customer_address," +
-                            "customer_city," +
-                            "customer_state," +
-                            "customer_zip," +
-                            "vehicle_vin," +
-                            "vehicle_year," +
-                            "vehicle_make," +
-                            "vehicle_model," +
-                            "vehicle_license_plate," +
-                            "vehicle_color," +
-                            "vehicle_engine," +
-                            "vehicle_transmission," +
-                            "vehicle_mileage_in," +
-                            "vehicle_mileage_out) " +
-                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement prepStmt = c.prepareStatement("""
+                    insert into work_order (
+                    date_created,date_completed,
+                    customer_first_name,customer_last_name,
+                    customer_phone,customer_email,
+                    customer_company,
+                    customer_address,customer_city,customer_state,customer_zip,
+                    vehicle_vin,vehicle_year,vehicle_make,vehicle_model,
+                    vehicle_license_plate,vehicle_color,
+                    vehicle_engine,vehicle_transmission,vehicle_mileage_in,vehicle_mileage_out)
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """);
             prepStmt.setDate(1, workOrder.getDateCreated());
             prepStmt.setDate(2, workOrder.getDateCompleted());
             prepStmt.setString(3, workOrder.getCustomer().getFirstName());
@@ -307,30 +295,18 @@ public class WorkOrderStore {
 
     public void update(@NotNull WorkOrder workOrder) {
         try {
-            PreparedStatement prepStmt = c.prepareStatement(
-                    "update work_order set " +
-                            "date_created = ?, " +
-                            "date_completed = ?," +
-                            "customer_first_name = ?," +
-                            "customer_last_name = ?," +
-                            "customer_phone = ?," +
-                            "customer_email = ?," +
-                            "customer_company = ?," +
-                            "customer_address = ?," +
-                            "customer_city = ?," +
-                            "customer_state = ?," +
-                            "customer_zip = ?," +
-                            "vehicle_vin = ?," +
-                            "vehicle_year = ?," +
-                            "vehicle_make = ?," +
-                            "vehicle_model = ?," +
-                            "vehicle_license_plate = ?," +
-                            "vehicle_color = ?," +
-                            "vehicle_engine = ?," +
-                            "vehicle_transmission = ?," +
-                            "vehicle_mileage_in = ?," +
-                            "vehicle_mileage_out = ? " +
-                            "where work_order_id = ?");
+            PreparedStatement prepStmt = c.prepareStatement("""
+                    update work_order set 
+                    date_created = ?, date_completed = ?,
+                    customer_first_name = ?, customer_last_name = ?,
+                    customer_phone = ?,customer_email = ?,
+                    customer_company = ?,
+                    customer_address = ?,customer_city = ?,customer_state = ?,customer_zip = ?,
+                    vehicle_vin = ?,vehicle_year = ?,vehicle_make = ?,vehicle_model = ?,
+                    vehicle_license_plate = ?,vehicle_color = ?,
+                    vehicle_engine = ?,vehicle_transmission = ?,vehicle_mileage_in = ?,vehicle_mileage_out = ? 
+                    where work_order_id = ?
+                    """);
             prepStmt.setDate(1, workOrder.getDateCreated());
             prepStmt.setDate(2, workOrder.getDateCompleted());
             prepStmt.setString(3, workOrder.getCustomer().getFirstName());
@@ -533,8 +509,9 @@ public class WorkOrderStore {
     public List<Labor> getLaborsByWorkOrderId(int workOrderId) {
         List<Labor> list = new LinkedList<>();
         try {
-            ResultSet rs = c.createStatement().executeQuery("select work_order_labor_id from work_order_labor " +
-                    "where work_order_id = " + workOrderId);
+            PreparedStatement prepStmt = c.prepareStatement("select work_order_labor_id from work_order_labor where work_order_id = ?");
+            prepStmt.setInt(1, workOrderId);
+            ResultSet rs = prepStmt.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt(1);
                 Labor labor = getLaborById(id);
@@ -570,9 +547,7 @@ public class WorkOrderStore {
 
     public void addPayment(int workOrderId, @NotNull WorkOrderPayment payment) {
         try {
-            PreparedStatement stmt = c.prepareStatement("""
-                    insert into work_order_payment (work_order_id, date_of_payment, type, amount) values (?, ?, ?, ?)
-                    """);
+            PreparedStatement stmt = c.prepareStatement("insert into work_order_payment (work_order_id, date_of_payment, type, amount) values (?, ?, ?, ?)");
             stmt.setInt(1, workOrderId);
             stmt.setDate(2, payment.getDate());
             stmt.setString(3, payment.getType().name());

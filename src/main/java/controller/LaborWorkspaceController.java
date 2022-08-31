@@ -29,6 +29,17 @@ public class LaborWorkspaceController {
     public void initialize() {
         tfLaborCode.setText("0");
         tfBilledHrs.setText("1.0");
+        tfBilledHrs.setOnScroll(e -> {
+            var value = Double.parseDouble(tfBilledHrs.getText());
+            if (e.getDeltaY() > 0) {
+                value += 0.1d;
+            } else {
+                if (value >= 0) {
+                    value -= 0.1d;
+                }
+            }
+            tfBilledHrs.setText(String.format("%.1f",value));
+        });
         tfRate.setText(Preferences.get().getLaborRate().toString());
 
         // Initialize listeners for fields
