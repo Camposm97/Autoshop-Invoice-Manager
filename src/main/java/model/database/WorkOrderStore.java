@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -183,6 +184,7 @@ public class WorkOrderStore {
         int year = LocalDate.now().getYear();
         Date date1 = Date.valueOf(LocalDate.of(year, 1, 1));
         Date date2 = Date.valueOf(LocalDate.of(year, 12, 31));
+
         List<WorkOrder> list = getCompletedWorkOrders();
         list.removeIf(x -> x.getDateCompleted().before(date1) || x.getDateCompleted().after(date2));
         return list.size();
@@ -251,45 +253,69 @@ public class WorkOrderStore {
         return list;
     }
 
-    public List<WorkOrder> filter(String firstName, String lastName, String company) {
+    public List<WorkOrder> filter(int id, String[] tokens1, String[] tokens2) throws SQLException {
         List<WorkOrder> list = new LinkedList<>();
-        try {
-             ResultSet rs = c.createStatement().executeQuery(
-                     "select work_order_id from work_order where " +
-                         "customer_first_name like \"" + firstName + "%\" and " +
-                         "customer_last_name like \"" + lastName + "%\" and " +
-                         "customer_company like \"" + company + "%\"");
-             while (rs.next()) {
-                 WorkOrder workOrder = getById(rs.getInt(1));
-                 list.add(workOrder);
-             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (id > 0) {
+            PreparedStatement prepStmt = c.prepareStatement("select work_order_id from work_order where work_order_id = ?");
+            prepStmt.setInt(1, id);
+            ResultSet rs = prepStmt.executeQuery();
+            while (rs.next()) {
+                list.add(getById(rs.getInt(1)));
+            }
+        } else {
+            StringBuilder sb = new StringBuilder("select work_order_id from work_order where ");
+            Iterator<String> iter = Arrays.stream(tokens1).iterator();
+            while (iter.hasNext()) {
+                var s = iter.next();
+                var x = "customer_first_name like \"" + s + "%\" or ";
+                var y = "customer_last_name like \"" + s + "%\" or ";
+                var z = "customer_company like \"" + s + "%\" or ";
+                if (!iter.hasNext()) {
+                    z = "customer_company like \"" + s + "%\" ";
+                }
+                sb.append(x).append(y).append(z);
+            }
+//            sb.append(" and ");
+            for (var s : tokens2) {
+
+            }
+            System.out.println(sb.toString());
+            var prepStmt = c.prepareStatement(sb.toString());
+            ResultSet rs = prepStmt.executeQuery();
+//            ResultSet rs = c.createStatement().executeQuery(
+//                    "select work_order_id from work_order where " +
+//                            "customer_first_name like \"" + firstName + "%\" and " +
+//                            "customer_last_name like \"" + lastName + "%\" and " +
+//                            "customer_company like \"" + company + "%\"");
+            while (rs.next()) {
+                WorkOrder workOrder = getById(rs.getInt(1));
+                list.add(workOrder);
+            }
         }
         return list;
     }
 
-    public List<WorkOrder> filter(String firstName, String lastName, String company, String dateFilter, Date date) {
-        return filter(firstName, lastName, company).stream().filter(x -> {
-            switch (dateFilter) {
-                case "Exactly":
-                    return x.getDateCreated().equals(date);
-                case "Before":
-                    return x.getDateCreated().before(date);
-                case "After":
-                    return x.getDateCreated().after(date);
-                default:
-                    return true;
-            }
-        }).collect(Collectors.toList());
-    }
-
-    public List<WorkOrder> filter(String firstName, String lastName, String company, Date date1, Date date2) {
-        return filter(firstName, lastName, company)
-                .stream()
-                .filter(x -> x.getDateCreated().after(date1) && x.getDateCreated().before(date2))
-                .collect(Collectors.toList());
-    }
+//    public List<WorkOrder> filter(String firstName, String lastName, String company, String dateFilter, Date date) {
+//        return filter(firstName, lastName, company).stream().filter(x -> {
+//            switch (dateFilter) {
+//                case "Exactly":
+//                    return x.getDateCreated().equals(date);
+//                case "Before":
+//                    return x.getDateCreated().before(date);
+//                case "After":
+//                    return x.getDateCreated().after(date);
+//                default:
+//                    return true;
+//            }
+//        }).collect(Collectors.toList());
+//    }
+//
+//    public List<WorkOrder> filter(String firstName, String lastName, String company, Date date1, Date date2) {
+//        return filter(firstName, lastName, company)
+//                .stream()
+//                .filter(x -> x.getDateCreated().after(date1) && x.getDateCreated().before(date2))
+//                .collect(Collectors.toList());
+//    }
 
     public void update(@NotNull WorkOrder workOrder) {
         try {

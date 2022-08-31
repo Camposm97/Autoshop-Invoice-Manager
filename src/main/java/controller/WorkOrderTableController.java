@@ -11,18 +11,20 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import model.database.DB;
 import model.ui.AlertBuilder;
+import model.ui.ChangeListenerFactory;
 import model.ui.FX;
 import model.work_order.WorkOrder;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class WorkOrderTableController {
     @FXML
-    TextField tfFirstName, tfLastName, tfCompanyName;
+    TextField tfId, tfName, tfVehicle;
     @FXML
     ComboBox<String> cbDateCreated;
     @FXML
@@ -32,57 +34,47 @@ public class WorkOrderTableController {
     @FXML
     TableColumn<WorkOrder, Integer> colId;
     @FXML
-    TableColumn<WorkOrder, String> colCustomer;
-    @FXML
-    TableColumn<WorkOrder, String> colCompany;
-    @FXML
-    TableColumn<WorkOrder, String> colVehicle;
-    @FXML
-    TableColumn<WorkOrder, String> colDateCreated;
-    @FXML
-    TableColumn<WorkOrder, String> colDateCompleted;
-    @FXML
-    TableColumn<WorkOrder, String> colInvoiceTotal;
+    TableColumn<WorkOrder, String> colCustomer, colCompany, colVehicle, colDateCreated, colDateCompleted, colInvoiceTotal;
     @FXML
     Button btEdit, btDelete;
 
-    public WorkOrderTableController() {
-        Platform.runLater(() -> {
-            Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
-            tfFirstName.textProperty().addListener((o, oldText, newText) -> filter());
-            tfLastName.textProperty().addListener((o, oldText, newText) -> filter());
-            tfCompanyName.textProperty().addListener((o, oldText, newText) -> filter());
-            cbDateCreated.setItems(FXCollections.observableArrayList("Exactly", "Before", "After", "Between"));
-            cbDateCreated.setOnAction(e -> {
-                if (cbDateCreated.getValue().equals("Between")) {
-                    dpAfter.setDisable(false);
-                } else {
-                    dpAfter.setDisable(true);
-                }
-                filter();
-            });
-            dpBefore.setOnAction(e -> filter());
-            dpAfter.setOnAction(e -> filter());
-            colId.setCellValueFactory(c -> c.getValue().idProperty());
-            colCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
-            colCompany.setCellValueFactory(c -> c.getValue().getCustomer().companyProperty());
-            colVehicle.setCellValueFactory(c -> c.getValue().vehicleProperty());
-            colDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
-            colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
-            colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
-            tv.getItems().setAll(DB.get().workOrders().getAll(50));
-            tv.setOnMouseClicked(e -> {
-                if (selectWorkOrder.apply(e)) editWorkOrder();
-                if (tv.getSelectionModel().getSelectedItem() != null) {
-                    btEdit.setDisable(false);
-                    btDelete.setDisable(false);
-                } else {
-                    btEdit.setDisable(true);
-                    btDelete.setDisable(true);
-                }
-            });
-            FX.autoResizeColumns(tv,75);
+    @FXML
+    public void initialize() {
+        ChangeListenerFactory factory = new ChangeListenerFactory();
+        factory.initIntFormat(tfId);
+        Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
+        tfId.textProperty().addListener((o,x,y) -> filter());
+        tfName.textProperty().addListener((o, oldText, newText) -> filter());
+        cbDateCreated.setItems(FXCollections.observableArrayList("Exactly", "Before", "After", "Between"));
+        cbDateCreated.setOnAction(e -> {
+            if (cbDateCreated.getValue().equals("Between")) {
+                dpAfter.setDisable(false);
+            } else {
+                dpAfter.setDisable(true);
+            }
+            filter();
         });
+        dpBefore.setOnAction(e -> filter());
+        dpAfter.setOnAction(e -> filter());
+        colId.setCellValueFactory(c -> c.getValue().idProperty());
+        colCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
+        colCompany.setCellValueFactory(c -> c.getValue().getCustomer().companyProperty());
+        colVehicle.setCellValueFactory(c -> c.getValue().vehicleProperty());
+        colDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
+        colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
+        colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
+        tv.getItems().setAll(DB.get().workOrders().getAll(50));
+        tv.setOnMouseClicked(e -> {
+            if (selectWorkOrder.apply(e)) editWorkOrder();
+            if (tv.getSelectionModel().getSelectedItem() != null) {
+                btEdit.setDisable(false);
+                btDelete.setDisable(false);
+            } else {
+                btEdit.setDisable(true);
+                btDelete.setDisable(true);
+            }
+        });
+        FX.autoResizeColumns(tv,75);
     }
 
     public void editWorkOrder() {
@@ -119,25 +111,34 @@ public class WorkOrderTableController {
     }
 
     public void filter() {
-        String firstName = tfFirstName.getText();
-        String lastName = tfLastName.getText();
-        String company = tfCompanyName.getText();
-        String dateFilter = cbDateCreated.getValue();
-        LocalDate localDate1 = dpBefore.getValue();
-        LocalDate localDate2 = dpAfter.getValue();
-        if (cbDateCreated.getValue() == null || localDate1 == null) {
-            var list = DB.get().workOrders().filter(firstName, lastName, company);
-            tv.getItems().setAll(list);
-        } else {
-            Date date1 = Date.valueOf(localDate1);
-            if (cbDateCreated.getValue().equals("Between") && localDate2 != null) {
-                Date date2 = Date.valueOf(localDate2);
-                var list = DB.get().workOrders().filter(firstName, lastName, company, date1, date2);
-                tv.getItems().setAll(list);
-            } else {
-                var list = DB.get().workOrders().filter(firstName, lastName, company, dateFilter, date1);
-                tv.getItems().setAll(list);
-            }
+        final String REGEX = "\\s+";
+        String strId = tfId.getText();
+        int id = -1;
+        if (!strId.isEmpty())
+            id = Integer.parseInt(strId);
+        String[] nameTokens = tfName.getText().trim().split(REGEX);
+        String[] vehicleTokens = tfVehicle.getText().trim().split(REGEX);
+        try {
+            tv.getItems().setAll(DB.get().workOrders().filter(id, nameTokens, vehicleTokens));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+//        String dateFilter = cbDateCreated.getValue();
+//        LocalDate localDate1 = dpBefore.getValue();
+//        LocalDate localDate2 = dpAfter.getValue();
+//        if (cbDateCreated.getValue() == null || localDate1 == null) {
+//            var list = DB.get().workOrders().filter(id, nameTokens, vehicleTokens);
+//            tv.getItems().setAll(list);
+//        } else {
+//            Date date1 = Date.valueOf(localDate1);
+//            if (cbDateCreated.getValue().equals("Between") && localDate2 != null) {
+//                Date date2 = Date.valueOf(localDate2);
+//                var list = DB.get().workOrders().filter(id, nameTokens, vehicleTokens, date1, date2);
+//                tv.getItems().setAll(list);
+//            } else {
+//                var list = DB.get().workOrders().filter(id, nameTokens, vehicleTokens, dateFilter, date1);
+//                tv.getItems().setAll(list);
+//            }
+//        }
     }
 }

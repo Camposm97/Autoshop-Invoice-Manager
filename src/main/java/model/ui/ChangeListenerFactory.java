@@ -4,14 +4,11 @@ import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NotNull;
 
 public class ChangeListenerFactory {
-    void initIntFormat(@NotNull TextField tf) {
-        tf.getStyleClass().add("number_field_invalid");
+    public void initIntFormat(@NotNull TextField tf) {
         tf.textProperty().addListener((o, x, y) -> {
             if (y == null || y.isEmpty()) {
-                tf.getStyleClass().add("number_field_invalid");
                 return;
             }
-            tf.getStyleClass().remove("number_field_invalid");
             try {
                 var val = Integer.parseInt(y);
                 if (val < 0.0) throw new NumberFormatException();
@@ -24,7 +21,7 @@ public class ChangeListenerFactory {
         });
     }
 
-    void initCurrencyFormat(TextField tf) {
+    public void initCurrencyFormat(TextField tf) {
         tf.textProperty().addListener((o,x,y) -> {
             if (y == null || y.isEmpty()) {
                 tf.getStyleClass().add("number_field_invalid");

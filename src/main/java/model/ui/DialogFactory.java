@@ -5,9 +5,7 @@ import controller.*;
 import javafx.print.*;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Scale;
@@ -184,12 +182,18 @@ public class DialogFactory {
 
     public static void initPreferences() {
         AlertBuilder builder = new AlertBuilder()
-                .setDefaultBtn().addApplyBtn()
                 .setTitle("Preferences")
-                .setHeaderText("Repair-shop Settings")
-                .setDefaultBtn()
+                .setHeaderText("Auto-shop Settings")
+                .setDefaultBtn().addApplyBtn()
                 .setContent(FX.view("Preferences.fxml"));
-        builder.build().showAndWait().ifPresent(e -> Preferences.get().save());
+        builder.build().showAndWait().ifPresent(e -> {
+            if (e.getButtonData().isDefaultButton()) {
+                Preferences.get().save();
+            } else if (e.getButtonData().equals(ButtonBar.ButtonData.APPLY)) {
+                Preferences.get().save();
+                initPreferences();
+            }
+        });
     }
 
     public static void initAbout() {

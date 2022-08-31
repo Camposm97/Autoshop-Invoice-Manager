@@ -7,9 +7,9 @@ package app;
  * Add a limitation to how many work orders can be displayed
  * Implement a listener when searching for work orders to save processing time
  *  Causes the program to slow down with big data
+ *      Such as when starting program, work order table, and customers
  *  Move to MySQL? Supports Multi-threading
- * Fix bug when editing preferences, pressing enter while in a text field
- *  Maybe have it where everytime a field is updated, then update Preferences
+ * Change field for searching work order by first/last name and company to one field.
  */
 public class AppWrapper {
     public static void main(String[] args) {
