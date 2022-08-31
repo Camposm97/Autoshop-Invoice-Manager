@@ -184,11 +184,15 @@ public class WorkOrderStore {
 
     public int getCompletedWorkOrdersThisYear() {
         int year = LocalDate.now().getYear();
-        Date date1 = Date.valueOf(LocalDate.of(year, 1, 1));
-        Date date2 = Date.valueOf(LocalDate.of(year, 12, 31));
-
-        List<WorkOrder> list = getCompletedWorkOrders();
-        list.removeIf(x -> x.getDateCompleted().before(date1) || x.getDateCompleted().after(date2));
+        var date1 = Date.valueOf(LocalDate.of(year, 1, 1)).getTime();
+        var date2 = Date.valueOf(LocalDate.of(year, 12, 31)).getTime();
+        List<WorkOrder> list = new LinkedList<>();
+        try {
+            ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where date_completed >= " + date1 + " and date_completed <= " + date2);
+            while (rs.next()) list.add(getById(rs.getInt(1)));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return list.size();
     }
 
@@ -196,25 +200,16 @@ public class WorkOrderStore {
         LocalDate currentDate = LocalDate.now();
         int year = currentDate.getYear();
         int month = currentDate.getMonthValue();
-        Date date1 = Date.valueOf(LocalDate.of(year, month, 1));
-        Date date2 = Date.valueOf(LocalDate.of(year, month, 31));
-        List<WorkOrder> list = getCompletedWorkOrders();
-        list.removeIf(x -> x.getDateCompleted().before(date1) || x.getDateCompleted().after(date2));
-        return list.size();
-    }
-
-    public List<WorkOrder> getCompletedWorkOrders() {
+        var date1 = Date.valueOf(LocalDate.of(year, month, 1)).getTime();
+        var date2 = Date.valueOf(LocalDate.of(year, month, 31)).getTime();
         List<WorkOrder> list = new LinkedList<>();
         try {
-            ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where date_completed is not null");
-            while (rs.next()) {
-                WorkOrder workOrder = getById(rs.getInt(1));
-                list.add(workOrder);
-            }
+            ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where date_completed >= " + date1 + " and date_completed <= " + date2);
+            while (rs.next()) list.add(getById(rs.getInt(1)));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return list.size();
     }
 
     public List<WorkOrder> getIncompletedWorkOrders() {
@@ -257,7 +252,7 @@ public class WorkOrderStore {
 
     public List<WorkOrder> filter(int id, String[] arr1, String[] arr2, DateFilter dateFilter, LocalDate date1, LocalDate date2) throws SQLException {
         List<WorkOrder> list = new LinkedList<>();
-        if (id > 0) List.of(getById(id));
+        if (id > 0) return List.of(getById(id));
         boolean stmtUpdated = false;
         StringBuilder sb = new StringBuilder("select work_order_id from work_order where ");
         if (arr1 != null || arr2 != null) {
