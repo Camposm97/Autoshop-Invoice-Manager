@@ -70,7 +70,7 @@ public class WorkOrderTableController {
             colDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
             colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
             colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
-            tv.getItems().setAll(DB.get().workOrders().getAll());
+            tv.getItems().setAll(DB.get().workOrders().getAll(50));
             tv.setOnMouseClicked(e -> {
                 if (selectWorkOrder.apply(e)) editWorkOrder();
                 if (tv.getSelectionModel().getSelectedItem() != null) {

@@ -325,6 +325,8 @@ public class CustomerTableController {
                 DB.get().customers().deleteById(cus.getId());
                 tvCustomer.getItems().remove(cus);
                 tvVehicle.getItems().clear();
+                btDelCustomer.setDisable(true);
+                btWorkOrderWithCustomer.setDisable(true);
             }
         });
     }
@@ -338,6 +340,8 @@ public class CustomerTableController {
             if (!e.getButtonData().isCancelButton()) {
                 DB.get().vehicles().deleteById(v.getId());
                 tvVehicle.getItems().remove(v);
+                btDelVehicle.setDisable(true);
+                btWorkOrderWithCustomerAndVehicle.setDisable(true);
             }
         });
     }

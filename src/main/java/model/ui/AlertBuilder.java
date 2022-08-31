@@ -9,13 +9,15 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.Preferences;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Function;
 
 public class AlertBuilder {
     private String title, headerText, contentText;
     private Alert.AlertType alertType;
     private Function<Void, Void> callback;
-    private ButtonType[] btList;
+    private List<ButtonType> btList;
     private Node content;
 
     public AlertBuilder() {
@@ -55,27 +57,40 @@ public class AlertBuilder {
     public AlertBuilder setSaveCancelBtns() {
         ButtonType bt1 = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         ButtonType bt2 = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        btList = new ButtonType[]{bt1, bt2};
+        btList = new LinkedList<>();
+        btList.add(bt1);
+        btList.add(bt2);
         return this;
     }
 
     public AlertBuilder setPrintWorkOrderBtns() {
         ButtonType bt1 = new ButtonType("Print", ButtonBar.ButtonData.OK_DONE);
         ButtonType bt2 = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        btList = new ButtonType[]{bt1, bt2};
+        btList = new LinkedList<>();
+        btList.add(bt1);
+        btList.add(bt2);
         return this;
     }
 
     public AlertBuilder setYesNoBtns() {
         ButtonType bt1 = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
         ButtonType bt2 = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
-        btList = new ButtonType[]{bt1, bt2};
+        btList = new LinkedList<>();
+        btList.add(bt1);
+        btList.add(bt2);
         return this;
     }
 
     public AlertBuilder setDefaultBtn() {
         ButtonType bt = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        btList = new ButtonType[]{bt};
+        btList = new LinkedList<>();
+        btList.add(bt);
+        return this;
+    }
+
+    public AlertBuilder addApplyBtn() {
+        ButtonType bt = new ButtonType("Apply", ButtonBar.ButtonData.APPLY);
+        btList.add(bt);
         return this;
     }
 
@@ -96,6 +111,8 @@ public class AlertBuilder {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(headerText);
+        if (btList != null)
+            alert.getButtonTypes().setAll(btList);
         if (contentText != null) {
             alert.setContentText(contentText);
         } else {

@@ -184,6 +184,7 @@ public class DialogFactory {
 
     public static void initPreferences() {
         AlertBuilder builder = new AlertBuilder()
+                .setDefaultBtn().addApplyBtn()
                 .setTitle("Preferences")
                 .setHeaderText("Repair-shop Settings")
                 .setDefaultBtn()

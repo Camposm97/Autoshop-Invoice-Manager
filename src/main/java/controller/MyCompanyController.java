@@ -70,8 +70,8 @@ public class MyCompanyController {
         String strYear = "(" + currentDate.getYear() + "):";
         String strMonth = "(" + currentDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + "):";
 
-        lblWorkOrderMonthCount.setText(String.valueOf(DB.get().workOrders().getCompletedWorkOrdersThisYear()));
-        lblWorkOrderYearCount.setText(String.valueOf(DB.get().workOrders().getCompletedWorkOrdersThisMonth()));
+        lblWorkOrderMonthCount.setText(String.valueOf(DB.get().workOrders().getCompletedWorkOrdersThisMonth()));
+        lblWorkOrderYearCount.setText(String.valueOf(DB.get().workOrders().getCompletedWorkOrdersThisYear()));
         lblYear.setText(strYear);
         lblMonth.setText(strMonth);
         lblIncompletedWorkOrderCount.setText(String.valueOf(incompletedWorkOrderCount));

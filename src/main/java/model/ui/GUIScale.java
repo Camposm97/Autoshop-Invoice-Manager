@@ -7,26 +7,24 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum GUIScale {
-    Small, Medium, Large, X_Large, XX_Large;
+    Small, Medium, Large, X_Large;
 
     public static String getStyleClass(GUIScale scale) {
         switch (scale) {
             case Small:
-                return "scale-100";
+                return "scale-small";
             case Medium:
-                return "scale-125";
+                return "scale-medium";
             case Large:
-                return "scale-150";
+                return "scale-large";
             case X_Large:
-                return "scale-175";
-            case XX_Large:
-                return "scale-200";
+                return "scale-x-large";
         }
-        return "scale-100";
+        return "scale-small";
     }
 
     public static List<String> styleClasses() {
-        return Arrays.stream(GUIScale.values()).map(x -> x.toString()).toList();
+        return Arrays.stream(GUIScale.values()).map(x -> getStyleClass(x)).toList();
     }
 
     public static ObservableList<GUIScale> list() {

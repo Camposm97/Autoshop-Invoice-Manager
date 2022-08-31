@@ -184,8 +184,7 @@ public class WorkOrderStore {
         Date date1 = Date.valueOf(LocalDate.of(year, 1, 1));
         Date date2 = Date.valueOf(LocalDate.of(year, 12, 31));
         List<WorkOrder> list = getCompletedWorkOrders();
-        list.removeIf(x -> x.getDateCompleted().before(date1));
-        list.removeIf(x -> x.getDateCompleted().after(date2));
+        list.removeIf(x -> x.getDateCompleted().before(date1) || x.getDateCompleted().after(date2));
         return list.size();
     }
 
@@ -196,8 +195,7 @@ public class WorkOrderStore {
         Date date1 = Date.valueOf(LocalDate.of(year, month, 1));
         Date date2 = Date.valueOf(LocalDate.of(year, month, 31));
         List<WorkOrder> list = getCompletedWorkOrders();
-        list.removeIf(x -> x.getDateCompleted().before(date1));
-        list.removeIf(x -> x.getDateCompleted().after(date2));
+        list.removeIf(x -> x.getDateCompleted().before(date1) || x.getDateCompleted().after(date2));
         return list.size();
     }
 
@@ -238,10 +236,10 @@ public class WorkOrderStore {
         return list;
     }
 
-    public List<WorkOrder> getAll() {
+    public List<WorkOrder> getAll(final int LIMIT) {
         List<WorkOrder> list = new LinkedList<>();
         try {
-            ResultSet workOrderSet = c.createStatement().executeQuery("select work_order_id from work_order");
+            ResultSet workOrderSet = c.createStatement().executeQuery("select work_order_id from work_order limit " + LIMIT);
             while (workOrderSet.next()) {
                 int workOrderId = workOrderSet.getInt(1);
                 WorkOrder workOrder = getById(workOrderId);
