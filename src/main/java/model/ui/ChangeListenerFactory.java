@@ -6,15 +6,9 @@ import org.jetbrains.annotations.NotNull;
 public class ChangeListenerFactory {
     public void initIntFormat(@NotNull TextField tf) {
         tf.textProperty().addListener((o, x, y) -> {
-            if (y == null || y.isEmpty()) {
-                return;
-            }
+            if (y == null || y.isEmpty()) return;
             try {
-                var val = Integer.parseInt(y);
-                if (val < 0.0) throw new NumberFormatException();
-                if (!y.matches("\\d")) {
-                    tf.setText(x);
-                }
+                if (Integer.parseInt(y) < 0) throw new NumberFormatException();
             } catch (NumberFormatException e) {
                 tf.setText(x);
             }

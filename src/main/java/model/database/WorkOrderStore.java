@@ -1,6 +1,7 @@
 package model.database;
 
 import app.App;
+import model.DateFilter;
 import model.customer.Address;
 import model.customer.Customer;
 import model.work_order.*;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -253,69 +255,70 @@ public class WorkOrderStore {
         return list;
     }
 
-    public List<WorkOrder> filter(int id, String[] tokens1, String[] tokens2) throws SQLException {
+    public List<WorkOrder> filter(int id, String[] arr1, String[] arr2, DateFilter dateFilter, LocalDate date1, LocalDate date2) throws SQLException {
         List<WorkOrder> list = new LinkedList<>();
-        if (id > 0) {
-            PreparedStatement prepStmt = c.prepareStatement("select work_order_id from work_order where work_order_id = ?");
-            prepStmt.setInt(1, id);
-            ResultSet rs = prepStmt.executeQuery();
-            while (rs.next()) {
-                list.add(getById(rs.getInt(1)));
-            }
-        } else {
-            StringBuilder sb = new StringBuilder("select work_order_id from work_order where ");
-            Iterator<String> iter = Arrays.stream(tokens1).iterator();
-            while (iter.hasNext()) {
-                var s = iter.next();
-                var x = "customer_first_name like \"" + s + "%\" or ";
-                var y = "customer_last_name like \"" + s + "%\" or ";
-                var z = "customer_company like \"" + s + "%\" or ";
-                if (!iter.hasNext()) {
-                    z = "customer_company like \"" + s + "%\" ";
-                }
-                sb.append(x).append(y).append(z);
-            }
-//            sb.append(" and ");
-            for (var s : tokens2) {
+        if (id > 0) List.of(getById(id));
+        boolean stmtUpdated = false;
+        StringBuilder sb = new StringBuilder("select work_order_id from work_order where ");
+        if (arr1 != null || arr2 != null) {
+            stmtUpdated = true;
+            if (arr1 != null) {
 
+                var iter = Arrays.stream(arr1).iterator();
+                if (iter.hasNext()) sb.append('(');
+                while (iter.hasNext()) {
+                    var s = iter.next();
+                    var x = "customer_first_name like \"" + s + "%\" or ";
+                    var y = "customer_last_name like \"" + s + "%\" or ";
+                    var z = "customer_company like \"" + s + "%\" or ";
+                    if (!iter.hasNext()) {
+                        z = "customer_company like \"" + s + "%\")";
+                    }
+                    sb.append(x).append(y).append(z);
+                }
             }
-            System.out.println(sb.toString());
+            if (arr1 != null && arr2 != null) sb.append(" and ");
+            if (arr2 != null) {
+                var iter = Arrays.stream(arr2).iterator();
+                if (iter.hasNext()) sb.append('(');
+                while (iter.hasNext()) {
+                    var s = iter.next();
+                    var x = "vehicle_year like \"" + s + "%\" or ";
+                    var y = "vehicle_make like \"" + s + "%\" or ";
+                    var z = "vehicle_model like \"" + s + "%\" or ";
+                    if (!iter.hasNext()) {
+                        z = "vehicle_model like \"" + s + "%\")";
+                    }
+                    sb.append(x).append(y).append(z);
+                }
+            }
+        }
+        if (dateFilter != null && date1 != null) {
+            if (stmtUpdated) {
+                sb.append(" and ");
+            }
+            var x= Date.valueOf(date1).getTime();
+            if (dateFilter.equals(DateFilter.Between) && date2 != null) {
+                stmtUpdated = true;
+                var y = Date.valueOf(date2).getTime();
+                sb.append("date_created >= " + x + " and date_created <= " + y);
+            } if (!dateFilter.equals(DateFilter.Between)) {
+                stmtUpdated = true;
+                switch (dateFilter) {
+                    case Exactly -> sb.append("date_created = " + x);
+                    case Before -> sb.append("date_created <= " + x);
+                    case After -> sb.append("date_created >= " + x);
+                }
+            }
+        }
+        if (stmtUpdated) {
+            System.out.println(sb);
             var prepStmt = c.prepareStatement(sb.toString());
             ResultSet rs = prepStmt.executeQuery();
-//            ResultSet rs = c.createStatement().executeQuery(
-//                    "select work_order_id from work_order where " +
-//                            "customer_first_name like \"" + firstName + "%\" and " +
-//                            "customer_last_name like \"" + lastName + "%\" and " +
-//                            "customer_company like \"" + company + "%\"");
-            while (rs.next()) {
-                WorkOrder workOrder = getById(rs.getInt(1));
-                list.add(workOrder);
-            }
+            while (rs.next()) list.add(getById(rs.getInt(1)));
         }
         return list;
     }
-
-//    public List<WorkOrder> filter(String firstName, String lastName, String company, String dateFilter, Date date) {
-//        return filter(firstName, lastName, company).stream().filter(x -> {
-//            switch (dateFilter) {
-//                case "Exactly":
-//                    return x.getDateCreated().equals(date);
-//                case "Before":
-//                    return x.getDateCreated().before(date);
-//                case "After":
-//                    return x.getDateCreated().after(date);
-//                default:
-//                    return true;
-//            }
-//        }).collect(Collectors.toList());
-//    }
-//
-//    public List<WorkOrder> filter(String firstName, String lastName, String company, Date date1, Date date2) {
-//        return filter(firstName, lastName, company)
-//                .stream()
-//                .filter(x -> x.getDateCreated().after(date1) && x.getDateCreated().before(date2))
-//                .collect(Collectors.toList());
-//    }
 
     public void update(@NotNull WorkOrder workOrder) {
         try {

@@ -35,10 +35,10 @@
          <children>
             <TextField fx:id="tfId" promptText="ID" />
             <TextField fx:id="tfName" promptText="First / Last Name, Company" GridPane.columnIndex="1" />
-            <TextField fx:id="tfVehicle" promptText="Year Make Model" GridPane.columnIndex="2" />
+            <TextField fx:id="tfVehicle" promptText="Year, Make, Model" GridPane.columnIndex="2" />
             <HBox alignment="CENTER" GridPane.columnIndex="3">
                <children>
-                  <ComboBox fx:id="cbDateCreated" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
+                  <ComboBox fx:id="cbDateFilter" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
                   <DatePicker fx:id="dpBefore" editable="false" />
                   <DatePicker fx:id="dpAfter" disable="true" editable="false" />
                </children>

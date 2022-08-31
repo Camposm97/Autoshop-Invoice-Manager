@@ -1,7 +1,6 @@
 package controller;
 
 import app.App;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import model.DateFilter;
 import model.database.DB;
 import model.ui.AlertBuilder;
 import model.ui.ChangeListenerFactory;
@@ -16,9 +16,9 @@ import model.ui.FX;
 import model.work_order.WorkOrder;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -26,7 +26,7 @@ public class WorkOrderTableController {
     @FXML
     TextField tfId, tfName, tfVehicle;
     @FXML
-    ComboBox<String> cbDateCreated;
+    ComboBox<DateFilter> cbDateFilter;
     @FXML
     DatePicker dpBefore, dpAfter;
     @FXML
@@ -43,11 +43,22 @@ public class WorkOrderTableController {
         ChangeListenerFactory factory = new ChangeListenerFactory();
         factory.initIntFormat(tfId);
         Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
-        tfId.textProperty().addListener((o,x,y) -> filter());
-        tfName.textProperty().addListener((o, oldText, newText) -> filter());
-        cbDateCreated.setItems(FXCollections.observableArrayList("Exactly", "Before", "After", "Between"));
-        cbDateCreated.setOnAction(e -> {
-            if (cbDateCreated.getValue().equals("Between")) {
+        tfId.textProperty().addListener((o,x,y) -> {
+            tfName.clear();
+            tfVehicle.clear();
+            filter();
+        });
+        tfName.textProperty().addListener((o, x, y) -> {
+            tfId.clear();
+            filter();
+        });
+        tfVehicle.textProperty().addListener((o,x,y) -> {
+            tfId.clear();
+            filter();
+        });
+        cbDateFilter.setItems(FXCollections.observableArrayList(DateFilter.values()));
+        cbDateFilter.setOnAction(e -> {
+            if (cbDateFilter.getValue().equals(DateFilter.Between)) {
                 dpAfter.setDisable(false);
             } else {
                 dpAfter.setDisable(true);
@@ -112,33 +123,20 @@ public class WorkOrderTableController {
 
     public void filter() {
         final String REGEX = "\\s+";
-        String strId = tfId.getText();
-        int id = -1;
-        if (!strId.isEmpty())
-            id = Integer.parseInt(strId);
-        String[] nameTokens = tfName.getText().trim().split(REGEX);
-        String[] vehicleTokens = tfVehicle.getText().trim().split(REGEX);
+        var strId = tfId.getText();
+        var id = -1;
+        if (!strId.isEmpty()) id = Integer.parseInt(strId);
+        var s1 = tfName.getText();
+        var s2 = tfVehicle.getText();
+        var arr1 = s1.trim().isEmpty() ? null : s1.trim().split(REGEX);
+        var arr2 = s2.trim().isEmpty() ? null : s2.trim().split(REGEX);
+        var dateFilter = cbDateFilter.getValue();
+        var date1 = dpBefore.getValue();
+        var date2 = dpAfter.getValue();
         try {
-            tv.getItems().setAll(DB.get().workOrders().filter(id, nameTokens, vehicleTokens));
+            tv.getItems().setAll(DB.get().workOrders().filter(id, arr1, arr2, dateFilter, date1, date2));
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        String dateFilter = cbDateCreated.getValue();
-//        LocalDate localDate1 = dpBefore.getValue();
-//        LocalDate localDate2 = dpAfter.getValue();
-//        if (cbDateCreated.getValue() == null || localDate1 == null) {
-//            var list = DB.get().workOrders().filter(id, nameTokens, vehicleTokens);
-//            tv.getItems().setAll(list);
-//        } else {
-//            Date date1 = Date.valueOf(localDate1);
-//            if (cbDateCreated.getValue().equals("Between") && localDate2 != null) {
-//                Date date2 = Date.valueOf(localDate2);
-//                var list = DB.get().workOrders().filter(id, nameTokens, vehicleTokens, date1, date2);
-//                tv.getItems().setAll(list);
-//            } else {
-//                var list = DB.get().workOrders().filter(id, nameTokens, vehicleTokens, dateFilter, date1);
-//                tv.getItems().setAll(list);
-//            }
-//        }
     }
 }
