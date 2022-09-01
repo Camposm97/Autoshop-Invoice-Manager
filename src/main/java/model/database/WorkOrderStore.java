@@ -12,13 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.time.Instant;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class WorkOrderStore {
     private Connection c;
@@ -197,11 +193,14 @@ public class WorkOrderStore {
     }
 
     public int getCompletedWorkOrdersThisMonth() {
-        LocalDate currentDate = LocalDate.now();
-        int year = currentDate.getYear();
-        int month = currentDate.getMonthValue();
-        var date1 = Date.valueOf(LocalDate.of(year, month, 1)).getTime();
-        var date2 = Date.valueOf(LocalDate.of(year, month, 31)).getTime();
+        var currentDate = LocalDate.now();
+        var cal = Calendar.getInstance();
+        var year = currentDate.getYear();
+        var month = currentDate.getMonthValue();
+        var minDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        var maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        var date1 = Date.valueOf(LocalDate.of(year, month, minDay)).getTime();
+        var date2 = Date.valueOf(LocalDate.of(year, month, maxDay)).getTime();
         List<WorkOrder> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where date_completed >= " + date1 + " and date_completed <= " + date2);
@@ -228,17 +227,24 @@ public class WorkOrderStore {
 
     public List<WorkOrder> getRecents() {
         List<WorkOrder> list = new LinkedList<>();
-        App.getRecentWorkOrders().iterator().forEachRemaining(x -> {
+        App.get().getRecentWorkOrders().iterator().forEachRemaining(x -> {
             WorkOrder workOrder = getById(x);
             list.add(workOrder);
         });
         return list;
     }
 
-    public List<WorkOrder> getAll(final int LIMIT) {
+    /**
+     * Gets the latest {LIMIT} work orders by date
+     * @param LIMIT
+     * @return latest work orders by date
+     */
+    public List<WorkOrder> getLatestWorkOrders(final int LIMIT) {
         List<WorkOrder> list = new LinkedList<>();
         try {
-            ResultSet workOrderSet = c.createStatement().executeQuery("select work_order_id from work_order limit " + LIMIT);
+            PreparedStatement prepStmt = c.prepareStatement("select work_order_id from work_order order by date_created desc limit ?");
+            prepStmt.setInt(1, LIMIT);
+            ResultSet workOrderSet = prepStmt.executeQuery();
             while (workOrderSet.next()) {
                 int workOrderId = workOrderSet.getInt(1);
                 WorkOrder workOrder = getById(workOrderId);
@@ -398,7 +404,7 @@ public class WorkOrderStore {
             }
 
             // Remove work order id from recent work orders
-            App.getRecentWorkOrders().remove(workOrder.getId());
+            App.get().getRecentWorkOrders().remove(workOrder.getId());
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,7 +1,9 @@
 package model.ui;
 
 import javafx.scene.control.TextField;
+import model.Timer;
 import org.jetbrains.annotations.NotNull;
+import java.util.function.Function;
 
 public class ChangeListenerFactory {
     public void initIntFormat(@NotNull TextField tf) {
@@ -13,6 +15,20 @@ public class ChangeListenerFactory {
                 tf.setText(x);
             }
         });
+    }
+
+    public void initTimer(@NotNull TextField tf, Runnable callback) {
+        final long DELAY = 600;
+        Timer timer = new Timer();
+        timer.setCallback(callback);
+        tf.textProperty().addListener((o,x,y) -> {
+            if (timer.isRunning()) {
+                timer.restart();
+            } else {
+                timer.start(DELAY);
+            }
+        });
+
     }
 
     public void initCurrencyFormat(TextField tf) {

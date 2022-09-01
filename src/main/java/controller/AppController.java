@@ -1,24 +1,75 @@
 package controller;
 
-import app.App;
 import javafx.application.Platform;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.MenuBar;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
+import javafx.stage.Window;
+import model.AppModel;
 import model.Preferences;
 import model.database.DB;
 import model.ui.DialogFactory;
 import model.ui.FX;
+import model.ui.GUIScale;
 import model.ui.Theme;
+import model.work_order.RecentWorkOrders;
 import org.controlsfx.control.Notifications;
 
 import java.io.File;
 
 public class AppController {
+    AppModel appModel;
+    @FXML
+    Stage stage;
     @FXML
     BorderPane root;
     @FXML
     MenuBar menuBar;
+    Parent myCompany, customers, workOrders;
+
+    @FXML
+    public void initialize() {
+        appModel = new AppModel();
+        stage.setTitle(title());
+        stage.getIcons().add(new Image("icon.png"));
+    }
+
+    public void setDisableMenu(boolean flag) {
+        menuBar.setDisable(flag);
+    }
+
+    public void display(Parent x) {
+        root.setCenter(x);
+    }
+
+    public void setScale(String styleClass) {
+        root.getStyleClass().removeAll(GUIScale.styleClasses());
+        root.getStyleClass().add(styleClass);
+    }
+
+    public void setTheme(Theme theme) {
+        switch (theme) {
+            case Light:
+                root.getStylesheets().remove(FX.loadCSS("dark-mode.css"));
+                break;
+            case Dark:
+                root.getStylesheets().add(FX.loadCSS("dark-mode.css"));
+                break;
+        }
+    }
+
+    public ObservableMap<KeyCombination, Runnable> getAccels() {
+        return root.getScene().getAccelerators();
+    }
+
+    public RecentWorkOrders getRecentWorkOrders() {
+        return appModel.getRecentWorkOrders();
+    }
 
     public void addCustomer() {
         DialogFactory.showAddCustomer();
@@ -29,7 +80,7 @@ public class AppController {
     }
 
     public void addWorkOrder() {
-        App.display(FX.view("WorkOrderWorkspace.fxml"));
+        root.setCenter(FX.view("WorkOrderWorkspace.fxml"));
     }
 
     public void exportCustomers() throws Exception {
@@ -85,15 +136,18 @@ public class AppController {
     }
 
     public void viewMyCompany() {
-        App.display(FX.view("MyCompany.fxml"));
+        if (myCompany == null) myCompany = FX.view("MyCompany.fxml");
+        root.setCenter(myCompany);
     }
 
     public void viewCustomers() {
-        App.display(FX.view("CustomerTable.fxml"));
+        if (customers == null) customers = FX.view("CustomerTable.fxml");
+        root.setCenter(customers);
     }
 
     public void viewWorkOrders() {
-        App.display(FX.view("WorkOrderTable.fxml"));
+        if (workOrders == null) workOrders = FX.view("WorkOrderTable.fxml");
+        root.setCenter(workOrders);
     }
 
     public void preferences() {
@@ -105,7 +159,15 @@ public class AppController {
     }
 
     public void exit() {
-        App.getRecentWorkOrders().save();
+        appModel.getRecentWorkOrders().save();
         Platform.exit();
+    }
+
+    public Window getWindow() {
+        return root.getScene().getWindow();
+    }
+
+    public String title() {
+        return AppModel.TITLE;
     }
 }

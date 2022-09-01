@@ -13,9 +13,6 @@ import java.sql.*;
 import java.util.List;
 
 public class DB {
-    public static void main(String[] args) {
-        DB.init();
-    }
     private static DB singleton;
     private static final String DB_NAME = "autoshop.db";
 

@@ -352,7 +352,7 @@ public class CustomerTableController {
             Parent node = loader.load();
             WorkOrderWorkspaceController c = loader.getController();
             c.loadCustomer(getSelectedCustomer());
-            App.display(node);
+            App.get().display(node);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -365,7 +365,7 @@ public class CustomerTableController {
             WorkOrderWorkspaceController c = loader.getController();
             c.loadCustomer(getSelectedCustomer());
             c.loadVehicle(getSelectedVehicle());
-            App.display(node);
+            App.get().display(node);
         } catch (IOException e) {
             e.printStackTrace();
         }

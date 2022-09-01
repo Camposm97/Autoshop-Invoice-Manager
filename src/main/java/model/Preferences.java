@@ -38,8 +38,8 @@ public class Preferences {
     private Preferences() {
         build();
         readFile();
-        App.setScale(GUIScale.getStyleClass(this.guiScale));
-        App.setTheme(theme);
+        App.get().setScale(GUIScale.getStyleClass(this.guiScale));
+        App.get().setTheme(theme);
         System.out.println(this);
     }
 
@@ -168,8 +168,8 @@ public class Preferences {
             e.printStackTrace();
         } finally {
             String styleClass = GUIScale.getStyleClass(this.guiScale);
-            App.setScale(styleClass);
-            App.setTheme(theme);
+            App.get().setScale(styleClass);
+            App.get().setTheme(theme);
         }
     }
 

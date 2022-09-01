@@ -146,7 +146,7 @@ public class DialogFactory {
             if (e.getButtonData().isDefaultButton()) {
                 PrinterJob printerJob = PrinterJob.createPrinterJob();
                 if (printerJob != null) {
-                    if (printerJob.showPrintDialog(App.getScene().getWindow())) {
+                    if (printerJob.showPrintDialog(App.get().getWindow())) {
                         WorkOrderFormController tempController = new WorkOrderFormController(workOrder);
                         Parent tempForm = FX.view("WorkOrderForm.fxml", tempController);
                         tempForm.getTransforms().add(new Scale(SCALE, SCALE));
@@ -199,7 +199,7 @@ public class DialogFactory {
     public static void initAbout() {
         AlertBuilder builder = new AlertBuilder()
                 .setTitle("About")
-                .setHeaderText(App.TITLE)
+                .setHeaderText(App.get().title())
                 .setDefaultBtn()
                 .setContent(FX.view("About.fxml"));
         Alert alert = builder.build();
@@ -215,6 +215,6 @@ public class DialogFactory {
         fc.setTitle(title);
         fc.getExtensionFilters().setAll(ef1, ef2);
         fc.setSelectedExtensionFilter(ef1);
-        return fc.showSaveDialog(App.getScene().getWindow());
+        return fc.showSaveDialog(App.get().getWindow());
     }
 }

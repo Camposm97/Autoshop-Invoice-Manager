@@ -114,7 +114,7 @@ public class MyCompanyController {
                 Parent node = loader.load();
                 WorkOrderWorkspaceController controller = loader.getController();
                 controller.loadWorkOrder(workOrder);
-                App.display(node);
+                App.get().display(node);
             } catch (IOException e) {
                 e.printStackTrace();
             }

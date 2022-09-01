@@ -17,8 +17,6 @@ import model.work_order.WorkOrder;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -40,29 +38,29 @@ public class WorkOrderTableController {
 
     @FXML
     public void initialize() {
+        Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
         ChangeListenerFactory factory = new ChangeListenerFactory();
         factory.initIntFormat(tfId);
-        Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
-        tfId.textProperty().addListener((o,x,y) -> {
+        factory.initTimer(tfId, () -> {
             tfName.clear();
             tfVehicle.clear();
             filter();
         });
-        tfName.textProperty().addListener((o, x, y) -> {
+        factory.initTimer(tfName, () -> {
             tfId.clear();
             filter();
         });
-        tfVehicle.textProperty().addListener((o,x,y) -> {
+        factory.initTimer(tfVehicle, () -> {
             tfId.clear();
             filter();
         });
         cbDateFilter.setItems(FXCollections.observableArrayList(DateFilter.values()));
         cbDateFilter.setOnAction(e -> {
-            if (cbDateFilter.getValue().equals(DateFilter.Between)) {
+            if (cbDateFilter.getValue().equals(DateFilter.Between))
                 dpAfter.setDisable(false);
-            } else {
+            else
                 dpAfter.setDisable(true);
-            }
+            tfId.clear();
             filter();
         });
         dpBefore.setOnAction(e -> filter());
@@ -74,7 +72,7 @@ public class WorkOrderTableController {
         colDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
         colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
         colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
-        tv.getItems().setAll(DB.get().workOrders().getAll(50));
+        tv.getItems().setAll(DB.get().workOrders().getLatestWorkOrders(50));
         tv.setOnMouseClicked(e -> {
             if (selectWorkOrder.apply(e)) editWorkOrder();
             if (tv.getSelectionModel().getSelectedItem() != null) {
@@ -96,7 +94,7 @@ public class WorkOrderTableController {
                 Parent node = loader.load();
                 WorkOrderWorkspaceController c = loader.getController();
                 c.loadWorkOrder(workOrder);
-                App.display(node);
+                App.get().display(node);
             } catch (IOException e) {
                 e.printStackTrace();
             }

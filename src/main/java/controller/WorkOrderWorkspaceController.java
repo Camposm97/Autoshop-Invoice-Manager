@@ -115,10 +115,10 @@ public class WorkOrderWorkspaceController implements PrefObservable {
      */
     @FXML
     public void initialize() throws IOException {
-        App.setDisableMenu(true);
-        App.getScene().getAccelerators().put(ACCEL_SAVE, () -> saveAndClose());
-        App.getScene().getAccelerators().put(ACCEL_PRINT, () -> btPrint.fire());
-        App.getScene().getAccelerators().put(ACCEL_UNDO, () -> {
+        App.get().setDisableMenu(true);
+        App.get().getAccels().put(ACCEL_SAVE, () -> saveAndClose());
+        App.get().getAccels().put(ACCEL_PRINT, () -> btPrint.fire());
+        App.get().getAccels().put(ACCEL_UNDO, () -> {
             if (tabPartsAndLabor.isSelected()) {
                 tpsProducts.undoTransaction();
             } else if (tabWorkOrderInfo.isSelected()) {
@@ -126,7 +126,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             }
             updateTotals();
         });
-        App.getScene().getAccelerators().put(ACCEL_REDO, () -> {
+        App.get().getAccels().put(ACCEL_REDO, () -> {
             if (tabPartsAndLabor.isSelected()) {
                 tpsProducts.doTransaction();
             } else if (tabWorkOrderInfo.isSelected()) {
@@ -294,7 +294,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             DB.get().deleteProductsMarkedForDeletion(productsMarkedForDeletion);
             DB.get().deletePaymentMarkedForDeletion(paymentsMarkedForDeletion);
         }
-        App.getRecentWorkOrders().add(workOrder.getId());
+        App.get().getRecentWorkOrders().add(workOrder.getId());
     }
 
     public void saveAndClose() {
@@ -304,12 +304,12 @@ public class WorkOrderWorkspaceController implements PrefObservable {
 
     public void close() {
         Preferences.get().removeObserver(this);
-        App.getScene().getAccelerators().remove(ACCEL_SAVE);
-        App.getScene().getAccelerators().remove(ACCEL_PRINT);
-        App.getScene().getAccelerators().remove(ACCEL_UNDO);
-        App.getScene().getAccelerators().remove(ACCEL_REDO);
-        App.setDisableMenu(false);
-        App.display(FX.view("MyCompany.fxml"));
+        App.get().getAccels().remove(ACCEL_SAVE);
+        App.get().getAccels().remove(ACCEL_PRINT);
+        App.get().getAccels().remove(ACCEL_UNDO);
+        App.get().getAccels().remove(ACCEL_REDO);
+        App.get().setDisableMenu(false);
+        App.get().display(FX.view("MyCompany.fxml"));
     }
 
     public void email() {
