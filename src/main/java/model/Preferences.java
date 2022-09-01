@@ -13,16 +13,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Preferences {
-    private static Preferences preferences;
+    private static Preferences singleton;
     private static final String SRC = "preferences.config";
 
     public static Preferences get() {
-        if (preferences == null) init();
-        return preferences;
+        if (singleton == null) init();
+        return singleton;
     }
 
     public static void init() {
-        preferences = new Preferences();
+        singleton = new Preferences();
     }
 
     private String company, address, city, tempCompany, tempAddress, tempCity;
@@ -33,7 +33,7 @@ public class Preferences {
     private Double taxRate, tempTaxRate;
     private GUIScale guiScale, tempGuiScale;
     private Theme theme, tempTheme;
-    private List<PrefObservable> observables;
+    private List<Observable> observables;
 
     private Preferences() {
         build();
@@ -161,7 +161,7 @@ public class Preferences {
             pw.println("theme=" + theme);
             pw.close();
             System.out.println("Saved preferences");
-            for (PrefObservable o : observables) {
+            for (Observable o : observables) {
                 o.update();
             }
         } catch (FileNotFoundException e) {
@@ -273,11 +273,11 @@ public class Preferences {
         this.tempTheme = theme;
     }
 
-    public void addObserver(PrefObservable observable) {
+    public void addObserver(Observable observable) {
         this.observables.add(observable);
     }
 
-    public void removeObserver(PrefObservable observable) {
+    public void removeObserver(Observable observable) {
         this.observables.remove(observable);
     }
 

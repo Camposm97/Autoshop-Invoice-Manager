@@ -3,40 +3,60 @@ package controller;
 import javafx.application.Platform;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import model.AppModel;
-import model.Preferences;
 import model.database.DB;
 import model.ui.DialogFactory;
 import model.ui.FX;
 import model.ui.GUIScale;
 import model.ui.Theme;
-import model.work_order.RecentWorkOrders;
 import org.controlsfx.control.Notifications;
 
 import java.io.File;
+import java.io.IOException;
 
 public class AppController {
-    AppModel appModel;
     @FXML
     Stage stage;
     @FXML
     BorderPane root;
     @FXML
     MenuBar menuBar;
+    @FXML
+    TabPane tabPane;
+    @FXML
+    Tab tabComp, tabCus, tabWO;
     Parent myCompany, customers, workOrders;
+    MyCompanyController compView;
+    CustomerTableController cusView;
+    WorkOrderTableController woView;
 
     @FXML
     public void initialize() {
-        appModel = new AppModel();
-        stage.setTitle(title());
+        stage.setTitle(AppModel.TITLE);
         stage.getIcons().add(new Image("icon.png"));
+        tabPane.getSelectionModel().selectedItemProperty().addListener((o,x,y) -> {
+            try {
+                if (y == tabComp) {
+                    viewMyCompany();
+                } else if (y == tabCus) {
+                    viewCustomers();
+                } else if (y == tabWO) {
+                    viewWorkOrders();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void setDisableMenu(boolean flag) {
@@ -45,6 +65,10 @@ public class AppController {
 
     public void display(Parent x) {
         root.setCenter(x);
+    }
+
+    public void display() {
+        root.setCenter(tabPane);
     }
 
     public void setScale(String styleClass) {
@@ -67,16 +91,12 @@ public class AppController {
         return root.getScene().getAccelerators();
     }
 
-    public RecentWorkOrders getRecentWorkOrders() {
-        return appModel.getRecentWorkOrders();
-    }
-
     public void addCustomer() {
-        DialogFactory.showAddCustomer();
+        DialogFactory.initAddCustomer();
     }
 
     public void addVehicle() {
-        DialogFactory.initAddVehicle();
+        DialogFactory.initAddVehicle(cusView);
     }
 
     public void addWorkOrder() {
@@ -90,7 +110,7 @@ public class AppController {
             DB.get().customers().export(file.getPath());
             Notifications n = Notifications.create().title("Export Customers")
                     .text("Successfully exported customers to " + file.getPath());
-            if (Preferences.get().getTheme() == Theme.Dark)
+            if (AppModel.get().preferences().getTheme() == Theme.Dark)
                 n = n.darkStyle();
             n.showInformation();
         }
@@ -103,7 +123,7 @@ public class AppController {
             DB.get().vehicles().export(file.getPath());
             Notifications n = Notifications.create().title("Export Vehicles")
                     .text("Successfully exported vehicles to " + file.getPath());
-            if (Preferences.get().getTheme() == Theme.Dark)
+            if (AppModel.get().preferences().getTheme() == Theme.Dark)
                 n = n.darkStyle();
             n.showInformation();
         }
@@ -116,7 +136,7 @@ public class AppController {
             DB.get().autoParts().export(file.getPath());
             Notifications n = Notifications.create().title("Export Auto Parts")
                     .text("Successfully exported auto parts to " + file.getPath());
-            if (Preferences.get().getTheme() == Theme.Dark)
+            if (AppModel.get().preferences().getTheme() == Theme.Dark)
                 n = n.darkStyle();
             n.showInformation();
         }
@@ -129,25 +149,52 @@ public class AppController {
             DB.get().workOrders().export(file.getPath());
             Notifications n = Notifications.create().title("Export Work Orders")
                     .text("Successfully exported work orders to " + file.getPath());
-            if (Preferences.get().getTheme() == Theme.Dark)
+            if (AppModel.get().preferences().getTheme() == Theme.Dark)
                 n = n.darkStyle();
             n.showInformation();
         }
     }
 
-    public void viewMyCompany() {
-        if (myCompany == null) myCompany = FX.view("MyCompany.fxml");
-        root.setCenter(myCompany);
+    public void viewMyCompany() throws IOException {
+        if (!tabPane.getTabs().contains(tabComp)) {
+            tabPane.getTabs().add(tabComp);
+            myCompany = null;
+        }
+        if (myCompany == null) {
+            FXMLLoader fxml = FX.load("MyCompany.fxml");
+            myCompany = fxml.load();
+            compView = fxml.getController();
+            tabComp.setContent(myCompany);
+        }
+        tabPane.getSelectionModel().select(tabComp);
     }
 
-    public void viewCustomers() {
-        if (customers == null) customers = FX.view("CustomerTable.fxml");
-        root.setCenter(customers);
+    public void viewCustomers() throws IOException {
+        if (!tabPane.getTabs().contains(tabCus)) {
+            tabPane.getTabs().add(tabCus);
+            customers = null;
+        }
+        if (customers == null) {
+            FXMLLoader fxml = FX.load("CustomerTable.fxml");
+            customers = fxml.load();
+            cusView = fxml.getController();
+            tabCus.setContent(customers);
+        }
+        tabPane.getSelectionModel().select(tabCus);
     }
 
-    public void viewWorkOrders() {
-        if (workOrders == null) workOrders = FX.view("WorkOrderTable.fxml");
-        root.setCenter(workOrders);
+    public void viewWorkOrders() throws IOException {
+        if (!tabPane.getTabs().contains(tabWO)) {
+            tabPane.getTabs().add(tabWO);
+            workOrders = null;
+        }
+        if (workOrders == null) {
+            FXMLLoader fxml = FX.load("WorkOrderTable.fxml");
+            workOrders = fxml.load();
+            woView = fxml.getController();
+            tabWO.setContent(workOrders);
+        }
+        tabPane.getSelectionModel().select(tabWO);
     }
 
     public void preferences() {
@@ -158,16 +205,16 @@ public class AppController {
         DialogFactory.initAbout();
     }
 
+    public AppModel model() {
+        return AppModel.get();
+    }
+
     public void exit() {
-        appModel.getRecentWorkOrders().save();
+        AppModel.get().recentWorkOrders().save();
         Platform.exit();
     }
 
     public Window getWindow() {
         return root.getScene().getWindow();
-    }
-
-    public String title() {
-        return AppModel.TITLE;
     }
 }

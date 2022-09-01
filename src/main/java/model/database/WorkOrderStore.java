@@ -1,6 +1,6 @@
 package model.database;
 
-import app.App;
+import model.AppModel;
 import model.DateFilter;
 import model.customer.Address;
 import model.customer.Customer;
@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.*;
 import java.sql.Date;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -227,7 +227,7 @@ public class WorkOrderStore {
 
     public List<WorkOrder> getRecents() {
         List<WorkOrder> list = new LinkedList<>();
-        App.get().getRecentWorkOrders().iterator().forEachRemaining(x -> {
+        AppModel.get().recentWorkOrders().iterator().forEachRemaining(x -> {
             WorkOrder workOrder = getById(x);
             list.add(workOrder);
         });
@@ -256,54 +256,49 @@ public class WorkOrderStore {
         return list;
     }
 
-    public List<WorkOrder> filter(int id, String[] arr1, String[] arr2, DateFilter dateFilter, LocalDate date1, LocalDate date2) throws SQLException {
+    public List<WorkOrder> filter(int id, String s1, String s2, String s3, String s4, String s5, String s6, DateFilter dateFilter, LocalDate date1, LocalDate date2) throws SQLException {
         List<WorkOrder> list = new LinkedList<>();
         if (id > 0) return List.of(getById(id));
         boolean stmtUpdated = false;
         StringBuilder sb = new StringBuilder("select work_order_id from work_order where ");
-        if (arr1 != null || arr2 != null) {
+        if (!s1.isEmpty()) {
             stmtUpdated = true;
-            if (arr1 != null) {
-
-                var iter = Arrays.stream(arr1).iterator();
-                if (iter.hasNext()) sb.append('(');
-                while (iter.hasNext()) {
-                    var s = iter.next();
-                    var x = "customer_first_name like \"" + s + "%\" or ";
-                    var y = "customer_last_name like \"" + s + "%\" or ";
-                    var z = "customer_company like \"" + s + "%\" or ";
-                    if (!iter.hasNext()) {
-                        z = "customer_company like \"" + s + "%\")";
-                    }
-                    sb.append(x).append(y).append(z);
-                }
-            }
-            if (arr1 != null && arr2 != null) sb.append(" and ");
-            if (arr2 != null) {
-                var iter = Arrays.stream(arr2).iterator();
-                if (iter.hasNext()) sb.append('(');
-                while (iter.hasNext()) {
-                    var s = iter.next();
-                    var x = "vehicle_year like \"" + s + "%\" or ";
-                    var y = "vehicle_make like \"" + s + "%\" or ";
-                    var z = "vehicle_model like \"" + s + "%\" or ";
-                    if (!iter.hasNext()) {
-                        z = "vehicle_model like \"" + s + "%\")";
-                    }
-                    sb.append(x).append(y).append(z);
-                }
-            }
+            sb.append("customer_first_name like \"" + s1 + "%\" ");
+        }
+        if (!s2.isEmpty()) {
+            if (stmtUpdated) sb.append("and ");
+            stmtUpdated = true;
+            sb.append("customer_last_name like \"" + s2 + "%\" ");
+        }
+        if (!s3.isEmpty()) {
+            if (stmtUpdated) sb.append("and ");
+            stmtUpdated = true;
+            sb.append("customer_company like \"" + s3 + "%\" ");
+        }
+        if (!s4.isEmpty()) {
+            if (stmtUpdated) sb.append("and ");
+            stmtUpdated = true;
+            sb.append("vehicle_year like \"" + s4 + "%\" ");
+        }
+        if (!s5.isEmpty()) {
+            if (stmtUpdated) sb.append("and ");
+            stmtUpdated = true;
+            sb.append("vehicle_make like \"" + s5 + "%\" ");
+        }
+        if (!s6.isEmpty()) {
+            if (stmtUpdated) sb.append("and ");
+            stmtUpdated = true;
+            sb.append("vehicle_model like \"" + s6 + "%\" ");
         }
         if (dateFilter != null && date1 != null) {
-            if (stmtUpdated) {
-                sb.append(" and ");
-            }
             var x= Date.valueOf(date1).getTime();
             if (dateFilter.equals(DateFilter.Between) && date2 != null) {
+                if (stmtUpdated) sb.append(" and ");
                 stmtUpdated = true;
                 var y = Date.valueOf(date2).getTime();
                 sb.append("date_created >= " + x + " and date_created <= " + y);
             } if (!dateFilter.equals(DateFilter.Between)) {
+                if (stmtUpdated) sb.append(" and ");
                 stmtUpdated = true;
                 switch (dateFilter) {
                     case Exactly -> sb.append("date_created = " + x);
@@ -313,7 +308,7 @@ public class WorkOrderStore {
             }
         }
         if (stmtUpdated) {
-            System.out.println(sb);
+            System.out.println(sb.append(" order by date_created desc"));
             var prepStmt = c.prepareStatement(sb.toString());
             ResultSet rs = prepStmt.executeQuery();
             while (rs.next()) list.add(getById(rs.getInt(1)));
@@ -404,7 +399,7 @@ public class WorkOrderStore {
             }
 
             // Remove work order id from recent work orders
-            App.get().getRecentWorkOrders().remove(workOrder.getId());
+            AppModel.get().recentWorkOrders().remove(workOrder.getId());
 
         } catch (SQLException e) {
             e.printStackTrace();

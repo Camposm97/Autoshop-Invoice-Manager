@@ -8,7 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import model.Preferences;
+import model.AppModel;
 import model.database.DB;
 import model.ui.Theme;
 import model.work_order.AutoPart;
@@ -46,11 +46,11 @@ public class WorkOrderFormController {
     public void initialize() {
         lblDate.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
         lblWorkOrderId.setText(getWorkOrderId());
-        lblOwnerCompany.setText(Preferences.get().getCompany());
+        lblOwnerCompany.setText(AppModel.get().preferences().getCompany());
         lblOwnerAddress.setText(getAddress());
-        lblOwnerPhone.setText(Preferences.get().getPhone());
+        lblOwnerPhone.setText(AppModel.get().preferences().getPhone());
         lblShop.setText(getShopDetail());
-        lblTitle.setText(Preferences.get().getSpecialTitle());
+        lblTitle.setText(AppModel.get().preferences().getSpecialTitle());
 
         if (workOrder.getCustomer() != null) {
             lblName.setText(workOrder.getCustomer().getName());
@@ -97,7 +97,7 @@ public class WorkOrderFormController {
             Text txtDesc = new Text(lbr.getDesc());
             Label lblSubtotal = new Label(f.apply(lbr.subtotal()));
             txtDesc.setWrappingWidth(400);
-            if (Preferences.get().getTheme().equals(Theme.Dark)) txtDesc.setFill(Color.LIGHTGRAY);
+            if (AppModel.get().preferences().getTheme().equals(Theme.Dark)) txtDesc.setFill(Color.LIGHTGRAY);
 //            txtDesc.getStyleClass().add("text");
 //            txtDesc.setWrapText(true);
             gridPaneLabor.addRow(i, lblCode, txtDesc, lblSubtotal);
@@ -122,11 +122,11 @@ public class WorkOrderFormController {
     }
 
     public String getAddress() {
-        return Preferences.get().getAddress() + ' ' + Preferences.get().getCity() + ' ' + Preferences.get().getState() + ' ' + Preferences.get().getZip();
+        return AppModel.get().preferences().getAddress() + ' ' + AppModel.get().preferences().getCity() + ' ' + AppModel.get().preferences().getState() + ' ' + AppModel.get().preferences().getZip();
     }
 
     public String getShopDetail() {
-     return Preferences.get().getState().getAbbreviation() + "S Repair Shop #" + Preferences.get().getRepairShopId();
+     return AppModel.get().preferences().getState().getAbbreviation() + "S Repair Shop #" + AppModel.get().preferences().getRepairShopId();
     }
 
     private void getAllLabels(Pane root, List<Label> labels) {

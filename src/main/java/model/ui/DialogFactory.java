@@ -5,12 +5,15 @@ import controller.*;
 import javafx.print.*;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
-import model.Preferences;
+import model.AppModel;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
@@ -21,7 +24,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class DialogFactory {
-    public static void showAddCustomer() {
+    public static void initAddCustomer() {
         CustomerWorkspaceController controller = new CustomerWorkspaceController();
         AlertBuilder builder = new AlertBuilder();
         Optional<ButtonType> rs = builder.buildAddDialog(
@@ -33,15 +36,17 @@ public class DialogFactory {
         });
     }
 
-    public static void initAddVehicle() {
+    public static void initAddVehicle(CustomerTableController view) {
         VehicleWorkspaceController controller = new VehicleWorkspaceController();
         AlertBuilder builder = new AlertBuilder();
         Optional<ButtonType> rs = builder.buildAddDialog(
                 "Add Vehicle",
                 FX.view("Vehicle_Workspace.fxml", controller)).showAndWait();
         rs.ifPresent(e -> {
-            if (e.getButtonData().isDefaultButton())
+            if (e.getButtonData().isDefaultButton()) {
                 controller.addVehicle();
+                view.refreshCustomer();
+            }
         });
     }
 
@@ -188,9 +193,9 @@ public class DialogFactory {
                 .setContent(FX.view("Preferences.fxml"));
         builder.build().showAndWait().ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
-                Preferences.get().save();
+                AppModel.get().preferences().save();
             } else if (e.getButtonData().equals(ButtonBar.ButtonData.APPLY)) {
-                Preferences.get().save();
+                AppModel.get().preferences().save();
                 initPreferences();
             }
         });
@@ -199,7 +204,7 @@ public class DialogFactory {
     public static void initAbout() {
         AlertBuilder builder = new AlertBuilder()
                 .setTitle("About")
-                .setHeaderText(App.get().title())
+                .setHeaderText(AppModel.TITLE)
                 .setDefaultBtn()
                 .setContent(FX.view("About.fxml"));
         Alert alert = builder.build();

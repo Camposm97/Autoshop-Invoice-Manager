@@ -7,7 +7,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import model.Preferences;
+import model.AppModel;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -120,10 +120,10 @@ public class AlertBuilder {
         }
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(FX.loadCSS("default.css"));
-        if (Preferences.get().getTheme().equals(Theme.Dark)) {
+        if (AppModel.get().preferences().getTheme().equals(Theme.Dark)) {
             dialogPane.getStylesheets().add(FX.loadCSS("dark-mode.css"));
         }
-        dialogPane.getStyleClass().add(GUIScale.getStyleClass(Preferences.get().getGuiScale()));
+        dialogPane.getStyleClass().add(GUIScale.getStyleClass(AppModel.get().preferences().getGuiScale()));
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("icon.png"));
         return alert;
     }

@@ -22,7 +22,7 @@ import java.util.function.Function;
 
 public class WorkOrderTableController {
     @FXML
-    TextField tfId, tfName, tfVehicle;
+    TextField tfId, tfFirst, tfLast, tfComp, tfYear, tfMake, tfModel;
     @FXML
     ComboBox<DateFilter> cbDateFilter;
     @FXML
@@ -42,18 +42,26 @@ public class WorkOrderTableController {
         ChangeListenerFactory factory = new ChangeListenerFactory();
         factory.initIntFormat(tfId);
         factory.initTimer(tfId, () -> {
-            tfName.clear();
-            tfVehicle.clear();
+            tfFirst.clear();
+            tfLast.clear();
+            tfComp.clear();
+            tfYear.clear();
+            tfMake.clear();
+            tfModel.clear();
             filter();
         });
-        factory.initTimer(tfName, () -> {
+
+        Runnable r = () -> {
             tfId.clear();
             filter();
-        });
-        factory.initTimer(tfVehicle, () -> {
-            tfId.clear();
-            filter();
-        });
+        };
+        factory.initTimer(tfFirst, r);
+        factory.initTimer(tfLast, r);
+        factory.initTimer(tfComp, r);
+        factory.initTimer(tfYear, r);
+        factory.initTimer(tfMake, r);
+        factory.initTimer(tfModel, r);
+
         cbDateFilter.setItems(FXCollections.observableArrayList(DateFilter.values()));
         cbDateFilter.setOnAction(e -> {
             if (cbDateFilter.getValue().equals(DateFilter.Between))
@@ -120,19 +128,20 @@ public class WorkOrderTableController {
     }
 
     public void filter() {
-        final String REGEX = "\\s+";
         var strId = tfId.getText();
         var id = -1;
         if (!strId.isEmpty()) id = Integer.parseInt(strId);
-        var s1 = tfName.getText();
-        var s2 = tfVehicle.getText();
-        var arr1 = s1.trim().isEmpty() ? null : s1.trim().split(REGEX);
-        var arr2 = s2.trim().isEmpty() ? null : s2.trim().split(REGEX);
+        var s1 = tfFirst.getText();
+        var s2 = tfLast.getText();
+        var s3 = tfComp.getText();
+        var s4 = tfYear.getText();
+        var s5 = tfMake.getText();
+        var s6 = tfModel.getText();
         var dateFilter = cbDateFilter.getValue();
         var date1 = dpBefore.getValue();
         var date2 = dpAfter.getValue();
         try {
-            tv.getItems().setAll(DB.get().workOrders().filter(id, arr1, arr2, dateFilter, date1, date2));
+            tv.getItems().setAll(DB.get().workOrders().filter(id, s1, s2, s3, s4, s5, s6, dateFilter, date1, date2));
         } catch (SQLException e) {
             e.printStackTrace();
         }

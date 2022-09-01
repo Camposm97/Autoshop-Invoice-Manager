@@ -141,8 +141,6 @@ public class VehicleStore {
                             "and color like \"" + vehicle.getColor() + "%\" " +
                             "and engine like \"" + vehicle.getEngine() + "%\" " +
                             "and transmission like \"" + vehicle.getTransmission() + "%\""
-//                            "and mileage_in like \"" + vehicle.getMileageIn() + "%\" " +
-//                            "and mileage_out like \"" + vehicle.getMileageOut() + "%\""
             );
             while (rs.next()) {
                 int id = rs.getInt(1);

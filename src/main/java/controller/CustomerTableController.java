@@ -142,6 +142,7 @@ public class CustomerTableController {
                     btWorkOrderWithCustomer.setDisable(false);
                     tvVehicle.setDisable(false);
                 } else {
+                    tvVehicle.getItems().clear();
                     btDelCustomer.setDisable(true);
                     btWorkOrderWithCustomer.setDisable(true);
                     tvVehicle.setDisable(true);
@@ -239,6 +240,13 @@ public class CustomerTableController {
 
     public void refresh() {
         tvCustomer.getItems().setAll(DB.get().customers().getAll());
+    }
+
+    public void refreshCustomer() {
+        Customer c = getSelectedCustomer();
+        if (c != null) {
+            tvVehicle.getItems().setAll(DB.get().vehicles().getAllByCustomerId(c.getId()));
+        }
     }
 
     public void connect(@NotNull VehicleWorkspaceController controller) {

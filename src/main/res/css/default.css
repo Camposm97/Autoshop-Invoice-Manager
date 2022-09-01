@@ -1,17 +1,17 @@
 .scale-small {
-    -fx-font-size: 10px;
-}
-
-.scale-medium {
     -fx-font-size: 12px;
 }
 
-.scale-large {
+.scale-medium {
     -fx-font-size: 14px;
 }
 
-.scale-x-large {
+.scale-large {
     -fx-font-size: 16px;
+}
+
+.scale-x-large {
+    -fx-font-size: 18px;
 }
 
 .title_label {

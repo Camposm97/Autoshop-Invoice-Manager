@@ -5,12 +5,23 @@ import model.work_order.RecentWorkOrders;
 public class AppModel {
     public static final String TITLE = "Autoshop Invoice Manager";
     private RecentWorkOrders recentWorkOrders;
+    private Preferences preferences;
 
-    public AppModel() {
-        recentWorkOrders = new RecentWorkOrders();
+    private static AppModel singleton;
+
+    public static AppModel get() {
+        if (singleton == null) singleton = new AppModel();
+        return singleton;
     }
 
-    public RecentWorkOrders getRecentWorkOrders() {
+    private AppModel() {
+        recentWorkOrders = new RecentWorkOrders();
+        preferences = Preferences.get();
+    }
+
+    public RecentWorkOrders recentWorkOrders() {
         return recentWorkOrders;
     }
+
+    public Preferences preferences() { return preferences; }
 }

@@ -3,7 +3,6 @@ package model.ui;
 import javafx.scene.control.TextField;
 import model.Timer;
 import org.jetbrains.annotations.NotNull;
-import java.util.function.Function;
 
 public class ChangeListenerFactory {
     public void initIntFormat(@NotNull TextField tf) {
@@ -22,10 +21,12 @@ public class ChangeListenerFactory {
         Timer timer = new Timer();
         timer.setCallback(callback);
         tf.textProperty().addListener((o,x,y) -> {
-            if (timer.isRunning()) {
-                timer.restart();
-            } else {
-                timer.start(DELAY);
+            if (!y.trim().isEmpty()) {
+                if (timer.isRunning()) {
+                    timer.restart();
+                } else {
+                    timer.start(DELAY);
+                }
             }
         });
 

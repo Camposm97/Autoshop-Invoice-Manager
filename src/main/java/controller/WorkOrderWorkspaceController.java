@@ -1,23 +1,20 @@
 package controller;
 
 import app.App;
-import com.sun.glass.ui.CommonDialogs;
-import javafx.application.Application;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.*;
-import model.PrefObservable;
-import model.Preferences;
+import model.AppModel;
+import model.Observable;
 import model.State;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.tps.*;
-import model.ui.AlertBuilder;
 import model.ui.DialogFactory;
 import model.ui.FX;
 import model.work_order.*;
@@ -26,7 +23,6 @@ import org.controlsfx.control.textfield.TextFields;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,7 +34,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
-public class WorkOrderWorkspaceController implements PrefObservable {
+public class WorkOrderWorkspaceController implements Observable {
     private static final KeyCodeCombination ACCEL_SAVE = new KeyCodeCombination(KeyCode.W, KeyCodeCombination.SHORTCUT_DOWN);
     private static final KeyCodeCombination ACCEL_PRINT = new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN);
     private static final KeyCodeCombination ACCEL_UNDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
@@ -229,7 +225,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         dateCreated.setValue(workOrder.getDateCreated().toLocalDate());
         dateCreated.setOnAction(e -> workOrder.setDateCreated(Date.valueOf(dateCreated.getValue())));
 
-        tfTaxRate.setText(Preferences.get().getTaxRatePrettyString());
+        tfTaxRate.setText(AppModel.get().preferences().getTaxRatePrettyString());
 
         btVeh.setDisable(true);
         btEditAutoPart.setDisable(true);
@@ -252,7 +248,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         vehiclePopOver.setTitle("Vehicle Picker");
         vehicleTableController = fxmlLoader.getController();
         vehicleTableController.connect(this);
-        Preferences.get().addObserver(this);
+        AppModel.get().preferences().addObserver(this);
     }
 
     public ListChangeListener<Labor> laborChangeListener() {
@@ -294,7 +290,9 @@ public class WorkOrderWorkspaceController implements PrefObservable {
             DB.get().deleteProductsMarkedForDeletion(productsMarkedForDeletion);
             DB.get().deletePaymentMarkedForDeletion(paymentsMarkedForDeletion);
         }
-        App.get().getRecentWorkOrders().add(workOrder.getId());
+        App.get().model().recentWorkOrders().add(workOrder.getId());
+        App.get().compView.refreshCompleted();
+        App.get().compView.refreshIncompleted();
     }
 
     public void saveAndClose() {
@@ -303,13 +301,13 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     }
 
     public void close() {
-        Preferences.get().removeObserver(this);
+        App.get().model().preferences().removeObserver(this);
         App.get().getAccels().remove(ACCEL_SAVE);
         App.get().getAccels().remove(ACCEL_PRINT);
         App.get().getAccels().remove(ACCEL_UNDO);
         App.get().getAccels().remove(ACCEL_REDO);
         App.get().setDisableMenu(false);
-        App.get().display(FX.view("MyCompany.fxml"));
+        App.get().display();
     }
 
     public void email() {
@@ -317,7 +315,7 @@ public class WorkOrderWorkspaceController implements PrefObservable {
         if (Desktop.isDesktopSupported() && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
             String email = tfEmail.getText();
             try {
-                String subject = (Preferences.get().getCompany() + " Invoice #" + tfWorkOrderId.getText());
+                String subject = (AppModel.get().preferences().getCompany() + " Invoice #" + tfWorkOrderId.getText());
                 subject = subject.replaceAll("\\s", "%20");
                 String s = "mailto:%s?subject=%s";
                 s = s.formatted(email, subject);
@@ -553,6 +551,6 @@ public class WorkOrderWorkspaceController implements PrefObservable {
     @Override
     public void update() {
         updateTotals();
-        tfTaxRate.setText(Preferences.get().getTaxRatePrettyString());
+        tfTaxRate.setText(AppModel.get().preferences().getTaxRatePrettyString());
     }
 }

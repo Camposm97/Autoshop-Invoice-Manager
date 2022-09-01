@@ -9,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import model.Observable;
 import model.database.DB;
 import model.ui.FX;
 import model.work_order.WorkOrder;
@@ -23,7 +24,7 @@ import java.util.function.Function;
 /**
  * Lists completed work orders in the year and month, also displays recently edited work orders and incompleted work orders
  */
-public class MyCompanyController {
+public class MyCompanyController implements Observable {
     @FXML
     Label lblWorkOrderYearCount, lblWorkOrderMonthCount;
     @FXML
@@ -63,19 +64,7 @@ public class MyCompanyController {
 
     @FXML
     public void initialize() {
-        List<WorkOrder> incompletedWorkOrders = DB.get().workOrders().getIncompletedWorkOrders();
-        int incompletedWorkOrderCount = incompletedWorkOrders.size();
-
-        LocalDate currentDate = LocalDate.now();
-        String strYear = "(" + currentDate.getYear() + "):";
-        String strMonth = "(" + currentDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + "):";
-
-        lblWorkOrderMonthCount.setText(String.valueOf(DB.get().workOrders().getCompletedWorkOrdersThisMonth()));
-        lblWorkOrderYearCount.setText(String.valueOf(DB.get().workOrders().getCompletedWorkOrdersThisYear()));
-        lblYear.setText(strYear);
-        lblMonth.setText(strMonth);
-        lblIncompletedWorkOrderCount.setText(String.valueOf(incompletedWorkOrderCount));
-
+        App.get().model().recentWorkOrders().addObserver(this);
         Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
 
         colRecentId.setCellValueFactory(c -> c.getValue().idProperty());
@@ -85,7 +74,6 @@ public class MyCompanyController {
         colRecentDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
         colRecentDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
         colRecentInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
-        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecents());
         tvRecentWorkOrders.setOnMouseClicked(e -> {
             if (selectWorkOrder.apply(e)) editWorkOrder(tvRecentWorkOrders);
         });
@@ -97,13 +85,12 @@ public class MyCompanyController {
         colIncompletedDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
         colIncompletedDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
         colIncompletedInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
-        tvIncompletedWorkOrders.getItems().setAll(incompletedWorkOrders);
         tvIncompletedWorkOrders.setOnMouseClicked(e -> {
             if (selectWorkOrder.apply(e)) editWorkOrder(tvIncompletedWorkOrders);
         });
 
-        FX.autoResizeColumns(tvRecentWorkOrders,75);
-        FX.autoResizeColumns(tvIncompletedWorkOrders,75);
+        refreshCompleted();
+        refreshIncompleted();
     }
 
     public void editWorkOrder(TableView<WorkOrder> tv) {
@@ -119,5 +106,36 @@ public class MyCompanyController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void update() {
+        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecents());
+        FX.autoResizeColumns(tvRecentWorkOrders,75);
+    }
+
+    public void refreshCompleted() {
+        LocalDate currentDate = LocalDate.now();
+        String strYear = "(" + currentDate.getYear() + "):";
+        String strMonth = "(" + currentDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + "):";
+
+        lblWorkOrderMonthCount.setText(String.valueOf(DB.get().workOrders().getCompletedWorkOrdersThisMonth()));
+        lblWorkOrderYearCount.setText(String.valueOf(DB.get().workOrders().getCompletedWorkOrdersThisYear()));
+        lblYear.setText(strYear);
+        lblMonth.setText(strMonth);
+    }
+
+    public void refreshIncompleted() {
+        List<WorkOrder> incompletedWorkOrders = DB.get().workOrders().getIncompletedWorkOrders();
+        int incompletedWorkOrderCount = incompletedWorkOrders.size();
+
+        lblIncompletedWorkOrderCount.setText(String.valueOf(incompletedWorkOrderCount));
+        tvIncompletedWorkOrders.getItems().setAll(incompletedWorkOrders);
+
+        FX.autoResizeColumns(tvIncompletedWorkOrders,75);
+    }
+
+    interface IObserve {
+        void update(Object o);
     }
 }

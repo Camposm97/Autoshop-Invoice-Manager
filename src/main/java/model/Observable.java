@@ -1,5 +1,5 @@
 package model;
 
-public interface PrefObservable {
+public interface Observable {
     void update();
 }
