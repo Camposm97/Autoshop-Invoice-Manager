@@ -116,6 +116,7 @@ public class DB {
                 work_order_id integer primary key autoincrement,
                 date_created date,
                 date_completed date,
+                customer_id integer,
                 customer_first_name varchar(64),
                 customer_last_name varchar(64),
                 customer_phone varchar(16),

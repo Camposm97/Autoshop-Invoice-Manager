@@ -387,7 +387,7 @@ public class WorkOrderWorkspaceController implements Observable {
         String state = tfState.getText();
         String zip = tfZip.getText();
         Address address = new Address(street, city, state, zip);
-        return new Customer(firstName, lastName, phone, email, company, address);
+        return new Customer(chosenCustomerId, firstName, lastName, phone, email, company, address);
     }
 
     public void loadVehicle(@NotNull Vehicle v) {
