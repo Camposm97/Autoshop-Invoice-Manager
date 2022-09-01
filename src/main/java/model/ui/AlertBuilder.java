@@ -1,5 +1,6 @@
 package model.ui;
 
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
@@ -9,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.AppModel;
 
+import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
@@ -16,7 +18,7 @@ import java.util.function.Function;
 public class AlertBuilder {
     private String title, headerText, contentText;
     private Alert.AlertType alertType;
-    private Function<Void, Void> callback;
+    private Runnable apply;
     private List<ButtonType> btList;
     private Node content;
 
@@ -46,11 +48,6 @@ public class AlertBuilder {
 
     public AlertBuilder setContentText(String contentText) {
         this.contentText = contentText;
-        return this;
-    }
-
-    public AlertBuilder setOnDefaultBtnClicked(Function<Void, Void> callback) {
-        this.callback = callback;
         return this;
     }
 
@@ -88,9 +85,10 @@ public class AlertBuilder {
         return this;
     }
 
-    public AlertBuilder addApplyBtn() {
-        ButtonType bt = new ButtonType("Apply", ButtonBar.ButtonData.APPLY);
+    public AlertBuilder addApplyBtn(Runnable apply) {
+        ButtonType bt = ButtonType.APPLY;
         btList.add(bt);
+        this.apply = apply;
         return this;
     }
 
@@ -113,6 +111,11 @@ public class AlertBuilder {
         alert.setHeaderText(headerText);
         if (btList != null)
             alert.getButtonTypes().setAll(btList);
+            if (btList.contains(ButtonType.APPLY))
+                alert.getDialogPane().lookupButton(ButtonType.APPLY).addEventFilter(ActionEvent.ACTION, e -> {
+                    apply.run();
+                    e.consume();
+                });
         if (contentText != null) {
             alert.setContentText(contentText);
         } else {

@@ -273,7 +273,10 @@ public class WorkOrderStore {
 
     public List<WorkOrder> filter(int id, String s1, String s2, String s3, String s4, String s5, String s6, DateFilter dateFilter, LocalDate date1, LocalDate date2) throws SQLException {
         List<WorkOrder> list = new LinkedList<>();
-        if (id > 0) return List.of(getById(id));
+        if (id > 0) {
+            WorkOrder x = getById(id);
+            if (x != null) return List.of(x);
+        }
         boolean stmtUpdated = false;
         StringBuilder sb = new StringBuilder("select work_order_id from work_order where ");
         if (!s1.isEmpty()) {

@@ -2,6 +2,7 @@ package model.ui;
 
 import app.App;
 import controller.*;
+import javafx.event.ActionEvent;
 import javafx.print.*;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -161,7 +162,7 @@ public class DialogFactory {
                         Alert tempAlert = new AlertBuilder().setContent(tempScrollPane).build();
                         tempAlert.show();
                         tempAlert.close();
-                        WritableImage wi = tempForm.snapshot(null,null);
+                        WritableImage wi = tempForm.snapshot(null, null);
                         ImageView iv = new ImageView(wi);
                         PageLayout pageLayout = printerJob.getPrinter().createPageLayout(Paper.NA_LETTER,
                                 PageOrientation.PORTRAIT, Printer.MarginType.HARDWARE_MINIMUM);
@@ -186,17 +187,14 @@ public class DialogFactory {
     }
 
     public static void initPreferences() {
-        AlertBuilder builder = new AlertBuilder()
-                .setTitle("Preferences")
-                .setHeaderText("Auto-shop Settings")
-                .setDefaultBtn().addApplyBtn()
-                .setContent(FX.view("Preferences.fxml"));
-        builder.build().showAndWait().ifPresent(e -> {
+        new AlertBuilder()
+        .setTitle("Preferences")
+        .setHeaderText("Auto-shop Settings")
+        .setDefaultBtn()
+        .addApplyBtn(() -> AppModel.get().preferences().save())
+        .setContent(FX.view("Preferences.fxml")).build().showAndWait().ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 AppModel.get().preferences().save();
-            } else if (e.getButtonData().equals(ButtonBar.ButtonData.APPLY)) {
-                AppModel.get().preferences().save();
-                initPreferences();
             }
         });
     }
