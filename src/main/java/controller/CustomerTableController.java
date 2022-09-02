@@ -141,7 +141,8 @@ public class CustomerTableController {
                     btDelCustomer.setDisable(false);
                     btWorkOrderWithCustomer.setDisable(false);
                     tvVehicle.setDisable(false);
-                    System.out.println(DB.get().workOrders().getByCustomerId(customerId));
+                    DB.get().workOrders().getByCustomerId(customerId).forEach(x -> System.out.println(x));
+                    System.out.println();
                 } else {
                     tvVehicle.getItems().clear();
                     btDelCustomer.setDisable(true);

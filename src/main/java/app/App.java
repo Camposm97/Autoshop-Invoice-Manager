@@ -11,7 +11,8 @@ import java.io.IOException;
 
 /**
  * TODO
- * Add customer ids to work orders
+ * Fool-proof fields when adding a customer and vehicle
+ * Update ChangeListenerFactory
  * Move to MySQL? Supports Multi-threading and Scalability, but requires login management system
  */
 public class App extends Application {
