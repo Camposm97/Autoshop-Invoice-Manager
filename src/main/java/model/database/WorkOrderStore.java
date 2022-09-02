@@ -1,5 +1,7 @@
 package model.database;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.AppModel;
 import model.DateFilter;
 import model.customer.Address;
@@ -129,7 +131,7 @@ public class WorkOrderStore {
         return workOrder;
     }
 
-    public List<WorkOrder> getByCustomerId(int id) {
+    public ObservableList getByCustomerId(int id) {
         List<WorkOrder> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where customer_id = " + id);
@@ -137,7 +139,7 @@ public class WorkOrderStore {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return FXCollections.observableList(list);
     }
 
     public WorkOrder getById(int workOrderId) {

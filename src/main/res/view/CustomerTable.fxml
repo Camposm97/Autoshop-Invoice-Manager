@@ -7,13 +7,12 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="root" vgap="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
+<GridPane fx:id="root" vgap="5.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -71,7 +70,7 @@
             <Insets />
          </GridPane.margin>
       </TableView>
-      <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="3">
+      <TabPane fx:id="tabPane" prefHeight="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="3">
          <tabs>
             <Tab text="Vehicles">
                <content>
@@ -90,9 +89,9 @@
                </content>
             </Tab>
             <Tab text="Work Orders">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
+                <content>
+                    <fx:include fx:id="workOrderView" disable="true" prefHeight="200.0" source="WorkOrderTable.fxml" />
+                </content>
             </Tab>
          </tabs>
       </TabPane>

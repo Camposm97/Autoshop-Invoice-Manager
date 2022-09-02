@@ -1,5 +1,7 @@
 package model.database;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.customer.OwnedVehicle;
 import model.work_order.Vehicle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -111,7 +113,7 @@ public class VehicleStore {
         return list;
     }
 
-    public List<Vehicle> getAllByCustomerId(int customerId) {
+    public ObservableList<Vehicle> getAllByCustomerId(int customerId) {
         List<Vehicle> list = new LinkedList<>();
         try {
             PreparedStatement prepStmt = c.prepareStatement("select vehicle_id from vehicle where customer_id = ?");
@@ -125,7 +127,7 @@ public class VehicleStore {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return FXCollections.observableList(list);
     }
 
     public List<Vehicle> filter(Vehicle vehicle) {

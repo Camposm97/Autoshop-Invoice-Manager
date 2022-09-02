@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import model.DateFilter;
+import model.customer.Customer;
 import model.database.DB;
 import model.ui.AlertBuilder;
 import model.ui.ChangeListenerFactory;
@@ -35,7 +36,6 @@ public class WorkOrderTableController {
     TableColumn<WorkOrder, String> colCustomer, colCompany, colVehicle, colDateCreated, colDateCompleted, colInvoiceTotal;
     @FXML
     Button btEdit, btDelete;
-
     @FXML
     public void initialize() {
         Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
@@ -146,5 +146,24 @@ public class WorkOrderTableController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void clear() {
+        tv.getItems().clear();
+    }
+
+    public void load(Customer c) {
+        var workOrders = DB.get().workOrders().getByCustomerId(c.getId());
+        tfFirst.setText(c.getFirstName());
+        tfLast.setText(c.getLastName());
+        tfComp.setText(c.getCompany());
+        tv.setItems(workOrders);
+    }
+
+    public void disableFields() {
+        tfId.setDisable(true);
+        tfFirst.setDisable(true);
+        tfLast.setDisable(true);
+        tfComp.setDisable(true);
     }
 }

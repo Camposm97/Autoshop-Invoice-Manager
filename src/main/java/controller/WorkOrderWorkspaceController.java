@@ -267,7 +267,7 @@ public class WorkOrderWorkspaceController implements Observable {
 
     public void showCustomerPopOver() {
         btVeh.setDisable(true);
-        customerTableController.refresh();
+        customerTableController.refreshCustomers();
         customerPopOver.show(btCus);
     }
 

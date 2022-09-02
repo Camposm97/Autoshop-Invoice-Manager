@@ -2,6 +2,7 @@ package model.ui;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -18,9 +19,8 @@ import java.util.function.Function;
 public class AlertBuilder {
     private String title, headerText, contentText;
     private Alert.AlertType alertType;
-    private Runnable apply;
     private List<ButtonType> btList;
-    private Node content;
+    private Parent content;
 
     public AlertBuilder() {
         this.alertType = Alert.AlertType.INFORMATION;
@@ -85,19 +85,19 @@ public class AlertBuilder {
         return this;
     }
 
-    public AlertBuilder addApplyBtn(Runnable apply) {
+    public AlertBuilder addApplyBtn() {
         ButtonType bt = ButtonType.APPLY;
+        if (btList == null) btList = new LinkedList<>();
         btList.add(bt);
-        this.apply = apply;
         return this;
     }
 
-    public AlertBuilder setContent(Node content) {
+    public AlertBuilder setContent(Parent content) {
         this.content = content;
         return this;
     }
 
-    public Alert buildAddDialog(String title, Node content) {
+    public Alert buildAddDialog(String title, Parent content) {
         setTitle(title);
         setHeaderTextInfo();
         setSaveCancelBtns();
@@ -111,11 +111,6 @@ public class AlertBuilder {
         alert.setHeaderText(headerText);
         if (btList != null)
             alert.getButtonTypes().setAll(btList);
-            if (btList.contains(ButtonType.APPLY))
-                alert.getDialogPane().lookupButton(ButtonType.APPLY).addEventFilter(ActionEvent.ACTION, e -> {
-                    apply.run();
-                    e.consume();
-                });
         if (contentText != null) {
             alert.setContentText(contentText);
         } else {

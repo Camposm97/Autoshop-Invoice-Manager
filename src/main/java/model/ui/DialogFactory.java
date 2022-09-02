@@ -2,12 +2,10 @@ package model.ui;
 
 import app.App;
 import controller.*;
-import javafx.event.ActionEvent;
 import javafx.print.*;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
@@ -46,7 +44,7 @@ public class DialogFactory {
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 controller.addVehicle();
-                view.refreshCustomer();
+                view.refreshVehicles();
             }
         });
     }
@@ -187,14 +185,18 @@ public class DialogFactory {
     }
 
     public static void initPreferences() {
-        new AlertBuilder()
+        Alert alert = new AlertBuilder()
         .setTitle("Preferences")
         .setHeaderText("Auto-shop Settings")
         .setDefaultBtn()
-        .addApplyBtn(() -> AppModel.get().preferences().save())
-        .setContent(FX.view("Preferences.fxml")).build().showAndWait().ifPresent(e -> {
+        .addApplyBtn()
+        .setContent(FX.view("Preferences.fxml")).build();
+        alert.showAndWait().ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 AppModel.get().preferences().save();
+            } else {
+                AppModel.get().preferences().save();
+                initPreferences();
             }
         });
     }

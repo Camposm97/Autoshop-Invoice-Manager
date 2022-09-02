@@ -40,9 +40,12 @@ public class CustomerTableController {
     Button btDelCustomer, btWorkOrderWithCustomer, btDelVehicle, btWorkOrderWithCustomerAndVehicle;
     @FXML
     HBox hBoxCusControls, hBoxVehControls;
-
     @FXML
-    public void initialize() {
+    GridPane workOrderView;
+    @FXML
+    WorkOrderTableController workOrderViewController;
+    @FXML
+    public void initialize() throws IOException {
         tfFirstName.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         tfLastName.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         tfPhone.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
@@ -54,7 +57,9 @@ public class CustomerTableController {
         tfZip.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         initCustomerTable();
         initVehicleTable();
-        refresh();
+        refreshCustomers();
+        workOrderViewController.disableFields();
+        workOrderViewController.clear();
     }
 
     public void initCustomerTable() {
@@ -133,22 +138,20 @@ public class CustomerTableController {
         });
 
         tvCustomer.setOnMouseClicked(e -> {
-            System.out.println("clicked");
             if (root.getChildren().contains(tabPane)) {
                 if (getSelectedCustomer() != null) {
                     int customerId = getSelectedCustomer().getId();
                     // Get all vehicles with that customer id and display in vehicle table
-                    System.out.println("set customer's vehicles");
-                    tvVehicle.getItems().setAll(DB.get().vehicles().getAllByCustomerId(customerId));
+                    tvVehicle.setItems(DB.get().vehicles().getAllByCustomerId(customerId));
                     FX.autoResizeColumns(tvVehicle, 25);
-                    tvVehicle.getItems().forEach(x -> System.out.println(x));
                     btDelCustomer.setDisable(false);
                     btWorkOrderWithCustomer.setDisable(false);
                     tvVehicle.setDisable(false);
-                    DB.get().workOrders().getByCustomerId(customerId).forEach(x -> System.out.println(x));
-                    System.out.println();
+                    workOrderViewController.tv.setDisable(false);
+                    workOrderViewController.load(getSelectedCustomer());
                 } else {
                     tvVehicle.getItems().clear();
+                    workOrderViewController.tv.setDisable(true);
                     btDelCustomer.setDisable(true);
                     btWorkOrderWithCustomer.setDisable(true);
                     tvVehicle.setDisable(true);
@@ -244,12 +247,12 @@ public class CustomerTableController {
         });
     }
 
-    public void refresh() {
+    public void refreshCustomers() {
         tvCustomer.getItems().setAll(DB.get().customers().getAll());
         FX.autoResizeColumns(tvCustomer, 75);
     }
 
-    public void refreshCustomer() {
+    public void refreshVehicles() {
         Customer c = getSelectedCustomer();
         if (c != null) {
             tvVehicle.getItems().setAll(DB.get().vehicles().getAllByCustomerId(c.getId()));
@@ -263,7 +266,6 @@ public class CustomerTableController {
                 Customer customer = getSelectedCustomer();
                 if (customer != null) {
                     controller.loadCustomer(customer);
-
                     controller.customerPopOver.hide();
                 }
             }
