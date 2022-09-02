@@ -25,6 +25,8 @@ public class CustomerTableController {
     @FXML
     GridPane root;
     @FXML
+    TabPane tabPane;
+    @FXML
     TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfStreet, tfCity, tfState, tfZip;
     @FXML
     TableView<Customer> tvCustomer;
@@ -52,6 +54,7 @@ public class CustomerTableController {
         tfZip.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         initCustomerTable();
         initVehicleTable();
+        refresh();
     }
 
     public void initCustomerTable() {
@@ -128,16 +131,17 @@ public class CustomerTableController {
             customer.getAddress().setZip(e.getNewValue());
             DB.get().customers().update(customer);
         });
-        tvCustomer.getItems().setAll(DB.get().customers().getAll());
-        FX.autoResizeColumns(tvCustomer, 10);
 
         tvCustomer.setOnMouseClicked(e -> {
-            if (root.getChildren().contains(tvVehicle)) {
+            System.out.println("clicked");
+            if (root.getChildren().contains(tabPane)) {
                 if (getSelectedCustomer() != null) {
                     int customerId = getSelectedCustomer().getId();
                     // Get all vehicles with that customer id and display in vehicle table
+                    System.out.println("set customer's vehicles");
                     tvVehicle.getItems().setAll(DB.get().vehicles().getAllByCustomerId(customerId));
                     FX.autoResizeColumns(tvVehicle, 25);
+                    tvVehicle.getItems().forEach(x -> System.out.println(x));
                     btDelCustomer.setDisable(false);
                     btWorkOrderWithCustomer.setDisable(false);
                     tvVehicle.setDisable(false);
@@ -242,6 +246,7 @@ public class CustomerTableController {
 
     public void refresh() {
         tvCustomer.getItems().setAll(DB.get().customers().getAll());
+        FX.autoResizeColumns(tvCustomer, 75);
     }
 
     public void refreshCustomer() {
@@ -264,7 +269,7 @@ public class CustomerTableController {
             }
         });
         root.getChildren().remove(hBoxCusControls);
-        root.getChildren().remove(tvVehicle);
+        root.getChildren().remove(tabPane);
         root.getChildren().remove(hBoxVehControls);
     }
 
@@ -280,7 +285,7 @@ public class CustomerTableController {
             }
         });
         root.getChildren().remove(hBoxCusControls);
-        root.getChildren().remove(tvVehicle);
+        root.getChildren().remove(tabPane);
         root.getChildren().remove(hBoxVehControls);
     }
 

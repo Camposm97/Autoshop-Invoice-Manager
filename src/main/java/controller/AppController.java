@@ -210,6 +210,7 @@ public class AppController {
     }
 
     public void exit() {
+        System.out.println("Exiting program");
         AppModel.get().recentWorkOrders().save();
         Platform.exit();
     }

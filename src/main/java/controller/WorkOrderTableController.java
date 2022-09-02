@@ -63,6 +63,7 @@ public class WorkOrderTableController {
         factory.initTimer(tfModel, r);
 
         cbDateFilter.setItems(FXCollections.observableArrayList(DateFilter.values()));
+        cbDateFilter.setValue(DateFilter.None);
         cbDateFilter.setOnAction(e -> {
             if (cbDateFilter.getValue().equals(DateFilter.Between))
                 dpAfter.setDisable(false);

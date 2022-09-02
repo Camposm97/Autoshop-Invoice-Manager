@@ -21,15 +21,12 @@ public class ChangeListenerFactory {
         Timer timer = new Timer();
         timer.setCallback(callback);
         tf.textProperty().addListener((o,x,y) -> {
-            if (!y.trim().isEmpty()) {
-                if (timer.isRunning()) {
-                    timer.restart();
-                } else {
-                    timer.start(DELAY);
-                }
+            if (timer.isRunning()) {
+                timer.restart();
+            } else {
+                timer.start(DELAY);
             }
         });
-
     }
 
     public void initCurrencyFormat(TextField tf) {

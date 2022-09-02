@@ -308,7 +308,7 @@ public class WorkOrderStore {
             stmtUpdated = true;
             sb.append("vehicle_model like \"" + s6 + "%\" ");
         }
-        if (dateFilter != null && date1 != null) {
+        if (dateFilter != DateFilter.None && date1 != null) {
             var x= Date.valueOf(date1).getTime();
             if (dateFilter.equals(DateFilter.Between) && date2 != null) {
                 if (stmtUpdated) sb.append(" and ");
