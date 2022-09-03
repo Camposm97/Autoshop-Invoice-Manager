@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.URL;
@@ -49,7 +50,7 @@ public class FX {
         return url.toExternalForm();
     }
 
-    public static void autoResizeColumns(TableView<?> tv, final double OFFSET) {
+    public static void autoResizeColumns(@NotNull TableView<?> tv, final double OFFSET) {
         tv.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         tv.getColumns().stream().forEach((col) -> {
             Text t = new Text(col.getText());
@@ -65,5 +66,25 @@ public class FX {
             }
             col.setPrefWidth(currentWidth + OFFSET);
         });
+    }
+
+    public static void autoResizeColumns(@NotNull TableView<?> tv, double... offsets) {
+        tv.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        if (offsets.length < tv.getItems().size()) return;
+        for (int i = 0; i < tv.getColumns().size(); i++) {
+            var c = tv.getColumns().get(i);
+            var t = new Text(c.getText());
+            var newWidth = t.getLayoutBounds().getWidth();
+            for (int j = 0; j < tv.getItems().size(); j++) {
+                if (c.getCellData(j) != null) {
+                    t = new Text(c.getCellData(j).toString());
+                    var width = t.getLayoutBounds().getWidth();
+                    if (width > newWidth) {
+                        newWidth = width;
+                    }
+                }
+            }
+            c.setPrefWidth(newWidth + offsets[i]);
+        }
     }
 }

@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import model.AppModel;
+import model.Preferences;
 import model.database.DB;
 import model.ui.Theme;
 import model.work_order.AutoPart;
@@ -25,6 +26,8 @@ public class WorkOrderFormController {
     WorkOrder workOrder;
     @FXML
     AnchorPane root;
+    @FXML
+    Label cusHeader, vehHeader, partIdHeader, partDescHeader, partPriceHeader, partQtyHeader, partTotalHeader, lbrCodeHeader, lbrDescHeader, lbrTotalHeader;
     @FXML
     Label lblDate, lblOwnerCompany, lblOwnerAddress, lblOwnerPhone, lblShop, lblTitle;
     @FXML
@@ -44,6 +47,28 @@ public class WorkOrderFormController {
 
     @FXML
     public void initialize() {
+        if (Preferences.get().getTheme() == Theme.Dark) {
+            cusHeader.getStyleClass().add("titled-lbl-dark");
+            vehHeader.getStyleClass().add("titled-lbl-dark");
+            partIdHeader.getStyleClass().add("titled-lbl-dark");
+            partDescHeader.getStyleClass().add("titled-lbl-dark");
+            partPriceHeader.getStyleClass().add("titled-lbl-dark");
+            partQtyHeader.getStyleClass().add("titled-lbl-dark");
+            partTotalHeader.getStyleClass().add("titled-lbl-dark");
+            lbrCodeHeader.getStyleClass().add("titled-lbl-dark");
+            lbrDescHeader.getStyleClass().add("titled-lbl-dark");
+            lbrTotalHeader.getStyleClass().add("titled-lbl-dark");
+            cusHeader.getStyleClass().remove("titled-lbl");
+            vehHeader.getStyleClass().remove("titled-lbl");
+            partIdHeader.getStyleClass().remove("titled-lbl");
+            partDescHeader.getStyleClass().remove("titled-lbl");
+            partPriceHeader.getStyleClass().remove("titled-lbl");
+            partQtyHeader.getStyleClass().remove("titled-lbl");
+            partTotalHeader.getStyleClass().remove("titled-lbl");
+            lbrCodeHeader.getStyleClass().remove("titled-lbl");
+            lbrDescHeader.getStyleClass().remove("titled-lbl");
+            lbrTotalHeader.getStyleClass().remove("titled-lbl");
+        }
         lblDate.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
         lblWorkOrderId.setText(getWorkOrderId());
         lblOwnerCompany.setText(AppModel.get().preferences().getCompany());
@@ -81,6 +106,7 @@ public class WorkOrderFormController {
         for (int i = 1; autoPartIterator.hasNext(); i++) {
             AutoPart a = autoPartIterator.next();
             Label lblName = new Label(a.getName());
+            lblName.getStyleClass().add("lbl-item-id");
             Label lblDesc = new Label(a.getDesc());
             Label lblUnitPrice = new Label(f.apply(a.getRetailPrice()));
             Label lblQty = new Label(String.valueOf(a.getQuantity()));
@@ -94,12 +120,11 @@ public class WorkOrderFormController {
         for (int i = 1; laborIterator.hasNext(); i++) {
             Labor lbr = laborIterator.next();
             Label lblCode = new Label(lbr.getName());
+            lblCode.getStyleClass().add("lbl-item-id");
             Text txtDesc = new Text(lbr.getDesc());
             Label lblSubtotal = new Label(f.apply(lbr.subtotal()));
             txtDesc.setWrappingWidth(400);
             if (AppModel.get().preferences().getTheme().equals(Theme.Dark)) txtDesc.setFill(Color.LIGHTGRAY);
-//            txtDesc.getStyleClass().add("text");
-//            txtDesc.setWrapText(true);
             gridPaneLabor.addRow(i, lblCode, txtDesc, lblSubtotal);
         }
         lblPartsTotal.setText(g.apply(workOrder.partsSubtotal()));
@@ -134,7 +159,10 @@ public class WorkOrderFormController {
             if (n instanceof Pane) {
                 getAllLabels((Pane) n, labels);
             } else if (n instanceof Label) {
-                labels.add((Label) n);
+                var lbl = (Label) n;
+                var styles = lbl.getStyleClass();
+                if (!styles.contains("titled-lbl-dark") && !styles.contains("titled-lbl"))
+                    labels.add(lbl);
                 if (((Label) n).getGraphic() != null)
                     labels.add((Label) ((Label) n).getGraphic());
             } else if (n instanceof Text) {
@@ -148,5 +176,27 @@ public class WorkOrderFormController {
         getAllLabels(root, labels);
         labels.forEach(e -> e.getStyleClass().add("light-mode-lbl"));
         root.setStyle("-fx-background-color: transparent;");
+        if (Preferences.get().getTheme() == Theme.Dark) {
+            cusHeader.getStyleClass().remove("titled-lbl-dark");
+            vehHeader.getStyleClass().remove("titled-lbl-dark");
+            partIdHeader.getStyleClass().remove("titled-lbl-dark");
+            partDescHeader.getStyleClass().remove("titled-lbl-dark");
+            partPriceHeader.getStyleClass().remove("titled-lbl-dark");
+            partQtyHeader.getStyleClass().remove("titled-lbl-dark");
+            partTotalHeader.getStyleClass().remove("titled-lbl-dark");
+            lbrCodeHeader.getStyleClass().remove("titled-lbl-dark");
+            lbrDescHeader.getStyleClass().remove("titled-lbl-dark");
+            lbrTotalHeader.getStyleClass().remove("titled-lbl-dark");
+            cusHeader.getStyleClass().add("titled-lbl");
+            vehHeader.getStyleClass().add("titled-lbl");
+            partIdHeader.getStyleClass().add("titled-lbl");
+            partDescHeader.getStyleClass().add("titled-lbl");
+            partPriceHeader.getStyleClass().add("titled-lbl");
+            partQtyHeader.getStyleClass().add("titled-lbl");
+            partTotalHeader.getStyleClass().add("titled-lbl");
+            lbrCodeHeader.getStyleClass().add("titled-lbl");
+            lbrDescHeader.getStyleClass().add("titled-lbl");
+            lbrTotalHeader.getStyleClass().add("titled-lbl");
+        }
     }
 }

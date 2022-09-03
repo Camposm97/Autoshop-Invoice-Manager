@@ -36,6 +36,8 @@ public class WorkOrderTableController {
     TableColumn<WorkOrder, String> colCustomer, colCompany, colVehicle, colDateCreated, colDateCompleted, colInvoiceTotal;
     @FXML
     Button btEdit, btDelete;
+    boolean embedded; // decides whether when the program filters work orders when user types in name or company field
+
     @FXML
     public void initialize() {
         Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
@@ -50,17 +52,22 @@ public class WorkOrderTableController {
             tfModel.clear();
             filter();
         });
-
-        Runnable r = () -> {
+        Runnable r1 = () -> {
+            tfId.clear();
+            if (!embedded) {
+                filter();
+            }
+        };
+        Runnable r2 = () -> {
             tfId.clear();
             filter();
         };
-        factory.initTimer(tfFirst, r);
-        factory.initTimer(tfLast, r);
-        factory.initTimer(tfComp, r);
-        factory.initTimer(tfYear, r);
-        factory.initTimer(tfMake, r);
-        factory.initTimer(tfModel, r);
+        factory.initTimer(tfFirst, r1);
+        factory.initTimer(tfLast, r1);
+        factory.initTimer(tfComp, r1);
+        factory.initTimer(tfYear, r2);
+        factory.initTimer(tfMake, r2);
+        factory.initTimer(tfModel, r2);
 
         cbDateFilter.setItems(FXCollections.observableArrayList(DateFilter.values()));
         cbDateFilter.setValue(DateFilter.None);

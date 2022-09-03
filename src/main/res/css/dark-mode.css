@@ -36,6 +36,11 @@
     );
 }
 
+.titled-lbl-dark {
+    -fx-font-weight: bold;
+    -fx-text-fill: lightgray;
+    -fx-background-color: #624aa1;
+}
 
 .dialog-pane {
     -fx-accent: #1e74c6;

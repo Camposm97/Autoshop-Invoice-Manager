@@ -14,6 +14,12 @@
 
 .titled-lbl {
     -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: black;
+}
+
+.lbl-item-id {
+    -fx-padding: 0 0 0 4;
 }
 
 .light-mode-lbl {

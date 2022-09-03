@@ -60,6 +60,7 @@ public class CustomerTableController {
         refreshCustomers();
         workOrderViewController.disableFields();
         workOrderViewController.clear();
+        workOrderViewController.embedded = true;
     }
 
     public void initCustomerTable() {

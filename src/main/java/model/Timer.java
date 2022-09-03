@@ -23,7 +23,11 @@ public class Timer {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                callback.run();
+                try {
+                    callback.run();
+                } catch (Exception e) {
+                    System.out.println("kill bugs stay cool");
+                }
             }
         }, delay);
     }
@@ -35,7 +39,11 @@ public class Timer {
         this.timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                callback.run();
+                try {
+                   callback.run();
+                } catch (Exception e) {
+                    System.out.println("kill bugs stay cool");
+                }
             }
         }, delay);
         this.isRunning = true;
