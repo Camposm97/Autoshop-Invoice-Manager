@@ -1,5 +1,7 @@
 package model.database;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.customer.Address;
 import model.customer.Customer;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -97,10 +99,12 @@ public class CustomerStore {
         return customer;
     }
 
-    public List<Customer> getAll() {
+    public ObservableList<Customer> getAll(final int LIMIT) {
         List<Customer> list = new LinkedList<>();
+        String s = "select customer_id from customer order by last_name limit " + LIMIT;
+        if (LIMIT <= 0) s = "select customer_id from customer order by last_name";
         try {
-            ResultSet rs = c.createStatement().executeQuery("select customer_id from customer");
+            ResultSet rs = c.createStatement().executeQuery(s);
             while (rs.next()) {
                 int id = rs.getInt("customer_id");
                 Customer cus = getById(id);
@@ -109,7 +113,7 @@ public class CustomerStore {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            return list;
+            return FXCollections.observableList(list);
         }
     }
 

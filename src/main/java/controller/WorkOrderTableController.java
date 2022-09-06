@@ -15,6 +15,7 @@ import model.ui.AlertBuilder;
 import model.ui.ChangeListenerFactory;
 import model.ui.FX;
 import model.work_order.WorkOrder;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -42,8 +43,8 @@ public class WorkOrderTableController {
     public void initialize() {
         Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
         ChangeListenerFactory factory = new ChangeListenerFactory();
-        factory.initIntFormat(tfId);
-        factory.initTimer(tfId, () -> {
+        factory.setPositiveNums(tfId);
+        Runnable r0 = () -> {
             tfFirst.clear();
             tfLast.clear();
             tfComp.clear();
@@ -51,10 +52,10 @@ public class WorkOrderTableController {
             tfMake.clear();
             tfModel.clear();
             filter();
-        });
+        };
         Runnable r1 = () -> {
-            tfId.clear();
             if (!embedded) {
+                tfId.clear();
                 filter();
             }
         };
@@ -62,12 +63,23 @@ public class WorkOrderTableController {
             tfId.clear();
             filter();
         };
-        factory.initTimer(tfFirst, r1);
-        factory.initTimer(tfLast, r1);
-        factory.initTimer(tfComp, r1);
-        factory.initTimer(tfYear, r2);
-        factory.initTimer(tfMake, r2);
-        factory.initTimer(tfModel, r2);
+        factory.setTimer(tfId, r0);
+        factory.setTimer(tfFirst, r1);
+        factory.setTimer(tfLast, r1);
+        factory.setTimer(tfComp, r1);
+        factory.setTimer(tfYear, r2);
+        factory.setTimer(tfMake, r2);
+        factory.setTimer(tfModel, r2);
+
+        TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
+        TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
+        TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
+
+        ContextMenu cm = new ContextMenu();
+        MenuItem mi1 = new MenuItem("Show Complete List");
+        mi1.setOnAction(e -> tv.setItems(DB.get().workOrders().getAll(0)));
+        cm.getItems().add(mi1);
+        tv.setContextMenu(cm);
 
         cbDateFilter.setItems(FXCollections.observableArrayList(DateFilter.values()));
         cbDateFilter.setValue(DateFilter.None);
@@ -88,7 +100,7 @@ public class WorkOrderTableController {
         colDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
         colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
         colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
-        tv.getItems().setAll(DB.get().workOrders().getLatestWorkOrders(50));
+        tv.getItems().setAll(DB.get().workOrders().getAll(50));
         tv.setOnMouseClicked(e -> {
             if (selectWorkOrder.apply(e)) editWorkOrder();
             if (tv.getSelectionModel().getSelectedItem() != null) {

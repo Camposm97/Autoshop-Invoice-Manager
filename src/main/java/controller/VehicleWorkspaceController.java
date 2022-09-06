@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import model.customer.Customer;
 import model.customer.OwnedVehicle;
 import model.database.DB;
+import model.ui.ChangeListenerFactory;
 import model.ui.FX;
 import model.work_order.Vehicle;
 import org.controlsfx.control.PopOver;
@@ -27,7 +28,11 @@ public class VehicleWorkspaceController {
 
     @FXML
     public void initialize() {
-        tfVin.textProperty().addListener((o,x,y) -> tfVin.setText(y.toUpperCase()));
+        ChangeListenerFactory f = new ChangeListenerFactory();
+        f.setVINFormat(tfVin);
+        f.setPositiveNums(tfYear);
+        f.setUpperCase(tfLicensePlate);
+        // TODO maybe make transmission combo box?
         TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
         TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
         TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());

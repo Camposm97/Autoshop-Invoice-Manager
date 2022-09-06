@@ -15,10 +15,12 @@ import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.tps.*;
+import model.ui.ChangeListenerFactory;
 import model.ui.DialogFactory;
 import model.ui.FX;
 import model.work_order.*;
 import org.controlsfx.control.PopOver;
+import org.controlsfx.control.SearchableComboBox;
 import org.controlsfx.control.textfield.TextFields;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,7 +53,11 @@ public class WorkOrderWorkspaceController implements Observable {
     @FXML
     Button btPrint, btAddLabor, btSideAddLabor;
     @FXML
-    TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfAddress, tfCity, tfState, tfZip;
+    TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfAddress, tfCity;
+    @FXML
+    SearchableComboBox<State> cbState;
+    @FXML
+    TextField tfZip;
     @FXML
     TextField tfVin, tfLicensePlate, tfColor, tfYear, tfMake, tfModel, tfEngine, tfTransmission, tfMileageIn, tfMileageOut;
     @FXML
@@ -135,7 +141,8 @@ public class WorkOrderWorkspaceController implements Observable {
         TextFields.bindAutoCompletion(tfCompany, DB.get().customers().getUniqueCompanies());
         TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueAddresses());
         TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
-        TextFields.bindAutoCompletion(tfState, State.list());
+        cbState.setValue(State.UNKNOWN);
+        cbState.setItems(State.list());
         TextFields.bindAutoCompletion(tfZip, DB.get().customers().getUniqueZips());
         TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
         TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
@@ -147,8 +154,11 @@ public class WorkOrderWorkspaceController implements Observable {
         tfWorkOrderId.setText(DB.get().workOrders().getNextId().toString());
 
         // Add Listeners to text fields vin and license plate
-        tfVin.textProperty().addListener((o,x,y) -> tfVin.setText(y.toUpperCase()));
-        tfLicensePlate.textProperty().addListener((o,x,y) -> tfLicensePlate.setText(y.toUpperCase()));
+        ChangeListenerFactory f = new ChangeListenerFactory();
+        f.setAlphaNums(tfFirstName);
+        f.setAlphaNums(tfLastName);
+        f.setVINFormat(tfVin);
+        f.setUpperCase(tfLicensePlate);
 
         // Bind columns to appropriate fields in WorkOrder
         colPartNumber.setCellValueFactory(c -> c.getValue().nameProperty());
@@ -372,7 +382,7 @@ public class WorkOrderWorkspaceController implements Observable {
         tfCompany.setText(c.getCompany());
         tfAddress.setText(c.getAddress().getStreet());
         tfCity.setText(c.getAddress().getCity());
-        tfState.setText(c.getAddress().getState());
+        cbState.setValue(State.valueOfName(c.getAddress().getState()));
         tfZip.setText(c.getAddress().getZip());
     }
 
@@ -384,7 +394,7 @@ public class WorkOrderWorkspaceController implements Observable {
         String company = tfCompany.getText();
         String street = tfAddress.getText();
         String city = tfCity.getText();
-        String state = tfState.getText();
+        String state = cbState.getValue() == null ? State.UNKNOWN.name() : cbState.getValue().name();
         String zip = tfZip.getText();
         Address address = new Address(street, city, state, zip);
         return new Customer(chosenCustomerId, firstName, lastName, phone, email, company, address);

@@ -1,5 +1,10 @@
 package model;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import model.ui.FX;
+
+import java.util.Arrays;
 import java.util.List;
 
 public enum State {
@@ -64,8 +69,8 @@ public enum State {
     WYOMING("Wyoming", "WY"),
     UNKNOWN("Unknown", "");
 
-    public static List<State> list() {
-        return List.of(State.values());
+    public static ObservableList<State> list() {
+        return FXCollections.observableList(Arrays.stream(State.values()).toList());
     }
 
     private String name;

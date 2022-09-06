@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.SearchableComboBox?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
 <StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderWorkspaceController">
@@ -112,7 +113,7 @@
                                         <GridPane hgap="5.0" GridPane.rowIndex="3">
                                             <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                                             </columnConstraints>
                                             <rowConstraints>
@@ -123,7 +124,7 @@
                                                 <Label text="City" />
                                                 <TextField fx:id="tfCity" GridPane.rowIndex="1" />
                                                 <Label text="State" GridPane.columnIndex="1" />
-                                                <TextField fx:id="tfState" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <SearchableComboBox fx:id="cbState" maxWidth="-Infinity" prefWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <Label text="Zip Code" GridPane.columnIndex="2" />
                                                 <TextField fx:id="tfZip" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                             </children>
@@ -331,7 +332,7 @@
                                                 <Label text="Total Due" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                                                 <TextField fx:id="tfPartsTotal" editable="false" GridPane.rowIndex="1" />
                                                 <TextField fx:id="tfLaborTotal" editable="false" GridPane.rowIndex="3" />
-                                                <TextField fx:id="tfDiscountTotal" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                <TextField fx:id="tfDiscountTotal" disable="true" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <TextField fx:id="tfTaxTotal" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                                 <TextField fx:id="tfSubtotal" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                                 <TextField fx:id="tfTotal" editable="false" GridPane.columnIndex="2" GridPane.rowIndex="3" />

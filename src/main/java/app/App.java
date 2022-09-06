@@ -13,7 +13,9 @@ import java.io.IOException;
  * TODO
  * Fool-proof fields when adding a customer and vehicle
  * Update ChangeListenerFactory
- * Move to MySQL? Supports Multi-threading and Scalability, but requires login management system
+ * Move to MySQL? Supports Multi-threading and Scalability, but requires login system
+ * Searching vehicles and adding vehicles should have suggestions
+ * Display notification confirming user added a customer, vehicle, and work order (saved and printed)
  */
 public class App extends Application {
     private static AppController controller;

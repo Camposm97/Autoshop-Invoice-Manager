@@ -256,11 +256,14 @@ public class WorkOrderStore {
      * @param LIMIT
      * @return latest work orders by date
      */
-    public List<WorkOrder> getLatestWorkOrders(final int LIMIT) {
+    public ObservableList<WorkOrder> getAll(final int LIMIT) {
         List<WorkOrder> list = new LinkedList<>();
+        String s = "select work_order_id from work_order order by date_created desc limit ?";
+        if (LIMIT <= 0)
+            s = "select work_order_id from work_order order by date_created desc";
         try {
-            PreparedStatement prepStmt = c.prepareStatement("select work_order_id from work_order order by date_created desc limit ?");
-            prepStmt.setInt(1, LIMIT);
+            PreparedStatement prepStmt = c.prepareStatement(s);
+            if (LIMIT > 0) prepStmt.setInt(1, LIMIT);
             ResultSet workOrderSet = prepStmt.executeQuery();
             while (workOrderSet.next()) {
                 int workOrderId = workOrderSet.getInt(1);
@@ -270,7 +273,7 @@ public class WorkOrderStore {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return FXCollections.observableList(list);
     }
 
     public List<WorkOrder> filter(int id, String s1, String s2, String s3, String s4, String s5, String s6, DateFilter dateFilter, LocalDate date1, LocalDate date2) throws SQLException {
@@ -329,6 +332,7 @@ public class WorkOrderStore {
         }
         if (stmtUpdated) {
             System.out.println(sb.append(" order by date_created desc"));
+            System.out.println(sb);
             var prepStmt = c.prepareStatement(sb.toString());
             ResultSet rs = prepStmt.executeQuery();
             while (rs.next()) list.add(getById(rs.getInt(1)));

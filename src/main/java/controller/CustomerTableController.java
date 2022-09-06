@@ -13,6 +13,7 @@ import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.ui.AlertBuilder;
+import model.ui.ChangeListenerFactory;
 import model.ui.FX;
 import model.ui.TableCellFactory;
 import model.work_order.Vehicle;
@@ -46,6 +47,9 @@ public class CustomerTableController {
     WorkOrderTableController workOrderViewController;
     @FXML
     public void initialize() throws IOException {
+        ChangeListenerFactory f = new ChangeListenerFactory();
+        f.setAlphaNums(tfFirstName);
+        f.setAlphaNums(tfLastName);
         tfFirstName.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         tfLastName.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         tfPhone.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
@@ -137,7 +141,11 @@ public class CustomerTableController {
             customer.getAddress().setZip(e.getNewValue());
             DB.get().customers().update(customer);
         });
-
+        ContextMenu cm = new ContextMenu();
+        MenuItem mi1 = new MenuItem("Show Complete List");
+        mi1.setOnAction(e -> tvCustomer.setItems(DB.get().customers().getAll(0)));
+        cm.getItems().add(mi1);
+        tvCustomer.setContextMenu(cm);
         tvCustomer.setOnMouseClicked(e -> {
             if (root.getChildren().contains(tabPane)) {
                 if (getSelectedCustomer() != null) {
@@ -249,7 +257,7 @@ public class CustomerTableController {
     }
 
     public void refreshCustomers() {
-        tvCustomer.getItems().setAll(DB.get().customers().getAll());
+        tvCustomer.setItems(DB.get().customers().getAll(100));
         FX.autoResizeColumns(tvCustomer, 75);
     }
 

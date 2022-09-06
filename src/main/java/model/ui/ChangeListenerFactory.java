@@ -5,7 +5,7 @@ import model.Timer;
 import org.jetbrains.annotations.NotNull;
 
 public class ChangeListenerFactory {
-    public void initIntFormat(@NotNull TextField tf) {
+    public void setPositiveNums(@NotNull TextField tf) {
         tf.textProperty().addListener((o, x, y) -> {
             if (y == null || y.isEmpty()) return;
             try {
@@ -16,7 +16,16 @@ public class ChangeListenerFactory {
         });
     }
 
-    public void initTimer(@NotNull TextField tf, Runnable callback) {
+    public void setAlphaNums(@NotNull TextField tf) {
+        final var REGEX = "[A-Za-z]+";
+        tf.textProperty().addListener((o,x,y) -> {
+            if (y.isEmpty()) return;
+            if (!y.matches(REGEX))
+                tf.setText(x);
+        });
+    }
+
+    public void setTimer(@NotNull TextField tf, Runnable callback) {
         final long DELAY = 600;
         Timer timer = new Timer();
         timer.setCallback(callback);
@@ -29,7 +38,18 @@ public class ChangeListenerFactory {
         });
     }
 
-    public void initCurrencyFormat(TextField tf) {
+    public void setUpperCase(@NotNull TextField tf) {
+        tf.textProperty().addListener((o,x,y) -> tf.setText(y.toUpperCase()));
+    }
+
+    public void setVINFormat(@NotNull TextField tf) {
+        tf.textProperty().addListener((o,x,y) -> tf.setText(y.length() > 17 ? x : y));
+        tf.textProperty().addListener((o,x,y) -> tf.setText(y.replaceAll("\\s+", "")));
+        tf.textProperty().addListener((o,x,y) -> tf.setText(y.replaceAll("[ioQIOA]", "")));
+        setUpperCase(tf);
+    }
+
+    public void setCurrencyFormat(TextField tf) {
         tf.textProperty().addListener((o,x,y) -> {
             if (y == null || y.isEmpty()) {
                 tf.getStyleClass().add("number_field_invalid");

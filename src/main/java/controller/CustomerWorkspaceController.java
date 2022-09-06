@@ -6,18 +6,26 @@ import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.State;
+import model.ui.ChangeListenerFactory;
+import org.controlsfx.control.SearchableComboBox;
 import org.controlsfx.control.textfield.TextFields;
 
 public class CustomerWorkspaceController {
     @FXML
-    TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfStreet, tfCity, tfState, tfZip;
+    TextField tfFirstName, tfLastName, tfPhone, tfEmail, tfCompany, tfStreet, tfCity, tfZip;
+    @FXML
+    SearchableComboBox<State> cbState;
 
     @FXML
     public void initialize() {
+        ChangeListenerFactory f = new ChangeListenerFactory();
+        f.setAlphaNums(tfFirstName);
+        f.setAlphaNums(tfLastName);
         TextFields.bindAutoCompletion(tfCompany, DB.get().customers().getUniqueCompanies());
         TextFields.bindAutoCompletion(tfStreet, DB.get().customers().getUniqueAddresses());
         TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
-        TextFields.bindAutoCompletion(tfState, State.list());
+        cbState.setValue(State.UNKNOWN);
+        cbState.setItems(State.list());
         TextFields.bindAutoCompletion(tfZip, DB.get().customers().getUniqueZips());
     }
 
@@ -29,10 +37,11 @@ public class CustomerWorkspaceController {
         String company = tfCompany.getText();
         String street = tfStreet.getText();
         String city = tfCity.getText();
-        String state = tfState.getText();
+        State state = cbState.getValue();
+        if (state == null) state = State.UNKNOWN;
         String zip = tfZip.getText();
 
-        Address address = new Address(street, city, state, zip);
+        Address address = new Address(street, city, state.name(), zip);
         Customer customer = new Customer(firstName, lastName, phone, email, company, address);
         DB.get().customers().add(customer);
     }

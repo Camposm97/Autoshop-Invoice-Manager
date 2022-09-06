@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ConcurrentModificationException;
 import java.util.TimerTask;
 
 public class Timer {
@@ -24,7 +25,7 @@ public class Timer {
             @Override
             public void run() {
                 try {
-                    callback.run();
+                    new Thread(callback).start();
                 } catch (Exception e) {
                     System.out.println("kill bugs stay cool");
                 }
@@ -40,7 +41,7 @@ public class Timer {
             @Override
             public void run() {
                 try {
-                   callback.run();
+                   new Thread(callback).start();
                 } catch (Exception e) {
                     System.out.println("kill bugs stay cool");
                 }

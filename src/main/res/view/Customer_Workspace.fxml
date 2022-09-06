@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import org.controlsfx.control.SearchableComboBox?>
 <GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../css/default.css" vgap="10.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" />
@@ -39,7 +40,8 @@
       <Label contentDisplay="RIGHT" text="City" GridPane.rowIndex="6" />
       <TextField fx:id="tfCity" GridPane.columnIndex="1" GridPane.rowIndex="6" />
       <Label contentDisplay="RIGHT" text="State" GridPane.rowIndex="7" />
-      <TextField fx:id="tfState" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+       <SearchableComboBox fx:id="cbState" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+<!--       <TextField fx:id="tfState" GridPane.columnIndex="1" GridPane.rowIndex="7" />-->
       <Label contentDisplay="RIGHT" text="Zip" GridPane.rowIndex="8" />
       <TextField fx:id="tfZip" GridPane.columnIndex="1" GridPane.rowIndex="8" />
    </children>
