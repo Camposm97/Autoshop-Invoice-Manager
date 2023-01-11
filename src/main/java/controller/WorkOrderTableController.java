@@ -71,7 +71,7 @@ public class WorkOrderTableController {
         factory.setTimer(tfMake, r2);
         factory.setTimer(tfModel, r2);
 
-        TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
+//        TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
         TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
         TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
 

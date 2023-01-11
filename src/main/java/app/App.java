@@ -11,13 +11,7 @@ import java.io.IOException;
 
 /**
  * TODO
- * Fool-proof fields when adding a customer and vehicle (maybe)
  * Update offsets for each column in tables: customer, vehicle, work order, parts, and labor
- * Searching vehicles and adding vehicles should have suggestions
- * Display notification confirming the following
- *  - adding a customer
- *  - adding a vehicle
- *  - printing a work order
  */
 public class App extends Application {
     private static AppController controller;

@@ -45,7 +45,7 @@ public class ChangeListenerFactory {
     public void setVINFormat(@NotNull TextField tf) {
         tf.textProperty().addListener((o,x,y) -> tf.setText(y.length() > 17 ? x : y));
         tf.textProperty().addListener((o,x,y) -> tf.setText(y.replaceAll("\\s+", "")));
-        tf.textProperty().addListener((o,x,y) -> tf.setText(y.replaceAll("[ioQIOA]", "")));
+        tf.textProperty().addListener((o,x,y) -> tf.setText(y.replaceAll("[qioQIO]", "")));
         setUpperCase(tf);
     }
 

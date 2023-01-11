@@ -35,8 +35,7 @@ public class VehicleWorkspaceController {
         f.setVINFormat(tfVin);
         f.setPositiveNums(tfYear);
         f.setUpperCase(tfLicensePlate);
-        // TODO maybe make transmission combo box?
-        TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
+//        TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
         TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
         TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
         TextFields.bindAutoCompletion(tfColor, DB.get().vehicles().getUniqueColor());
