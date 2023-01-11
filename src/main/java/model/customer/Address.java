@@ -1,6 +1,7 @@
 package model.customer;
 
 import javafx.beans.property.SimpleStringProperty;
+import model.State;
 
 public class Address {
     private String street, city, state, zip;
@@ -65,6 +66,6 @@ public class Address {
         if (street.isEmpty() && city.isEmpty() && state.isEmpty() && zip.isEmpty()) {
             return "";
         }
-        return street + " " + city + ", " + state + " " + zip;
+        return street + " " + city + ", " + State.valueOfName(state) + " " + zip;
     }
 }

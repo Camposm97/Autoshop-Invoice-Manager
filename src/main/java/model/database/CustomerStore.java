@@ -52,7 +52,7 @@ public class CustomerStore {
         return false;
     }
 
-    public void add(@NotNull Customer cus) {
+    public boolean add(@NotNull Customer cus) {
         try {
             if (!exists(cus)) {
                 PreparedStatement prepStmt = c.prepareStatement(
@@ -67,6 +67,7 @@ public class CustomerStore {
                 prepStmt.setString(8, cus.getAddress().getState());
                 prepStmt.setString(9, cus.getAddress().getZip());
                 prepStmt.execute();
+                return true;
             } else {
                 // Report this duplicate to user
                 System.out.println("Duplicate customer profile!");
@@ -74,6 +75,7 @@ public class CustomerStore {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public Customer getById(int id) {

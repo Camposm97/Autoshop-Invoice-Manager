@@ -21,7 +21,7 @@ public class VehicleStore {
         this.c = c;
     }
 
-    public void add(@NotNull OwnedVehicle ov) {
+    public boolean add(@NotNull OwnedVehicle ov) {
         try {
             PreparedStatement prepStmt = c.prepareStatement(
                     "insert into vehicle " +
@@ -37,9 +37,11 @@ public class VehicleStore {
             prepStmt.setString(8, ov.getVehicle().getTransmission());
             prepStmt.setInt(9, ov.getCustomerId());
             prepStmt.execute();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     public void update(@NotNull Vehicle vehicle) {

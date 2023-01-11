@@ -17,6 +17,7 @@ import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
 import model.work_order.WorkOrderPayment;
+import org.controlsfx.control.Notifications;
 
 import java.io.File;
 import java.util.Optional;
@@ -171,6 +172,11 @@ public class DialogFactory {
                             System.out.println(Printer.MarginType.HARDWARE_MINIMUM);
                             System.out.println(printerJob.getJobSettings().getPageLayout().toString());
                             printerJob.endJob();
+                            var n = Notifications.create()
+                                    .title("Printing Work Order #" + workOrder.getId())
+                                    .text(workOrder.toFormattedString());
+                            if (AppModel.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
+                            n.showInformation();
                         }
                     }
                 } else {

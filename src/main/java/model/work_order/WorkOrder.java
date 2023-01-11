@@ -266,6 +266,6 @@ public class WorkOrder implements Billable {
     }
 
     public String toFormattedString() {
-        return customer.toFormattedString() + '\n' + vehicleProperty().getValue();
+        return customer.toFormattedString() + vehicleProperty().getValue();
     }
 }

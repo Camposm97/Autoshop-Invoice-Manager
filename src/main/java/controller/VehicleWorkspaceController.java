@@ -4,12 +4,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import model.AppModel;
 import model.customer.Customer;
 import model.customer.OwnedVehicle;
 import model.database.DB;
 import model.ui.ChangeListenerFactory;
 import model.ui.FX;
+import model.ui.Theme;
 import model.work_order.Vehicle;
+import org.controlsfx.control.Notifications;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -66,7 +69,15 @@ public class VehicleWorkspaceController {
         Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission);
         int customerId = this.customer.getId();
         OwnedVehicle ownedVehicle = new OwnedVehicle(customerId, vehicle);
-        DB.get().vehicles().add(ownedVehicle);
+        var success = DB.get().vehicles().add(ownedVehicle);
+        var n = Notifications.create();
+        if (AppModel.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
+        if (success) {
+            n.title("Created Vehicle").text(vehicle.toString());
+        } else {
+            n.title("Failed to Create Vehicle").text("Cannot write to database");
+        }
+        n.showInformation();
     }
 
     public void loadCustomer(Customer customer) {

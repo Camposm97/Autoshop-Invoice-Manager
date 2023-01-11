@@ -136,11 +136,6 @@ public class Vehicle implements Comparable<Vehicle> {
         }
     }
 
-    @Override
-    public String toString() {
-        return getYear() + " " + getMake() + " " + getModel();
-    }
-
     public SimpleStringProperty vinProperty() {
         return new SimpleStringProperty(vin);
     }
@@ -179,6 +174,11 @@ public class Vehicle implements Comparable<Vehicle> {
 
     public SimpleStringProperty mileageOutProperty() {
         return new SimpleStringProperty(mileageOut);
+    }
+
+    @Override
+    public String toString() {
+        return getYear() + " " + getMake() + " " + getModel();
     }
 
     @Override
