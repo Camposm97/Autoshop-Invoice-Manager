@@ -70,21 +70,24 @@ public class FX {
 
     public static void autoResizeColumns(@NotNull TableView<?> tv, double... offsets) {
         tv.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-        if (offsets.length < tv.getItems().size()) return;
         for (int i = 0; i < tv.getColumns().size(); i++) {
             var c = tv.getColumns().get(i);
             var t = new Text(c.getText());
-            var newWidth = t.getLayoutBounds().getWidth();
+            var longestWidth = t.getLayoutBounds().getWidth();
             for (int j = 0; j < tv.getItems().size(); j++) {
                 if (c.getCellData(j) != null) {
                     t = new Text(c.getCellData(j).toString());
                     var width = t.getLayoutBounds().getWidth();
-                    if (width > newWidth) {
-                        newWidth = width;
+                    if (width > longestWidth) {
+                        longestWidth = width;
                     }
                 }
             }
-            c.setPrefWidth(newWidth + offsets[i]);
+            if (offsets.length < i) {
+                c.setPrefWidth(longestWidth + offsets[i]);
+            } else {
+                c.setPrefWidth(longestWidth + offsets[offsets.length-1]);
+            }
         }
     }
 }

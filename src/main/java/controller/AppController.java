@@ -44,13 +44,13 @@ public class AppController {
     public void initialize() {
         stage.setTitle(AppModel.TITLE);
         stage.getIcons().add(new Image("icon.png"));
-        tabPane.getSelectionModel().selectedItemProperty().addListener((o,x,y) -> {
+        tabPane.getSelectionModel().selectedItemProperty().addListener((o,previous,current) -> {
             try {
-                if (y == tabComp) {
+                if (current == tabComp) {
                     viewMyCompany();
-                } else if (y == tabCus) {
+                } else if (current == tabCus) {
                     viewCustomers();
-                } else if (y == tabWO) {
+                } else if (current == tabWO) {
                     viewWorkOrders();
                 }
             } catch (IOException e) {
@@ -210,7 +210,7 @@ public class AppController {
     }
 
     public void exit() {
-        System.out.println("Exiting program");
+        System.out.println("Exiting program...");
         AppModel.get().recentWorkOrders().save();
         Platform.exit();
     }

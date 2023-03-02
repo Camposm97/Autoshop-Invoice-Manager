@@ -29,7 +29,7 @@ public class DialogFactory {
         AlertBuilder builder = new AlertBuilder();
         Optional<ButtonType> rs = builder.buildAddDialog(
                 "Add Customer",
-                FX.view("Customer_Workspace.fxml", controller)).showAndWait();
+                FX.view("CustomerWorkspace.fxml", controller)).showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton())
                 controller.addCustomer();
@@ -41,7 +41,7 @@ public class DialogFactory {
         AlertBuilder builder = new AlertBuilder();
         Optional<ButtonType> rs = builder.buildAddDialog(
                 "Add Vehicle",
-                FX.view("Vehicle_Workspace.fxml", controller)).showAndWait();
+                FX.view("VehicleWorkspace.fxml", controller)).showAndWait();
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 controller.addVehicle();

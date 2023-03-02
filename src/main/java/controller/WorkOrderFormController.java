@@ -70,7 +70,7 @@ public class WorkOrderFormController {
             lbrTotalHeader.getStyleClass().remove("titled-lbl");
         }
         lblDate.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
-        lblWorkOrderId.setText(getWorkOrderId());
+        lblWorkOrderId.setText(formatWorkOrderId());
         lblOwnerCompany.setText(AppModel.get().preferences().getCompany());
         lblOwnerAddress.setText(getAddress());
         lblOwnerPhone.setText(AppModel.get().preferences().getPhone());
@@ -136,7 +136,7 @@ public class WorkOrderFormController {
         lblAmountDue.setText(g.apply(workOrder.balance()));
     }
 
-    public String getWorkOrderId() {
+    public String formatWorkOrderId() {
         String s = workOrder.getId().toString();
         if (workOrder.isNew()) s = DB.get().workOrders().getNextId().toString();
         final int SIZE = 5;

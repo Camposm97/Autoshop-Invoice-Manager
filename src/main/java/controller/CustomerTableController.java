@@ -146,10 +146,32 @@ public class CustomerTableController {
         mi1.setOnAction(e -> tvCustomer.setItems(DB.get().customers().getAll(0)));
         cm.getItems().add(mi1);
         tvCustomer.setContextMenu(cm);
-        tvCustomer.setOnMouseClicked(e -> {
+//        tvCustomer.setOnMouseClicked(e -> {
+//            if (root.getChildren().contains(tabPane)) {
+//                if (getSelectedCustomer() != null) {
+//                    int customerId = getSelectedCustomer().getId();
+//                    // Get all vehicles with that customer id and display in vehicle table
+//                    tvVehicle.setItems(DB.get().vehicles().getAllByCustomerId(customerId));
+//                    FX.autoResizeColumns(tvVehicle, 25);
+//                    btDelCustomer.setDisable(false);
+//                    btWorkOrderWithCustomer.setDisable(false);
+//                    tvVehicle.setDisable(false);
+//                    workOrderViewController.tv.setDisable(false);
+//                    workOrderViewController.load(getSelectedCustomer());
+//                } else {
+//                    tvVehicle.getItems().clear();
+//                    workOrderViewController.tv.setDisable(true);
+//                    btDelCustomer.setDisable(true);
+//                    btWorkOrderWithCustomer.setDisable(true);
+//                    tvVehicle.setDisable(true);
+//                }
+//            }
+//        });
+        /* I think this is a better way to add a listener when a customer is selected */
+        tvCustomer.getSelectionModel().selectedItemProperty().addListener((o, m, c) -> {
             if (root.getChildren().contains(tabPane)) {
-                if (getSelectedCustomer() != null) {
-                    int customerId = getSelectedCustomer().getId();
+                if (c != null) {
+                    int customerId = c.getId();
                     // Get all vehicles with that customer id and display in vehicle table
                     tvVehicle.setItems(DB.get().vehicles().getAllByCustomerId(customerId));
                     FX.autoResizeColumns(tvVehicle, 25);
@@ -258,7 +280,7 @@ public class CustomerTableController {
 
     public void refreshCustomers() {
         tvCustomer.setItems(DB.get().customers().getAll(100));
-        FX.autoResizeColumns(tvCustomer, 75);
+        FX.autoResizeColumns(tvCustomer, 25);
     }
 
     public void refreshVehicles() {

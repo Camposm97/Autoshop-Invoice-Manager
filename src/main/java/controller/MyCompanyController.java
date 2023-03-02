@@ -111,7 +111,7 @@ public class MyCompanyController implements Observable {
     @Override
     public void update() {
         tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecents());
-        FX.autoResizeColumns(tvRecentWorkOrders,75);
+        FX.autoResizeColumns(tvRecentWorkOrders,25);
     }
 
     public void refreshCompleted() {
