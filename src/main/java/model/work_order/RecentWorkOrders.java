@@ -13,7 +13,7 @@ public class RecentWorkOrders {
 
     public RecentWorkOrders() {
         try {
-            File file = new File("recents.dat");
+            File file = new File("./recents.dat");
             if (file.exists()) {
                 FileInputStream fis = new FileInputStream(file);
                 ObjectInputStream ois = new ObjectInputStream(fis);

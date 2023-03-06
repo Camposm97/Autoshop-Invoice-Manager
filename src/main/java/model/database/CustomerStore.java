@@ -101,6 +101,12 @@ public class CustomerStore {
         return customer;
     }
 
+    /**
+     * Fetches all information of customers from the database.
+     * @param LIMIT
+     * @return If {LIMIT} <= 0, then all the customers will be returns sorted by last name, otherwise {LIMIT}
+     * customers will be returned sorted by last name
+     */
     public ObservableList<Customer> getAll(final int LIMIT) {
         List<Customer> list = new LinkedList<>();
         String s = "select customer_id from customer order by last_name limit " + LIMIT;

@@ -1,12 +1,12 @@
 package controller;
 
 import app.App;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import model.customer.Address;
@@ -45,8 +45,27 @@ public class CustomerTableController {
     GridPane workOrderView;
     @FXML
     WorkOrderTableController workOrderViewController;
+
+    private ChangeListener<Customer> customerSelectedListener, vehicleWorkspaceListener, workOrderWorkspaceListener;
+
     @FXML
     public void initialize() throws IOException {
+        initInputFieldListeners();
+        initCustomerTableListeners();
+        initCustomerTable();
+        initVehicleTable();
+        refreshCustomers();
+        workOrderViewController.disableFields();
+        workOrderViewController.clear();
+        workOrderViewController.embedded = true;
+    }
+
+    /**
+     * Write down something here
+     * @brief Initializes listeners for input fields
+     * Hello there
+     */
+    public void initInputFieldListeners() {
         ChangeListenerFactory f = new ChangeListenerFactory();
         f.setAlphaNums(tfFirstName);
         f.setAlphaNums(tfLastName);
@@ -59,12 +78,32 @@ public class CustomerTableController {
         tfCity.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         tfState.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
         tfZip.textProperty().addListener((o, oldValue, newValue) -> tvCustomer.getItems().setAll(DB.get().customers().filter(buildCustomer())));
-        initCustomerTable();
-        initVehicleTable();
-        refreshCustomers();
-        workOrderViewController.disableFields();
-        workOrderViewController.clear();
-        workOrderViewController.embedded = true;
+    }
+
+    public void initCustomerTableListeners() {
+        customerSelectedListener = (o, m, c) -> {
+            if (root.getChildren().contains(tabPane)) {
+                if (c != null) {
+                    int customerId = c.getId();
+                    /* Get all vehicles with that customer id and display in vehicle table */
+                    tvVehicle.setItems(DB.get().vehicles().getAllByCustomerId(customerId));
+                    FX.autoResizeColumns(tvVehicle, 25);
+                    btDelCustomer.setDisable(false);
+                    btWorkOrderWithCustomer.setDisable(false);
+                    tvVehicle.setDisable(false);
+                    workOrderViewController.tv.setDisable(false);
+                    workOrderViewController.load(getSelectedCustomer());
+                } else {
+                    tvVehicle.getItems().clear();
+                    workOrderViewController.tv.setDisable(true);
+                    btDelCustomer.setDisable(true);
+                    btWorkOrderWithCustomer.setDisable(true);
+                    tvVehicle.setDisable(true);
+                }
+            }
+        };
+        vehicleWorkspaceListener = null;
+        workOrderWorkspaceListener = null;
     }
 
     public void initCustomerTable() {
@@ -142,36 +181,14 @@ public class CustomerTableController {
             DB.get().customers().update(customer);
         });
         ContextMenu cm = new ContextMenu();
-        MenuItem mi1 = new MenuItem("Show Complete List");
+        MenuItem mi1 = new MenuItem("Show All Customers");
         mi1.setOnAction(e -> tvCustomer.setItems(DB.get().customers().getAll(0)));
         cm.getItems().add(mi1);
         tvCustomer.setContextMenu(cm);
-//        tvCustomer.setOnMouseClicked(e -> {
-//            if (root.getChildren().contains(tabPane)) {
-//                if (getSelectedCustomer() != null) {
-//                    int customerId = getSelectedCustomer().getId();
-//                    // Get all vehicles with that customer id and display in vehicle table
-//                    tvVehicle.setItems(DB.get().vehicles().getAllByCustomerId(customerId));
-//                    FX.autoResizeColumns(tvVehicle, 25);
-//                    btDelCustomer.setDisable(false);
-//                    btWorkOrderWithCustomer.setDisable(false);
-//                    tvVehicle.setDisable(false);
-//                    workOrderViewController.tv.setDisable(false);
-//                    workOrderViewController.load(getSelectedCustomer());
-//                } else {
-//                    tvVehicle.getItems().clear();
-//                    workOrderViewController.tv.setDisable(true);
-//                    btDelCustomer.setDisable(true);
-//                    btWorkOrderWithCustomer.setDisable(true);
-//                    tvVehicle.setDisable(true);
-//                }
-//            }
-//        });
-        /* I think this is a better way to add a listener when a customer is selected */
-        tvCustomer.getSelectionModel().selectedItemProperty().addListener((o, m, c) -> {
+        /*tvCustomer.setOnMouseClicked(e -> {
             if (root.getChildren().contains(tabPane)) {
-                if (c != null) {
-                    int customerId = c.getId();
+                if (getSelectedCustomer() != null) {
+                    int customerId = getSelectedCustomer().getId();
                     // Get all vehicles with that customer id and display in vehicle table
                     tvVehicle.setItems(DB.get().vehicles().getAllByCustomerId(customerId));
                     FX.autoResizeColumns(tvVehicle, 25);
@@ -188,7 +205,9 @@ public class CustomerTableController {
                     tvVehicle.setDisable(true);
                 }
             }
-        });
+        });*/
+        /* I think this is a better way to add a listener when a customer is selected */
+        tvCustomer.getSelectionModel().selectedItemProperty().addListener(customerSelectedListener);
     }
 
     public void initVehicleTable() {
@@ -278,8 +297,13 @@ public class CustomerTableController {
         });
     }
 
+    /**
+     * Fetches customers from the database and resizes the customer table
+     */
     public void refreshCustomers() {
-        tvCustomer.setItems(DB.get().customers().getAll(100));
+        /* As of now, we get the first {LIMIT} which should be fine */
+        final int LIMIT = 50;
+        tvCustomer.setItems(DB.get().customers().getAll(LIMIT));
         FX.autoResizeColumns(tvCustomer, 25);
     }
 
@@ -291,8 +315,8 @@ public class CustomerTableController {
     }
 
     public void connect(@NotNull VehicleWorkspaceController controller) {
-        disableEditing();
-        tvCustomer.setOnMouseClicked(e -> {
+        disableCustomerFields();
+        /*tvCustomer.setOnMouseClicked(e -> {
             if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
                 Customer customer = getSelectedCustomer();
                 if (customer != null) {
@@ -300,15 +324,25 @@ public class CustomerTableController {
                     controller.customerPopOver.hide();
                 }
             }
-        });
+        });*/
+        vehicleWorkspaceListener = (o, m, c) -> {
+            Customer customer = getSelectedCustomer();
+            if (customer != null) {
+                controller.loadCustomer(customer);
+                controller.customerPopOver.hide();
+            }
+        };
+        tvCustomer.getSelectionModel().selectedItemProperty().removeListener(customerSelectedListener);
+        tvCustomer.getSelectionModel().selectedItemProperty().addListener(vehicleWorkspaceListener);
         root.getChildren().remove(hBoxCusControls);
         root.getChildren().remove(tabPane);
         root.getChildren().remove(hBoxVehControls);
     }
 
     public void connect(@NotNull WorkOrderWorkspaceController controller) {
-        disableEditing();
-        tvCustomer.setOnMouseClicked(e -> {
+        disableCustomerFields();
+        /*tvCustomer.setOnMouseClicked(e -> {
+            // Check if the user clicked and click count is 1
             if (e.getButton().equals(MouseButton.PRIMARY) && e.getClickCount() == 1) {
                 Customer customer = getSelectedCustomer();
                 if (customer != null) {
@@ -316,13 +350,22 @@ public class CustomerTableController {
                     controller.customerPopOver.hide();
                 }
             }
-        });
+        });*/
+        workOrderWorkspaceListener = (o, m, c) -> {
+            Customer customer = getSelectedCustomer();
+            if (customer != null) {
+                controller.loadCustomer(customer);
+                controller.customerPopOver.hide();
+            }
+        };
+        tvCustomer.getSelectionModel().selectedItemProperty().removeListener(customerSelectedListener);
+        tvCustomer.getSelectionModel().selectedItemProperty().addListener(workOrderWorkspaceListener);
         root.getChildren().remove(hBoxCusControls);
         root.getChildren().remove(tabPane);
         root.getChildren().remove(hBoxVehControls);
     }
 
-    public void disableEditing() {
+    public void disableCustomerFields() {
         colFirstName.setEditable(false);
         colLastName.setEditable(false);
         colPhone.setEditable(false);
@@ -418,4 +461,6 @@ public class CustomerTableController {
             e.printStackTrace();
         }
     }
+
+
 }

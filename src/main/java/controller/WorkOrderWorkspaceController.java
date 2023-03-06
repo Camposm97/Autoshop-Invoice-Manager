@@ -18,7 +18,6 @@ import model.tps.*;
 import model.ui.ChangeListenerFactory;
 import model.ui.DialogFactory;
 import model.ui.FX;
-import model.tps.*;
 import model.work_order.*;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.SearchableComboBox;

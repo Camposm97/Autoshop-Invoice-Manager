@@ -5,13 +5,13 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.stage.Stage?>
 
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.Tab?>
-<Stage fx:id="stage" height="800.0" onShown="#viewMyCompany" onCloseRequest="#exit" width="1200.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppController">
+<Stage fx:id="stage" height="900.0" onCloseRequest="#exit" onShown="#viewMyCompany" width="1600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppController">
    <scene>
       <Scene>
          <root>
@@ -80,11 +80,11 @@
                </top>
                 <center>
                     <TabPane fx:id="tabPane">
-                        <Tab fx:id="tabComp" id="tabComp" text="My Company">
+                        <Tab id="tabComp" fx:id="tabComp" text="My Company">
                         </Tab>
-                        <Tab fx:id="tabCus" id="tabCus" text="Customers">
+                        <Tab id="tabCus" fx:id="tabCus" text="Customers">
                         </Tab>
-                        <Tab fx:id="tabWO" id="tabWO" text="Work Orders">
+                        <Tab id="tabWO" fx:id="tabWO" text="Work Orders">
                         </Tab>
                     </TabPane>
                 </center>
