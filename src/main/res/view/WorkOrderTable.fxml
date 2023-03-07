@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane vgap="2.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderTableController">
+<GridPane vgap="2.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderTableController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -77,6 +77,6 @@
       </TableView>
    </children>
    <padding>
-      <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+      <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
    </padding>
 </GridPane>

@@ -1,19 +1,22 @@
 package model.work_order;
 
 import model.Observable;
+import model.database.DB;
 
 import java.io.*;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 public class RecentWorkOrders {
+    private static final String RECENTS_DAT = "./recents.dat";
     private static final int SIZE = 10;
     private LinkedList<Integer> integers;
     private LinkedList<Observable> observables;
 
     public RecentWorkOrders() {
         try {
-            File file = new File("./recents.dat");
+            File file = new File(RECENTS_DAT);
             if (file.exists()) {
                 FileInputStream fis = new FileInputStream(file);
                 ObjectInputStream ois = new ObjectInputStream(fis);

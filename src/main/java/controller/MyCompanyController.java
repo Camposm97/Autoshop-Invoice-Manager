@@ -36,15 +36,7 @@ public class MyCompanyController implements Observable {
     @FXML
     TableColumn<WorkOrder, String> colRecentCustomer;
     @FXML
-    TableColumn<WorkOrder, String> colRecentCompany;
-    @FXML
-    TableColumn<WorkOrder, String> colRecentVehicle;
-    @FXML
-    TableColumn<WorkOrder, String> colRecentDateCreated;
-    @FXML
-    TableColumn<WorkOrder, String> colRecentDateCompleted;
-    @FXML
-    TableColumn<WorkOrder, String> colRecentInvoiceTotal;
+    TableColumn<WorkOrder, String> colRecentCompany,  colRecentVehicle, colRecentDateCreated, colRecentDateCompleted, colRecentInvoiceTotal;
     @FXML
     TableView<WorkOrder> tvIncompletedWorkOrders;
     @FXML
@@ -65,7 +57,8 @@ public class MyCompanyController implements Observable {
     @FXML
     public void initialize() {
         App.get().model().recentWorkOrders().addObserver(this);
-        Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
+        Function<MouseEvent, Boolean> doubleClick = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
+        fetchCompletedWorkOrderStats();
 
         colRecentId.setCellValueFactory(c -> c.getValue().idProperty());
         colRecentCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
@@ -75,8 +68,9 @@ public class MyCompanyController implements Observable {
         colRecentDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
         colRecentInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
         tvRecentWorkOrders.setOnMouseClicked(e -> {
-            if (selectWorkOrder.apply(e)) editWorkOrder(tvRecentWorkOrders);
+            if (doubleClick.apply(e)) editWorkOrder(tvRecentWorkOrders);
         });
+        fetchRecentWorkOrders();
 
         colIncompletedId.setCellValueFactory(c -> c.getValue().idProperty());
         colIncompletedCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
@@ -86,11 +80,9 @@ public class MyCompanyController implements Observable {
         colIncompletedDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
         colIncompletedInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
         tvIncompletedWorkOrders.setOnMouseClicked(e -> {
-            if (selectWorkOrder.apply(e)) editWorkOrder(tvIncompletedWorkOrders);
+            if (doubleClick.apply(e)) editWorkOrder(tvIncompletedWorkOrders);
         });
-
-        refreshCompleted();
-        refreshIncompleted();
+        fetchIncompletedWorkOrders();
     }
 
     public void editWorkOrder(TableView<WorkOrder> tv) {
@@ -114,7 +106,12 @@ public class MyCompanyController implements Observable {
         FX.autoResizeColumns(tvRecentWorkOrders,25);
     }
 
-    public void refreshCompleted() {
+    public void fetchRecentWorkOrders() {
+        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecents());
+
+    }
+
+    public void fetchCompletedWorkOrderStats() {
         LocalDate currentDate = LocalDate.now();
         String strYear = "(" + currentDate.getYear() + "):";
         String strMonth = "(" + currentDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH) + "):";
@@ -125,7 +122,7 @@ public class MyCompanyController implements Observable {
         lblMonth.setText(strMonth);
     }
 
-    public void refreshIncompleted() {
+    public void fetchIncompletedWorkOrders() {
         List<WorkOrder> incompletedWorkOrders = DB.get().workOrders().getIncompletedWorkOrders();
         int incompletedWorkOrderCount = incompletedWorkOrders.size();
 

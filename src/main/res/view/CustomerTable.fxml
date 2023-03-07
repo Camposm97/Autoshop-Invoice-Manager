@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="root" vgap="5.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
+<GridPane fx:id="root" vgap="2.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerTableController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -20,11 +20,11 @@
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <GridPane hgap="4.0">
+      <GridPane fx:id="gridInputFields" hgap="2.0" vgap="2.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -38,23 +38,29 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextField fx:id="tfFirstName" promptText="First Name" />
-            <TextField fx:id="tfLastName" promptText="Last Name" GridPane.columnIndex="1" />
-            <fx:include fx:id="tfPhone" source="PhoneField.fxml" GridPane.columnIndex="2" />
-            <TextField fx:id="tfEmail" promptText="Email" GridPane.columnIndex="3" />
-            <TextField fx:id="tfCompany" promptText=" Company Name" GridPane.columnIndex="4" />
-            <TextField fx:id="tfStreet" promptText="Address" GridPane.columnIndex="5" />
-            <TextField fx:id="tfCity" promptText="City" GridPane.columnIndex="6" />
-            <TextField fx:id="tfState" promptText="State" GridPane.columnIndex="7" />
-            <TextField fx:id="tfZip" promptText="Zip" GridPane.columnIndex="8" />
+            <TextField fx:id="tfFirstName" prefWidth="75.0" promptText="First Name" />
+            <TextField fx:id="tfLastName" prefWidth="75.0" promptText="Last Name" GridPane.columnIndex="1" />
+            <fx:include fx:id="tfPhone" prefWidth="75.0" source="PhoneField.fxml" GridPane.columnIndex="2" />
+            <TextField fx:id="tfEmail" prefWidth="75.0" promptText="Email" GridPane.columnIndex="3" />
+            <TextField fx:id="tfCompany" prefWidth="75.0" promptText=" Company Name" GridPane.columnIndex="4" />
+            <TextField fx:id="tfStreet" prefWidth="75.0" promptText="Address" GridPane.columnIndex="5" />
+            <TextField fx:id="tfCity" prefWidth="75.0" promptText="City" GridPane.columnIndex="6" />
+            <TextField fx:id="tfState" prefWidth="75.0" promptText="State" GridPane.columnIndex="7" />
+            <TextField fx:id="tfZip" prefWidth="75.0" promptText="Zip" GridPane.columnIndex="8" />
+            <HBox fx:id="hBoxAllCustomers" alignment="CENTER_RIGHT" GridPane.columnIndex="7" GridPane.columnSpan="2" GridPane.rowIndex="1">
+               <children>
+                  <Button fx:id="btAllCustomers" mnemonicParsing="false" onAction="#fetchAllCustomers" text="All Customers" />
+               </children>
+            </HBox>
          </children>
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </GridPane>
-      <TableView fx:id="tvCustomer" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" stylesheets="@../css/default.css" GridPane.rowIndex="1">
+      <TableView fx:id="tvCustomer" editable="true" maxHeight="1.7976931348623157E308" prefHeight="200.0" stylesheets="@../css/default.css" GridPane.rowIndex="1">
          <columns>
             <TableColumn fx:id="colFirstName" prefWidth="75.0" text="First Name" />
             <TableColumn fx:id="colLastName" prefWidth="75.0" text="Last Name" />
@@ -74,17 +80,20 @@
          <tabs>
             <Tab text="Vehicles">
                <content>
-                  <TableView fx:id="tvVehicle" disable="true" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0">
+                  <TableView fx:id="tvVehicle" disable="true" editable="true" maxHeight="1.7976931348623157E308" prefHeight="200.0">
                     <columns>
-                      <TableColumn fx:id="colVin" prefWidth="75.0" text="VIN" />
+                      <TableColumn fx:id="colVin" prefWidth="150.0" text="VIN" />
                         <TableColumn fx:id="colYear" prefWidth="75.0" text="Year" />
-                        <TableColumn fx:id="colMake" prefWidth="75.0" text="Make" />
-                        <TableColumn fx:id="colModel" prefWidth="75.0" text="Model" />
-                      <TableColumn fx:id="colLicensePlate" prefWidth="75.0" text="License Plate" />
+                        <TableColumn fx:id="colMake" prefWidth="100.0" text="Make" />
+                        <TableColumn fx:id="colModel" prefWidth="100.0" text="Model" />
+                      <TableColumn fx:id="colLicensePlate" prefWidth="100.0" text="License Plate" />
                         <TableColumn fx:id="colColor" prefWidth="75.0" text="Color" />
-                        <TableColumn fx:id="colEngine" prefWidth="75.0" text="Engine" />
-                        <TableColumn fx:id="colTransmission" prefWidth="75.0" text="Transmission" />
+                        <TableColumn fx:id="colEngine" prefWidth="120.0" text="Engine" />
+                        <TableColumn fx:id="colTransmission" prefWidth="120.0" text="Transmission" />
                     </columns>
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
                   </TableView>
                </content>
             </Tab>
@@ -97,18 +106,18 @@
       </TabPane>
       <HBox fx:id="hBoxVehControls" alignment="CENTER_RIGHT" spacing="5.0" GridPane.rowIndex="4">
          <children>
-          <Button fx:id="btDelVehicle" disable="true" mnemonicParsing="false" onAction="#deleteVehicle" text="Delete Vehicle" />
-            <Button fx:id="btWorkOrderWithCustomerAndVehicle" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithCustomerAndVehicle" text="Create Work Order with Customer &amp; Vehicle" />
+          <Button fx:id="btDelVehicle" disable="true" mnemonicParsing="false" onAction="#deleteSelectedVehicle" text="Delete Vehicle" />
+            <Button fx:id="btWorkOrderWithCustomerAndVehicle" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithSelectedCustomerAndVehicle" text="Create Work Order with Customer &amp; Vehicle" />
          </children>
       </HBox>
       <HBox fx:id="hBoxCusControls" alignment="CENTER_RIGHT" spacing="5.0" GridPane.rowIndex="2">
          <children>
-          <Button fx:id="btDelCustomer" disable="true" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete Customer" />
-            <Button fx:id="btWorkOrderWithCustomer" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithCustomer" text="Create Work Order with Customer" />
+          <Button fx:id="btDelCustomer" disable="true" mnemonicParsing="false" onAction="#deleteSelectedCustomer" text="Delete Customer" />
+            <Button fx:id="btWorkOrderWithCustomer" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithSelectedCustomer" text="Create Work Order with Customer" />
          </children>
       </HBox>
    </children>
    <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+      <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
    </padding>
 </GridPane>

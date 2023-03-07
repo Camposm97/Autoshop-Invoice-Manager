@@ -277,7 +277,7 @@ public class WorkOrderWorkspaceController implements Observable {
 
     public void showCustomerPopOver() {
         btVeh.setDisable(true);
-        customerTableController.refreshCustomers();
+        customerTableController.fetchCustomers();
         customerPopOver.show(btCus);
     }
 
@@ -301,8 +301,8 @@ public class WorkOrderWorkspaceController implements Observable {
             DB.get().deletePaymentMarkedForDeletion(paymentsMarkedForDeletion);
         }
         App.get().model().recentWorkOrders().add(workOrder.getId());
-        App.get().compView.refreshCompleted();
-        App.get().compView.refreshIncompleted();
+        App.get().compView.fetchCompletedWorkOrderStats();
+        App.get().compView.fetchIncompletedWorkOrders();
     }
 
     public void saveAndClose() {

@@ -45,7 +45,7 @@ public class DialogFactory {
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 controller.addVehicle();
-                view.refreshVehicles();
+                view.fetchVehiclesOfSelectedCustomer();
             }
         });
     }

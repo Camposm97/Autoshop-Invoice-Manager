@@ -159,6 +159,7 @@ public class WorkOrder implements Billable {
     }
 
     public SimpleObjectProperty<Integer> idProperty() {
+        System.out.println("id = " + id);
         return new SimpleObjectProperty<>(id);
     }
 
