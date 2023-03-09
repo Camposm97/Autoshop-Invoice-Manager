@@ -19,6 +19,8 @@ import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -37,7 +39,8 @@ public class WorkOrderTableController {
     TableColumn<WorkOrder, String> colCustomer, colCompany, colVehicle, colDateCreated, colDateCompleted, colInvoiceTotal;
     @FXML
     Button btEdit, btDelete;
-    boolean embedded; // decides whether when the program filters work orders when user types in name or company field
+
+    boolean isEmbedded; /* decides whether when the program filters work orders when user types in name or company field */
 
     @FXML
     public void initialize() {
@@ -54,7 +57,7 @@ public class WorkOrderTableController {
             filter();
         };
         Runnable r1 = () -> {
-            if (!embedded) {
+            if (!isEmbedded) {
                 tfId.clear();
                 filter();
             }
@@ -71,7 +74,6 @@ public class WorkOrderTableController {
         factory.setTimer(tfMake, r2);
         factory.setTimer(tfModel, r2);
 
-//        TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
         TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
         TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
 
@@ -98,7 +100,23 @@ public class WorkOrderTableController {
         colCompany.setCellValueFactory(c -> c.getValue().getCustomer().companyProperty());
         colVehicle.setCellValueFactory(c -> c.getValue().vehicleProperty());
         colDateCreated.setCellValueFactory(c -> c.getValue().dateCreatedProperty());
+        colDateCreated.comparatorProperty().set((s1, s2) -> {
+            var d1 = LocalDate.parse(s1, DateTimeFormatter.ofPattern("MM/dd/u"));
+            var d2 = LocalDate.parse(s2, DateTimeFormatter.ofPattern("MM/dd/u"));
+            return d1.compareTo(d2);
+        });
         colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
+        colDateCompleted.comparatorProperty().set((s1, s2) -> {
+            if (s1 == null) {
+                return (s2 == null) ? 0 : -1;
+            }
+            if (s2 == null) {
+                return 1;
+            }
+            var d1 = LocalDate.parse(s1, DateTimeFormatter.ofPattern("MM/dd/u"));
+            var d2 = LocalDate.parse(s2, DateTimeFormatter.ofPattern("MM/dd/u"));
+            return d1.compareTo(d2);
+        });
         colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
         tv.getItems().setAll(DB.get().workOrders().getAll(50));
         tv.setOnMouseClicked(e -> {
@@ -112,6 +130,10 @@ public class WorkOrderTableController {
             }
         });
         FX.autoResizeColumns(tv,75);
+    }
+
+    public void fetchAllWorkOrders() {
+        tv.setItems(DB.get().workOrders().getAll(0));
     }
 
     public void editWorkOrder() {

@@ -1,17 +1,15 @@
 package model.work_order;
 
 import model.Observable;
-import model.database.DB;
 
 import java.io.*;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 public class RecentWorkOrders {
     private static final String RECENTS_DAT = "./recents.dat";
     private static final int SIZE = 10;
-    private LinkedList<Integer> integers;
+    private LinkedList<Integer> workOrderIds;
     private LinkedList<Observable> observables;
 
     public RecentWorkOrders() {
@@ -20,10 +18,12 @@ public class RecentWorkOrders {
             if (file.exists()) {
                 FileInputStream fis = new FileInputStream(file);
                 ObjectInputStream ois = new ObjectInputStream(fis);
-                integers = (LinkedList<Integer>) ois.readObject();
+                workOrderIds = (LinkedList<Integer>) ois.readObject();
                 ois.close();
+                System.out.println("Loaded " + RECENTS_DAT);
             } else {
-                integers = new LinkedList<>();
+                System.out.println("Missing " + RECENTS_DAT);
+                workOrderIds = new LinkedList<>();
             }
         } catch (IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -34,34 +34,35 @@ public class RecentWorkOrders {
 
     public void save() {
         try {
-            File file = new File("recents.dat");
+            File file = new File(RECENTS_DAT);
             FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(integers);
+            oos.writeObject(workOrderIds);
             oos.close();
+            System.out.println("Saved " + RECENTS_DAT);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     public void add(int workOrderId) {
-        if (integers.contains(workOrderId)) {
-            integers.removeFirstOccurrence(workOrderId);
+        if (workOrderIds.contains(workOrderId)) {
+            workOrderIds.removeFirstOccurrence(workOrderId);
         }
-        integers.addFirst(workOrderId);
-        if (integers.size() > SIZE) {
-            integers.removeLast();
+        workOrderIds.addFirst(workOrderId);
+        if (workOrderIds.size() > SIZE) {
+            workOrderIds.removeLast();
         }
         for (Observable o : observables) o.update();
     }
 
     public void remove(int workOrderId) {
-        integers.removeFirstOccurrence(workOrderId);
+        workOrderIds.removeFirstOccurrence(workOrderId);
         for (Observable o : observables) o.update();
     }
 
     public Iterator<Integer> iterator() {
-        return integers.iterator();
+        return workOrderIds.iterator();
     }
 
     public void addObserver(Observable o) {

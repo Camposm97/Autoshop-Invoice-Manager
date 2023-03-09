@@ -14,14 +14,11 @@ import java.util.List;
 
 public class DB {
     private static DB singleton;
-    private static final String DB_NAME = "autoshop.db";
+    private static final String DB_NAME = "./autoshop.db";
 
     public static DB get() {
+        if (singleton == null) singleton = new DB();
         return singleton;
-    }
-
-    public static void init() {
-        singleton = new DB();
     }
 
     private Connection c;
@@ -179,6 +176,15 @@ public class DB {
         stmt.execute(s7);
         stmt.execute(s8);
         stmt.execute("insert into counter (id,value) values('work.order.id',1);");
+    }
+
+    public void close() {
+        try {
+            this.c.close();
+            System.out.println("Closed database " + DB_NAME);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteProductsMarkedForDeletion(List<Product> list) {

@@ -283,13 +283,9 @@ public class Preferences {
 
     @Override
     public String toString() {
-        return "\n\t" + company + " " + address + " " + city + ", " + state + " " + zip +
-                ",\n\t" + phone +
-                ", " + repairShopId +
-                ",\n\t" + title +
-                ",\n\t" + laborRate +
-                ", " + taxRate +
-                ", " + guiScale +
-                ", " + theme;
+        return company + " " + address + " " + city + ", " + state + " " + zip +
+                ",\n" + phone + ", " + repairShopId +
+                ",\n" + title +
+                ",\n" + laborRate + ", " + taxRate + ", " + guiScale + ", " + theme;
     }
 }

@@ -26,7 +26,7 @@ public class ChangeListenerFactory {
     }
 
     public void setTimer(@NotNull TextField tf, Runnable callback) {
-        final long DELAY = 600;
+        final long DELAY = 300;
         Timer timer = new Timer();
         timer.setCallback(callback);
         tf.textProperty().addListener((o,x,y) -> {

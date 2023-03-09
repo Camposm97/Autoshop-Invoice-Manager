@@ -4,7 +4,6 @@ import controller.AppController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import model.database.DB;
 import model.ui.FX;
 
 import java.io.IOException;
@@ -66,10 +65,6 @@ public class App extends Application {
 
     public static AppController get() {
         return controller;
-    }
-    @Override
-    public void init() {
-        DB.init();
     }
 
     @Override

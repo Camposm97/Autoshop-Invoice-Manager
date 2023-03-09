@@ -201,6 +201,7 @@ public class DialogFactory {
             if (e.getButtonData().isDefaultButton()) {
                 AppModel.get().preferences().save();
             } else {
+                /* apply button */
                 AppModel.get().preferences().save();
                 initPreferences();
             }
