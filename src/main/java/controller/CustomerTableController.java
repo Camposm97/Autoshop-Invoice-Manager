@@ -13,7 +13,6 @@ import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.ui.AlertBuilder;
-import model.ui.ChangeListenerFactory;
 import model.ui.FX;
 import model.ui.TableCellFactory;
 import model.work_order.Vehicle;
@@ -61,7 +60,7 @@ public class CustomerTableController {
         resizeCustomerTable();
         workOrderViewController.disableFields();
         workOrderViewController.clear();
-        workOrderViewController.embedded = true;
+        workOrderViewController.isEmbedded = true;
     }
 
     /**
@@ -277,7 +276,7 @@ public class CustomerTableController {
 
     public void resizeCustomerTable() {
         /* Apply offsets and resize customer table columns */
-        FX.autoResizeColumns(tvCustomer, 8,8,4,8,16,16,8,8,8);
+        FX.autoResizeColumns(tvCustomer, 16,16,8,8,16,16,24,16,16);
     }
 
     /**
