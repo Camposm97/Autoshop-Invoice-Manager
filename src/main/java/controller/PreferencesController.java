@@ -35,7 +35,7 @@ public class PreferencesController {
         tfZip.setText(AppModel.get().preferences().getZip());
         tfZip.textProperty().addListener((o, oldValue, newValue) -> AppModel.get().preferences().setZip(newValue));
         tfPhone.setText(AppModel.get().preferences().getPhone());
-        tfPhone.textProperty().addListener((o, newValue, oldValue) -> AppModel.get().preferences().setPhone(newValue));
+        tfPhone.textProperty().addListener((o, oldValue, newValue) -> AppModel.get().preferences().setPhone(newValue));
         tfRepairShopId.setText(AppModel.get().preferences().getRepairShopId());
         tfRepairShopId.textProperty().addListener((o, oldValue, newValue) -> AppModel.get().preferences().setRepairShopId(newValue));
         tfTitle.setText(AppModel.get().preferences().getSpecialTitle());
