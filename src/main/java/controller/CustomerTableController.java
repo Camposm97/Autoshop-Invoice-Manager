@@ -14,6 +14,7 @@ import model.customer.Customer;
 import model.database.DB;
 import model.ui.AlertBuilder;
 import model.ui.FX;
+import model.ui.IOffsets;
 import model.ui.TableCellFactory;
 import model.work_order.Vehicle;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public class CustomerTableController {
+public class CustomerTableController implements IOffsets {
     @FXML
     GridPane root, gridInputFields;
     @FXML HBox hBoxAllCustomers;
@@ -276,7 +277,7 @@ public class CustomerTableController {
 
     public void resizeCustomerTable() {
         /* Apply offsets and resize customer table columns */
-        FX.autoResizeColumns(tvCustomer, 16,16,8,8,16,16,24,16,16);
+        FX.autoResizeColumns(tvCustomer, CUS_OFFSETS);
     }
 
     /**

@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import model.Observable;
 import model.database.DB;
 import model.ui.FX;
+import model.ui.IOffsets;
 import model.work_order.WorkOrder;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ import java.util.function.Function;
 /**
  * Lists completed work orders in the year and month, also displays recently edited work orders and incompleted work orders
  */
-public class MyCompanyController implements Observable {
+public class MyCompanyController implements Observable, IOffsets {
     @FXML
     Label lblWorkOrderYearCount, lblWorkOrderMonthCount;
     @FXML
@@ -53,7 +54,7 @@ public class MyCompanyController implements Observable {
     TableColumn<WorkOrder, String> colIncompletedDateCompleted;
     @FXML
     TableColumn<WorkOrder, String> colIncompletedInvoiceTotal;
-
+    private static final int TV_RECENT_OFFSET = 75;
     @FXML
     public void initialize() {
         App.get().model().recentWorkOrders().addObserver(this);
@@ -103,12 +104,12 @@ public class MyCompanyController implements Observable {
     @Override
     public void update() {
         tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecents());
-        FX.autoResizeColumns(tvRecentWorkOrders,25);
+        FX.autoResizeColumns(tvRecentWorkOrders, WO_OFFSET);
     }
 
     public void fetchRecentWorkOrders() {
         tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecents());
-
+        FX.autoResizeColumns(tvRecentWorkOrders, WO_OFFSET);
     }
 
     public void fetchCompletedWorkOrderStats() {
@@ -129,7 +130,7 @@ public class MyCompanyController implements Observable {
         lblIncompletedWorkOrderCount.setText(String.valueOf(incompletedWorkOrderCount));
         tvIncompletedWorkOrders.getItems().setAll(incompletedWorkOrders);
 
-        FX.autoResizeColumns(tvIncompletedWorkOrders,75);
+        FX.autoResizeColumns(tvIncompletedWorkOrders, WO_OFFSET);
     }
 
     interface IObserve {

@@ -14,6 +14,7 @@ import model.database.DB;
 import model.ui.AlertBuilder;
 import model.ui.ChangeListenerFactory;
 import model.ui.FX;
+import model.ui.IOffsets;
 import model.work_order.WorkOrder;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -24,7 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class WorkOrderTableController {
+public class WorkOrderTableController implements IOffsets {
     @FXML
     TextField tfId, tfFirst, tfLast, tfComp, tfYear, tfMake, tfModel;
     @FXML
@@ -129,7 +130,7 @@ public class WorkOrderTableController {
                 btDelete.setDisable(true);
             }
         });
-        FX.autoResizeColumns(tv,75);
+        FX.autoResizeColumns(tv, WO_OFFSET);
     }
 
     public void fetchAllWorkOrders() {

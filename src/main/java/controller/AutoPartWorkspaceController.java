@@ -9,11 +9,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
 import model.database.DB;
 import model.ui.FX;
+import model.ui.IOffsets;
 import model.work_order.AutoPart;
 
 import java.util.function.Function;
 
-public class AutoPartWorkspaceController {
+public class AutoPartWorkspaceController implements IOffsets {
     @FXML
     Text lblId;
     @FXML
@@ -29,7 +30,7 @@ public class AutoPartWorkspaceController {
     public void initialize() {
         tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> {
             tvParts.getItems().setAll(DB.get().autoParts().getAutoPartSuggestions(newValue));
-            FX.autoResizeColumns(tvParts, 100);
+            FX.autoResizeColumns(tvParts, AP_OFFSET);
             genID();
         });
         tfPartQuantity.setText("1");

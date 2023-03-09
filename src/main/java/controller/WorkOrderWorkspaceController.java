@@ -18,6 +18,7 @@ import model.tps.*;
 import model.ui.ChangeListenerFactory;
 import model.ui.DialogFactory;
 import model.ui.FX;
+import model.ui.IOffsets;
 import model.work_order.*;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.SearchableComboBox;
@@ -36,7 +37,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
-public class WorkOrderWorkspaceController implements Observable {
+public class WorkOrderWorkspaceController implements Observable, IOffsets {
     private static final KeyCodeCombination ACCEL_SAVE = new KeyCodeCombination(KeyCode.W, KeyCodeCombination.SHORTCUT_DOWN);
     private static final KeyCodeCombination ACCEL_PRINT = new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN);
     private static final KeyCodeCombination ACCEL_UNDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
@@ -228,8 +229,8 @@ public class WorkOrderWorkspaceController implements Observable {
                 deletePayment();
         });
 
-        FX.autoResizeColumns(tvPayment, 75);
-        tvPayment.getItems().addListener((ListChangeListener<WorkOrderPayment>) change -> FX.autoResizeColumns(tvPayment, 75));
+        FX.autoResizeColumns(tvPayment, PAY_OFFSET);
+        tvPayment.getItems().addListener((ListChangeListener<WorkOrderPayment>) change -> FX.autoResizeColumns(tvPayment, PAY_OFFSET));
 
         // Set date created value to current date
         dateCreated.setValue(workOrder.getDateCreated().toLocalDate());

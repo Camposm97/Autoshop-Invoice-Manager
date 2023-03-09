@@ -68,7 +68,7 @@ public class FX {
         });
     }
 
-    public static void autoResizeColumns(@NotNull TableView<?> tv, double... offsets) {
+    public static void autoResizeColumns(@NotNull TableView<?> tv, final double... OFFSETS) {
         tv.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         for (int i = 0; i < tv.getColumns().size(); i++) {
             var c = tv.getColumns().get(i);
@@ -83,10 +83,10 @@ public class FX {
                     }
                 }
             }
-            if (offsets.length < i) {
-                c.setPrefWidth(longestWidth + offsets[i]);
+            if (OFFSETS.length < i) {
+                c.setPrefWidth(longestWidth + OFFSETS[i]);
             } else {
-                c.setPrefWidth(longestWidth + offsets[offsets.length-1]);
+                c.setPrefWidth(longestWidth + OFFSETS[OFFSETS.length-1]);
             }
         }
     }
