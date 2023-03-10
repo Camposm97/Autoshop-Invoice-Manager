@@ -284,6 +284,7 @@ public class WorkOrderStore {
         }
         boolean stmtUpdated = false;
         StringBuilder sb = new StringBuilder("select work_order_id from work_order where ");
+        /* check for customer name */
         if (!s1.isEmpty()) {
             stmtUpdated = true;
             sb.append("customer_first_name like \"" + s1 + "%\" ");
@@ -293,11 +294,13 @@ public class WorkOrderStore {
             stmtUpdated = true;
             sb.append("customer_last_name like \"" + s2 + "%\" ");
         }
+        /* check for company name */
         if (!s3.isEmpty()) {
             if (stmtUpdated) sb.append("and ");
             stmtUpdated = true;
             sb.append("customer_company like \"" + s3 + "%\" ");
         }
+        /* check for vehicle values */
         if (!s4.isEmpty()) {
             if (stmtUpdated) sb.append("and ");
             stmtUpdated = true;
@@ -313,20 +316,21 @@ public class WorkOrderStore {
             stmtUpdated = true;
             sb.append("vehicle_model like \"" + s6 + "%\" ");
         }
+        /* check for date values */
         if (dateFilter != DateFilter.None && date1 != null) {
             var x= Date.valueOf(date1).getTime();
-            if (dateFilter.equals(DateFilter.Between) && date2 != null) {
+            if (dateFilter == DateFilter.Between && date2 != null) { /* between filter */
                 if (stmtUpdated) sb.append(" and ");
                 stmtUpdated = true;
                 var y = Date.valueOf(date2).getTime();
                 sb.append("date_created >= " + x + " and date_created <= " + y);
-            } if (!dateFilter.equals(DateFilter.Between)) {
+            } else { /* otherwise, unary filter */
                 if (stmtUpdated) sb.append(" and ");
                 stmtUpdated = true;
                 switch (dateFilter) {
-                    case Exactly -> sb.append("date_created = " + x);
                     case Before -> sb.append("date_created <= " + x);
                     case After -> sb.append("date_created >= " + x);
+                    default -> sb.append(String.format("date_created >= %s and date_created <= %s", x, x + (1000*60*60*24)));
                 }
             }
         }

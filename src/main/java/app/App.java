@@ -10,12 +10,6 @@ import java.io.IOException;
 
 /**
  * TODO
- * Update offsets for each column in tables:
- *  customer
- *  vehicle
- *  work order
- *  parts
- *  labor
  * Considering the root of the ui is a tab pane, in future updates we can potentially implement
  * a multi-task feature where the user is able to have multiple work orders open in tabs. For example,
  * if I had work order #1 and #2 open, the program can distinguish the tabs by setting the title to that
