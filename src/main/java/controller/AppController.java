@@ -96,7 +96,7 @@ public class AppController {
     }
 
     public void addVehicle() {
-        DialogFactory.initAddVehicle(cusView);
+        DialogFactory.initAddVehicle();
     }
 
     public void addWorkOrder() {

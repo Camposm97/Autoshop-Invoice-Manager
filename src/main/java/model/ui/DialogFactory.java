@@ -36,7 +36,7 @@ public class DialogFactory {
         });
     }
 
-    public static void initAddVehicle(CustomerTableController view) {
+    public static void initAddVehicle() {
         VehicleWorkspaceController controller = new VehicleWorkspaceController();
         AlertBuilder builder = new AlertBuilder();
         Optional<ButtonType> rs = builder.buildAddDialog(
@@ -45,7 +45,6 @@ public class DialogFactory {
         rs.ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 controller.addVehicle();
-                view.fetchVehiclesOfSelectedCustomer();
             }
         });
     }
