@@ -20,7 +20,7 @@
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
@@ -60,7 +60,7 @@
             <Insets />
          </GridPane.margin>
       </GridPane>
-      <TableView fx:id="tvCustomer" editable="true" maxHeight="1.7976931348623157E308" prefHeight="200.0" stylesheets="@../css/default.css" GridPane.rowIndex="1">
+      <TableView fx:id="tvCustomer" editable="true" maxHeight="1.7976931348623157E308" prefHeight="250.0" stylesheets="@../css/default.css" GridPane.rowIndex="1">
          <columns>
             <TableColumn fx:id="colFirstName" prefWidth="75.0" text="First Name" />
             <TableColumn fx:id="colLastName" prefWidth="75.0" text="Last Name" />
@@ -76,11 +76,17 @@
             <Insets />
          </GridPane.margin>
       </TableView>
-      <TabPane fx:id="tabPane" prefHeight="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="3">
+      <HBox fx:id="hBoxCusControls" alignment="CENTER_RIGHT" spacing="5.0" GridPane.rowIndex="2">
+         <children>
+          <Button fx:id="btDelCustomer" disable="true" mnemonicParsing="false" onAction="#deleteSelectedCustomer" text="Delete Customer" />
+            <Button fx:id="btWorkOrderWithCustomer" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithSelectedCustomer" text="Create Work Order with Customer" />
+         </children>
+      </HBox>
+      <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="3">
          <tabs>
             <Tab text="Vehicles">
                <content>
-                  <TableView fx:id="tvVehicle" disable="true" editable="true" maxHeight="1.7976931348623157E308" prefHeight="200.0">
+                  <TableView fx:id="tvVehicle" disable="true" editable="true" maxHeight="1.7976931348623157E308" prefHeight="250.0">
                     <columns>
                       <TableColumn fx:id="colVin" prefWidth="150.0" text="VIN" />
                         <TableColumn fx:id="colYear" prefWidth="75.0" text="Year" />
@@ -99,7 +105,7 @@
             </Tab>
             <Tab text="Work Orders">
                 <content>
-                    <fx:include fx:id="workOrderView" disable="true" prefHeight="200.0" source="WorkOrderTable.fxml" />
+                    <fx:include fx:id="workOrderView" disable="true" maxHeight="1.7976931348623157E308" prefHeight="250.0" source="WorkOrderTable.fxml" />
                 </content>
             </Tab>
          </tabs>
@@ -108,12 +114,6 @@
          <children>
           <Button fx:id="btDelVehicle" disable="true" mnemonicParsing="false" onAction="#deleteSelectedVehicle" text="Delete Vehicle" />
             <Button fx:id="btWorkOrderWithCustomerAndVehicle" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithSelectedCustomerAndVehicle" text="Create Work Order with Customer &amp; Vehicle" />
-         </children>
-      </HBox>
-      <HBox fx:id="hBoxCusControls" alignment="CENTER_RIGHT" spacing="5.0" GridPane.rowIndex="2">
-         <children>
-          <Button fx:id="btDelCustomer" disable="true" mnemonicParsing="false" onAction="#deleteSelectedCustomer" text="Delete Customer" />
-            <Button fx:id="btWorkOrderWithCustomer" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithSelectedCustomer" text="Create Work Order with Customer" />
          </children>
       </HBox>
    </children>

@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
@@ -316,15 +317,10 @@ public class CustomerTableController implements IOffsets {
             Customer customer = getSelectedCustomer();
             if (customer != null) {
                 controller.loadCustomer(customer);
-                controller.customerPopOver.hide();
+                controller.cusPopOver.hide();
             }
         };
-        gridInputFields.getChildren().remove(hBoxAllCustomers);
-        tvCustomer.getSelectionModel().selectedItemProperty().removeListener(customerSelectedListener);
-        tvCustomer.getSelectionModel().selectedItemProperty().addListener(vehicleWorkspaceListener);
-        root.getChildren().remove(hBoxCusControls);
-        root.getChildren().remove(tabPane);
-        root.getChildren().remove(hBoxVehControls);
+        updateListeners(vehicleWorkspaceListener);
     }
 
     /**
@@ -339,15 +335,25 @@ public class CustomerTableController implements IOffsets {
             Customer customer = getSelectedCustomer();
             if (customer != null) {
                 controller.loadCustomer(customer);
-                controller.customerPopOver.hide();
+                controller.cusPopOver.hide();
             }
         };
-        gridInputFields.getChildren().remove(hBoxAllCustomers);
+        updateListeners(workOrderWorkspaceListener);
+    }
+
+    /**
+     * Removes {customerSelectedListener} and modifies layout to display only
+     * the input fields and customer table
+     * @param listener
+     */
+    public void updateListeners(ChangeListener<Customer> listener) {
         tvCustomer.getSelectionModel().selectedItemProperty().removeListener(customerSelectedListener);
-        tvCustomer.getSelectionModel().selectedItemProperty().addListener(workOrderWorkspaceListener);
+        tvCustomer.getSelectionModel().selectedItemProperty().addListener(listener);
+        gridInputFields.getChildren().remove(hBoxAllCustomers);
         root.getChildren().remove(hBoxCusControls);
         root.getChildren().remove(tabPane);
         root.getChildren().remove(hBoxVehControls);
+        tvCustomer.setPrefHeight(Region.USE_COMPUTED_SIZE);
     }
 
     /**

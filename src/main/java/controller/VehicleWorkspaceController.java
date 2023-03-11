@@ -27,7 +27,7 @@ public class VehicleWorkspaceController {
     @FXML
     TextField tfVin, tfYear, tfMake, tfModel, tfLicensePlate, tfColor, tfEngine, tfTransmission;
     @FXML
-    PopOver customerPopOver;
+    PopOver cusPopOver;
 
     @FXML
     public void initialize() {
@@ -42,9 +42,12 @@ public class VehicleWorkspaceController {
         TextFields.bindAutoCompletion(tfEngine, DB.get().vehicles().getUniqueEngine());
         TextFields.bindAutoCompletion(tfTransmission, DB.get().vehicles().getUniqueTransmission());
         try {
+            /* initialize customer pop over */
             FXMLLoader fxml = FX.load(("CustomerTable.fxml"));
-            this.customerPopOver = new PopOver(fxml.load());
-            customerPopOver.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
+            cusPopOver = new PopOver(fxml.load());
+            cusPopOver.setTitle("Customer Picker");
+            cusPopOver.setHeaderAlwaysVisible(true);
+            cusPopOver.setArrowSize(0);
             CustomerTableController customerTableController = fxml.getController();
             customerTableController.connect(this);
         } catch (IOException e) {
@@ -53,7 +56,7 @@ public class VehicleWorkspaceController {
     }
 
     public void showCustomer() {
-        customerPopOver.show(btCus);
+        cusPopOver.show(btCus);
     }
 
     public void addVehicle() {

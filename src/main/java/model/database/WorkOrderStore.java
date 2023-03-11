@@ -616,10 +616,10 @@ public class WorkOrderStore {
         try {
             ResultSet rs = c.createStatement().executeQuery("select * from work_order_payment where work_order_payment_id = " + id);
             Date date = rs.getDate(3);
-            Payment type = Payment.valueOf(rs.getString(4));
+            PaymentMethod type = PaymentMethod.valueOf(rs.getString(4));
             double amount = rs.getDouble(5);
             workOrderPayment = new WorkOrderPayment(id, date, type, amount);
-        } catch (SQLException e) {
+        } catch (IllegalArgumentException | SQLException e) {
             e.printStackTrace();
         } finally {
             return workOrderPayment;

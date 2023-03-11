@@ -4,6 +4,7 @@ import app.App;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
@@ -47,8 +48,8 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
     protected TPS tpsProducts, tpsPayments;
     protected List<Product> productsMarkedForDeletion;
     protected List<WorkOrderPayment> paymentsMarkedForDeletion;
-    protected CustomerTableController customerTableController;
-    protected VehicleTableController vehicleTableController;
+    protected CustomerTableController cusTableController;
+    protected VehicleTableController vehTableController;
     @FXML
     Tab tabPartsAndLabor, tabWorkOrderInfo;
     @FXML
@@ -92,13 +93,13 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
     @FXML
     Button btCus, btVeh, btEditAutoPart, btDelAutoPart, btEditLabor, btDelLabor, btEditPayment, btDelPayment;
     @FXML
-    PopOver customerPopOver, vehiclePopOver;
+    PopOver cusPopOver, vehPopOver;
     @FXML
     TableView<WorkOrderPayment> tvPayment;
     @FXML
     TableColumn<WorkOrderPayment, String> colPaymentDate;
     @FXML
-    TableColumn<WorkOrderPayment, Payment> colPaymentType;
+    TableColumn<WorkOrderPayment, PaymentMethod> colPaymentType;
     @FXML
     TableColumn<WorkOrderPayment, String> colPaymentAmount;
     @FXML
@@ -232,7 +233,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
         FX.autoResizeColumns(tvPayment, PAY_OFFSET);
         tvPayment.getItems().addListener((ListChangeListener<WorkOrderPayment>) change -> FX.autoResizeColumns(tvPayment, PAY_OFFSET));
 
-        // Set date created value to current date
+        /* set date created value to current date */
         dateCreated.setValue(workOrder.getDateCreated().toLocalDate());
         dateCreated.setOnAction(e -> workOrder.setDateCreated(Date.valueOf(dateCreated.getValue())));
 
@@ -246,19 +247,27 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
         btEditPayment.setDisable(true);
         btDelPayment.setDisable(true);
 
-
+        /* initialize customer pop over */
         FXMLLoader fxmlLoader = FX.load("CustomerTable.fxml");
-        customerPopOver = new PopOver(fxmlLoader.load());
-        customerPopOver.setHeaderAlwaysVisible(true);
-        customerPopOver.setTitle("Customer Picker");
-        customerTableController = fxmlLoader.getController();
-        customerTableController.connect(this);
+        Node cusTable = fxmlLoader.load();
+        cusTableController = fxmlLoader.getController();
+        cusTableController.connect(this);
+        cusPopOver = new PopOver(cusTable);
+        cusPopOver.setHeaderAlwaysVisible(true);
+        cusPopOver.setTitle("Customer Picker");
+        cusPopOver.setDetached(true);
+        cusPopOver.setArrowSize(0);
+        /* initialize vehicle pop over */
         fxmlLoader = FX.load("VehicleTable.fxml");
-        vehiclePopOver = new PopOver(fxmlLoader.load());
-        vehiclePopOver.setHeaderAlwaysVisible(true);
-        vehiclePopOver.setTitle("Vehicle Picker");
-        vehicleTableController = fxmlLoader.getController();
-        vehicleTableController.connect(this);
+        Node vehTable = fxmlLoader.load();
+        vehTableController = fxmlLoader.getController();
+        vehTableController.connect(this);
+        vehPopOver = new PopOver(vehTable);
+        vehPopOver.setHeaderAlwaysVisible(true);
+        vehPopOver.setTitle("Vehicle Picker");
+        vehPopOver.setDetached(true);
+        vehPopOver.setArrowSize(0);
+        /* add listener */
         AppModel.get().preferences().addObserver(this);
     }
 
@@ -278,13 +287,13 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
 
     public void showCustomerPopOver() {
         btVeh.setDisable(true);
-        customerTableController.fetchCustomers();
-        customerPopOver.show(btCus);
+        cusTableController.fetchCustomers();
+        cusPopOver.show(btCus);
     }
 
     public void showVehiclePopOver() {
-        vehicleTableController.refresh(chosenCustomerId);
-        vehiclePopOver.show(btVeh);
+        vehTableController.refresh(chosenCustomerId);
+        vehPopOver.show(btVeh);
     }
 
     public void print() {

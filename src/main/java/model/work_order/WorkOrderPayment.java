@@ -9,18 +9,18 @@ import java.time.format.DateTimeFormatter;
 
 public class WorkOrderPayment implements Comparable<WorkOrderPayment> {
     private int id;
-    private Payment type;
+    private PaymentMethod type;
     private Date date;
     private double amount;
 
-    public WorkOrderPayment(int id, Date date, Payment type, double amount) {
+    public WorkOrderPayment(int id, Date date, PaymentMethod type, double amount) {
         this.id = id;
         this.date = date;
         this.type = type;
         this.amount = amount;
     }
 
-    public WorkOrderPayment(Date dateOfPayment, Payment type, double amount) {
+    public WorkOrderPayment(Date dateOfPayment, PaymentMethod type, double amount) {
         this.id = -1;
         this.date = dateOfPayment;
         this.type = type;
@@ -51,7 +51,7 @@ public class WorkOrderPayment implements Comparable<WorkOrderPayment> {
         return new SimpleStringProperty(date.toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
     }
 
-    public SimpleObjectProperty<Payment> typeProperty() {
+    public SimpleObjectProperty<PaymentMethod> typeProperty() {
         return new SimpleObjectProperty<>(type);
     }
 
@@ -59,11 +59,11 @@ public class WorkOrderPayment implements Comparable<WorkOrderPayment> {
         return new SimpleStringProperty(String.format("%.2f", amount));
     }
 
-    public Payment getType() {
+    public PaymentMethod getType() {
         return type;
     }
 
-    public void setType(Payment type) {
+    public void setType(PaymentMethod type) {
         this.type = type;
     }
 

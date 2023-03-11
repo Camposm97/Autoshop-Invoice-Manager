@@ -56,7 +56,7 @@ public class VehicleTableController implements IOffsets {
                 Vehicle vehicle = getSelectedVehicle();
                 if (vehicle != null) {
                     controller.loadVehicle(vehicle);
-                    controller.vehiclePopOver.hide();
+                    controller.vehPopOver.hide();
                 }
             }
         });

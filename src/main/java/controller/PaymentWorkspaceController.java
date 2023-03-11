@@ -5,7 +5,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
-import model.work_order.Payment;
+import model.work_order.PaymentMethod;
 import model.work_order.WorkOrderPayment;
 
 import java.sql.Date;
@@ -18,7 +18,7 @@ public class PaymentWorkspaceController {
     @FXML
     DatePicker datePicker;
     @FXML
-    ComboBox<Payment> cb;
+    ComboBox<PaymentMethod> cb;
     @FXML
     TextField tfAmount;
 
@@ -35,8 +35,8 @@ public class PaymentWorkspaceController {
             }
         });
         datePicker.setValue(LocalDate.now());
-        cb.setValue(Payment.Cash);
-        cb.getItems().setAll(Payment.list());
+        cb.setValue(PaymentMethod.Cash);
+        cb.getItems().setAll(PaymentMethod.list());
     }
 
     public void savePayment(Function<WorkOrderPayment, Void> callback) {
@@ -59,7 +59,7 @@ public class PaymentWorkspaceController {
 
     public WorkOrderPayment buildPayment() {
         Date date = Date.valueOf(datePicker.getValue());
-        Payment type = cb.getValue();
+        PaymentMethod type = cb.getValue();
         double amount;
         try {
             amount = Double.parseDouble(tfAmount.getText());
