@@ -120,34 +120,42 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
     @FXML
     public void initialize() throws IOException {
         App.get().setDisableMenu(true);
-        App.get().getAccels().put(ACCEL_SAVE, () -> {
+        Runnable save = () -> {
             System.out.println("Save & Close Shortcut");
             saveAndClose();
-        });
-        App.get().getAccels().put(ACCEL_PRINT, () -> {
+        };
+        Runnable print = () -> {
             System.out.println("Print Shortcut");
-            btPrint.fire();
-        });
-        App.get().getAccels().put(ACCEL_UNDO, () -> {
-            System.out.println("Undo Shortcut");
+            print();
+        };
+        Runnable undo = () -> {
+            System.out.print("Undo Shortcut ");
             if (tabPartsAndLabor.isSelected()) {
                 tpsProducts.undoTransaction();
+                System.out.println("(Product)");
             } else if (tabWorkOrderInfo.isSelected()) {
                 tpsPayments.undoTransaction();
+                System.out.println("(Payment)");
             }
             updateTotals();
-        });
-        App.get().getAccels().put(ACCEL_REDO, () -> {
-            System.out.println("Redo Shortcut");
+        };
+        Runnable redo = () -> {
+            System.out.print("Redo Shortcut ");
             if (tabPartsAndLabor.isSelected()) {
                 tpsProducts.doTransaction();
+                System.out.println("(Product)");
             } else if (tabWorkOrderInfo.isSelected()) {
                 tpsPayments.doTransaction();
+                System.out.println("(Payment)");
             }
             updateTotals();
-        });
+        };
+        App.get().getAccels().put(ACCEL_SAVE, save);
+        App.get().getAccels().put(ACCEL_PRINT, print);
+        App.get().getAccels().put(ACCEL_UNDO, undo);
+        App.get().getAccels().put(ACCEL_REDO, redo);
 
-        // Bind TextFields for auto-completion
+        /* Bind TextFields for auto-completion */
         TextFields.bindAutoCompletion(tfCompany, DB.get().customers().getUniqueCompanies());
         TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueAddresses());
         TextFields.bindAutoCompletion(tfCity, DB.get().customers().getUniqueCities());
