@@ -2,7 +2,7 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import model.AppModel;
+import model.Model;
 import model.State;
 import model.customer.Address;
 import model.customer.Customer;
@@ -48,7 +48,7 @@ public class CustomerWorkspaceController {
         Customer customer = new Customer(firstName, lastName, phone, email, company, address);
         var success = DB.get().customers().add(customer);
         var n = Notifications.create();
-        if (AppModel.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
+        if (Model.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
         if (success) { // Successfully created the customer
             n.title("Created Customer").text(customer.toFormattedString());
         } else { // Failed to create customer (duplicate or write issue)

@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import model.AppModel;
+import model.Model;
 import model.customer.Customer;
 import model.customer.OwnedVehicle;
 import model.database.DB;
@@ -73,7 +73,7 @@ public class VehicleWorkspaceController {
         OwnedVehicle ownedVehicle = new OwnedVehicle(customerId, vehicle);
         var success = DB.get().vehicles().add(ownedVehicle);
         var n = Notifications.create();
-        if (AppModel.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
+        if (Model.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
         if (success) {
             n.title("Created Vehicle").text(vehicle.toString());
         } else {

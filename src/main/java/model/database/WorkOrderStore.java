@@ -2,7 +2,7 @@ package model.database;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.AppModel;
+import model.Model;
 import model.DateFilter;
 import model.customer.Address;
 import model.customer.Customer;
@@ -244,7 +244,7 @@ public class WorkOrderStore {
 
     public List<WorkOrder> getRecents() {
         List<WorkOrder> list = new LinkedList<>();
-        AppModel.get().recentWorkOrders().iterator().forEachRemaining(x -> {
+        Model.get().recentWorkOrders().iterator().forEachRemaining(x -> {
             WorkOrder workOrder = getById(x);
             list.add(workOrder);
         });
@@ -429,7 +429,7 @@ public class WorkOrderStore {
             }
 
             // Remove work order id from recent work orders
-            AppModel.get().recentWorkOrders().remove(workOrder.getId());
+            Model.get().recentWorkOrders().remove(workOrder.getId());
 
         } catch (SQLException e) {
             e.printStackTrace();

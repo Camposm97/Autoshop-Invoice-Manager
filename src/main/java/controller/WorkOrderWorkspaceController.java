@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
-import model.AppModel;
+import model.Model;
 import model.Observable;
 import model.State;
 import model.customer.Address;
@@ -253,7 +253,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
         dateCreated.setValue(workOrder.getDateCreated().toLocalDate());
         dateCreated.setOnAction(e -> workOrder.setDateCreated(Date.valueOf(dateCreated.getValue())));
 
-        tfTaxRate.setText(AppModel.get().preferences().getTaxRatePrettyString());
+        tfTaxRate.setText(Model.get().preferences().getTaxRatePrettyString());
 
         btVeh.setDisable(true);
         btEditAutoPart.setDisable(true);
@@ -284,7 +284,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
         vehPopOver.setDetached(true);
         vehPopOver.setArrowSize(0);
         /* add listener */
-        AppModel.get().preferences().addObserver(this);
+        Model.get().preferences().addObserver(this);
     }
 
     public ListChangeListener<Labor> laborChangeListener() {
@@ -351,7 +351,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
         if (Desktop.isDesktopSupported() && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
             String email = tfEmail.getText();
             try {
-                String subject = (AppModel.get().preferences().getCompany() + " Invoice #" + tfWorkOrderId.getText());
+                String subject = (Model.get().preferences().getCompany() + " Invoice #" + tfWorkOrderId.getText());
                 subject = subject.replaceAll("\\s", "%20");
                 String s = "mailto:%s?subject=%s";
                 s = s.formatted(email, subject);
@@ -587,6 +587,6 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
     @Override
     public void update() {
         updateTotals();
-        tfTaxRate.setText(AppModel.get().preferences().getTaxRatePrettyString());
+        tfTaxRate.setText(Model.get().preferences().getTaxRatePrettyString());
     }
 }

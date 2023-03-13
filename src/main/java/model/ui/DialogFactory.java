@@ -12,7 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
-import model.AppModel;
+import model.Model;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
@@ -150,7 +150,7 @@ public class DialogFactory {
             if (e.getButtonData().isDefaultButton()) {
                 PrinterJob printerJob = PrinterJob.createPrinterJob();
                 if (printerJob != null) {
-                    if (printerJob.showPrintDialog(App.get().getWindow())) {
+                    if (printerJob.showPrintDialog(App.get().window())) {
                         WorkOrderFormController tempController = new WorkOrderFormController(workOrder);
                         Parent tempForm = FX.view("WorkOrderForm.fxml", tempController);
                         tempForm.getTransforms().add(new Scale(SCALE, SCALE));
@@ -174,7 +174,7 @@ public class DialogFactory {
                             var n = Notifications.create()
                                     .title("Printing Work Order #" + workOrder.getId())
                                     .text(workOrder.toFormattedString());
-                            if (AppModel.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
+                            if (Model.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
                             n.showInformation();
                         }
                     }
@@ -198,10 +198,10 @@ public class DialogFactory {
         .setContent(FX.view("Preferences.fxml")).build();
         alert.showAndWait().ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
-                AppModel.get().preferences().save();
+                Model.get().preferences().save();
             } else {
                 /* apply button */
-                AppModel.get().preferences().save();
+                Model.get().preferences().save();
                 initPreferences();
             }
         });
@@ -210,7 +210,7 @@ public class DialogFactory {
     public static void initAbout() {
         AlertBuilder builder = new AlertBuilder()
                 .setTitle("About")
-                .setHeaderText(AppModel.TITLE)
+                .setHeaderText(Model.TITLE)
                 .setDefaultBtn()
                 .setContent(FX.view("About.fxml"));
         Alert alert = builder.build();
@@ -226,6 +226,6 @@ public class DialogFactory {
         fc.setTitle(title);
         fc.getExtensionFilters().setAll(ef1, ef2);
         fc.setSelectedExtensionFilter(ef1);
-        return fc.showSaveDialog(App.get().getWindow());
+        return fc.showSaveDialog(App.get().window());
     }
 }

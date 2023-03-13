@@ -8,7 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import model.AppModel;
+import model.Model;
 import model.Preferences;
 import model.database.DB;
 import model.ui.Theme;
@@ -71,11 +71,11 @@ public class WorkOrderFormController {
         }
         lblDate.setText(workOrder.getDateCreated().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
         lblWorkOrderId.setText(formatWorkOrderId());
-        lblOwnerCompany.setText(AppModel.get().preferences().getCompany());
+        lblOwnerCompany.setText(Model.get().preferences().getCompany());
         lblOwnerAddress.setText(getAddress());
-        lblOwnerPhone.setText(AppModel.get().preferences().getPhone());
+        lblOwnerPhone.setText(Model.get().preferences().getPhone());
         lblShop.setText(getShopDetail());
-        lblTitle.setText(AppModel.get().preferences().getSpecialTitle());
+        lblTitle.setText(Model.get().preferences().getSpecialTitle());
 
         if (workOrder.getCustomer() != null) {
             lblName.setText(workOrder.getCustomer().getName());
@@ -124,7 +124,7 @@ public class WorkOrderFormController {
             Text txtDesc = new Text(lbr.getDesc());
             Label lblSubtotal = new Label(f.apply(lbr.subtotal()));
             txtDesc.setWrappingWidth(400);
-            if (AppModel.get().preferences().getTheme().equals(Theme.Dark)) txtDesc.setFill(Color.LIGHTGRAY);
+            if (Model.get().preferences().getTheme().equals(Theme.Dark)) txtDesc.setFill(Color.LIGHTGRAY);
             gridPaneLabor.addRow(i, lblCode, txtDesc, lblSubtotal);
         }
         lblPartsTotal.setText(g.apply(workOrder.partsSubtotal()));
@@ -147,11 +147,11 @@ public class WorkOrderFormController {
     }
 
     public String getAddress() {
-        return AppModel.get().preferences().getAddress() + ' ' + AppModel.get().preferences().getCity() + ' ' + AppModel.get().preferences().getState() + ' ' + AppModel.get().preferences().getZip();
+        return Model.get().preferences().getAddress() + ' ' + Model.get().preferences().getCity() + ' ' + Model.get().preferences().getState() + ' ' + Model.get().preferences().getZip();
     }
 
     public String getShopDetail() {
-     return AppModel.get().preferences().getState().getAbbreviation() + "S Repair Shop #" + AppModel.get().preferences().getRepairShopId();
+     return Model.get().preferences().getState().getAbbreviation() + "S Repair Shop #" + Model.get().preferences().getRepairShopId();
     }
 
     private void getAllLabels(Pane root, List<Label> labels) {

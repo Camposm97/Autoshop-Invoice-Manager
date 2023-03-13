@@ -6,7 +6,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
-import model.AppModel;
+import model.Model;
 import model.work_order.Labor;
 
 import java.util.function.Function;
@@ -40,7 +40,7 @@ public class LaborWorkspaceController {
             }
             tfBilledHrs.setText(String.format("%.1f",value));
         });
-        tfRate.setText(AppModel.get().preferences().getLaborRate().toString());
+        tfRate.setText(Model.get().preferences().getLaborRate().toString());
 
         // Initialize listeners for fields
         tfLaborCode.setOnKeyPressed(e -> {

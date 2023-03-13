@@ -1,7 +1,5 @@
 package model.ui;
 
-import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
@@ -9,12 +7,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import model.AppModel;
+import model.Model;
 
-import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 
 public class AlertBuilder {
     private String title, headerText, contentText;
@@ -118,10 +114,10 @@ public class AlertBuilder {
         }
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(FX.loadCSS("default.css"));
-        if (AppModel.get().preferences().getTheme().equals(Theme.Dark)) {
+        if (Model.get().preferences().getTheme().equals(Theme.Dark)) {
             dialogPane.getStylesheets().add(FX.loadCSS("dark-mode.css"));
         }
-        dialogPane.getStyleClass().add(GUIScale.getStyleClass(AppModel.get().preferences().getGuiScale()));
+        dialogPane.getStyleClass().add(GUIScale.getStyleClass(Model.get().preferences().getGuiScale()));
         ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(new Image("icon.png"));
         return alert;
     }

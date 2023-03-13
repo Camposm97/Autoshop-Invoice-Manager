@@ -13,7 +13,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import model.AppModel;
+import model.Model;
 import model.database.DB;
 import model.ui.DialogFactory;
 import model.ui.FX;
@@ -42,7 +42,7 @@ public class AppController {
 
     @FXML
     public void initialize() {
-        stage.setTitle(AppModel.TITLE);
+        stage.setTitle(Model.TITLE);
         stage.getIcons().add(new Image("icon.png"));
         tabPane.getSelectionModel().selectedItemProperty().addListener((o,prev,curr) -> {
             try {
@@ -117,7 +117,7 @@ public class AppController {
             DB.get().customers().export(file.getPath());
             Notifications n = Notifications.create().title("Export Customers")
                     .text("Successfully exported customers to " + file.getPath());
-            if (AppModel.get().preferences().getTheme() == Theme.Dark)
+            if (Model.get().preferences().getTheme() == Theme.Dark)
                 n = n.darkStyle();
             n.showInformation();
         }
@@ -130,7 +130,7 @@ public class AppController {
             DB.get().vehicles().export(file.getPath());
             Notifications n = Notifications.create().title("Export Vehicles")
                     .text("Successfully exported vehicles to " + file.getPath());
-            if (AppModel.get().preferences().getTheme() == Theme.Dark)
+            if (Model.get().preferences().getTheme() == Theme.Dark)
                 n = n.darkStyle();
             n.showInformation();
         }
@@ -143,7 +143,7 @@ public class AppController {
             DB.get().autoParts().export(file.getPath());
             Notifications n = Notifications.create().title("Export Auto Parts")
                     .text("Successfully exported auto parts to " + file.getPath());
-            if (AppModel.get().preferences().getTheme() == Theme.Dark)
+            if (Model.get().preferences().getTheme() == Theme.Dark)
                 n = n.darkStyle();
             n.showInformation();
         }
@@ -156,7 +156,7 @@ public class AppController {
             DB.get().workOrders().export(file.getPath());
             Notifications n = Notifications.create().title("Export Work Orders")
                     .text("Successfully exported work orders to " + file.getPath());
-            if (AppModel.get().preferences().getTheme() == Theme.Dark)
+            if (Model.get().preferences().getTheme() == Theme.Dark)
                 n = n.darkStyle();
             n.showInformation();
         }
@@ -212,17 +212,17 @@ public class AppController {
         DialogFactory.initAbout();
     }
 
-    public AppModel model() {
-        return AppModel.get();
+    public Model model() {
+        return Model.get();
     }
 
     public void exit() {
-        AppModel.get().recentWorkOrders().save();
+        Model.get().recentWorkOrders().save();
         DB.get().close();
         Platform.exit();
     }
 
-    public Window getWindow() {
+    public Window window() {
         return root.getScene().getWindow();
     }
 }

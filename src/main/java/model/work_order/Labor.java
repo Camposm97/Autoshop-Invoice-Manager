@@ -2,7 +2,7 @@ package model.work_order;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import model.AppModel;
+import model.Model;
 
 public class Labor extends Product implements Comparable<Labor> {
     private double billedHrs, rate;
@@ -51,7 +51,7 @@ public class Labor extends Product implements Comparable<Labor> {
 
     @Override
     public double bill() {
-        return taxable ? AppModel.get().preferences().getTaxRate() * (billedHrs * rate) : billedHrs * rate;
+        return taxable ? Model.get().preferences().getTaxRate() * (billedHrs * rate) : billedHrs * rate;
     }
 
     @Override
