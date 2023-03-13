@@ -120,9 +120,16 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
     @FXML
     public void initialize() throws IOException {
         App.get().setDisableMenu(true);
-        App.get().getAccels().put(ACCEL_SAVE, () -> saveAndClose());
-        App.get().getAccels().put(ACCEL_PRINT, () -> btPrint.fire());
+        App.get().getAccels().put(ACCEL_SAVE, () -> {
+            System.out.println("Save & Close Shortcut");
+            saveAndClose();
+        });
+        App.get().getAccels().put(ACCEL_PRINT, () -> {
+            System.out.println("Print Shortcut");
+            btPrint.fire();
+        });
         App.get().getAccels().put(ACCEL_UNDO, () -> {
+            System.out.println("Undo Shortcut");
             if (tabPartsAndLabor.isSelected()) {
                 tpsProducts.undoTransaction();
             } else if (tabWorkOrderInfo.isSelected()) {
@@ -131,6 +138,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
             updateTotals();
         });
         App.get().getAccels().put(ACCEL_REDO, () -> {
+            System.out.println("Redo Shortcut");
             if (tabPartsAndLabor.isSelected()) {
                 tpsProducts.doTransaction();
             } else if (tabWorkOrderInfo.isSelected()) {

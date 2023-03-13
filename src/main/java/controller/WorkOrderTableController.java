@@ -143,8 +143,9 @@ public class WorkOrderTableController implements IOffsets {
             try {
                 FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
                 Parent node = loader.load();
-                WorkOrderWorkspaceController c = loader.getController();
-                c.loadWorkOrder(workOrder);
+                WorkOrderWorkspaceController controller = loader.getController();
+                controller.loadWorkOrder(workOrder);
+//                App.get().append(node, controller);
                 App.get().display(node);
             } catch (IOException e) {
                 e.printStackTrace();

@@ -67,6 +67,13 @@ public class AppController {
         root.setCenter(x);
     }
 
+    public void append(Parent x, WorkOrderWorkspaceController controller) {
+        Tab tab = new Tab("#" + controller.workOrder.getId());
+        tab.setOnClosed(e -> controller.close());
+        tab.setContent(x);
+        tabPane.getTabs().add(tab);
+    }
+
     public void display() {
         root.setCenter(tabPane);
     }
