@@ -297,13 +297,6 @@ public class CustomerTableController implements IOffsets {
         new Thread(() -> tvCustomer.setItems(DB.get().customers().getAll(0))).start();
     }
 
-    public void fetchVehiclesOfSelectedCustomer() {
-        Customer c = getSelectedCustomer();
-        if (c != null) {
-            tvVehicle.getItems().setAll(DB.get().vehicles().getAllByCustomerId(c.getId()));
-        }
-    }
-
     /**
      * Enables the customer table controller to work with the vehicle workspace controller using
      * listener when a customer is selected to load customer information to the vehicle workspace.
