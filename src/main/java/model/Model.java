@@ -25,6 +25,11 @@ public class Model {
         preferences = Preferences.get();
     }
 
+    public void save() {
+        recentWorkOrders.save();
+        currOWOs.save();
+    }
+
     public RecentWorkOrders recentWorkOrders() {
         return recentWorkOrders;
     }

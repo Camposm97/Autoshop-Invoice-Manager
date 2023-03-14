@@ -266,7 +266,7 @@ public class AppController {
     }
 
     public void exit() {
-        Model.get().recentWorkOrders().save();
+        Model.get().save();
         DB.get().close();
         Platform.exit();
     }

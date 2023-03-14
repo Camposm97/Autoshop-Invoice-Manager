@@ -251,6 +251,15 @@ public class WorkOrderStore {
         return list;
     }
 
+    public List<WorkOrder> getCurrOWOs() {
+        List<WorkOrder> list = new LinkedList<>();
+        Model.get().currOWOs().iterator().forEachRemaining(x -> {
+            WorkOrder workOrder = getById(x);
+            list.add(workOrder);
+        });
+        return list;
+    }
+
     /**
      * Gets the latest {LIMIT} work orders by date
      * @param LIMIT

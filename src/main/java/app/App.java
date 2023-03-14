@@ -4,6 +4,7 @@ import controller.AppController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import model.database.DB;
 import model.ui.FX;
 
 import java.io.IOException;
@@ -64,6 +65,7 @@ public class App extends Application {
         FXMLLoader fxml = FX.load("App.fxml");
         stage = fxml.load();
         controller = fxml.getController();
+        DB.get().workOrders().getCurrOWOs().forEach(x -> controller.showWorkOrder(x));
         stage.show();
     }
 

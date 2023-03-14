@@ -7,6 +7,7 @@ target
 autoshop.db
 preferences.config
 recents.dat
+currowos.dat
 *.xlsx
 *.log
 
