@@ -94,7 +94,7 @@ public class MyCompanyController implements Observable, IOffsets {
                 Parent node = loader.load();
                 WorkOrderWorkspaceController controller = loader.getController();
                 controller.loadWorkOrder(workOrder);
-                App.get().display(node);
+                App.get().closeCurrentTab(node);
             } catch (IOException e) {
                 e.printStackTrace();
             }

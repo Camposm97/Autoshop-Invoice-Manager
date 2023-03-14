@@ -45,7 +45,7 @@ public class DB {
             this.stmt = c.createStatement();
             try {
                 System.out.println("Connected to database!");
-                displayInfo();
+                showInfo();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
                 System.out.println("Some of the tables do not exist, re-initializing tables...");
@@ -56,7 +56,7 @@ public class DB {
         }
     }
 
-    private void displayInfo() throws SQLException {
+    private void showInfo() throws SQLException {
         System.out.println("customer: " + stmt.executeQuery("select count(*) from customer").getInt(1));
         System.out.println("vehicle: " + stmt.executeQuery("select count(*) from vehicle").getInt(1));
         System.out.println("item: " + stmt.executeQuery("select count(*) from item").getInt(1));

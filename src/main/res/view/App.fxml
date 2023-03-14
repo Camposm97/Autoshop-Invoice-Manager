@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.stage.Stage?>
 
-<Stage fx:id="stage" height="900.0" onCloseRequest="#exit" onShown="#viewMyCompany" width="1600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppController">
+<Stage fx:id="stage" height="900.0" onCloseRequest="#exit" onShown="#viewMyCompany" width="1600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AppController">
    <scene>
       <Scene>
          <root>
             <BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" styleClass="scale_100" stylesheets="@../css/default.css">
                <top>
-                  <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
+                  <MenuBar BorderPane.alignment="CENTER">
                     <menus>
                       <Menu mnemonicParsing="false" text="File">
                         <items>
@@ -33,7 +33,7 @@
                                           <KeyCodeCombination alt="UP" code="DIGIT2" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                        </accelerator>
                                     </MenuItem>
-                                    <MenuItem mnemonicParsing="false" onAction="#addWorkOrder" text="Work Order">
+                                    <MenuItem fx:id="miWorkOrder" mnemonicParsing="false" onAction="#addWorkOrder" text="Work Order">
                                        <accelerator>
                                           <KeyCodeCombination alt="UP" code="DIGIT3" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                        </accelerator>

@@ -19,11 +19,13 @@ public class CurrentlyOpenedWorkOrders {
         if (ids.contains(workOrderId)) {
             ids.removeFirstOccurrence(workOrderId);
         }
-        ids.addFirst(workOrderId);
+        ids.addLast(workOrderId);
+        System.out.println("currOWOs: " + ids);
     }
 
     public void remove(int workOrderId) {
         ids.removeFirstOccurrence(workOrderId);
+        System.out.println("currOWOs: " + ids);
     }
 
     public Iterator<Integer> iterator() {

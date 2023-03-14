@@ -29,7 +29,7 @@ public class Model {
         return recentWorkOrders;
     }
 
-    public CurrentlyOpenedWorkOrders currOpenedWorkOrders() {
+    public CurrentlyOpenedWorkOrders currOWOs() {
         return currOWOs;
     }
 

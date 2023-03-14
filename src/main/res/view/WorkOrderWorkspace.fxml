@@ -27,12 +27,22 @@
             <items>
                 <VBox maxWidth="-Infinity" prefWidth="150.0" spacing="15.0" stylesheets="@../css/default.css">
                     <children>
-                        <Button fx:id="btPrint" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#print" text="Print..." />
-                  <Button fx:id="btEmail" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#email" text="Email" />
+                        <Button fx:id="btPrint" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#print" text="Print" />
+                        <Button fx:id="btEmail" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#email" text="Email" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#saveAndClose" text="Save &amp; Close" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#close" text="Cancel &amp; Close" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addPart" text="Add Part" />
                         <Button fx:id="btSideAddLabor" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addLabor" text="Add Labor" />
+<!--                        <Button mnemonicParsing="false">-->
+<!--                            <graphic>-->
+<!--                                <Glyph fontFamily="FontAwesome" icon="UNDO" />-->
+<!--                            </graphic>-->
+<!--                        </Button>-->
+<!--                        <Button mnemonicParsing="false">-->
+<!--                            <graphic>-->
+<!--                                <Glyph fontFamily="FontAwesome" icon="REDO" />-->
+<!--                            </graphic>-->
+<!--                        </Button>-->
                     </children>
                     <padding>
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />

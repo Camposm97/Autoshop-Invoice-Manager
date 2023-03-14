@@ -5,7 +5,7 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
@@ -19,7 +19,9 @@ import model.ui.DialogFactory;
 import model.ui.FX;
 import model.ui.GUIScale;
 import model.ui.Theme;
+import model.work_order.WorkOrder;
 import org.controlsfx.control.Notifications;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +32,7 @@ public class AppController {
     @FXML
     BorderPane root;
     @FXML
-    MenuBar menuBar;
+    MenuItem miWorkOrder;
     @FXML
     TabPane tabPane;
     @FXML
@@ -59,25 +61,56 @@ public class AppController {
         });
     }
 
-    public void setDisableMenu(boolean flag) {
-        menuBar.setDisable(flag);
+    /**
+     * Defines where the new work order menu item to be disabled or not
+     * @param flag
+     */
+    public void setDisableMIWO(boolean flag) {
+        miWorkOrder.setDisable(flag);
     }
 
-    public void display(Parent x) {
+    /**
+     * Replaces center pane of the BorderPane {root}
+     */
+    public void closeCurrentTab(Parent x) {
         root.setCenter(x);
     }
 
-    public void append(Parent x, WorkOrderWorkspaceController controller) {
-        Tab tab = new Tab("#" + controller.workOrder.getId());
-        tab.setOnClosed(e -> controller.close());
-        tab.setContent(x);
-        tabPane.getTabs().add(tab);
+    /**
+     * Appends work order workspace as a tab
+     * @param workOrder
+     */
+    public void showWorkOrder(@NotNull WorkOrder workOrder) {
+        try {
+            FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
+            Parent content = loader.load();
+            WorkOrderWorkspaceController controller = loader.getController();
+            controller.loadWorkOrder(workOrder);
+            Tab tab = new Tab("#" + controller.workOrder.getId());
+            tab.setOnClosed(e -> controller.closeTab());
+            tab.setContent(content);
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
+            /* Add work order id to {currOWOs} */
+            Model.get().currOWOs().add(workOrder.getId());
+//            App.get().show(content); /* old way of doing things */
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void display() {
-        root.setCenter(tabPane);
+    /**
+     * @brief Closes the tab that is currently selected
+     */
+    public void closeCurrentTab() {
+        System.out.println("Closing current tab");
+        tabPane.getTabs().remove(tabPane.getSelectionModel().getSelectedItem());
     }
 
+    /**
+     * Changes the scale size of the program
+     * @param styleClass
+     */
     public void setScale(String styleClass) {
         root.getStyleClass().removeAll(GUIScale.styleClasses());
         root.getStyleClass().add(styleClass);
@@ -94,7 +127,7 @@ public class AppController {
         }
     }
 
-    public ObservableMap<KeyCombination, Runnable> getAccels() {
+    public ObservableMap<KeyCombination, Runnable> accels() {
         return root.getScene().getAccelerators();
     }
 
@@ -107,7 +140,23 @@ public class AppController {
     }
 
     public void addWorkOrder() {
-        root.setCenter(FX.view("WorkOrderWorkspace.fxml"));
+        try {
+            FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
+            Parent content = loader.load();
+            WorkOrderWorkspaceController controller = loader.getController();
+            Tab tab = new Tab("#" + DB.get().workOrders().getNextId());
+            tab.setOnClosed(e -> {
+                setDisableMIWO(false);
+                controller.closeTab();
+            });
+            tab.setContent(content);
+            tabPane.getTabs().add(tab);
+            tabPane.getSelectionModel().select(tab);
+            /* disable ability to create a new work order */
+            setDisableMIWO(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void exportCustomers() throws Exception {

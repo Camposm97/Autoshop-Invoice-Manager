@@ -45,7 +45,7 @@ public class WorkOrderTableController implements IOffsets {
 
     @FXML
     public void initialize() {
-        Function<MouseEvent, Boolean> selectWorkOrder = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
+        Function<MouseEvent, Boolean> doubleClick = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
         ChangeListenerFactory factory = new ChangeListenerFactory();
         factory.setPositiveNums(tfId);
         Runnable r0 = () -> {
@@ -121,7 +121,7 @@ public class WorkOrderTableController implements IOffsets {
         colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
         tv.getItems().setAll(DB.get().workOrders().getAll(50));
         tv.setOnMouseClicked(e -> {
-            if (selectWorkOrder.apply(e)) editWorkOrder();
+            if (doubleClick.apply(e)) editWorkOrder();
             if (tv.getSelectionModel().getSelectedItem() != null) {
                 btEdit.setDisable(false);
                 btDelete.setDisable(false);
@@ -139,18 +139,7 @@ public class WorkOrderTableController implements IOffsets {
 
     public void editWorkOrder() {
         WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
-        if (workOrder != null) {
-            try {
-                FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
-                Parent node = loader.load();
-                WorkOrderWorkspaceController controller = loader.getController();
-                controller.loadWorkOrder(workOrder);
-//                App.get().append(node, controller);
-                App.get().display(node);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        App.get().showWorkOrder(workOrder);
     }
 
     public void deleteWorkOrder() {

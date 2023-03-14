@@ -119,7 +119,6 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
      */
     @FXML
     public void initialize() throws IOException {
-        App.get().setDisableMenu(true);
         Runnable save = () -> {
             System.out.println("Save & Close Shortcut");
             saveAndClose();
@@ -150,10 +149,14 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
             }
             updateTotals();
         };
-        App.get().getAccels().put(ACCEL_SAVE, save);
-        App.get().getAccels().put(ACCEL_PRINT, print);
-        App.get().getAccels().put(ACCEL_UNDO, undo);
-        App.get().getAccels().put(ACCEL_REDO, redo);
+        /*
+            This is an issue since for every new workspace the user opens will overwrite the previous
+            shortcuts. For example, if I open work order A and then B, B accels will overwrite A's accels.
+        */
+//        App.get().accels().put(ACCEL_SAVE, save);
+//        App.get().accels().put(ACCEL_PRINT, print);
+//        App.get().accels().put(ACCEL_UNDO, undo);
+//        App.get().accels().put(ACCEL_REDO, redo);
 
         /* Bind TextFields for auto-completion */
         TextFields.bindAutoCompletion(tfCompany, DB.get().customers().getUniqueCompanies());
@@ -338,12 +341,27 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
 
     public void close() {
         App.get().model().preferences().removeObserver(this);
-        App.get().getAccels().remove(ACCEL_SAVE);
-        App.get().getAccels().remove(ACCEL_PRINT);
-        App.get().getAccels().remove(ACCEL_UNDO);
-        App.get().getAccels().remove(ACCEL_REDO);
-        App.get().setDisableMenu(false);
-        App.get().display();
+//        App.get().accels().remove(ACCEL_SAVE);
+//        App.get().accels().remove(ACCEL_PRINT);
+//        App.get().accels().remove(ACCEL_UNDO);
+//        App.get().accels().remove(ACCEL_REDO);
+        App.get().closeCurrentTab();
+        /* Remove work order id from {currOWOs} */
+        if (!workOrder.isNew()) {
+            Model.get().currOWOs().remove(workOrder.getId());
+        } else {
+            App.get().setDisableMIWO(false);
+        }
+    }
+
+    public void closeTab() {
+        App.get().model().preferences().removeObserver(this);
+        /* Remove work order id from {currOWOs} */
+        if (!workOrder.isNew()) {
+            Model.get().currOWOs().remove(workOrder.getId());
+        } else {
+            App.get().setDisableMIWO(false);
+        }
     }
 
     public void email() {

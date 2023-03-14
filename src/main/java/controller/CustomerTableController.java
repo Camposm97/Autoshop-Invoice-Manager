@@ -439,7 +439,7 @@ public class CustomerTableController implements IOffsets {
             Parent node = loader.load();
             WorkOrderWorkspaceController c = loader.getController();
             c.loadCustomer(getSelectedCustomer());
-            App.get().display(node);
+            App.get().closeCurrentTab(node);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -452,7 +452,7 @@ public class CustomerTableController implements IOffsets {
             WorkOrderWorkspaceController c = loader.getController();
             c.loadCustomer(getSelectedCustomer());
             c.loadVehicle(getSelectedVehicle());
-            App.get().display(node);
+            App.get().closeCurrentTab(node);
         } catch (IOException e) {
             e.printStackTrace();
         }
