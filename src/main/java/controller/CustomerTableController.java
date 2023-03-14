@@ -18,6 +18,7 @@ import model.ui.FX;
 import model.ui.IOffsets;
 import model.ui.TableCellFactory;
 import model.work_order.Vehicle;
+import model.work_order.WorkOrder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class CustomerTableController implements IOffsets {
         resizeCustomerTable();
         workOrderViewController.disableFields();
         workOrderViewController.clear();
-        workOrderViewController.isEmbedded = true;
+        workOrderViewController.embed();
     }
 
     /**
@@ -96,6 +97,7 @@ public class CustomerTableController implements IOffsets {
                     workOrderViewController.load(getSelectedCustomer());
                 } else {
                     tvVehicle.getItems().clear();
+                    workOrderViewController.clear();
                     workOrderViewController.tv.setDisable(true);
                     btDelCustomer.setDisable(true);
                     btWorkOrderWithCustomer.setDisable(true);
@@ -300,7 +302,6 @@ public class CustomerTableController implements IOffsets {
     /**
      * Enables the customer table controller to work with the vehicle workspace controller using
      * listener when a customer is selected to load customer information to the vehicle workspace.
-     * @param controller
      * @see VehicleWorkspaceController
      */
     public void connect(@NotNull VehicleWorkspaceController controller) {
@@ -319,7 +320,6 @@ public class CustomerTableController implements IOffsets {
     /**
      * Enables the customer table controller to work with the work order workspace controller using
      * listener when a customer is selected to load customer information to the work order workspace.
-     * @param controller
      */
     public void connect(@NotNull WorkOrderWorkspaceController controller) {
         disableEditableCustomers();
@@ -337,7 +337,6 @@ public class CustomerTableController implements IOffsets {
     /**
      * Removes {customerSelectedListener} and modifies layout to display only
      * the input fields and customer table
-     * @param listener
      */
     public void updateListeners(ChangeListener<Customer> listener) {
         tvCustomer.getSelectionModel().selectedItemProperty().removeListener(customerSelectedListener);
@@ -434,27 +433,10 @@ public class CustomerTableController implements IOffsets {
     }
 
     public void createWorkOrderWithSelectedCustomer() {
-        FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
-        try {
-            Parent node = loader.load();
-            WorkOrderWorkspaceController c = loader.getController();
-            c.loadCustomer(getSelectedCustomer());
-            App.get().closeCurrentTab(node);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        App.get().addWorkOrder(getSelectedCustomer());
     }
 
     public void createWorkOrderWithSelectedCustomerAndVehicle() {
-        FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
-        try {
-            Parent node = loader.load();
-            WorkOrderWorkspaceController c = loader.getController();
-            c.loadCustomer(getSelectedCustomer());
-            c.loadVehicle(getSelectedVehicle());
-            App.get().closeCurrentTab(node);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        App.get().addWorkOrder(getSelectedCustomer(), getSelectedVehicle());
     }
 }

@@ -8,16 +8,19 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Scale;
 import javafx.stage.FileChooser;
 import model.Model;
+import model.database.DB;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
 import model.work_order.WorkOrderPayment;
 import org.controlsfx.control.Notifications;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Optional;
@@ -187,6 +190,30 @@ public class DialogFactory {
 
             }
         });
+    }
+
+    public static void initDeleteWorkOrder(@NotNull TableView<WorkOrder> tv, @NotNull WorkOrder x) {
+        AlertBuilder builder = new AlertBuilder();
+        builder.setTitle("Delete Work Order #" + x.getId());
+        if (Model.get().currOWOs().contains(x.getId())) { /* show error dialog */
+            Alert alert = builder.setAlertType(Alert.AlertType.ERROR)
+                    .setContentText("Close work order #" + x.getId() + " and try again.").build();
+            alert.showAndWait();
+        } else { /* show confirmation dialog */
+            builder.setAlertType(Alert.AlertType.CONFIRMATION)
+                    .setHeaderText("Are you sure you want to delete work order #" + x.getId() + "?")
+                    .setContentText(x.toFormattedString())
+                    .setYesNoBtns();
+            Alert alert = builder.build();
+            Optional<ButtonType> rs = alert.showAndWait();
+            rs.ifPresent(e -> {
+                if (!e.getButtonData().isCancelButton()) {
+                    tv.getItems().remove(x);
+                    DB.get().workOrders().delete(x);
+                }
+            });
+        }
+
     }
 
     public static void initPreferences() {

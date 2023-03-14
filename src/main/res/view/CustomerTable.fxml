@@ -50,8 +50,10 @@
             <TextField fx:id="tfCity" prefWidth="75.0" promptText="City" GridPane.columnIndex="6" />
             <TextField fx:id="tfState" prefWidth="75.0" promptText="State" GridPane.columnIndex="7" />
             <TextField fx:id="tfZip" prefWidth="75.0" promptText="Zip" GridPane.columnIndex="8" />
-            <HBox fx:id="hBoxAllCustomers" alignment="CENTER_RIGHT" GridPane.columnIndex="7" GridPane.columnSpan="2" GridPane.rowIndex="1">
+            <HBox fx:id="hBoxAllCustomers" alignment="CENTER_RIGHT" spacing="2.0" GridPane.columnIndex="7" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <children>
+                <Button fx:id="btDelCustomer" disable="true" mnemonicParsing="false" onAction="#deleteSelectedCustomer" text="Delete Customer" />
+                <Button fx:id="btDelVehicle" disable="true" mnemonicParsing="false" onAction="#deleteSelectedVehicle" text="Delete Vehicle" />
                   <Button fx:id="btAllCustomers" mnemonicParsing="false" onAction="#fetchAllCustomers" text="All Customers" />
                </children>
             </HBox>
@@ -76,9 +78,8 @@
             <Insets />
          </GridPane.margin>
       </TableView>
-      <HBox fx:id="hBoxCusControls" alignment="CENTER_RIGHT" spacing="5.0" GridPane.rowIndex="2">
+      <HBox fx:id="hBoxCusControls" alignment="CENTER_RIGHT" spacing="5.0" visible="false" GridPane.rowIndex="2">
          <children>
-          <Button fx:id="btDelCustomer" disable="true" mnemonicParsing="false" onAction="#deleteSelectedCustomer" text="Delete Customer" />
             <Button fx:id="btWorkOrderWithCustomer" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithSelectedCustomer" text="Create Work Order with Customer" />
          </children>
       </HBox>
@@ -110,9 +111,8 @@
             </Tab>
          </tabs>
       </TabPane>
-      <HBox fx:id="hBoxVehControls" alignment="CENTER_RIGHT" spacing="5.0" GridPane.rowIndex="4">
+      <HBox fx:id="hBoxVehControls" alignment="CENTER_RIGHT" spacing="5.0" visible="false" GridPane.rowIndex="4">
          <children>
-          <Button fx:id="btDelVehicle" disable="true" mnemonicParsing="false" onAction="#deleteSelectedVehicle" text="Delete Vehicle" />
             <Button fx:id="btWorkOrderWithCustomerAndVehicle" disable="true" mnemonicParsing="false" onAction="#createWorkOrderWithSelectedCustomerAndVehicle" text="Create Work Order with Customer &amp; Vehicle" />
          </children>
       </HBox>

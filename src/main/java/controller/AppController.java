@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,19 +15,25 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import model.Model;
+import model.customer.Customer;
 import model.database.DB;
 import model.ui.DialogFactory;
 import model.ui.FX;
 import model.ui.GUIScale;
 import model.ui.Theme;
+import model.work_order.Vehicle;
 import model.work_order.WorkOrder;
 import org.controlsfx.control.Notifications;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.TreeMap;
+import java.util.function.Function;
 
-public class AppController {
+public class AppController implements IShortcuts {
+    /* Prefix id for work order tabs */
+    private static final String TAB_PREFIX_ID = "tab-wo-";
     @FXML
     Stage stage;
     @FXML
@@ -41,13 +48,18 @@ public class AppController {
     MyCompanyController compView;
     CustomerTableController cusView;
     WorkOrderTableController woView;
-
+    TreeMap<String, WorkOrderWorkspaceController> map;
     @FXML
     public void initialize() {
+        map = new TreeMap<>();
         stage.setTitle(Model.TITLE);
         stage.getIcons().add(new Image("icon.png"));
+        accels().put(ACCEL_CLOSE, this::closeCurrentTab);
         tabPane.getSelectionModel().selectedItemProperty().addListener((o,prev,curr) -> {
+            if (curr == null) return;
             try {
+                removeShortcuts();
+                accels().put(ACCEL_CLOSE, this::closeCurrentTab);
                 if (curr == tabComp) {
                     viewMyCompany();
                 } else if (curr == tabCus) {
@@ -55,30 +67,35 @@ public class AppController {
                 } else if (curr == tabWO) {
                     viewWorkOrders();
                 }
+                WorkOrderWorkspaceController x = map.get(curr.getId());
+                if (x != null) x.loadShortcuts();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+        tabPane.getTabs().addListener((ListChangeListener<? super Tab>) change -> {
+            System.out.println("tab-ids: " + map.keySet()); /* debug */
+        });
+    }
+
+    public void removeShortcuts() {
+        accels().remove(ACCEL_SAVE);
+        accels().remove(ACCEL_PRINT);
+        accels().remove(ACCEL_REDO);
+        accels().remove(ACCEL_UNDO);
     }
 
     /**
      * Defines where the new work order menu item to be disabled or not
-     * @param flag
+     * @param flag Decide whether menu item 'New Work Order' is disabled
      */
     public void setDisableMIWO(boolean flag) {
         miWorkOrder.setDisable(flag);
     }
 
     /**
-     * Replaces center pane of the BorderPane {root}
-     */
-    public void closeCurrentTab(Parent x) {
-        root.setCenter(x);
-    }
-
-    /**
      * Appends work order workspace as a tab
-     * @param workOrder
+     * @param workOrder To be shown on work order tab
      */
     public void showWorkOrder(@NotNull WorkOrder workOrder) {
         try {
@@ -87,29 +104,47 @@ public class AppController {
             WorkOrderWorkspaceController controller = loader.getController();
             controller.loadWorkOrder(workOrder);
             Tab tab = new Tab("#" + controller.workOrder.getId());
-            tab.setOnClosed(e -> controller.closeTab());
+            tab.setId(TAB_PREFIX_ID + controller.workOrder.getId());
             tab.setContent(content);
+            tab.setOnClosed(e -> {
+                System.out.println("Closing tab");
+                map.remove(tab.getId());
+                controller.closeTab();
+            });
+            /* Do we already have this work order open? */
+            for (Tab x : tabPane.getTabs()) {
+                if (x.getId().equals(tab.getId())) {
+                    tabPane.getSelectionModel().select(x);
+                    return;
+                }
+            }
+            map.put(tab.getId(), controller);
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
             /* Add work order id to {currOWOs} */
             Model.get().currOWOs().add(workOrder.getId());
-//            App.get().show(content); /* old way of doing things */
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void openCurrentWorkOrders() {
+        DB.get().workOrders().getCurrOWOs().forEach(this::showWorkOrder);
     }
 
     /**
      * @brief Closes the tab that is currently selected
      */
     public void closeCurrentTab() {
-        System.out.println("Closing current tab");
-        tabPane.getTabs().remove(tabPane.getSelectionModel().getSelectedItem());
+        Tab x = tabPane.getSelectionModel().getSelectedItem();
+        if (x == null) return;
+        map.remove(x.getId());
+        tabPane.getTabs().remove(x);
     }
 
     /**
      * Changes the scale size of the program
-     * @param styleClass
+     * @param styleClass Refer to GUIScale.java
      */
     public void setScale(String styleClass) {
         root.getStyleClass().removeAll(GUIScale.styleClasses());
@@ -118,12 +153,8 @@ public class AppController {
 
     public void setTheme(Theme theme) {
         switch (theme) {
-            case Light:
-                root.getStylesheets().remove(FX.loadCSS("dark-mode.css"));
-                break;
-            case Dark:
-                root.getStylesheets().add(FX.loadCSS("dark-mode.css"));
-                break;
+            case Light -> root.getStylesheets().remove(FX.loadCSS("dark-mode.css"));
+            case Dark -> root.getStylesheets().add(FX.loadCSS("dark-mode.css"));
         }
     }
 
@@ -139,24 +170,43 @@ public class AppController {
         DialogFactory.initAddVehicle();
     }
 
-    public void addWorkOrder() {
+    public WorkOrderWorkspaceController addWorkOrder() {
         try {
             FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
             Parent content = loader.load();
             WorkOrderWorkspaceController controller = loader.getController();
-            Tab tab = new Tab("#" + DB.get().workOrders().getNextId());
+            Integer id = DB.get().workOrders().getNextId();
+            Tab tab = new Tab("#" + id);
+            tab.setId(TAB_PREFIX_ID + id.toString());
+            tab.setContent(content);
             tab.setOnClosed(e -> {
+                map.remove(tab.getId());
                 setDisableMIWO(false);
                 controller.closeTab();
             });
-            tab.setContent(content);
+            map.put(tab.getId(), controller);
             tabPane.getTabs().add(tab);
             tabPane.getSelectionModel().select(tab);
             /* disable ability to create a new work order */
             setDisableMIWO(true);
+            return controller;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    @Deprecated
+    public void addWorkOrder(@NotNull Customer c) {
+        WorkOrderWorkspaceController controller = addWorkOrder();
+        controller.loadCustomer(c);
+    }
+
+    @Deprecated
+    public void addWorkOrder(@NotNull Customer c, Vehicle v) {
+        WorkOrderWorkspaceController controller = addWorkOrder();
+        controller.loadCustomer(c);
+        controller.loadVehicle(v);
     }
 
     public void exportCustomers() throws Exception {
@@ -259,10 +309,6 @@ public class AppController {
 
     public void about() {
         DialogFactory.initAbout();
-    }
-
-    public Model model() {
-        return Model.get();
     }
 
     public void exit() {

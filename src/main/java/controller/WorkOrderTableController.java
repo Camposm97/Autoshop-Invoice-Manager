@@ -8,13 +8,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import model.DateFilter;
 import model.customer.Customer;
 import model.database.DB;
-import model.ui.AlertBuilder;
-import model.ui.ChangeListenerFactory;
-import model.ui.FX;
-import model.ui.IOffsets;
+import model.ui.*;
 import model.work_order.WorkOrder;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -39,9 +37,11 @@ public class WorkOrderTableController implements IOffsets {
     @FXML
     TableColumn<WorkOrder, String> colCustomer, colCompany, colVehicle, colDateCreated, colDateCompleted, colInvoiceTotal;
     @FXML
-    Button btEdit, btDelete;
+    HBox controlBox;
+    @FXML
+    Button btEdit, btDelete, btAll;
 
-    boolean isEmbedded; /* decides whether when the program filters work orders when user types in name or company field */
+    private boolean isEmbedded; /* decides whether when the program filters work orders when user types in name or company field */
 
     @FXML
     public void initialize() {
@@ -77,12 +77,6 @@ public class WorkOrderTableController implements IOffsets {
 
         TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
         TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
-
-        ContextMenu cm = new ContextMenu();
-        MenuItem mi1 = new MenuItem("Show Complete List");
-        mi1.setOnAction(e -> tv.setItems(DB.get().workOrders().getAll(0)));
-        cm.getItems().add(mi1);
-        tv.setContextMenu(cm);
 
         cbDateFilter.setItems(FXCollections.observableArrayList(DateFilter.values()));
         cbDateFilter.setValue(DateFilter.None);
@@ -144,20 +138,7 @@ public class WorkOrderTableController implements IOffsets {
 
     public void deleteWorkOrder() {
         WorkOrder x = tv.getSelectionModel().getSelectedItem();
-        AlertBuilder builder = new AlertBuilder();
-        builder.setAlertType(Alert.AlertType.CONFIRMATION)
-                .setTitle("Delete Work Order #" + x.getId())
-                .setHeaderText("Are you sure you want to delete work order #" + x.getId() + "?")
-                .setContentText(x.toFormattedString())
-                .setYesNoBtns();
-        Alert alert = builder.build();
-        Optional<ButtonType> rs = alert.showAndWait();
-        rs.ifPresent(e -> {
-            if (!e.getButtonData().isCancelButton()) {
-                tv.getItems().remove(x);
-                DB.get().workOrders().delete(x);
-            }
-        });
+        DialogFactory.initDeleteWorkOrder(tv, x);
     }
 
     public void filter() {
@@ -180,8 +161,15 @@ public class WorkOrderTableController implements IOffsets {
         }
     }
 
+    public void embed() {
+        isEmbedded = true;
+        controlBox.getChildren().remove(btAll);
+    }
+
     public void clear() {
         tv.getItems().clear();
+        btEdit.setDisable(true);
+        btDelete.setDisable(true);
     }
 
     public void load(Customer c) {

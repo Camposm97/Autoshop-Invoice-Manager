@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane vgap="2.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderTableController">
+<GridPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderTableController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -43,18 +43,18 @@
             <TextField fx:id="tfYear" minWidth="75.0" promptText="Year" GridPane.columnIndex="4" />
             <TextField fx:id="tfMake" minWidth="75.0" promptText="Make" GridPane.columnIndex="5" />
             <TextField fx:id="tfModel" minWidth="75.0" promptText="Model" GridPane.columnIndex="6" />
-            <HBox fx:id="dateFilterBox" alignment="CENTER_LEFT" GridPane.columnSpan="3" GridPane.rowIndex="1">
+            <HBox fx:id="dateFilterBox" alignment="CENTER_LEFT" spacing="2.0" GridPane.columnSpan="3" GridPane.rowIndex="1">
                <children>
                   <ComboBox fx:id="cbDateFilter" maxWidth="1.7976931348623157E308" minWidth="75.0" />
                   <DatePicker fx:id="dpBefore" editable="false" minWidth="50.0" />
                   <DatePicker fx:id="dpAfter" disable="true" editable="false" minWidth="50.0" />
                </children>
             </HBox>
-            <HBox fx:id="controlBox" alignment="CENTER_RIGHT" spacing="8.0" GridPane.columnIndex="6" GridPane.rowIndex="1">
+            <HBox fx:id="controlBox" alignment="CENTER_RIGHT" spacing="2.0" GridPane.columnIndex="6" GridPane.rowIndex="1">
                <children>
                   <Button fx:id="btEdit" disable="true" mnemonicParsing="false" onAction="#editWorkOrder" text="Edit" />
                   <Button fx:id="btDelete" disable="true" mnemonicParsing="false" onAction="#deleteWorkOrder" text="Delete" />
-                  <Button mnemonicParsing="false" onAction="#fetchAllWorkOrders" text="All Work Orders" />
+                  <Button fx:id="btAll" mnemonicParsing="false" onAction="#fetchAllWorkOrders" text="All Work Orders" />
                </children>
                <GridPane.margin>
                   <Insets />

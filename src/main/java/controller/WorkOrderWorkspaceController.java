@@ -38,11 +38,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
-public class WorkOrderWorkspaceController implements Observable, IOffsets {
-    private static final KeyCodeCombination ACCEL_SAVE = new KeyCodeCombination(KeyCode.W, KeyCodeCombination.SHORTCUT_DOWN);
-    private static final KeyCodeCombination ACCEL_PRINT = new KeyCodeCombination(KeyCode.P, KeyCodeCombination.SHORTCUT_DOWN);
-    private static final KeyCodeCombination ACCEL_UNDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
-    private static final KeyCodeCombination ACCEL_REDO = new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN);
+public class WorkOrderWorkspaceController implements Observable, IOffsets, IShortcuts {
     protected int chosenCustomerId;
     protected WorkOrder workOrder;
     protected TPS tpsProducts, tpsPayments;
@@ -119,45 +115,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
      */
     @FXML
     public void initialize() throws IOException {
-        Runnable save = () -> {
-            System.out.println("Save & Close Shortcut");
-            saveAndClose();
-        };
-        Runnable print = () -> {
-            System.out.println("Print Shortcut");
-            print();
-        };
-        Runnable undo = () -> {
-            System.out.print("Undo Shortcut ");
-            if (tabPartsAndLabor.isSelected()) {
-                tpsProducts.undoTransaction();
-                System.out.println("(Product)");
-            } else if (tabWorkOrderInfo.isSelected()) {
-                tpsPayments.undoTransaction();
-                System.out.println("(Payment)");
-            }
-            updateTotals();
-        };
-        Runnable redo = () -> {
-            System.out.print("Redo Shortcut ");
-            if (tabPartsAndLabor.isSelected()) {
-                tpsProducts.doTransaction();
-                System.out.println("(Product)");
-            } else if (tabWorkOrderInfo.isSelected()) {
-                tpsPayments.doTransaction();
-                System.out.println("(Payment)");
-            }
-            updateTotals();
-        };
-        /*
-            This is an issue since for every new workspace the user opens will overwrite the previous
-            shortcuts. For example, if I open work order A and then B, B accels will overwrite A's accels.
-        */
-//        App.get().accels().put(ACCEL_SAVE, save);
-//        App.get().accels().put(ACCEL_PRINT, print);
-//        App.get().accels().put(ACCEL_UNDO, undo);
-//        App.get().accels().put(ACCEL_REDO, redo);
-
+        loadShortcuts();
         /* Bind TextFields for auto-completion */
         TextFields.bindAutoCompletion(tfCompany, DB.get().customers().getUniqueCompanies());
         TextFields.bindAutoCompletion(tfAddress, DB.get().customers().getUniqueAddresses());
@@ -290,6 +248,47 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
         Model.get().preferences().addObserver(this);
     }
 
+    public void loadShortcuts() {
+        Runnable save = () -> {
+            System.out.println("Save & Close Shortcut");
+            saveAndClose();
+        };
+        Runnable print = () -> {
+            System.out.println("Print Shortcut");
+            print();
+        };
+        Runnable undo = () -> {
+            System.out.print("Undo Shortcut ");
+            if (tabPartsAndLabor.isSelected()) {
+                tpsProducts.undoTransaction();
+                System.out.println("(Product)");
+            } else if (tabWorkOrderInfo.isSelected()) {
+                tpsPayments.undoTransaction();
+                System.out.println("(Payment)");
+            }
+            updateTotals();
+        };
+        Runnable redo = () -> {
+            System.out.print("Redo Shortcut ");
+            if (tabPartsAndLabor.isSelected()) {
+                tpsProducts.doTransaction();
+                System.out.println("(Product)");
+            } else if (tabWorkOrderInfo.isSelected()) {
+                tpsPayments.doTransaction();
+                System.out.println("(Payment)");
+            }
+            updateTotals();
+        };
+        /*
+            This is an issue since for every new workspace the user opens will overwrite the previous
+            shortcuts. For example, if I open work order A and then B, B accels will overwrite A's accels.
+        */
+        App.get().accels().put(ACCEL_SAVE, save);
+        App.get().accels().put(ACCEL_PRINT, print);
+        App.get().accels().put(ACCEL_UNDO, undo);
+        App.get().accels().put(ACCEL_REDO, redo);
+    }
+
     public ListChangeListener<Labor> laborChangeListener() {
         return e -> {
             if (e.next()) {
@@ -329,7 +328,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
             DB.get().deleteProductsMarkedForDeletion(productsMarkedForDeletion);
             DB.get().deletePaymentMarkedForDeletion(paymentsMarkedForDeletion);
         }
-        App.get().model().recentWorkOrders().add(workOrder.getId());
+        Model.get().recentWorkOrders().add(workOrder.getId());
         App.get().compView.fetchCompletedWorkOrderStats();
         App.get().compView.fetchIncompletedWorkOrders();
     }
@@ -339,8 +338,11 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
         close();
     }
 
+    /**
+     * Event handler for when the button is clicked
+     */
     public void close() {
-        App.get().model().preferences().removeObserver(this);
+        Model.get().preferences().removeObserver(this);
 //        App.get().accels().remove(ACCEL_SAVE);
 //        App.get().accels().remove(ACCEL_PRINT);
 //        App.get().accels().remove(ACCEL_UNDO);
@@ -354,8 +356,11 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets {
         }
     }
 
+    /**
+     * Event handler for when the tab is closed
+     */
     public void closeTab() {
-        App.get().model().preferences().removeObserver(this);
+        Model.get().preferences().removeObserver(this);
         /* Remove work order id from {currOWOs} */
         if (!workOrder.isNew()) {
             Model.get().currOWOs().remove(workOrder.getId());

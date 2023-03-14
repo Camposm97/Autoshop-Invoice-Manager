@@ -9,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import model.Model;
 import model.Observable;
 import model.database.DB;
 import model.ui.FX;
@@ -54,10 +55,9 @@ public class MyCompanyController implements Observable, IOffsets {
     TableColumn<WorkOrder, String> colIncompletedDateCompleted;
     @FXML
     TableColumn<WorkOrder, String> colIncompletedInvoiceTotal;
-    private static final int TV_RECENT_OFFSET = 75;
     @FXML
     public void initialize() {
-        App.get().model().recentWorkOrders().addObserver(this);
+        Model.get().recentWorkOrders().addObserver(this);
         Function<MouseEvent, Boolean> doubleClick = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
         fetchCompletedWorkOrderStats();
 
@@ -88,17 +88,7 @@ public class MyCompanyController implements Observable, IOffsets {
 
     public void editWorkOrder(TableView<WorkOrder> tv) {
         WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
-        if (workOrder != null) {
-            try {
-                FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
-                Parent node = loader.load();
-                WorkOrderWorkspaceController controller = loader.getController();
-                controller.loadWorkOrder(workOrder);
-                App.get().closeCurrentTab(node);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        App.get().showWorkOrder(workOrder);
     }
 
     @Override
@@ -131,9 +121,5 @@ public class MyCompanyController implements Observable, IOffsets {
         tvIncompletedWorkOrders.getItems().setAll(incompletedWorkOrders);
 
         FX.autoResizeColumns(tvIncompletedWorkOrders, WO_OFFSET);
-    }
-
-    interface IObserve {
-        void update(Object o);
     }
 }

@@ -4,13 +4,11 @@ import controller.AppController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import model.database.DB;
 import model.ui.FX;
 
 import java.io.IOException;
 
 /**
- * TODO - Work Order Tabs Idea
  * What flags a work order to be added to {currOWOs}?
  * From the work order table controller, if the user double-clicks of clicks the edit button when a work order
  * is currently selected then before switching to work order workspace the program will add that selected work order
@@ -33,7 +31,6 @@ import java.io.IOException;
  * @see controller.WorkOrderWorkspaceController
  *
  *
- * TODO - Work Order Tabs Implementation
  * The App class gives us access to the AppController which will allow us to modify the tab pane.
  * We can use that to append tabs of work orders to edit.
  *
@@ -47,9 +44,6 @@ import java.io.IOException;
  *
  * If the user tries to delete work order and if its id is in {currOWOs} then show an error message.
  *
- *
- * TODO - Work Order Tabs Save Feature
- * @brief Continue where the
  * Create a global list of work orders called {currOWOs} which is a list of integers.
  *
  */
@@ -65,7 +59,8 @@ public class App extends Application {
         FXMLLoader fxml = FX.load("App.fxml");
         stage = fxml.load();
         controller = fxml.getController();
-        DB.get().workOrders().getCurrOWOs().forEach(x -> controller.showWorkOrder(x));
+        /* Restore previous session */
+        controller.openCurrentWorkOrders();
         stage.show();
     }
 

@@ -12,7 +12,6 @@ public class CurrentlyOpenedWorkOrders {
     private LinkedList<Integer> ids;
 
     public CurrentlyOpenedWorkOrders() {
-        /* TODO: Implement save feature */
         try {
             File file = new File(DAT_FILE);
             if (file.exists()) {
@@ -54,6 +53,10 @@ public class CurrentlyOpenedWorkOrders {
     public void remove(int workOrderId) {
         ids.removeFirstOccurrence(workOrderId);
         System.out.println("currOWOs: " + ids);
+    }
+
+    public boolean contains(int workOrderId) {
+        return ids.contains(workOrderId);
     }
 
     public Iterator<Integer> iterator() {
