@@ -249,40 +249,24 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
     }
 
     public void loadShortcuts() {
-        Runnable save = () -> {
-            System.out.println("Save & Close Shortcut");
-            saveAndClose();
-        };
-        Runnable print = () -> {
-            System.out.println("Print Shortcut");
-            print();
-        };
+        Runnable save = () -> saveAndClose();
+        Runnable print = () -> print();
         Runnable undo = () -> {
-            System.out.print("Undo Shortcut ");
             if (tabPartsAndLabor.isSelected()) {
                 tpsProducts.undoTransaction();
-                System.out.println("(Product)");
             } else if (tabWorkOrderInfo.isSelected()) {
                 tpsPayments.undoTransaction();
-                System.out.println("(Payment)");
             }
             updateTotals();
         };
         Runnable redo = () -> {
-            System.out.print("Redo Shortcut ");
             if (tabPartsAndLabor.isSelected()) {
                 tpsProducts.doTransaction();
-                System.out.println("(Product)");
             } else if (tabWorkOrderInfo.isSelected()) {
                 tpsPayments.doTransaction();
-                System.out.println("(Payment)");
             }
             updateTotals();
         };
-        /*
-            This is an issue since for every new workspace the user opens will overwrite the previous
-            shortcuts. For example, if I open work order A and then B, B accels will overwrite A's accels.
-        */
         App.get().accels().put(ACCEL_SAVE, save);
         App.get().accels().put(ACCEL_PRINT, print);
         App.get().accels().put(ACCEL_UNDO, undo);
