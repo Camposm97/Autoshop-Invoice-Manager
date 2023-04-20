@@ -23,6 +23,7 @@ import org.controlsfx.control.Notifications;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -78,8 +79,22 @@ public class DialogFactory {
         });
     }
 
-    public static void initAddLabor(Function<Labor, Void> callback) {
+//    public static void initAddLabor(Function<Labor, Void> callback) {
+//        LaborWorkspaceController controller = new LaborWorkspaceController();
+//        Parent node = FX.view("LaborWorkspace.fxml", controller);
+//        AlertBuilder builder = new AlertBuilder();
+//        Alert alert = builder.buildAddDialog("Add Labor", node);
+//        Optional<ButtonType> rs = alert.showAndWait();
+//        rs.ifPresent(e -> {
+//            if (e.getButtonData().isDefaultButton()) {
+//                controller.saveLabor(callback);
+//            }
+//        });
+//    }
+
+    public static void initAddLabor(Iterator<AutoPart> items, Function<Labor, Void> callback) {
         LaborWorkspaceController controller = new LaborWorkspaceController();
+        controller.loadItems(items);
         Parent node = FX.view("LaborWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
         Alert alert = builder.buildAddDialog("Add Labor", node);
@@ -91,8 +106,9 @@ public class DialogFactory {
         });
     }
 
-    public static void initEditLabor(Function<Labor, Void> callback, Labor selectedLabor) {
+    public static void initEditLabor(Iterator<AutoPart> items, Function<Labor, Void> callback, Labor selectedLabor) {
         LaborWorkspaceController controller = new LaborWorkspaceController();
+        controller.loadItems(items);
         Parent node = FX.view("LaborWorkspace.fxml", controller);
         AlertBuilder builder = new AlertBuilder();
         Alert alert = builder.buildAddDialog("Update Labor", node);

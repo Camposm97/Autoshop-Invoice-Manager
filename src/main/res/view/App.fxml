@@ -44,6 +44,12 @@
                                     <KeyCodeCombination alt="UP" code="COMMA" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                  </accelerator>
                               </MenuItem>
+                              <Menu mnemonicParsing="false" text="Import">
+                                <items>
+                                  <MenuItem mnemonicParsing="false" text="Customers" />
+                                    <MenuItem mnemonicParsing="false" text="Vehicles" />
+                                </items>
+                              </Menu>
                               <Menu mnemonicParsing="false" text="Export">
                                 <items>
                                   <MenuItem mnemonicParsing="false" onAction="#exportCustomers" text="Customers" />
