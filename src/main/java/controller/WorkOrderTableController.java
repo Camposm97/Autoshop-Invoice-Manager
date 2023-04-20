@@ -133,7 +133,7 @@ public class WorkOrderTableController implements IOffsets {
 
     public void editWorkOrder() {
         WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
-        App.get().showWorkOrder(workOrder);
+        if (workOrder != null) App.get().showWorkOrder(workOrder);
     }
 
     public void deleteWorkOrder() {

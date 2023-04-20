@@ -116,6 +116,7 @@ public class WorkOrderFormController {
         }
 
         // Add labors to the form
+        final var WWIDTH = 400;
         Iterator<Labor> laborIterator = workOrder.laborIterator();
         for (int i = 1; laborIterator.hasNext(); i++) {
             Labor lbr = laborIterator.next();
@@ -123,7 +124,7 @@ public class WorkOrderFormController {
             lblCode.getStyleClass().add("lbl-item-id");
             Text txtDesc = new Text(lbr.getDesc());
             Label lblSubtotal = new Label(f.apply(lbr.subtotal()));
-            txtDesc.setWrappingWidth(400);
+            txtDesc.setWrappingWidth(WWIDTH);
             if (Model.get().preferences().getTheme().equals(Theme.Dark)) txtDesc.setFill(Color.LIGHTGRAY);
             gridPaneLabor.addRow(i, lblCode, txtDesc, lblSubtotal);
         }

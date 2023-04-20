@@ -149,26 +149,31 @@ public class DialogFactory {
     }
 
     public static void initPrintWorkOrder(WorkOrder workOrder) {
-        final var SCALE = 1.5;
+        final var SCALE = 1.75; /* To scale the work order form to be readable on preview */
+        final var PREF_HEIGHT = 640; /* Represents the pref. height of the scroll pane */
+        /* Create WorkOrder Form  */
         WorkOrderFormController controller = new WorkOrderFormController(workOrder);
         Parent formPane = FX.view("WorkOrderForm.fxml", controller);
         formPane.getTransforms().add(new Scale(SCALE, SCALE));
         Group group = new Group(formPane);
         ScrollPane scrollPane = new ScrollPane(group);
+        /* Hide the scroll bars */
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setPrefViewportHeight(640);
+        scrollPane.setPrefViewportHeight(PREF_HEIGHT);
+        /* Create aloert */
         Alert alert = new AlertBuilder()
                 .setTitle("Print Work Order")
                 .setHeaderText("Ready to print Work Order #" + workOrder.getId())
                 .setContent(scrollPane)
                 .setPrintWorkOrderBtns()
                 .build();
+        /* Display alert */
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
-            if (e.getButtonData().isDefaultButton()) {
+            if (e.getButtonData().isDefaultButton()) { /* Print the work order */
                 PrinterJob printerJob = PrinterJob.createPrinterJob();
-                if (printerJob != null) {
+                if (printerJob != null) { /* If there is a printer available */
                     if (printerJob.showPrintDialog(App.get().window())) {
                         WorkOrderFormController tempController = new WorkOrderFormController(workOrder);
                         Parent tempForm = FX.view("WorkOrderForm.fxml", tempController);
@@ -197,7 +202,7 @@ public class DialogFactory {
                             n.showInformation();
                         }
                     }
-                } else {
+                } else { /* Otherwise, display error */
                     AlertBuilder a = new AlertBuilder();
                     a.setTitle("Error");
                     a.setHeaderText("No Printer Available");
