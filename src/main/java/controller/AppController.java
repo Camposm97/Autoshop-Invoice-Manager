@@ -34,6 +34,9 @@ import java.io.IOException;
 import java.util.TreeMap;
 import java.util.function.Function;
 
+/**
+ * Provides methods to handle actions on controls in the App view
+ */
 public class AppController implements IShortcuts {
     /* Prefix id for work order tabs */
     private static final String TAB_PREFIX_ID = "tab-wo-";
@@ -88,6 +91,9 @@ public class AppController implements IShortcuts {
         ft.play();
     }
 
+    /**
+     * Removes all shortcuts assigned to this controller
+     */
     public void removeShortcuts() {
         accels().remove(ACCEL_SAVE);
         accels().remove(ACCEL_PRINT);
@@ -138,12 +144,15 @@ public class AppController implements IShortcuts {
         }
     }
 
+    /**
+     * Loads all current work orders from database
+     */
     public void openCurrentWorkOrders() {
         DB.get().workOrders().getCurrOWOs().forEach(this::showWorkOrder);
     }
 
     /**
-     * @brief Closes the tab that is currently selected
+     * Closes the tab that is currently selected
      */
     public void closeCurrentTab() {
         Tab x = tabPane.getSelectionModel().getSelectedItem();
@@ -161,6 +170,10 @@ public class AppController implements IShortcuts {
         root.getStyleClass().add(styleClass);
     }
 
+    /**
+     * Changes theme of the app
+     * @param theme Used to set the new theme
+     */
     public void setTheme(Theme theme) {
         switch (theme) {
             case Light -> root.getStylesheets().remove(FX.loadCSS("dark-mode.css"));
@@ -168,18 +181,34 @@ public class AppController implements IShortcuts {
         }
     }
 
+    /**
+     * @return Returns the current accelerations assigned to the controller
+     */
     public ObservableMap<KeyCombination, Runnable> accels() {
         return root.getScene().getAccelerators();
     }
 
+    /**
+     * Displays the add customer window
+     */
     public void addCustomer() {
         DialogFactory.initAddCustomer();
     }
 
+    /**
+     * Displays the add vehicle window
+     */
     public void addVehicle() {
         DialogFactory.initAddVehicle();
     }
 
+    /**
+     * @brief Displays a new tab to add a work order
+     * Disables the shortcut to create a new work order and its menu item.
+     * This is done so the there can only be one new work order currently edited
+     * to avoid the program from bugs when saving a new work order.
+     * @return WorkOrderWorkspaceController on success, otherwise null
+     */
     public WorkOrderWorkspaceController addWorkOrder() {
         try {
             FXMLLoader loader = FX.load("WorkOrderWorkspace.fxml");
@@ -206,12 +235,21 @@ public class AppController implements IShortcuts {
         return null;
     }
 
+    /**
+     * Displays a new work order with a given customer
+     * @param c Customer to be added to work order
+     */
     @Deprecated
     public void addWorkOrder(@NotNull Customer c) {
         WorkOrderWorkspaceController controller = addWorkOrder();
         controller.loadCustomer(c);
     }
 
+    /**
+     * Displays a new work order with a given customer and vehicle
+     * @param c Customer to be added to work order
+     * @param v Vehicle to be added to work order
+     */
     @Deprecated
     public void addWorkOrder(@NotNull Customer c, Vehicle v) {
         WorkOrderWorkspaceController controller = addWorkOrder();
@@ -219,6 +257,10 @@ public class AppController implements IShortcuts {
         controller.loadVehicle(v);
     }
 
+    /**
+     * Prompts user to save worksheet of customers
+     * @throws Exception
+     */
     public void exportCustomers() throws Exception {
         DialogFactory f = new DialogFactory();
         File file = f.initExport("Export Customers", "customers");
@@ -232,6 +274,10 @@ public class AppController implements IShortcuts {
         }
     }
 
+    /**
+     * Prompts user to save worksheet of vehicles
+     * @throws Exception
+     */
     public void exportVehicles() throws Exception {
         DialogFactory f = new DialogFactory();
         File file = f.initExport("Export Vehicles", "vehicles");
@@ -245,6 +291,10 @@ public class AppController implements IShortcuts {
         }
     }
 
+    /**
+     * Prompts user to save worksheet of auto part suggestions
+     * @throws Exception
+     */
     public void exportAutoPartSuggestions() throws Exception {
         DialogFactory f = new DialogFactory();
         File file = f.initExport("Export Auto Part Suggestions", "auto-part-suggestions.xlsx");
@@ -258,6 +308,10 @@ public class AppController implements IShortcuts {
         }
     }
 
+    /**
+     * Prompts user to save worksheet of work orders
+     * @throws Exception
+     */
     public void exportWorkOrders() throws Exception {
         DialogFactory f = new DialogFactory();
         File file = f.initExport("Export Work Orders", "work-orders.xlsx");
@@ -271,6 +325,11 @@ public class AppController implements IShortcuts {
         }
     }
 
+    /**
+     * Displays a tab of info about user's company such as recent work orders
+     * and completed work orders. Amount of work orders completed this month and year
+     * @throws IOException
+     */
     public void viewMyCompany() throws IOException {
         if (!tabPane.getTabs().contains(tabComp)) {
             tabPane.getTabs().add(tabComp);
@@ -285,6 +344,10 @@ public class AppController implements IShortcuts {
         tabPane.getSelectionModel().select(tabComp);
     }
 
+    /**
+     * Displays a tab of customers stored in database
+     * @throws IOException
+     */
     public void viewCustomers() throws IOException {
         if (!tabPane.getTabs().contains(tabCus)) {
             tabPane.getTabs().add(tabCus);
@@ -299,6 +362,10 @@ public class AppController implements IShortcuts {
         tabPane.getSelectionModel().select(tabCus);
     }
 
+    /**
+     * Displays a tab of work orders stored in database
+     * @throws IOException
+     */
     public void viewWorkOrders() throws IOException {
         if (!tabPane.getTabs().contains(tabWO)) {
             tabPane.getTabs().add(tabWO);
@@ -313,20 +380,33 @@ public class AppController implements IShortcuts {
         tabPane.getSelectionModel().select(tabWO);
     }
 
+    /**
+     * Displays a window of user's preferences that can be customized
+     */
     public void preferences() {
         DialogFactory.initPreferences();
     }
 
+    /**
+     * Displays a window of info about the program
+     */
     public void about() {
         DialogFactory.initAbout();
     }
 
+    /**
+     * Exits the program and saves changes to {Model} and {DB}
+     */
     public void exit() {
         Model.get().save();
         DB.get().close();
         Platform.exit();
     }
 
+    /**
+     * Returns the window of the controller
+     * @return Window of {root}
+     */
     public Window window() {
         return root.getScene().getWindow();
     }

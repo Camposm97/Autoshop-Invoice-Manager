@@ -4,6 +4,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
+/**
+ * For declaration of shortcuts for use throughout the program
+ */
 public interface IShortcuts {
     KeyCodeCombination ACCEL_CLOSE =
             new KeyCodeCombination(KeyCode.W, KeyCodeCombination.SHORTCUT_DOWN);
