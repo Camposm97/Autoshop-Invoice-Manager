@@ -102,17 +102,20 @@ public class WorkOrderTableController implements IOffsets {
         });
         colDateCompleted.setCellValueFactory(c -> c.getValue().dateCompletedProperty());
         colDateCompleted.comparatorProperty().set((s1, s2) -> {
-            if (s1 == null) {
-                return (s2 == null) ? 0 : -1;
-            }
-            if (s2 == null) {
-                return 1;
-            }
+            if (s1 == null) return (s2 == null) ? 0 : -1;
+            if (s2 == null) return 1;
             var d1 = LocalDate.parse(s1, DateTimeFormatter.ofPattern("MM/dd/u"));
             var d2 = LocalDate.parse(s2, DateTimeFormatter.ofPattern("MM/dd/u"));
             return d1.compareTo(d2);
         });
         colInvoiceTotal.setCellValueFactory(c -> c.getValue().billProperty());
+        colInvoiceTotal.comparatorProperty().set((s1, s2) -> {
+            if (s1 == null) return (s2 == null) ? 0 : -1;
+            if (s2 == null) return 1;
+            var d1 = Double.parseDouble(s1.substring(1));
+            var d2 = Double.parseDouble(s2.substring(1));
+            return Double.compare(d1, d2);
+        });
         tv.getItems().setAll(DB.get().workOrders().getAll(50));
         tv.setOnMouseClicked(e -> {
             if (doubleClick.apply(e)) editWorkOrder();
@@ -133,7 +136,7 @@ public class WorkOrderTableController implements IOffsets {
 
     public void editWorkOrder() {
         WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
-        App.get().showWorkOrder(workOrder);
+        if (workOrder != null) App.get().showWorkOrder(workOrder);
     }
 
     public void deleteWorkOrder() {

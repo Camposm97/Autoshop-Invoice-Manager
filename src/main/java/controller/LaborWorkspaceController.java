@@ -1,17 +1,27 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.Model;
+import model.tps.AddLaborTransaction;
+import model.work_order.AutoPart;
 import model.work_order.Labor;
+import model.work_order.WorkOrder;
 
+import java.util.Iterator;
+import java.util.TreeMap;
 import java.util.function.Function;
 
 public class LaborWorkspaceController {
+    private Iterator<AutoPart> items;
+    @FXML
+    GridPane fieldGrid;
     @FXML
     Text lblId;
     @FXML
@@ -60,6 +70,10 @@ public class LaborWorkspaceController {
         });
     }
 
+    public void loadItems(Iterator<AutoPart> items) {
+        this.items = items;
+    }
+
     public void saveLabor(Function<Labor, Void> callback) {
         Labor labor = buildLabor();
         callback.apply(labor);
@@ -84,12 +98,17 @@ public class LaborWorkspaceController {
     public Labor buildLabor() {
         int id = Integer.parseInt(lblId.getText());
         String laborCode = tfLaborCode.getText();
-        String desc = taDesc.getText();
-
+        final StringBuilder desc = new StringBuilder("Installed ");
+        /* If auto-gen checkbox is selected, then generate the labor description */
         if (cbAutoGen.isSelected()) {
-            desc = "AUTO_GENERATE";
-        }
-
+            for (int i = 0; i < vbox.getChildren().size();  i++) {
+                CheckBox cb = (CheckBox) vbox.getChildren().get(i);
+                if (cb.isSelected()) {
+                    desc.append(cb.getText()).append(", ");
+                }
+            }
+            if (!vbox.getChildren().isEmpty()) desc.delete(desc.length()-2, desc.length());
+        } else desc.delete(0,desc.length()).append(taDesc.getText());
         double billedHrs, rate;
         try {
             billedHrs = Double.parseDouble(tfBilledHrs.getText());
@@ -102,13 +121,31 @@ public class LaborWorkspaceController {
             rate = 0.0;
         }
         boolean taxable = cbTaxable.isSelected();
-        Labor labor = new Labor(laborCode, desc, billedHrs, rate, taxable);
+        Labor labor = new Labor(laborCode, desc.toString(), billedHrs, rate, taxable);
         labor.setId(id);
         return labor;
     }
 
+    private VBox vbox;
+
     public void genDesc() {
-        taDesc.setDisable(cbAutoGen.isSelected());
-        taDesc.clear();
+        if (cbAutoGen.isSelected()) {
+            if (vbox == null) {
+                vbox = new VBox(1);
+                items.forEachRemaining(x -> {
+                    CheckBox cb = new CheckBox(x.getDesc());
+                    cb.setSelected(true);
+                    vbox.getChildren().add(cb);
+                });
+            } else vbox.getChildren().forEach(x -> ((CheckBox) x).setSelected(true));
+            final int FIT_HEIGHT = 200;
+            ScrollPane scrollPane = new ScrollPane(vbox);
+            scrollPane.setPrefHeight(FIT_HEIGHT);
+            fieldGrid.add(scrollPane, 1, 1);
+            fieldGrid.getChildren().remove(taDesc);
+        } else {
+            fieldGrid.getChildren().remove(1, 1); /* remove scroll pane */
+            fieldGrid.add(taDesc, 1, 1);
+        }
     }
 }

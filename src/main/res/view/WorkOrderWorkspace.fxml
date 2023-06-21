@@ -28,7 +28,6 @@
                 <VBox maxWidth="-Infinity" prefWidth="150.0" spacing="15.0" stylesheets="@../css/default.css">
                     <children>
                         <Button fx:id="btPrint" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#print" text="Print" />
-                        <Button fx:id="btEmail" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#email" text="Email" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#saveAndClose" text="Save &amp; Close" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#close" text="Cancel &amp; Close" />
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addPart" text="Add Part" />

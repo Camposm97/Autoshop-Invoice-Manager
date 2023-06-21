@@ -38,8 +38,10 @@
 
 .titled-lbl-dark {
     -fx-font-weight: bold;
+    /*-fx-text-fill: lightgray;*/
     -fx-text-fill: lightgray;
-    -fx-background-color: #624aa1;
+    /*-fx-background-color: #624aa1;*/
+    -fx-background-color: #39434B;
 }
 
 .dialog-pane {

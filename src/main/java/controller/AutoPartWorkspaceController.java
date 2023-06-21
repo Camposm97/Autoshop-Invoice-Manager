@@ -47,16 +47,28 @@ public class AutoPartWorkspaceController implements IOffsets {
         });
     }
 
+    /**
+     * Creates AutoPart object and passes to callback function
+     * @param callback Called after AutoPart object is created
+     */
     public void savePart(Function<AutoPart, Void> callback) {
         AutoPart autoPart = buildPart();
         callback.apply(autoPart);
     }
 
+    /**
+     * Updates AutoPart parameters and passes to callback function
+     * @param callback Called after AutoPart object is created
+     */
     public void updatePart(Function<AutoPart, Void> callback) {
         AutoPart newAutoPart = buildPart();
         callback.apply(newAutoPart);
     }
 
+    /**
+     * Sets the control fields with the attributes of given {ap}
+     * @param ap Used to set the control fields with its attributes
+     */
     public void loadPart(AutoPart ap) {
         lblId.setText(String.valueOf(ap.getId()));
         tfPartNumber.setText(ap.getName());
@@ -67,6 +79,10 @@ public class AutoPartWorkspaceController implements IOffsets {
         cbPartTaxable.setSelected(ap.isTaxable());
     }
 
+    /**
+     * Creates AutoPart object and returns it
+     * @return AutoPart object to be returned
+     */
     public AutoPart buildPart() {
         int id = Integer.parseInt(lblId.getText());
         String partNumber = tfPartNumber.getText();
@@ -95,32 +111,39 @@ public class AutoPartWorkspaceController implements IOffsets {
         return autoPart;
     }
 
+    /**
+     * Generates ID for AutoPart object (created later) and displays it on the {tfPartNumber} field.
+     * Set the {tfPartNumber} field with generated ID.
+     */
     public void genID() {
-        final String REGEX = "\\s+";
+        final String REGEX = "\\s+"; /* Used to split {s} by spaces */
         String s = tfPartDesc.getText();
-        String[] tokens = s.trim().split(REGEX);
-        var strId = new StringBuilder();
-        for (int i = 0; i < tokens.length; i++) {
-            String x = tokens[i].toUpperCase();
+        String[] tokens = s.trim().split(REGEX); /* Split {s} by {REGEX} */
+        var strId = new StringBuilder(); /* Used to build the ID of the auto part */
+        for (int i = 0; i < tokens.length; i++) { /* Iterate each string in {tokens} */
+            String x = tokens[i].toUpperCase(); /* Assign tokens[i] to {x} */
             var len = x.length();
-            try {
-                var n = Integer.parseInt(x);
+            try { /* Try to parse {x} to Integer */
+                var n = Integer.parseInt(x); /**/
                 strId.append(n);
             } catch (NumberFormatException e) {
+                /* Otherwise, analyze {x} to generate the uato part ID */
                 char[] arr = x.toCharArray();
-                if (len <= 2) {
+                if (len <= 2) { /* If the length of {x} <= 2, then use {x} as the ID */
                     strId.append(x);
                 } else if (len == 3) {
-                    if (x.contains("A/C"))
+                    if (x.contains("A/C")) /* Remove '/' in "A/C" */
                         strId.append("AC");
-                    else
+                    else /* Otherwise, append {x} to {stdId} */
                         strId.append(x);
                 } else if (len > 3 && len <= 5) {
+                    /* Append first 3 chars, then append last char of {x} */
                     strId.append(arr[0]);
                     strId.append(arr[1]);
                     strId.append(arr[2]);
                     strId.append(arr[len-1]);
                 } else {
+                    /* Append first 2 chars and last 2 chars of {x} */
                     strId.append(arr[0]);
                     strId.append(arr[1]);
                     strId.append(arr[len-2]);

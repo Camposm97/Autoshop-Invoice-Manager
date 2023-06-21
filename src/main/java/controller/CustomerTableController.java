@@ -64,9 +64,7 @@ public class CustomerTableController implements IOffsets {
     }
 
     /**
-     * Write down something here
-     * @brief Initializes listeners for input fields
-     * Hello there
+     * Initializes listeners for customer input fields
      */
     public void initCustomerInputFields() {
         tfFirstName.textProperty().addListener((o, oldValue, newValue) -> handleSearchCustomers());
@@ -80,6 +78,9 @@ public class CustomerTableController implements IOffsets {
         tfZip.textProperty().addListener((o, oldValue, newValue) -> handleSearchCustomers());
     }
 
+    /**
+     * Initializes customer table columns and listener(s)
+     */
     public void initCustomerTable() {
         customerSelectedListener = (o, m, c) -> {
             if (root.getChildren().contains(tabPane)) {
@@ -186,6 +187,9 @@ public class CustomerTableController implements IOffsets {
         tvCustomer.getSelectionModel().selectedItemProperty().addListener(customerSelectedListener);
     }
 
+    /**
+     * Initializes vehicle table columns and listeners
+     */
     public void initVehicleTable() {
         TableCellFactory factory = new TableCellFactory();
         colVin.setCellValueFactory(c -> c.getValue().vinProperty());

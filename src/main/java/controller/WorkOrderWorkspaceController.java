@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.scene.text.Text;
 import model.Model;
 import model.Observable;
 import model.State;
@@ -27,6 +28,7 @@ import org.controlsfx.control.textfield.TextFields;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.awt.Dialog;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -494,43 +496,42 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
 
     public void addLabor() {
         Function<Labor, Void> callback = x -> {
-            if (x.getDesc().equals("AUTO_GENERATE")) {
-                Iterator<AutoPart> iterator = workOrder.autoPartIterator();
-                StringBuilder sb = new StringBuilder("Installed ");
-                while (iterator.hasNext()) {
-                    sb.append(iterator.next().getDesc());
-                    if (iterator.hasNext())
-                        sb.append(", ");
-                }
-                x.setDesc(sb.toString());
-            }
+//            if (x.getDesc().equals("AUTO_GENERATE")) {
+//                Iterator<AutoPart> iterator = workOrder.autoPartIterator();
+//                StringBuilder sb = new StringBuilder("Installed ");
+//                while (iterator.hasNext()) {
+//                    sb.append(iterator.next().getDesc());
+//                    if (iterator.hasNext())
+//                        sb.append(", ");
+//                }
+//                x.setDesc(sb.toString());
+//            }
             AddLaborTransaction transaction = new AddLaborTransaction(workOrder, x);
             tpsProducts.addTransaction(transaction);
             return null;
         };
-        DialogFactory.initAddLabor(callback);
-        updateTotals();
+        DialogFactory.initAddLabor(workOrder.autoPartIterator(), callback);
     }
 
     public void editLabor() {
         Labor labor = tvLabor.getSelectionModel().getSelectedItem();
         if (labor != null) {
             Function<Labor, Void> callback = x -> {
-                if (x.getDesc().equals("AUTO_GENERATE")) {
-                    Iterator<AutoPart> iterator = workOrder.autoPartIterator();
-                    StringBuilder sb = new StringBuilder("Installed ");
-                    while (iterator.hasNext()) {
-                        sb.append(iterator.next().getDesc());
-                        if (iterator.hasNext())
-                            sb.append(", ");
-                    }
-                    x.setDesc(sb.toString());
-                }
+//                if (x.getDesc().equals("AUTO_GENERATE")) {
+//                    Iterator<AutoPart> iterator = workOrder.autoPartIterator();
+//                    StringBuilder sb = new StringBuilder("Installed ");
+//                    while (iterator.hasNext()) {
+//                        sb.append(iterator.next().getDesc());
+//                        if (iterator.hasNext())
+//                            sb.append(", ");
+//                    }
+//                    x.setDesc(sb.toString());
+//                }
                 UpdateLaborTransaction transaction = new UpdateLaborTransaction(workOrder, labor, x);
                 tpsProducts.addTransaction(transaction);
                 return null;
             };
-            DialogFactory.initEditLabor(callback, labor);
+            DialogFactory.initEditLabor(workOrder.autoPartIterator(), callback, labor);
             updateTotals();
         }
     }
