@@ -136,6 +136,10 @@ public class WorkOrderFormController {
         lblAmountDue.setText(g.apply(workOrder.balance()));
     }
 
+    /**
+     * Formats the work order id to a presentable format
+     * @return Work order id prepended with 'Work Order # ' followed by the id as ##### (e.g. 00001 where the id is 1)
+     */
     public String formatWorkOrderId() {
         String s = workOrder.getId().toString();
         if (workOrder.isNew()) s = DB.get().workOrders().getNextId().toString();

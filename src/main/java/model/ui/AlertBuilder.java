@@ -65,7 +65,11 @@ public class AlertBuilder {
         return this;
     }
 
-    public AlertBuilder setYesNoBtns() {
+    /**
+     * @brief Replaces the default
+     * @return Instance of the caller's object
+     */
+    public AlertBuilder setConfirmBtns() {
         ButtonType bt1 = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
         ButtonType bt2 = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
         btList = new LinkedList<>();

@@ -42,7 +42,7 @@
         </rowConstraints>
          <children>
             <Label text="Part Number" />
-            <TextField fx:id="tfPartNumber" disable="true" GridPane.columnIndex="1" />
+            <TextField fx:id="tfPartNumber"  GridPane.columnIndex="1" />
             <Label text="Part Description" GridPane.rowIndex="1" />
             <TextField fx:id="tfPartDesc" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Retail Price" GridPane.rowIndex="2" />

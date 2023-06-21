@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.TreeMap;
-import java.util.function.Function;
 
 public class AppController implements IShortcuts {
     /* Prefix id for work order tabs */
@@ -210,8 +209,9 @@ public class AppController implements IShortcuts {
     }
 
     public void exportCustomers() throws Exception {
+        final String FILE = "customers.xlsx";
         DialogFactory f = new DialogFactory();
-        File file = f.initExport("Export Customers", "customers");
+        File file = f.initExport("Export Customers", FILE);
         if (file != null) {
             DB.get().customers().export(file.getPath());
             Notifications n = Notifications.create().title("Export Customers")
@@ -223,8 +223,9 @@ public class AppController implements IShortcuts {
     }
 
     public void exportVehicles() throws Exception {
+        final String FILE = "vehicles.xlsx";
         DialogFactory f = new DialogFactory();
-        File file = f.initExport("Export Vehicles", "vehicles");
+        File file = f.initExport("Export Vehicles",  FILE);
         if (file != null) {
             DB.get().vehicles().export(file.getPath());
             Notifications n = Notifications.create().title("Export Vehicles")
@@ -236,8 +237,9 @@ public class AppController implements IShortcuts {
     }
 
     public void exportAutoPartSuggestions() throws Exception {
+        final String FILE = "auto-part-suggestions.xlsx";
         DialogFactory f = new DialogFactory();
-        File file = f.initExport("Export Auto Part Suggestions", "auto-part-suggestions.xlsx");
+        File file = f.initExport("Export Auto Part Suggestions", FILE);
         if (file != null) {
             DB.get().autoParts().export(file.getPath());
             Notifications n = Notifications.create().title("Export Auto Parts")
@@ -249,8 +251,9 @@ public class AppController implements IShortcuts {
     }
 
     public void exportWorkOrders() throws Exception {
+        final String FILE = "work-orders.xlsx";
         DialogFactory f = new DialogFactory();
-        File file = f.initExport("Export Work Orders", "work-orders.xlsx");
+        File file = f.initExport("Export Work Orders", FILE);
         if (file != null) {
             DB.get().workOrders().export(file.getPath());
             Notifications n = Notifications.create().title("Export Work Orders")

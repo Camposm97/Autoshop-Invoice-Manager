@@ -203,7 +203,7 @@ public class DialogFactory {
             builder.setAlertType(Alert.AlertType.CONFIRMATION)
                     .setHeaderText("Are you sure you want to delete work order #" + x.getId() + "?")
                     .setContentText(x.toFormattedString())
-                    .setYesNoBtns();
+                    .setConfirmBtns();
             Alert alert = builder.build();
             Optional<ButtonType> rs = alert.showAndWait();
             rs.ifPresent(e -> {
@@ -213,7 +213,6 @@ public class DialogFactory {
                 }
             });
         }
-
     }
 
     public static void initPreferences() {

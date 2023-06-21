@@ -3,8 +3,6 @@ package controller;
 import app.App;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
@@ -18,7 +16,6 @@ import model.ui.FX;
 import model.ui.IOffsets;
 import model.ui.TableCellFactory;
 import model.work_order.Vehicle;
-import model.work_order.WorkOrder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -399,7 +396,7 @@ public class CustomerTableController implements IOffsets {
                 .setTitle("Delete Customer")
                 .setHeaderText("Are you sure you want to delete this customer?")
                 .setContentText(cus.toFormattedString() + "\n" + "Deleting a customer will delete all associated vehicles.")
-                .setYesNoBtns();
+                .setConfirmBtns();
         Alert alert = builder.build();
         Optional<ButtonType> rs = alert.showAndWait();
         rs.ifPresent(e -> {
@@ -420,7 +417,7 @@ public class CustomerTableController implements IOffsets {
     public void deleteSelectedVehicle() {
         Vehicle v = getSelectedVehicle();
         AlertBuilder builder = new AlertBuilder();
-        builder.setAlertType(Alert.AlertType.CONFIRMATION).setTitle("Delete Vehicle").setHeaderText("Are you sure you want to delete this vehicle?").setContentText(v.toString()).setYesNoBtns();
+        builder.setAlertType(Alert.AlertType.CONFIRMATION).setTitle("Delete Vehicle").setHeaderText("Are you sure you want to delete this vehicle?").setContentText(v.toString()).setConfirmBtns();
         Optional<ButtonType> rs = builder.build().showAndWait();
         rs.ifPresent(e -> {
             if (!e.getButtonData().isCancelButton()) {
