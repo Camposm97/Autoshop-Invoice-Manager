@@ -26,7 +26,7 @@
       <HBox alignment="CENTER_LEFT" spacing="4.0" GridPane.columnSpan="2147483647">
          <children>
             <Label text="Select Year" />
-            <ComboBox fx:id="cbYear" onAction="#fetchIncomeData" prefWidth="150.0" promptText="Year" />
+            <ComboBox fx:id="cbYear" onAction="#cbYearCallback" prefWidth="150.0" promptText="Year" />
          </children>
          <GridPane.margin>
             <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />

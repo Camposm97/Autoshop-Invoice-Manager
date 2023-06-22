@@ -27,10 +27,10 @@ public class GrossIncomeController {
         ObservableList<Integer> years = DB.get().workOrders().getYearOptions();
         cbYear.setItems(years);
         cbYear.setValue(LocalDate.now().getYear());
-        fetchIncomeData();
+        cbYearCallback();
     }
 
-    public void fetchIncomeData() {
+    public void cbYearCallback() {
         /* Fetch the chosen year and update {bcIncome} */
         int chosenYear = cbYear.getValue();
         /* Set local dates to cover whole year for filtering work orders */

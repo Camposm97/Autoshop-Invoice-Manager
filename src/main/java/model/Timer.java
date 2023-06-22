@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ConcurrentModificationException;
 import java.util.TimerTask;
 
 public class Timer {
@@ -12,6 +11,12 @@ public class Timer {
     public Timer() {
         this.timer = new java.util.Timer();
         this.isRunning = false;
+    }
+
+    public Timer(Runnable callback) {
+        this.timer = new java.util.Timer();
+        this.isRunning = false;
+        this.callback = callback;
     }
 
     public void setCallback(Runnable callback) {
