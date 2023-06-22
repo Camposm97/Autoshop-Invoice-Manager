@@ -2,13 +2,14 @@ package controller;
 
 import app.App;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import model.Model;
 import model.Observable;
 import model.database.DB;
@@ -16,7 +17,6 @@ import model.ui.FX;
 import model.ui.IOffsets;
 import model.work_order.WorkOrder;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
@@ -28,9 +28,11 @@ import java.util.function.Function;
  */
 public class MyCompanyController implements Observable, IOffsets {
     @FXML
+    TitledPane tpUncompletedWorkOrders;
+    @FXML
     Label lblWorkOrderYearCount, lblWorkOrderMonthCount;
     @FXML
-    Label lblYear, lblMonth, lblIncompletedWorkOrderCount;
+    Label lblYear, lblMonth;
     @FXML
     TableView<WorkOrder> tvRecentWorkOrders;
     @FXML
@@ -56,11 +58,15 @@ public class MyCompanyController implements Observable, IOffsets {
     @FXML
     TableColumn<WorkOrder, String> colIncompletedInvoiceTotal;
     @FXML
+    StackPane spIncome;
+
+    @FXML
     public void initialize() {
         Model.get().recentWorkOrders().addObserver(this);
         Function<MouseEvent, Boolean> doubleClick = x -> x.getClickCount() == 2 && x.getButton().equals(MouseButton.PRIMARY);
         fetchCompletedWorkOrderStats();
 
+        /* Initialize recent work order table */
         colRecentId.setCellValueFactory(c -> c.getValue().idProperty());
         colRecentCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
         colRecentCompany.setCellValueFactory(c -> c.getValue().getCustomer().companyProperty());
@@ -73,6 +79,7 @@ public class MyCompanyController implements Observable, IOffsets {
         });
         fetchRecentWorkOrders();
 
+        /* Initialize incomplete work order table */
         colIncompletedId.setCellValueFactory(c -> c.getValue().idProperty());
         colIncompletedCustomer.setCellValueFactory(c -> c.getValue().getCustomer().nameProperty());
         colIncompletedCompany.setCellValueFactory(c -> c.getValue().getCustomer().companyProperty());
@@ -84,6 +91,10 @@ public class MyCompanyController implements Observable, IOffsets {
             if (doubleClick.apply(e)) editWorkOrder(tvIncompletedWorkOrders);
         });
         fetchIncompletedWorkOrders();
+
+        /* Load gross income overview of work orders */
+        Parent incomeUI = FX.view("GrossIncome.fxml");
+        spIncome.getChildren().add(incomeUI);
     }
 
     public void editWorkOrder(TableView<WorkOrder> tv) {
@@ -93,12 +104,12 @@ public class MyCompanyController implements Observable, IOffsets {
 
     @Override
     public void update() {
-        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecents());
+        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecentWorkOrderEdits());
         FX.autoResizeColumns(tvRecentWorkOrders, WO_OFFSET);
     }
 
     public void fetchRecentWorkOrders() {
-        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecents());
+        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecentWorkOrderEdits());
         FX.autoResizeColumns(tvRecentWorkOrders, WO_OFFSET);
     }
 
@@ -114,11 +125,11 @@ public class MyCompanyController implements Observable, IOffsets {
     }
 
     public void fetchIncompletedWorkOrders() {
-        List<WorkOrder> incompletedWorkOrders = DB.get().workOrders().getIncompletedWorkOrders();
-        int incompletedWorkOrderCount = incompletedWorkOrders.size();
-
-        lblIncompletedWorkOrderCount.setText(String.valueOf(incompletedWorkOrderCount));
-        tvIncompletedWorkOrders.getItems().setAll(incompletedWorkOrders);
+        List<WorkOrder> uncompletedWorkOrders = DB.get().workOrders().getUncompletedWorkOrders();
+        int uncompletedWorkOrdersCount = uncompletedWorkOrders.size();
+        final String TITLE = "Uncompleted Work Orders (" + uncompletedWorkOrdersCount + ")";
+        tpUncompletedWorkOrders.setText(TITLE);
+        tvIncompletedWorkOrders.getItems().setAll(uncompletedWorkOrders);
 
         FX.autoResizeColumns(tvIncompletedWorkOrders, WO_OFFSET);
     }

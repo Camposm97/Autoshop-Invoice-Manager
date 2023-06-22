@@ -3,8 +3,6 @@ package controller;
 import app.App;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -16,11 +14,9 @@ import model.ui.*;
 import model.work_order.WorkOrder;
 import org.controlsfx.control.textfield.TextFields;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import java.util.function.Function;
 
 public class WorkOrderTableController implements IOffsets {
@@ -79,9 +75,9 @@ public class WorkOrderTableController implements IOffsets {
         TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
 
         cbDateFilter.setItems(FXCollections.observableArrayList(DateFilter.values()));
-        cbDateFilter.setValue(DateFilter.None);
+        cbDateFilter.setValue(DateFilter.NONE);
         cbDateFilter.setOnAction(e -> {
-            if (cbDateFilter.getValue().equals(DateFilter.Between))
+            if (cbDateFilter.getValue().equals(DateFilter.BETWEEN))
                 dpAfter.setDisable(false);
             else
                 dpAfter.setDisable(true);

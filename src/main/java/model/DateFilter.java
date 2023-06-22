@@ -1,5 +1,5 @@
 package model;
 
 public enum DateFilter {
-    None, Exactly, Before, After, Between
+    NONE, EXACTLY, BEFORE, AFTER, BETWEEN
 }

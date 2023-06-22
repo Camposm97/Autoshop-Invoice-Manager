@@ -2,8 +2,8 @@ package model.database;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Model;
 import model.DateFilter;
+import model.Model;
 import model.customer.Address;
 import model.customer.Customer;
 import model.work_order.*;
@@ -13,16 +13,34 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class WorkOrderStore {
     private Connection c;
 
     public WorkOrderStore(@NotNull Connection c) {
         this.c = c;
+    }
+
+    public ObservableList<Integer> getYearOptions() {
+        List<Integer> years = new LinkedList<>();
+        try {
+            ResultSet rs = c.createStatement().executeQuery("""
+                    select distinct strftime('%Y', datetime(date_completed/1000, 'unixepoch', 'localtime')) as year 
+                    from work_order where date_completed is not null order by year desc
+                    """);
+            while (rs.next()) {
+                years.add(rs.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return FXCollections.observableList(years);
     }
 
     public int getMaxId() throws SQLException {
@@ -131,7 +149,7 @@ public class WorkOrderStore {
         return workOrder;
     }
 
-    public ObservableList getByCustomerId(int id) {
+    public ObservableList<WorkOrder> getByCustomerId(int id) {
         List<WorkOrder> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where customer_id = " + id);
@@ -228,7 +246,7 @@ public class WorkOrderStore {
         return list.size();
     }
 
-    public List<WorkOrder> getIncompletedWorkOrders() {
+    public List<WorkOrder> getUncompletedWorkOrders() {
         List<WorkOrder> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where date_completed is null");
@@ -242,7 +260,7 @@ public class WorkOrderStore {
         return list;
     }
 
-    public List<WorkOrder> getRecents() {
+    public List<WorkOrder> getRecentWorkOrderEdits() {
         List<WorkOrder> list = new LinkedList<>();
         Model.get().recentWorkOrders().iterator().forEachRemaining(x -> {
             WorkOrder workOrder = getById(x);
@@ -285,6 +303,23 @@ public class WorkOrderStore {
         return FXCollections.observableList(list);
     }
 
+    /**
+     * Queries work order table to fetch work orders passed on given parameters
+     * @param id ID of the work order. If greater than 0, the program will query the database for the work order that
+     *           contains the ID, otherwise return empty list
+     * @param s1 First name of customer
+     * @param s2 Last name of customer
+     * @param s3 Name of company
+     * @param s4 Vehicle year
+     * @param s5 Vehicle make
+     * @param s6 Vehicle model
+     * @param dateFilter Type of date filter
+     * @param date1 Required if date filter is not {None}
+     * @param date2 May be null, used for when date filter type is {Between}
+     * @return List of work order(s), otherwise empty list if there were no matches
+     * @throws SQLException
+     * @see DateFilter
+     */
     public List<WorkOrder> filter(int id, String s1, String s2, String s3, String s4, String s5, String s6, DateFilter dateFilter, LocalDate date1, LocalDate date2) throws SQLException {
         List<WorkOrder> list = new LinkedList<>();
         if (id > 0) {
@@ -326,9 +361,9 @@ public class WorkOrderStore {
             sb.append("vehicle_model like \"" + s6 + "%\" ");
         }
         /* check for date values */
-        if (dateFilter != DateFilter.None && date1 != null) {
+        if (dateFilter != DateFilter.NONE && date1 != null) {
             var x= Date.valueOf(date1).getTime();
-            if (dateFilter == DateFilter.Between && date2 != null) { /* between filter */
+            if (dateFilter == DateFilter.BETWEEN && date2 != null) { /* between filter */
                 if (stmtUpdated) sb.append(" and ");
                 stmtUpdated = true;
                 var y = Date.valueOf(date2).getTime();
@@ -337,8 +372,8 @@ public class WorkOrderStore {
                 if (stmtUpdated) sb.append(" and ");
                 stmtUpdated = true;
                 switch (dateFilter) {
-                    case Before -> sb.append("date_created <= " + x);
-                    case After -> sb.append("date_created >= " + x);
+                    case BEFORE -> sb.append("date_created <= " + x);
+                    case AFTER -> sb.append("date_created >= " + x);
                     default -> sb.append(String.format("date_created >= %s and date_created <= %s", x, x + (1000*60*60*24)));
                 }
             }
