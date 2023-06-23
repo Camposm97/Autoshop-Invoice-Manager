@@ -181,6 +181,16 @@ public class Vehicle implements Comparable<Vehicle> {
         return getYear() + " " + getMake() + " " + getModel();
     }
 
+    public String toPrettyString() {
+        return String.format("""
+                Year: %s
+                Make: %s
+                Model: %s
+                Engine: %s
+                Transmission: %s
+                """, getYear(), getMake(), getModel(), getEngine(), getTransmission());
+    }
+
     @Override
     public int compareTo(@NotNull Vehicle o) {
         return vin.compareTo(((Vehicle) o).getVin());

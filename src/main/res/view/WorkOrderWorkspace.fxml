@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -21,7 +22,7 @@
 <?import org.controlsfx.control.SearchableComboBox?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderWorkspaceController">
+<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderWorkspaceController">
     <children>
         <SplitPane dividerPositions="0.135">
             <items>
@@ -49,7 +50,7 @@
                 </VBox>
                 <TabPane fx:id="tabPane" stylesheets="@../css/default.css" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                        <Tab text="Customer / Vehicle Info">
+                        <Tab fx:id="tabCustomerAndVehicle" text="Customer / Vehicle Info">
                             <content>
                                 <GridPane vgap="5.0">
                                     <columnConstraints>
@@ -168,7 +169,10 @@
                                             </rowConstraints>
                                             <children>
                                                 <Label text="License Plate" GridPane.columnIndex="1" />
-                                                <TextField fx:id="tfVin" GridPane.rowIndex="1" />
+                                                <TextField fx:id="tfVin" onAction="#fetchVehicleData" promptText="Press 'Enter' to decode VIN" GridPane.rowIndex="1">
+                                       <tooltip>
+                                          <Tooltip text="WARNING: VIN Decoder is not 100% accurate." />
+                                       </tooltip></TextField>
                                                 <Label text="VIN" />
                                                 <TextField fx:id="tfLicensePlate" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                 <Label text="Color" GridPane.columnIndex="2" />

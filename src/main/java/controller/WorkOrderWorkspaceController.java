@@ -8,19 +8,18 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
-import javafx.scene.input.*;
-import javafx.scene.text.Text;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import model.Model;
 import model.Observable;
 import model.State;
+import model.VehicleDataFetcher;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.tps.*;
-import model.ui.ChangeListenerFactory;
-import model.ui.DialogFactory;
-import model.ui.FX;
-import model.ui.IOffsets;
+import model.ui.*;
 import model.work_order.*;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.SearchableComboBox;
@@ -28,13 +27,11 @@ import org.controlsfx.control.textfield.TextFields;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.awt.Dialog;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
@@ -590,6 +587,48 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
         tfTotal.setText(f.apply(workOrder.bill()));
         tfTotalPayment.setText(f.apply(workOrder.totalPayments()));
         tfInvoiceBalance.setText(f.apply(workOrder.balance()));
+    }
+
+    public void fetchVehicleData() {
+        String vin = tfVin.getText();
+        try {
+            VehicleDataFetcher fetcher = new VehicleDataFetcher(vin);
+            if (fetcher.isFetchSuccess()) {
+                Vehicle v = fetcher.get();
+                AlertBuilder builder = new AlertBuilder();
+                builder.setAlertType(Alert.AlertType.CONFIRMATION)
+                        .setTitle("Vehicle Confirmation")
+                        .setHeaderText("Vehicle Data Retrieved")
+                        .setContentText("The program has successfully retrieved the vehicle data. Please review the details below to confirm if it matches your vehicle.\n\n" + v.toPrettyString())
+                        .setConfirmBtns()
+                        .build().showAndWait().ifPresent(e -> {
+                            if (e.getButtonData().isDefaultButton())
+                                loadVehicle(v);
+                        });
+            } else {
+                Vehicle v = fetcher.get();
+                AlertBuilder builder = new AlertBuilder();
+                builder.setAlertType(Alert.AlertType.WARNING)
+                        .setTitle("Warning")
+                        .setHeaderText("Vehicle data fetched may not be 100% accurate (Error Code(s): " + fetcher.getErrorCodes() + ")")
+                        .setContentText(v.toPrettyString() + "\n\n" + fetcher.getErrorText())
+                        .setConfirmBtns()
+                        .build().showAndWait().ifPresent(e -> {
+                            if (e.getButtonData().isDefaultButton())
+                                loadVehicle(v);
+                        });
+
+            }
+        } catch (IOException e) {
+            AlertBuilder builder = new AlertBuilder();
+            builder.setAlertType(Alert.AlertType.ERROR);
+            builder.setTitle("Connection Error")
+                    .setHeaderText("Failed to Connect to API")
+                    .setContentText("""
+                            Sorry, the program was unable to establish a connection to the API site. Please check your internet connection and try again later.
+                            """)
+                    .build().showAndWait();
+        }
     }
 
     @Override
