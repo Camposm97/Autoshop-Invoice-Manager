@@ -11,11 +11,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
 
-<Accordion fx:id="rootAccor" stylesheets="@../css/default.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MyCompanyController">
+<Accordion fx:id="rootAccor" stylesheets="@../css/default.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MyCompanyController">
   <panes>
-      <TitledPane styleClass="title_label" text="Recent Work Order Edits and Modifications">
+      <TitledPane fx:id="tpRecentWorkOrders" styleClass="title_label" text="Recent Work Order Edits and Modifications">
          <content>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>

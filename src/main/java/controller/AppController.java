@@ -1,7 +1,5 @@
 package controller;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.Interpolator;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableMap;
@@ -16,7 +14,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javafx.util.Duration;
 import model.Model;
 import model.customer.Customer;
 import model.database.DB;
@@ -81,13 +78,6 @@ public class AppController implements IShortcuts {
         tabPane.getTabs().addListener((ListChangeListener<? super Tab>) change -> {
             System.out.println("tab-ids: " + map.keySet()); /* debug */
         });
-        final int D = 3000;
-        FadeTransition ft = new FadeTransition(Duration.millis(D), root);
-        ft.setInterpolator(Interpolator.EASE_IN);
-        ft.setFromValue(0.3);
-        ft.setToValue(1.0);
-        ft.setCycleCount(1);
-        ft.play();
     }
 
     /**

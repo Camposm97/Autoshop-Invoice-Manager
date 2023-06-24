@@ -28,7 +28,11 @@ import java.util.function.Function;
  */
 public class MyCompanyController implements Observable, IOffsets {
     @FXML
+    TitledPane tpRecentWorkOrders;
+    @FXML
     TitledPane tpUncompletedWorkOrders;
+    @FXML
+    TitledPane tpIncome;
     @FXML
     Label lblWorkOrderYearCount, lblWorkOrderMonthCount;
     @FXML
@@ -92,10 +96,19 @@ public class MyCompanyController implements Observable, IOffsets {
         });
         fetchIncompletedWorkOrders();
 
-        /* Load gross income overview of work orders */
-        Parent incomeUI = FX.view("GrossIncome.fxml");
-        spIncome.getChildren().add(incomeUI);
+//        TODO: Doesn't work for some reason
+//        /* Load gross income overview of work orders */
+//        tpIncome.expandedProperty().addListener((o, x, y) -> {
+//            if (y) {
+//                if (incomeUI == null) {
+//                    incomeUI = FX.view("GrossIncome.fxml");
+//                    spIncome.getChildren().add(incomeUI);
+//                }
+//            }
+//        });
     }
+
+    Parent incomeUI;
 
     public void editWorkOrder(TableView<WorkOrder> tv) {
         WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
