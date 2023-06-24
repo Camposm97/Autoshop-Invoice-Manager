@@ -331,12 +331,14 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
 //        App.get().accels().remove(ACCEL_UNDO);
 //        App.get().accels().remove(ACCEL_REDO);
         App.get().closeCurrentTab();
-        /* Remove work order id from {currOWOs} */
-        if (!workOrder.isNew()) {
-            Model.get().currOWOs().remove(workOrder.getId());
-        } else {
-            App.get().setDisableMIWO(false);
-        }
+        /* Remove work order id from {currOWOs} if not new, otherwise enable menu item  */
+
+        App.get().setDisableMIWO(false);
+        Model.get().currOWOs().remove(workOrder.getId());
+        /*
+            Since this function is called after {save} the current work order is given an id and thus,
+            checking if the work order is new is never true.
+         */
     }
 
     /**
@@ -373,6 +375,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
         this.workOrder = workOrder;
         loadCustomer(workOrder.getCustomer());
         loadVehicle(workOrder.getVehicle());
+        tfTaxRate.setText(workOrder.getTaxRatePrettyString());
         tfWorkOrderId.setText(workOrder.getId().toString());
         if (workOrder.isCompleted()) {
             dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
@@ -398,6 +401,11 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
         Vehicle vehicle = buildVehicle();
         workOrder.setCustomer(customer);
         workOrder.setVehicle(vehicle);
+
+        String strTaxRate = tfTaxRate.getText();
+        strTaxRate = strTaxRate.substring(0, strTaxRate.length()-1);
+        double taxRate = (Double.parseDouble(strTaxRate) / 100.0);
+        workOrder.setTaxRate(taxRate);
         LocalDate dateCompleted = dateCompletedPicker.getValue();
         if (dateCompleted != null) {
             workOrder.setDateCompleted(Date.valueOf(dateCompleted));
@@ -634,6 +642,8 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
     @Override
     public void update() {
         updateTotals();
-        tfTaxRate.setText(Model.get().preferences().getTaxRatePrettyString());
+        if (workOrder != null && workOrder.isNew()) {
+            tfTaxRate.setText(Model.get().preferences().getTaxRatePrettyString());
+        }
     }
 }

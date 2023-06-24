@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -8,10 +9,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
-<GridPane hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="5.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PreferencesController">
+<GridPane hgap="4.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="4.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PreferencesController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+      <ColumnConstraints />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -36,21 +38,25 @@
       <Label text="Phone" GridPane.rowIndex="5" />
       <Label text="Repair Shop ID" GridPane.rowIndex="6" />
       <Label text="Special Title" GridPane.rowIndex="7" />
-      <Label text="Default Labor Rate" GridPane.rowIndex="8" />
+      <Label text="Default Labor Rate ($)" GridPane.rowIndex="8" />
       <Label text="Default Tax Rate" GridPane.rowIndex="9" />
       <Label text="GUI Scale" GridPane.rowIndex="10" />
       <Label text="Theme" GridPane.rowIndex="11" />
-      <TextField fx:id="tfCompany" GridPane.columnIndex="1" />
-      <TextField fx:id="tfAddress" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <TextField fx:id="tfCity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <SearchableComboBox fx:id="cbState" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <TextField fx:id="tfZip" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <fx:include fx:id="tfPhone" source="PhoneField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      <TextField fx:id="tfRepairShopId" promptText="ID" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-       <fx:include fx:id="tfLaborRate" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <TextField fx:id="tfCompany" GridPane.columnIndex="1" GridPane.columnSpan="2" />
+      <TextField fx:id="tfAddress" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+      <TextField fx:id="tfCity" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+      <SearchableComboBox fx:id="cbState" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+      <TextField fx:id="tfZip" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+      <fx:include fx:id="tfPhone" source="PhoneField.fxml" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5" />
+      <TextField fx:id="tfRepairShopId" promptText="ID" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6" />
+      <TextField fx:id="tfTitle" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+       <fx:include fx:id="tfLaborRate" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="8" />
       <fx:include fx:id="tfTaxRate" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-      <ComboBox fx:id="cbScale" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-      <TextField fx:id="tfTitle" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-      <ComboBox fx:id="cbTheme" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+      <ComboBox fx:id="cbScale" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="10" />
+      <ComboBox fx:id="cbTheme" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="11" />
+      <Label fx:id="lblTaxPercent" maxWidth="-Infinity" prefWidth="100.0" text="\%" GridPane.columnIndex="2" GridPane.rowIndex="9" />
    </children>
+   <padding>
+      <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+   </padding>
 </GridPane>

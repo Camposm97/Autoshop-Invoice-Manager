@@ -2,7 +2,7 @@ package model.work_order;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public abstract class Product implements Billable {
+public abstract class Product implements BillableItem {
     private int id;
     private String name;
     private String desc;

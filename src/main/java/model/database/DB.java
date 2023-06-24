@@ -132,7 +132,8 @@ public class DB {
                 vehicle_engine varchar(16),
                 vehicle_transmission varchar(16),
                 vehicle_mileage_in varchar(10),
-                vehicle_mileage_out varchar(10));
+                vehicle_mileage_out varchar(10),
+                tax_rate real);
                 """;
         String s5 = """
                 create table if not exists work_order_item (

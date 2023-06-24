@@ -2,6 +2,7 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.Model;
 import model.State;
@@ -19,6 +20,8 @@ public class PreferencesController {
     ComboBox<GUIScale> cbScale;
     @FXML
     ComboBox<Theme> cbTheme;
+    @FXML
+    Label lblTaxPercent;
 
 
     @FXML
@@ -50,8 +53,12 @@ public class PreferencesController {
         tfTaxRate.textProperty().addListener((o, oldValue, newValue) -> {
             try {
                 Model.get().preferences().setTaxRate(Double.parseDouble(newValue));
-            } catch (NumberFormatException e) {}
+                lblTaxPercent.setText(Double.parseDouble(newValue) * 100 + " %");
+            } catch (NumberFormatException e) {
+                lblTaxPercent.setText("");
+            }
         });
+        lblTaxPercent.setText(Model.get().preferences().getTaxRatePrettyString());
         cbScale.setItems(GUIScale.list());
         cbScale.setValue(Model.get().preferences().getGuiScale());
         cbScale.setOnAction(e -> Model.get().preferences().setGuiScale(cbScale.getValue()));

@@ -13,11 +13,3 @@
 .scale-x-large {
     -fx-font-size: 18px;
 }
-
-.title_label {
-    -fx-font-weight: bold;
-}
-
-.titled-pane-title {
-    -fx-font-size: inherit;
-}

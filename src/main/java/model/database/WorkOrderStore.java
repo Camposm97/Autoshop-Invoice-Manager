@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+
+;
 
 public class WorkOrderStore {
     private Connection c;
@@ -92,8 +92,8 @@ public class WorkOrderStore {
                     customer_address,customer_city,customer_state,customer_zip,
                     vehicle_vin,vehicle_year,vehicle_make,vehicle_model,
                     vehicle_license_plate,vehicle_color,
-                    vehicle_engine,vehicle_transmission,vehicle_mileage_in,vehicle_mileage_out)
-                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    vehicle_engine,vehicle_transmission,vehicle_mileage_in,vehicle_mileage_out,tax_rate)
+                    values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """);
             prepStmt.setDate(1, workOrder.getDateCreated());
             prepStmt.setDate(2, workOrder.getDateCompleted());
@@ -117,6 +117,7 @@ public class WorkOrderStore {
             prepStmt.setString(20, workOrder.getVehicle().getTransmission());
             prepStmt.setString(21, workOrder.getVehicle().getMileageIn());
             prepStmt.setString(22, workOrder.getVehicle().getMileageOut());
+            prepStmt.setDouble(23, workOrder.getTaxRate());
             prepStmt.execute();
 
             updateNextId(); // Update next work order id value
@@ -167,8 +168,8 @@ public class WorkOrderStore {
                     "select * from work_order " +
                             "where work_order_id = " + workOrderId);
             if (rs.next()) {
-                Date dateCreated = rs.getDate(2);
-                Date dateCompleted = rs.getDate(3);
+                java.sql.Date dateCreated = rs.getDate(2);
+                java.sql.Date dateCompleted = rs.getDate(3);
                 int id = rs.getInt(4);
                 String firstName = rs.getString(5);
                 String lastName = rs.getString(6);
@@ -192,8 +193,9 @@ public class WorkOrderStore {
                 String transmission = rs.getString(21);
                 String mileageIn = rs.getString(22);
                 String mileageOut = rs.getString(23);
+                double taxRate = rs.getDouble(24);
                 Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut);
-                workOrder = new WorkOrder(customer, vehicle);
+                workOrder = new WorkOrder(customer, vehicle, taxRate);
                 workOrder.setId(workOrderId);
                 workOrder.setDateCreated(dateCreated);
                 workOrder.setDateCompleted(dateCompleted);
@@ -400,7 +402,7 @@ public class WorkOrderStore {
                     customer_address = ?,customer_city = ?,customer_state = ?,customer_zip = ?,
                     vehicle_vin = ?,vehicle_year = ?,vehicle_make = ?,vehicle_model = ?,
                     vehicle_license_plate = ?,vehicle_color = ?,
-                    vehicle_engine = ?,vehicle_transmission = ?,vehicle_mileage_in = ?,vehicle_mileage_out = ? 
+                    vehicle_engine = ?,vehicle_transmission = ?,vehicle_mileage_in = ?,vehicle_mileage_out = ?, tax_rate = ? 
                     where work_order_id = ?
                     """);
             prepStmt.setDate(1, workOrder.getDateCreated());
@@ -425,7 +427,8 @@ public class WorkOrderStore {
             prepStmt.setString(20, workOrder.getVehicle().getTransmission());
             prepStmt.setString(21, workOrder.getVehicle().getMileageIn());
             prepStmt.setString(22, workOrder.getVehicle().getMileageOut());
-            prepStmt.setInt(23, workOrder.getId());
+            prepStmt.setDouble(23, workOrder.getTaxRate());
+            prepStmt.setInt(24, workOrder.getId());
             prepStmt.execute();
 
             Iterator<AutoPart> autoPartIterator = workOrder.autoPartIterator();

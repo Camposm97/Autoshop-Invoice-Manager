@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import model.Model;
 import model.customer.Customer;
 
 import java.sql.Date;
@@ -14,11 +15,12 @@ import java.util.ListIterator;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
-public class WorkOrder implements Billable {
+public class WorkOrder implements BillableInvoice {
     private Integer id;
     private Date dateCreated, dateCompleted;
     private Customer customer;
     private Vehicle vehicle;
+    private Double taxRate; /* Sales Tax for this Work Order */
     private ObservableList<AutoPart> itemList;
     private ObservableList<Labor> laborList;
     private ObservableList<WorkOrderPayment> paymentList;
@@ -29,17 +31,19 @@ public class WorkOrder implements Billable {
         this.dateCompleted = null;
         this.customer = null;
         this.vehicle = null;
+        this.taxRate = Model.get().preferences().getTaxRate();
         this.itemList = FXCollections.observableArrayList();
         this.laborList = FXCollections.observableArrayList();
         this.paymentList = FXCollections.observableArrayList();
     }
 
-    public WorkOrder(Customer customer, Vehicle vehicle) {
+    public WorkOrder(Customer customer, Vehicle vehicle, Double taxRate) {
         this.id = 0;
-        this.dateCreated = Date.valueOf(LocalDate.now().toString());
+        this.dateCreated = java.sql.Date.valueOf(LocalDate.now().toString());
         this.dateCompleted = null;
         this.customer = customer;
         this.vehicle = vehicle;
+        this.taxRate = taxRate;
         this.itemList = FXCollections.observableArrayList();
         this.laborList = FXCollections.observableArrayList();
         this.paymentList = FXCollections.observableArrayList();
@@ -87,6 +91,18 @@ public class WorkOrder implements Billable {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public Double getTaxRate() {
+        return taxRate;
+    }
+
+    public String getTaxRatePrettyString() {
+        return (taxRate * 100) + " %";
+    }
+
+    public void setTaxRate(double taxRate) {
+        this.taxRate = taxRate;
     }
 
     public boolean addAutoPart(AutoPart item) {
@@ -163,6 +179,8 @@ public class WorkOrder implements Billable {
     }
 
     public SimpleStringProperty dateCreatedProperty() {
+//        System.out.println("dateCreated=" + dateCreated);
+//        System.out.println("localdate=" + dateCreated.toLocalDate());
         return new SimpleStringProperty(dateCreated.toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/u")));
     }
 
@@ -208,7 +226,7 @@ public class WorkOrder implements Billable {
         if (!itemList.isEmpty()) {
             Optional<Double> rs = itemList.stream()
                     .filter(item -> item.isTaxable())
-                    .map(item -> item.tax())
+                    .map(item -> item.tax(taxRate))
                     .reduce((x, y) -> x + y);
             if (rs.isPresent()) itemTaxSum = rs.get();
         }
@@ -216,7 +234,7 @@ public class WorkOrder implements Billable {
         if (!laborList.isEmpty()) {
             Optional<Double> rs = laborList.stream()
                     .filter(labor -> labor.isTaxable())
-                    .map(labor -> labor.tax())
+                    .map(labor -> labor.tax(taxRate))
                     .reduce((x, y) -> x + y);
             if (rs.isPresent()) laborTaxSum = rs.get();
         }
@@ -227,10 +245,10 @@ public class WorkOrder implements Billable {
     public double bill() {
         double total = 0;
         for (AutoPart item : itemList) {
-            total += item.bill();
+            total += item.bill(taxRate);
         }
         for (Labor labor : laborList) {
-            total += labor.bill();
+            total += labor.bill(taxRate);
         }
         return total;
     }
@@ -256,6 +274,7 @@ public class WorkOrder implements Billable {
                 ", dateCompleted=" + dateCompleted +
                 ", customer=" + customer +
                 ", vehicle=" + vehicle +
+                ", taxRate=" + taxRate +
                 ", itemList=" + itemList +
                 ", laborList=" + laborList +
                 '}';

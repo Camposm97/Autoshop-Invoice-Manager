@@ -239,7 +239,7 @@ public class DialogFactory {
     public static void initPreferences() {
         Alert alert = new AlertBuilder()
         .setTitle("Preferences")
-        .setHeaderText("Auto-shop Settings")
+        .setHeaderText(Model.TITLE)
         .setDefaultBtn()
         .addApplyBtn()
         .setContent(FX.view("Preferences.fxml")).build();

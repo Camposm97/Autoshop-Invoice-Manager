@@ -250,7 +250,7 @@ public class Preferences {
     }
 
     public String getTaxRatePrettyString() {
-        return (taxRate * 100) - 100 + " %";
+        return (taxRate * 100) + " %";
     }
 
     public void setTaxRate(Double taxRate) {
