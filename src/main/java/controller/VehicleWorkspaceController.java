@@ -60,26 +60,32 @@ public class VehicleWorkspaceController {
     }
 
     public void addVehicle() {
-        String vin = tfVin.getText();
-        String year = tfYear.getText();
-        String make = tfMake.getText();
-        String model = tfModel.getText();
-        String licensePlate = tfLicensePlate.getText();
-        String color = tfColor.getText();
-        String engine = tfEngine.getText();
-        String transmission = tfTransmission.getText();
-        Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission);
-        int customerId = this.customer.getId();
-        OwnedVehicle ownedVehicle = new OwnedVehicle(customerId, vehicle);
-        var success = DB.get().vehicles().add(ownedVehicle);
-        var n = Notifications.create();
-        if (Model.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
-        if (success) {
-            n.title("Created Vehicle").text(vehicle.toString());
+        if (this.customer == null) {
+            var n = Notifications.create();
+            if (Model.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
+            n.title("Failed to Create Vehicle").text("No Customer chosen").showError();
         } else {
-            n.title("Failed to Create Vehicle").text("Cannot write to database");
+            String vin = tfVin.getText();
+            String year = tfYear.getText();
+            String make = tfMake.getText();
+            String model = tfModel.getText();
+            String licensePlate = tfLicensePlate.getText();
+            String color = tfColor.getText();
+            String engine = tfEngine.getText();
+            String transmission = tfTransmission.getText();
+            Vehicle vehicle = new Vehicle(vin, year, make, model, licensePlate, color, engine, transmission);
+            int customerId = this.customer.getId();
+            OwnedVehicle ownedVehicle = new OwnedVehicle(customerId, vehicle);
+            var success = DB.get().vehicles().add(ownedVehicle);
+            var n = Notifications.create();
+            if (Model.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
+            if (success) {
+                n.title("Created Vehicle").text(vehicle.toString());
+            } else {
+                n.title("Failed to Create Vehicle").text("Cannot write to database");
+            }
+            n.showInformation();
         }
-        n.showInformation();
     }
 
     public void loadCustomer(Customer customer) {

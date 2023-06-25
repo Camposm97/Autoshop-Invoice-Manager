@@ -25,22 +25,19 @@ public class VehicleDataFetcher {
 
     /**
      * Fetches the vehicle info and fetches the data required to create a Vehicle object;
-     * @return
+     * @return Vehicle object if node is not null, otherwise null
      */
     public Vehicle get() {
         String vin = node.get(VField.VIN.name()).asText();
         String year = node.get(VField.ModelYear.name()).asText();
         String make = Strings.toTitle(node.get(VField.Make.name()).asText());
         String model = node.get(VField.Model.name()).asText();
-        String engine = node.get(VField.DisplacementL.name()).asText() + "L";
+        String engine = node.get(VField.DisplacementL.name()).asText();
+        if (!engine.isEmpty()) engine += 'L';
         String cylCount = node.get(VField.EngineCylinders.name()).asText();
-        if (!cylCount.isEmpty()) {
-            engine += " V" + cylCount;
-        }
+        if (!cylCount.isEmpty()) engine += " V" + cylCount;
         String fuelType = node.get(VField.FuelTypePrimary.name()).asText();
-        if (!fuelType.isEmpty()) {
-            engine += ' ' + fuelType;
-        }
+        if (!fuelType.isEmpty()) engine += ' ' + fuelType;
         String transmission = node.get(VField.TransmissionStyle.name()).asText();
         Vehicle v = new Vehicle(vin, year, make, model, "", "", engine, transmission);
         return v;
@@ -72,6 +69,12 @@ public class VehicleDataFetcher {
      */
     public String getErrorText() {
         if (node == null) return "No Errors";
-        return node.get(VField.ErrorText.name()).asText();
+        var errText = node.get(VField.ErrorText.name()).asText();
+        var tokens = errText.split(";");
+        var text = "";
+        for (var token : tokens) {
+            text += token + '\n';
+        }
+        return text;
     }
 }

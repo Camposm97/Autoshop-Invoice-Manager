@@ -603,6 +603,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
 
     public void fetchVehicleData() {
         String vin = tfVin.getText();
+        if (vin.isBlank()) return;
         ProgressBar pi = new ProgressBar();
         pi.prefWidthProperty().bind(tfVin.widthProperty());
         pi.setStyle("-fx-accent: #7289da;");
@@ -627,13 +628,11 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
                 builder.setAlertType(Alert.AlertType.WARNING)
                         .setTitle("Warning")
                         .setHeaderText("Vehicle data fetched may not be 100% accurate (Error Code(s): " + fetcher.getErrorCodes() + ")")
-                        .setContentText(v.toPrettyString() + "\n\n" + fetcher.getErrorText())
-                        .setConfirmBtns()
-                        .build().showAndWait().ifPresent(e -> {
-                            if (e.getButtonData().isDefaultButton())
-                                loadVehicle(v);
-                        });
-
+                        .setContentText(v.toPrettyString() + '\n' + fetcher.getErrorText())
+                        .setConfirmBtns().build().showAndWait().ifPresent(e -> {
+                    if (e.getButtonData().isDefaultButton())
+                        loadVehicle(v);
+                });
             }
         } catch (IOException e) {
             AlertBuilder builder = new AlertBuilder();
