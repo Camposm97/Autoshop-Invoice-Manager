@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import model.Model;
 import model.Observable;
 import model.State;
@@ -99,6 +100,9 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
     TableColumn<WorkOrderPayment, String> colPaymentAmount;
     @FXML
     TextField tfTotalPayment, tfInvoiceBalance;
+
+    @FXML
+    GridPane vehicleGridPane1;
 
     public WorkOrderWorkspaceController() {
         this.workOrder = new WorkOrder();
@@ -599,6 +603,10 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
 
     public void fetchVehicleData() {
         String vin = tfVin.getText();
+        ProgressBar pi = new ProgressBar();
+        pi.prefWidthProperty().bind(tfVin.widthProperty());
+        pi.setStyle("-fx-accent: #7289da;");
+        vehicleGridPane1.add(pi, 0, 1);
         try {
             VehicleDataFetcher fetcher = new VehicleDataFetcher(vin);
             if (fetcher.isFetchSuccess()) {
@@ -636,6 +644,8 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
                             Sorry, the program was unable to establish a connection to the API site. Please check your internet connection and try again later.
                             """)
                     .build().showAndWait();
+        } finally {
+            vehicleGridPane1.getChildren().remove(pi);
         }
     }
 

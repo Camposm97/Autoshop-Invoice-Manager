@@ -2,6 +2,7 @@ package controller;
 
 import app.App;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -17,6 +18,7 @@ import model.ui.FX;
 import model.ui.IOffsets;
 import model.work_order.WorkOrder;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.List;
@@ -64,6 +66,10 @@ public class MyCompanyController implements Observable, IOffsets {
     @FXML
     StackPane spIncome;
 
+    /* Class Fields */
+    Parent incomeUI;
+    GrossIncomeController controller;
+
     @FXML
     public void initialize() {
         Model.get().recentWorkOrders().addObserver(this);
@@ -96,19 +102,22 @@ public class MyCompanyController implements Observable, IOffsets {
         });
         fetchIncompletedWorkOrders();
 
-//        TODO: Doesn't work for some reason
-//        /* Load gross income overview of work orders */
-//        tpIncome.expandedProperty().addListener((o, x, y) -> {
-//            if (y) {
-//                if (incomeUI == null) {
-//                    incomeUI = FX.view("GrossIncome.fxml");
-//                    spIncome.getChildren().add(incomeUI);
-//                }
-//            }
-//        });
+        /* Load gross income overview of work orders */
+        tpIncome.expandedProperty().addListener((o, x, y) -> {
+            if (y) {
+                if (incomeUI == null) {
+                    FXMLLoader fxmlLoader = FX.load("GrossIncome.fxml");
+                    try {
+                        incomeUI = fxmlLoader.load();
+                        spIncome.getChildren().add(incomeUI);
+                        controller = fxmlLoader.getController();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
     }
-
-    Parent incomeUI;
 
     public void editWorkOrder(TableView<WorkOrder> tv) {
         WorkOrder workOrder = tv.getSelectionModel().getSelectedItem();
