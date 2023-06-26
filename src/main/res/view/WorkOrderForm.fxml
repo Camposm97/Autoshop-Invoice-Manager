@@ -9,13 +9,17 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@../css/work-order-form-layout.css" />
     </stylesheets>
     <children>
-        <Label fx:id="lblDate" text="8/19/2020" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="2.0">
+      <Label contentDisplay="RIGHT" text="Date:" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="2.0">
+         <graphic>
+              <Label fx:id="lblDate" text="8/19/2020">
         </Label>
+         </graphic>
+      </Label>
         <VBox fx:id="header" alignment="CENTER" spacing="2.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
             <children>
                 <Label fx:id="lblOwnerCompany" styleClass="title_label" text="Your Company Goes Here">

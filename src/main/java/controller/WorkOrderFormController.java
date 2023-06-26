@@ -16,6 +16,7 @@ import model.work_order.AutoPart;
 import model.work_order.Labor;
 import model.work_order.WorkOrder;
 
+import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -97,9 +98,10 @@ public class WorkOrderFormController {
             lblMileageInAndOut.setText(workOrder.getVehicle().getMileageInAndOut());
         }
 
-
-        Function<Double, String> f = x -> String.format("%.2f", x);
-        Function<Double, String> g = x -> String.format("$ %.2f", x);
+        Function<Double, String> df = x -> {
+            DecimalFormat format = new DecimalFormat("$#,##0.00");
+            return format.format(x);
+        };
 
         // Add parts to the form
         Iterator<AutoPart> autoPartIterator = workOrder.autoPartIterator();
@@ -108,9 +110,9 @@ public class WorkOrderFormController {
             Label lblName = new Label(a.getName());
             lblName.getStyleClass().add("lbl-item-id");
             Label lblDesc = new Label(a.getDesc());
-            Label lblUnitPrice = new Label(f.apply(a.getRetailPrice()));
+            Label lblUnitPrice = new Label(df.apply(a.getRetailPrice()));
             Label lblQty = new Label(String.valueOf(a.getQuantity()));
-            Label lblSubtotal = new Label(f.apply(a.subtotal()));
+            Label lblSubtotal = new Label(df.apply(a.subtotal()));
             lblDesc.setWrapText(true);
             gridPaneParts.addRow(i, lblName, lblDesc, lblUnitPrice, lblQty, lblSubtotal);
         }
@@ -123,18 +125,18 @@ public class WorkOrderFormController {
             Label lblCode = new Label(lbr.getName());
             lblCode.getStyleClass().add("lbl-item-id");
             Text txtDesc = new Text(lbr.getDesc());
-            Label lblSubtotal = new Label(f.apply(lbr.subtotal()));
+            Label lblSubtotal = new Label(df.apply(lbr.subtotal()));
             txtDesc.setWrappingWidth(WWIDTH);
             if (Model.get().preferences().getTheme().equals(Theme.Dark)) txtDesc.setFill(Color.LIGHTGRAY);
             gridPaneLabor.addRow(i, lblCode, txtDesc, lblSubtotal);
         }
-        lblPartsTotal.setText(g.apply(workOrder.partsSubtotal()));
-        lblLaborTotal.setText(g.apply(workOrder.laborSubtotal()));
-        lblSubtotal.setText(g.apply(workOrder.subtotal()));
-        lblSalesTax.setText(g.apply(workOrder.tax()));
-        lblWorkOrderTotal.setText(g.apply(workOrder.bill()));
-        lblTotalPayment.setText(g.apply(workOrder.totalPayments()));
-        lblAmountDue.setText(g.apply(workOrder.balance()));
+        lblPartsTotal.setText(df.apply(workOrder.partsSubtotal()));
+        lblLaborTotal.setText(df.apply(workOrder.laborSubtotal()));
+        lblSubtotal.setText(df.apply(workOrder.subtotal()));
+        lblSalesTax.setText(df.apply(workOrder.tax()));
+        lblWorkOrderTotal.setText(df.apply(workOrder.bill()));
+        lblTotalPayment.setText(df.apply(workOrder.totalPayments()));
+        lblAmountDue.setText(df.apply(workOrder.balance()));
     }
 
     /**

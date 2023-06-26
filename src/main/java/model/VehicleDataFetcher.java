@@ -11,7 +11,7 @@ import java.io.IOException;
  * @see Vehicle
  */
 public class VehicleDataFetcher {
-    private JsonNode node;
+    private final JsonNode node;
 
     /**
      * Decodes the passed {VIN} and holds onto the result.
@@ -39,8 +39,7 @@ public class VehicleDataFetcher {
         String fuelType = node.get(VField.FuelTypePrimary.name()).asText();
         if (!fuelType.isEmpty()) engine += ' ' + fuelType;
         String transmission = node.get(VField.TransmissionStyle.name()).asText();
-        Vehicle v = new Vehicle(vin, year, make, model, "", "", engine, transmission);
-        return v;
+        return new Vehicle(vin, year, make, model, "", "", engine, transmission);
     }
 
     /**
@@ -50,8 +49,7 @@ public class VehicleDataFetcher {
     public boolean isFetchSuccess() {
         if (node == null) return false;
         String errCode = node.get(VField.ErrorCode.name()).asText();
-        if (errCode.equals("0")) return true;
-        else return false;
+        return errCode.equals("0");
     }
 
     /**
@@ -71,10 +69,10 @@ public class VehicleDataFetcher {
         if (node == null) return "No Errors";
         var errText = node.get(VField.ErrorText.name()).asText();
         var tokens = errText.split(";");
-        var text = "";
+        StringBuilder text = new StringBuilder();
         for (var token : tokens) {
-            text += token + '\n';
+            text.append(token).append('\n');
         }
-        return text;
+        return text.toString();
     }
 }

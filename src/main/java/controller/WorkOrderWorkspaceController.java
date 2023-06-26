@@ -229,6 +229,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
 
         /* initialize customer pop over */
         FXMLLoader fxmlLoader = FX.load("CustomerTable.fxml");
+        assert fxmlLoader != null;
         Node cusTable = fxmlLoader.load();
         cusTableController = fxmlLoader.getController();
         cusTableController.connect(this);
@@ -239,6 +240,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
         cusPopOver.setArrowSize(0);
         /* initialize vehicle pop over */
         fxmlLoader = FX.load("VehicleTable.fxml");
+        assert fxmlLoader != null;
         Node vehTable = fxmlLoader.load();
         vehTableController = fxmlLoader.getController();
         vehTableController.connect(this);
@@ -252,8 +254,8 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
     }
 
     public void loadShortcuts() {
-        Runnable save = () -> saveAndClose();
-        Runnable print = () -> print();
+        Runnable save = this::saveAndClose;
+        Runnable print = this::print;
         Runnable undo = () -> {
             if (tabPartsAndLabor.isSelected()) {
                 tpsProducts.undoTransaction();

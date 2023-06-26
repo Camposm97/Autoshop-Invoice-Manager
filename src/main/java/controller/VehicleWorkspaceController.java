@@ -44,6 +44,7 @@ public class VehicleWorkspaceController {
         try {
             /* initialize customer pop over */
             FXMLLoader fxml = FX.load(("CustomerTable.fxml"));
+            assert fxml != null;
             cusPopOver = new PopOver(fxml.load());
             cusPopOver.setTitle("Customer Picker");
             cusPopOver.setHeaderAlwaysVisible(true);
