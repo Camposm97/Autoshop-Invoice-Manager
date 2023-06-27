@@ -57,6 +57,30 @@ public class AppController implements IShortcuts {
         stage.setTitle(Model.TITLE);
         stage.getIcons().add(new Image("icon.png"));
         accels().put(ACCEL_CLOSE, this::closeCurrentTab);
+        accels().put(ACCEL_ZOOM_IN, () -> {
+           GUIScale scale = Model.get().preferences().getGuiScale();
+           if (!scale.equals(GUIScale.Large)) {
+               for (int i = 0; i < GUIScale.values().length; i++) {
+                   if (scale.equals(GUIScale.values()[i])) {
+                       Model.get().preferences().setGuiScale(GUIScale.values()[i+1]);
+                       Model.get().preferences().save();
+                       break;
+                   }
+               }
+           }
+        });
+        accels().put(ACCEL_ZOOM_OUT, () -> {
+            GUIScale scale = Model.get().preferences().getGuiScale();
+            if (!scale.equals(GUIScale.Small)) {
+                for (int i = 0; i < GUIScale.values().length; i++) {
+                    if (scale.equals(GUIScale.values()[i])) {
+                        Model.get().preferences().setGuiScale(GUIScale.values()[i-1]);
+                        Model.get().preferences().save();
+                        break;
+                    }
+                }
+            }
+        });
         tabPane.getSelectionModel().selectedItemProperty().addListener((o,prev,curr) -> {
             if (curr == null) return;
             try {
