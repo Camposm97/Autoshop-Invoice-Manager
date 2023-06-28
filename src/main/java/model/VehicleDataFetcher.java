@@ -33,7 +33,15 @@ public class VehicleDataFetcher {
         String make = Strings.toTitle(node.get(VField.Make.name()).asText());
         String model = node.get(VField.Model.name()).asText();
         String engine = node.get(VField.DisplacementL.name()).asText();
-        if (!engine.isEmpty()) engine += 'L';
+        /* Sometimes the engine has a leading decimal number, so we format it */
+        if (!engine.isEmpty()) {
+            try {
+                double x = Double.parseDouble(engine);
+                engine = String.format("%.1f%c", x, 'L');
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
+            }
+        }
         String cylCount = node.get(VField.EngineCylinders.name()).asText();
         if (!cylCount.isEmpty()) engine += " V" + cylCount;
         String fuelType = node.get(VField.FuelTypePrimary.name()).asText();
