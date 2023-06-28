@@ -92,6 +92,13 @@ public class AlertBuilder {
         return this;
     }
 
+    public AlertBuilder addBtn(String s, ButtonBar.ButtonData data) {
+        ButtonType bt = new ButtonType(s, data);
+        if (btList == null) btList = new LinkedList<>();
+        btList.add(bt);
+        return this;
+    }
+
     public AlertBuilder setContent(Parent content) {
         this.content = content;
         return this;

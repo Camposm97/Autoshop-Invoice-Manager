@@ -5,10 +5,7 @@ import controller.*;
 import javafx.print.*;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.transform.Scale;
@@ -56,12 +53,15 @@ public class DialogFactory {
     public static void initAddPart(Function<AutoPart, Void> callback) {
         AutoPartWorkspaceController controller = new AutoPartWorkspaceController();
         AlertBuilder builder = new AlertBuilder();
-        Optional<ButtonType> rs = builder.buildAddDialog(
+        Alert alert = builder.addBtn("Save & Continue", ButtonBar.ButtonData.APPLY).buildAddDialog(
                 "Add Part",
-                FX.view("AutoPartWorkspace.fxml", controller)).showAndWait();
-        rs.ifPresent(e -> {
+                FX.view("AutoPartWorkspace.fxml", controller));
+        alert.showAndWait().ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 controller.savePart(callback);
+            } else if (e.getButtonData().equals(ButtonBar.ButtonData.APPLY)) {
+                controller.savePart(callback);
+                initAddPart(callback);
             }
         });
     }
@@ -78,19 +78,6 @@ public class DialogFactory {
                 controller.updatePart(callback);
         });
     }
-
-//    public static void initAddLabor(Function<Labor, Void> callback) {
-//        LaborWorkspaceController controller = new LaborWorkspaceController();
-//        Parent node = FX.view("LaborWorkspace.fxml", controller);
-//        AlertBuilder builder = new AlertBuilder();
-//        Alert alert = builder.buildAddDialog("Add Labor", node);
-//        Optional<ButtonType> rs = alert.showAndWait();
-//        rs.ifPresent(e -> {
-//            if (e.getButtonData().isDefaultButton()) {
-//                controller.saveLabor(callback);
-//            }
-//        });
-//    }
 
     public static void initAddLabor(Iterator<AutoPart> items, Function<Labor, Void> callback) {
         LaborWorkspaceController controller = new LaborWorkspaceController();
