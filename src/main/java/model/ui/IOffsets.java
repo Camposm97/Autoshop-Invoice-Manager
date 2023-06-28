@@ -5,5 +5,4 @@ public interface IOffsets {
     double VEH_OFFSET = 50; /* vehicle table */
     double WO_OFFSET = 75; /* work order table */
     double PAY_OFFSET = 75; /* payment table */
-    double AP_OFFSET = 100; /* auto part table  */
 }

@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.text.Text;
 import model.database.DB;
-import model.ui.FX;
 import model.ui.IOffsets;
 import model.work_order.AutoPart;
 
@@ -30,7 +29,6 @@ public class AutoPartWorkspaceController implements IOffsets {
     public void initialize() {
         tfPartDesc.textProperty().addListener((o, oldValue, newValue) -> {
             tvParts.getItems().setAll(DB.get().autoParts().getAutoPartSuggestions(newValue));
-            FX.autoResizeColumns(tvParts, AP_OFFSET);
             genID();
         });
         tfPartQuantity.setText("1");
