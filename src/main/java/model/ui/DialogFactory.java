@@ -53,9 +53,10 @@ public class DialogFactory {
     public static void initAddPart(Function<AutoPart, Void> callback) {
         AutoPartWorkspaceController controller = new AutoPartWorkspaceController();
         AlertBuilder builder = new AlertBuilder();
-        Alert alert = builder.addBtn("Save & Continue", ButtonBar.ButtonData.APPLY).buildAddDialog(
+        Alert alert = builder.buildAddDialog(
                 "Add Part",
                 FX.view("AutoPartWorkspace.fxml", controller));
+        alert.getButtonTypes().add(new ButtonType("Save & Add Another", ButtonBar.ButtonData.APPLY));
         alert.showAndWait().ifPresent(e -> {
             if (e.getButtonData().isDefaultButton()) {
                 controller.savePart(callback);
