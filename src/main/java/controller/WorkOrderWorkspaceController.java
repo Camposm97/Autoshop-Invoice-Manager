@@ -12,10 +12,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import model.Model;
-import model.Observable;
-import model.State;
-import model.VehicleDataFetcher;
+import model.*;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
@@ -38,7 +35,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
-public class WorkOrderWorkspaceController implements Observable, IOffsets, IShortcuts {
+public class WorkOrderWorkspaceController implements Observable, ExitObservable, IOffsets, IShortcuts {
     protected int chosenCustomerId;
     protected WorkOrder workOrder;
     protected TPS tpsProducts, tpsPayments;
@@ -105,6 +102,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
     GridPane vehicleGridPane1;
 
     public WorkOrderWorkspaceController() {
+        Model.get().addExitObservable(this);
         this.workOrder = new WorkOrder();
         this.tpsProducts = new TPS();
         this.tpsPayments = new TPS();
@@ -345,6 +343,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
             Since this function is called after {save} the current work order is given an id and thus,
             checking if the work order is new is never true.
          */
+        Model.get().removeExitObservable(this);
     }
 
     /**
@@ -656,5 +655,13 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
         if (workOrder != null && workOrder.isNew()) {
             tfTaxRate.setText(Model.get().preferences().getTaxRatePrettyString());
         }
+    }
+
+    @Override
+    public void exit() {
+        boolean isNew = workOrder.isNew();
+        save();
+        if (isNew)
+            Model.get().currOWOs().add(workOrder.getId());
     }
 }

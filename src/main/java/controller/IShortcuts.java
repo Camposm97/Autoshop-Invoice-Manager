@@ -18,8 +18,4 @@ public interface IShortcuts {
             new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN);
     KeyCodeCombination ACCEL_REDO =
             new KeyCodeCombination(KeyCode.Z, KeyCodeCombination.SHORTCUT_DOWN, KeyCombination.SHIFT_DOWN);
-    KeyCodeCombination ACCEL_ZOOM_IN =
-            new KeyCodeCombination(KeyCode.EQUALS, KeyCodeCombination.SHORTCUT_DOWN);
-    KeyCodeCombination ACCEL_ZOOM_OUT =
-            new KeyCodeCombination(KeyCode.MINUS, KeyCodeCombination.SHORTCUT_DOWN);
 }

@@ -39,11 +39,13 @@
                                     </MenuItem>
                                  </items>
                               </Menu>
-                              <MenuItem mnemonicParsing="false" onAction="#preferences" text="Preferences...">
-                                 <accelerator>
-                                    <KeyCodeCombination alt="UP" code="COMMA" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                                 </accelerator>
-                              </MenuItem>
+                              <Menu mnemonicParsing="false" text="Manage">
+                                 <items>
+                                    <MenuItem mnemonicParsing="false" onAction="#viewMyCompany" text="My Company" />
+                                <MenuItem mnemonicParsing="false" onAction="#viewCustomers" text="Customers" />
+                                    <MenuItem mnemonicParsing="false" onAction="#viewWorkOrders" text="Work Orders" />
+                                 </items>
+                              </Menu>
                               <Menu mnemonicParsing="false" text="Import">
                                 <items>
                                   <MenuItem mnemonicParsing="false" text="Customers" />
@@ -58,6 +60,11 @@
                                     <MenuItem mnemonicParsing="false" onAction="#exportAutoPartSuggestions" text="Auto Part Suggestions" />
                                 </items>
                               </Menu>
+                              <MenuItem mnemonicParsing="false" onAction="#preferences" text="Preferences...">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="COMMA" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                 </accelerator>
+                              </MenuItem>
                               <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit">
                                  <accelerator>
                                     <KeyCodeCombination alt="UP" code="Q" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
@@ -67,9 +74,16 @@
                       </Menu>
                       <Menu mnemonicParsing="false" text="View">
                         <items>
-                              <MenuItem mnemonicParsing="false" onAction="#viewMyCompany" text="My Company" />
-                          <MenuItem mnemonicParsing="false" onAction="#viewCustomers" text="Customers" />
-                              <MenuItem mnemonicParsing="false" onAction="#viewWorkOrders" text="Work Orders" />
+                              <MenuItem mnemonicParsing="false" onAction="#zoomIn" text="Zoom In">
+                                  <accelerator>
+                                      <KeyCodeCombination alt="UP" code="EQUALS" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                  </accelerator>
+                              </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#zoomOut" text="Zoom Out">
+                                  <accelerator>
+                                      <KeyCodeCombination alt="UP" code="MINUS" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                  </accelerator>
+                              </MenuItem>
                         </items>
                       </Menu>
                         <Menu mnemonicParsing="false" text="Help">

@@ -51,14 +51,13 @@ public class AppController implements IShortcuts {
     CustomerTableController cusView;
     WorkOrderTableController woView;
     TreeMap<String, WorkOrderWorkspaceController> map;
+
     @FXML
     public void initialize() {
         map = new TreeMap<>();
         stage.setTitle(Model.TITLE);
         stage.getIcons().add(new Image("icon.png"));
         accels().put(ACCEL_CLOSE, this::closeCurrentTab);
-        accels().put(ACCEL_ZOOM_IN, () -> zoomIn());
-        accels().put(ACCEL_ZOOM_OUT, () -> zoomOut());
         tabPane.getSelectionModel().selectedItemProperty().addListener((o,prev,curr) -> {
             if (curr == null) return;
             try {
@@ -84,7 +83,7 @@ public class AppController implements IShortcuts {
 
     public void zoomIn() {
         GUIScale scale = Model.get().preferences().getGuiScale();
-        if (!scale.equals(GUIScale.Large)) {
+        if (!scale.equals(GUIScale.X_Large)) {
             for (int i = 0; i < GUIScale.values().length; i++) {
                 if (scale.equals(GUIScale.values()[i])) {
                     Model.get().preferences().setGuiScale(GUIScale.values()[i+1]);
