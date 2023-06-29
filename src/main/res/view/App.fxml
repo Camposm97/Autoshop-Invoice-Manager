@@ -46,12 +46,12 @@
                                     <MenuItem mnemonicParsing="false" onAction="#viewWorkOrders" text="Work Orders" />
                                  </items>
                               </Menu>
-                              <Menu mnemonicParsing="false" text="Import">
-                                <items>
-                                  <MenuItem mnemonicParsing="false" text="Customers" />
-                                    <MenuItem mnemonicParsing="false" text="Vehicles" />
-                                </items>
-                              </Menu>
+<!--                              <Menu mnemonicParsing="false" text="Import">-->
+<!--                                <items>-->
+<!--                                  <MenuItem mnemonicParsing="false" text="Customers" />-->
+<!--                                    <MenuItem mnemonicParsing="false" text="Vehicles" />-->
+<!--                                </items>-->
+<!--                              </Menu>-->
                               <Menu mnemonicParsing="false" text="Export">
                                 <items>
                                   <MenuItem mnemonicParsing="false" onAction="#exportCustomers" text="Customers" />
