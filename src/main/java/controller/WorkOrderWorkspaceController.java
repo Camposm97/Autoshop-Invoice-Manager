@@ -34,6 +34,38 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * NEW UPDATE v2.0 INCOMING
+ * The goal of this new update is to save work orders on creation.
+ * At the moment, the work order is not saved when its created. It's not saved to the database.
+ * That being said, when this controller is created, a work order is created in the database.
+ *
+ * Does that mean we should save every change we make when editing the work order?
+ * No, we still go with the same implementation of saving.
+ * Since a work order is always going to be saved, we remove the {isNew} method from
+ * the WorkOrder class since created work orders will always have an {id}, so then
+ * we can remove the disabled menu item for 'New WorkOrder' (yay).
+ *
+ * TODO - Investigate this issue
+ * Issue, since multi. work orders can be open, does that effect atomic edits in the WOStore?
+ *
+ * TODO - Bug in updating labor total
+ * Seems to occur during saving the labor for the first time
+ * After editing the labor, the total is updated
+ *
+ * TODO - Implement Feedback System
+ * At the bottom of the BorderPane, implement a feedback system where for each action the
+ * user does will be displayed in border pane's bottom.
+ *
+ * Actions that will be show feedback should be?
+ * Saving Customers, Vehicles, Work Orders
+ * Printing Work Orders
+ *
+ * If we wanted, we could be more show feedback for more actions such as
+ * editing a work order (CRUD parts, labor)
+ *
+ * @version 2.0
+ */
 @SuppressWarnings("unused")
 public class WorkOrderWorkspaceController implements Observable, ExitObservable, IOffsets, IShortcuts {
     protected int chosenCustomerId;
@@ -521,22 +553,13 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
             return null;
         };
         DialogFactory.initAddLabor(workOrder.autoPartIterator(), callback);
+        updateTotals();
     }
 
     public void editLabor() {
         Labor labor = tvLabor.getSelectionModel().getSelectedItem();
         if (labor != null) {
             Function<Labor, Void> callback = x -> {
-//                if (x.getDesc().equals("AUTO_GENERATE")) {
-//                    Iterator<AutoPart> iterator = workOrder.autoPartIterator();
-//                    StringBuilder sb = new StringBuilder("Installed ");
-//                    while (iterator.hasNext()) {
-//                        sb.append(iterator.next().getDesc());
-//                        if (iterator.hasNext())
-//                            sb.append(", ");
-//                    }
-//                    x.setDesc(sb.toString());
-//                }
                 UpdateLaborTransaction transaction = new UpdateLaborTransaction(workOrder, labor, x);
                 tpsProducts.addTransaction(transaction);
                 return null;

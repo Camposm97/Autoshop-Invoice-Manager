@@ -104,6 +104,9 @@
                         </Tab>
                     </TabPane>
                 </center>
+                <bottom>
+                    <fx:include source="NotificationBar.fxml"/>
+                </bottom>
             </BorderPane>
          </root>
       </Scene>

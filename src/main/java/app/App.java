@@ -25,12 +25,6 @@ import java.io.IOException;
  * to recent work orders. If the user closes (exit) the program, then {currOWOs} will be saved. And on start of the
  * program, {currOWOs} will be loaded into memory and automatically open the work orders in the process of being edited.
  *
- * How many work orders should {currOWOs} keep track of?
- * As of now, I think it would be best to leave it as many as the user's local machine can handle.
- * @see controller.WorkOrderTableController
- * @see controller.WorkOrderWorkspaceController
- *
- *
  * The App class gives us access to the AppController which will allow us to modify the tab pane.
  * We can use that to append tabs of work orders to edit.
  *
@@ -45,6 +39,12 @@ import java.io.IOException;
  * If the user tries to delete work order and if its id is in {currOWOs} then show an error message.
  *
  * Create a global list of work orders called {currOWOs} which is a list of integers.
+ *
+ * How many work orders should {currOWOs} keep track of?
+ * As of now, I think it would be best to leave it as many as the user's local machine can handle.
+ * @see controller.WorkOrderTableController
+ * @see controller.WorkOrderWorkspaceController
+ *
  *
  */
 public class App extends Application {
