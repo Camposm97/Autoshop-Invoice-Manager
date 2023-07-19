@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import org.controlsfx.control.SearchableComboBox?>
 
+<?import javafx.scene.control.CheckBox?>
 <GridPane hgap="8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="8.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PreferencesController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -42,6 +43,7 @@
       <Label text="Default Tax Rate" GridPane.rowIndex="9" />
       <Label text="GUI Scale" GridPane.rowIndex="10" />
       <Label text="Theme" GridPane.rowIndex="11" />
+       <CheckBox fx:id="cbConfirmExit" text="Confirm Before Exiting Application" GridPane.rowIndex="12"/>
       <TextField fx:id="tfCompany" GridPane.columnIndex="1" GridPane.columnSpan="2" />
       <TextField fx:id="tfAddress" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
       <TextField fx:id="tfCity" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />

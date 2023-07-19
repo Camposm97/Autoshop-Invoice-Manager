@@ -4,6 +4,7 @@ import app.App;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -122,6 +123,10 @@ public class WorkOrderTableController implements IOffsets {
                 btEdit.setDisable(true);
                 btDelete.setDisable(true);
             }
+        });
+        tv.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.DELETE)
+                btDelete.fire();
         });
         FX.autoResizeColumns(tv, WO_OFFSET);
     }

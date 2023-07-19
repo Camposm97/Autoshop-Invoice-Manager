@@ -22,7 +22,7 @@
 <?import org.controlsfx.control.SearchableComboBox?>
 <?import org.controlsfx.glyphfont.Glyph?>
 
-<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderWorkspaceController">
+<StackPane alignment="TOP_LEFT" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.WorkOrderWorkspaceController">
     <children>
         <SplitPane dividerPositions="0.135">
             <items>
@@ -80,6 +80,7 @@
                                                         <Glyph fontFamily="FontAwesome" icon="BARS" />
                                                     </graphic>
                                                 </Button>
+                                    <Button fx:id="btUpdateCus" mnemonicParsing="false" onAction="#updateCustomer" text="Update Customer" />
                                             </children>
                                         </HBox>
                                         <GridPane hgap="5.0" GridPane.rowIndex="1">
@@ -155,6 +156,7 @@
                                                         <Glyph fontFamily="FontAwesome" icon="BARS" />
                                                     </graphic>
                                                 </Button>
+                                    <Button fx:id="btAddVeh" mnemonicParsing="false" onAction="#addVehicle" text="Add Vehicle" />
                                             </children>
                                         </HBox>
                                         <GridPane fx:id="vehicleGridPane1" hgap="5.0" GridPane.rowIndex="6">

@@ -43,7 +43,7 @@
       <Label text="Color:" GridPane.rowIndex="6" />
       <Label text="Engine:" GridPane.rowIndex="7" />
       <Label text="Transmission:" GridPane.rowIndex="8" />
-      <TextField fx:id="tfVin" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <TextField fx:id="tfVin" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="Press 'Enter' to decode VIN" onAction="#fetchVehicleData"/>
       <fx:include fx:id="tfYear" source="NumberField.fxml" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <TextField fx:id="tfMake" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <TextField fx:id="tfModel" GridPane.columnIndex="1" GridPane.rowIndex="4" />

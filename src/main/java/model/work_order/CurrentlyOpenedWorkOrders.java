@@ -19,13 +19,13 @@ public class CurrentlyOpenedWorkOrders {
                 ObjectInputStream ois = new ObjectInputStream(fis);
                 ids = (LinkedList<Integer>) ois.readObject();
                 ois.close();
-                System.out.println("Loaded " + DAT_FILE);
+                System.out.println("Loaded " + DAT_FILE + ": " + ids);
             } else {
                 System.out.println("Missing " + DAT_FILE);
                 ids = new LinkedList<>();
             }
         } catch (IOException | ClassNotFoundException ex) {
-            ex.printStackTrace();
+            System.out.println("Failed to load " + DAT_FILE);
         }
     }
 
@@ -47,12 +47,12 @@ public class CurrentlyOpenedWorkOrders {
             ids.removeFirstOccurrence(workOrderId);
         }
         ids.addLast(workOrderId);
-        System.out.println("currOWOs: " + ids);
+        System.out.println("Add currowo (" + workOrderId + "): " + ids);
     }
 
     public void remove(int workOrderId) {
-        ids.removeFirstOccurrence(workOrderId);
-        System.out.println("currOWOs: " + ids);
+        var flag = ids.removeFirstOccurrence(workOrderId);
+        System.out.println("Remove currowo (" + workOrderId + "): " + ids);
     }
 
     public boolean contains(int workOrderId) {

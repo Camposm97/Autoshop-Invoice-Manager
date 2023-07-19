@@ -29,8 +29,8 @@ public class WorkOrder implements BillableInvoice {
         this.id = 0;
         this.dateCreated = Date.valueOf(LocalDate.now().toString());
         this.dateCompleted = null;
-        this.customer = null;
-        this.vehicle = null;
+        this.customer = new Customer();
+        this.vehicle = new Vehicle();
         this.taxRate = Model.get().preferences().getTaxRate();
         this.itemList = FXCollections.observableArrayList();
         this.laborList = FXCollections.observableArrayList();

@@ -248,7 +248,7 @@ public class WorkOrderStore {
         return list.size();
     }
 
-    public List<WorkOrder> getUncompletedWorkOrders() {
+    public List<WorkOrder> getIncompletedWorkOrders() {
         List<WorkOrder> list = new LinkedList<>();
         try {
             ResultSet rs = c.createStatement().executeQuery("select work_order_id from work_order where date_completed is null");
@@ -262,7 +262,10 @@ public class WorkOrderStore {
         return list;
     }
 
-    public List<WorkOrder> getRecentWorkOrderEdits() {
+    /**
+     * @return List of work orders that have been recently modified
+     */
+    public List<WorkOrder> getRecentWorkOrders() {
         List<WorkOrder> list = new LinkedList<>();
         Model.get().recentWorkOrders().iterator().forEachRemaining(x -> {
             WorkOrder workOrder = getById(x);
@@ -465,6 +468,8 @@ public class WorkOrderStore {
 
     public void delete(@NotNull WorkOrder workOrder) {
         try {
+            /* Remove work order id from recent work orders list */
+            Model.get().recentWorkOrders().remove(workOrder.getId());
             c.createStatement().execute("delete from work_order where work_order_id = " + workOrder.getId());
             Iterator<AutoPart> itemIterator = workOrder.autoPartIterator();
             while (itemIterator.hasNext()) {
@@ -474,10 +479,6 @@ public class WorkOrderStore {
             while (laborIterator.hasNext()) {
                 deleteLabor(laborIterator.next());
             }
-
-            // Remove work order id from recent work orders
-            Model.get().recentWorkOrders().remove(workOrder.getId());
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

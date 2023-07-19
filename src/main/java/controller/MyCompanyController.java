@@ -68,7 +68,7 @@ public class MyCompanyController implements Observable, IOffsets {
 
     /* Class Fields */
     Parent incomeUI;
-    GrossIncomeController controller;
+    GrossIncomeController incomeController;
 
     @FXML
     public void initialize() {
@@ -110,7 +110,7 @@ public class MyCompanyController implements Observable, IOffsets {
                     try {
                         incomeUI = fxmlLoader.load();
                         spIncome.getChildren().add(incomeUI);
-                        controller = fxmlLoader.getController();
+                        incomeController = fxmlLoader.getController();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -126,12 +126,14 @@ public class MyCompanyController implements Observable, IOffsets {
 
     @Override
     public void update() {
-        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecentWorkOrderEdits());
+        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecentWorkOrders());
+        tvIncompletedWorkOrders.getItems().setAll(DB.get().workOrders().getIncompletedWorkOrders());
         FX.autoResizeColumns(tvRecentWorkOrders, WO_OFFSET);
+        if (incomeController != null) incomeController.refresh();
     }
 
     public void fetchRecentWorkOrders() {
-        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecentWorkOrderEdits());
+        tvRecentWorkOrders.getItems().setAll(DB.get().workOrders().getRecentWorkOrders());
         FX.autoResizeColumns(tvRecentWorkOrders, WO_OFFSET);
     }
 
@@ -147,7 +149,7 @@ public class MyCompanyController implements Observable, IOffsets {
     }
 
     public void fetchIncompletedWorkOrders() {
-        List<WorkOrder> uncompletedWorkOrders = DB.get().workOrders().getUncompletedWorkOrders();
+        List<WorkOrder> uncompletedWorkOrders = DB.get().workOrders().getIncompletedWorkOrders();
         int uncompletedWorkOrdersCount = uncompletedWorkOrders.size();
         final String TITLE = "Uncompleted Work Orders (" + uncompletedWorkOrdersCount + ")";
         tpUncompletedWorkOrders.setText(TITLE);

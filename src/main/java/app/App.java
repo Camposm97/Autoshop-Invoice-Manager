@@ -2,8 +2,12 @@ package app;
 
 import controller.AppController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import model.Model;
+import model.database.DB;
+import model.ui.DialogFactory;
 import model.ui.FX;
 
 import java.io.IOException;
@@ -56,6 +60,11 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        /* catch uncaught exceptions and give the user the choice to report it */
+        Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
+            Exception ex = new Exception(throwable);
+            DialogFactory.initError(ex);
+        });
         FXMLLoader fxml = FX.load("App.fxml");
         stage = fxml.load();
         controller = fxml.getController();
@@ -66,5 +75,15 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
+    }
+
+    /**
+     * @brief Shutdowns the application and saves the model and closes the connection with the database.
+     */
+    public static void exit() {
+        System.out.println("Exiting program...");
+        Model.get().save();
+        DB.get().close();
+        Platform.exit();
     }
 }

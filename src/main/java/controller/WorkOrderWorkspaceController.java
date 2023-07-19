@@ -12,12 +12,18 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import model.*;
+import model.Model;
+import model.Observable;
+import model.State;
 import model.customer.Address;
 import model.customer.Customer;
+import model.customer.OwnedVehicle;
 import model.database.DB;
 import model.tps.*;
-import model.ui.*;
+import model.ui.ChangeListenerFactory;
+import model.ui.DialogFactory;
+import model.ui.FX;
+import model.ui.IOffsets;
 import model.work_order.*;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.SearchableComboBox;
@@ -46,12 +52,13 @@ import java.util.function.Function;
  * the WorkOrder class since created work orders will always have an {id}, so then
  * we can remove the disabled menu item for 'New WorkOrder' (yay).
  *
- * TODO - Investigate this issue
  * Issue, since multi. work orders can be open, does that effect atomic edits in the WOStore?
+ * No, since the atomic lists of edits are located in the controller itself and not the WOStore.
  *
- * TODO - Bug in updating labor total
- * Seems to occur during saving the labor for the first time
- * After editing the labor, the total is updated
+ * TODO - Bug #2
+ * When the user opens a work order, then exits the app the work order is saved in {currows}
+ * But, if the user closes the work order tab, then deletes the work order. The app refuses to exit (crashes).
+ * In addition, the app will then crash when starting up.
  *
  * TODO - Implement Feedback System
  * At the bottom of the BorderPane, implement a feedback system where for each action the
@@ -67,7 +74,7 @@ import java.util.function.Function;
  * @version 2.0
  */
 @SuppressWarnings("unused")
-public class WorkOrderWorkspaceController implements Observable, ExitObservable, IOffsets, IShortcuts {
+public class WorkOrderWorkspaceController implements Observable, IOffsets, IShortcuts {
     protected int chosenCustomerId;
     protected WorkOrder workOrder;
     protected TPS tpsProducts, tpsPayments;
@@ -116,7 +123,7 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
     @FXML
     TextField tfTaxRate;
     @FXML
-    Button btCus, btVeh, btEditAutoPart, btDelAutoPart, btEditLabor, btDelLabor, btEditPayment, btDelPayment;
+    Button btCus, btVeh, btAddVeh, btEditAutoPart, btDelAutoPart, btEditLabor, btDelLabor, btEditPayment, btDelPayment;
     @FXML
     PopOver cusPopOver, vehPopOver;
     @FXML
@@ -134,7 +141,7 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
     GridPane vehicleGridPane1;
 
     public WorkOrderWorkspaceController() {
-        Model.get().addExitObservable(this);
+//        Model.get().addExitObservable(this);
         this.workOrder = new WorkOrder();
         this.tpsProducts = new TPS();
         this.tpsPayments = new TPS();
@@ -250,6 +257,7 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
         tfTaxRate.setText(Model.get().preferences().getTaxRatePrettyString());
 
         btVeh.setDisable(true);
+        btAddVeh.setDisable(true);
         btEditAutoPart.setDisable(true);
         btDelAutoPart.setDisable(true);
         btEditLabor.setDisable(true);
@@ -324,6 +332,7 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
 
     public void showCustomerPopOver() {
         btVeh.setDisable(true);
+        btAddVeh.setDisable(true);
         cusTableController.fetchCustomers();
         cusPopOver.show(btCus);
     }
@@ -350,6 +359,7 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
         Model.get().recentWorkOrders().add(workOrder.getId());
         App.get().compView.fetchCompletedWorkOrderStats();
         App.get().compView.fetchIncompletedWorkOrders();
+        App.get().log("Saved Work Order #" + workOrder.getId());
     }
 
     public void saveAndClose() {
@@ -361,6 +371,7 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
      * Event handler for when the button is clicked
      */
     public void close() {
+//        Model.get().removeExitObservable(this);
         Model.get().preferences().removeObserver(this);
 //        App.get().accels().remove(ACCEL_SAVE);
 //        App.get().accels().remove(ACCEL_PRINT);
@@ -375,22 +386,27 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
             Since this function is called after {save} the current work order is given an id and thus,
             checking if the work order is new is never true.
          */
-        Model.get().removeExitObservable(this);
     }
 
     /**
      * Event handler for when the tab is closed
      */
     public void closeTab() {
+        /* Remove this controller from preference's observables */
         Model.get().preferences().removeObserver(this);
-        /* Remove work order id from {currOWOs} */
-        if (!workOrder.isNew()) {
-            Model.get().currOWOs().remove(workOrder.getId());
-        } else {
+        if (workOrder.isNew()) {
+            /* work order is new, enable the feature to create a new work order*/
             App.get().setDisableMIWO(false);
+            App.get().log("Cancel and closed new work order");
+        } else {
+            /* work order not new, remove it from the model's list of currowos */
+            Model.get().currOWOs().remove(workOrder.getId());
+            App.get().log("Cancel and closed work order #" + workOrder.getId());
         }
     }
 
+    /* TODO - Not sure what to do with this... */
+    @Deprecated
     public void email() {
         Desktop desktop;
         if (Desktop.isDesktopSupported() && (desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
@@ -417,7 +433,6 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
         if (workOrder.isCompleted()) {
             dateCompletedPicker.setValue(workOrder.getDateCompleted().toLocalDate());
         }
-        btVeh.setDisable(true);
         tvParts.setItems(workOrder.itemList());
         tvLabor.setItems(workOrder.laborList());
         tvLabor.getItems().addListener(laborChangeListener());
@@ -451,7 +466,15 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
 
     public void loadCustomer(@NotNull Customer c) {
         this.chosenCustomerId = c.getId();
-        this.btVeh.setDisable(false);
+        if (this.chosenCustomerId > 0) {
+            /* customer saved in database */
+            this.btVeh.setDisable(false);
+            this.btAddVeh.setDisable(false);
+        } else {
+            /* customer not saved in database */
+            this.btVeh.setDisable(true);
+            this.btAddVeh.setDisable(true);
+        }
         tfFirstName.setText(c.getFirstName());
         tfLastName.setText(c.getLastName());
         tfPhone.setText(c.getPhone());
@@ -627,48 +650,64 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
 
     public void fetchVehicleData() {
         String vin = tfVin.getText();
-        if (vin.isBlank()) return;
-        ProgressBar pi = new ProgressBar();
-        pi.prefWidthProperty().bind(tfVin.widthProperty());
-        pi.setStyle("-fx-accent: #7289da;");
-        vehicleGridPane1.add(pi, 0, 1);
-        try {
-            VehicleDataFetcher fetcher = new VehicleDataFetcher(vin);
-            if (fetcher.isFetchSuccess()) {
-                Vehicle v = fetcher.get();
-                AlertBuilder builder = new AlertBuilder();
-                builder.setAlertType(Alert.AlertType.CONFIRMATION)
-                        .setTitle("Vehicle Confirmation")
-                        .setHeaderText("Vehicle Data Retrieved")
-                        .setContentText("The program has successfully retrieved the vehicle data. Please review the details below to confirm if it matches your vehicle.\n\n" + v.toPrettyString())
-                        .setConfirmBtns()
-                        .build().showAndWait().ifPresent(e -> {
-                            if (e.getButtonData().isDefaultButton())
-                                loadVehicle(v);
-                        });
+        DialogFactory.initDecodeVIN(vin, (v) -> loadVehicle(v));
+    }
+
+    /**
+     * @brief Updates a customer's information if a customer is selected, or adds a new customer
+     */
+    public void updateCustomer() {
+        if (this.chosenCustomerId > 0) {
+            /* a customer is chosen */
+            var c = buildCustomer();
+            DB.get().customers().update(c);
+            App.get().log("Updated customer: " + c.toPrettyString());
+        } else {
+            Customer c = buildCustomer();
+            if (c.getId() > 0) {
+                /* update customer */
+                DB.get().customers().update(c);
+                loadCustomer(c);
+                App.get().log("Updated csutomer: " + c.toPrettyString());
             } else {
-                Vehicle v = fetcher.get();
-                AlertBuilder builder = new AlertBuilder();
-                builder.setAlertType(Alert.AlertType.WARNING)
-                        .setTitle("Warning")
-                        .setHeaderText("Vehicle data fetched may not be 100% accurate (Error Code(s): " + fetcher.getErrorCodes() + ")")
-                        .setContentText(v.toPrettyString() + '\n' + fetcher.getErrorText())
-                        .setConfirmBtns().build().showAndWait().ifPresent(e -> {
-                    if (e.getButtonData().isDefaultButton())
-                        loadVehicle(v);
-                });
+                /* add customer */
+                var success = DB.get().customers().add(c);
+                if (success) {
+                    List<Customer> list = DB.get().customers().filter(c);
+                    if (list.size() > 0) {
+                        loadCustomer(list.get(0));
+                        App.get().log("Added new customer");
+                    } else {
+                        App.get().log("Failed to add customer");
+                    }
+                } else {
+                    App.get().log("Failed to add customer, there already exists a customer " + c.toPrettyString());
+                }
             }
-        } catch (IOException e) {
-            AlertBuilder builder = new AlertBuilder();
-            builder.setAlertType(Alert.AlertType.ERROR);
-            builder.setTitle("Connection Error")
-                    .setHeaderText("Failed to Connect to API")
-                    .setContentText("""
-                            Sorry, the program was unable to establish a connection to the API site. Please check your internet connection and try again later.
-                            """)
-                    .build().showAndWait();
-        } finally {
-            vehicleGridPane1.getChildren().remove(pi);
+        }
+    }
+
+    /**
+     * @brief Adds vehicle for selected customer of current work order
+     * If the customer's id is valid, then a vehicle object is built and is passed to the vehicle store to be added
+     * in the database, otherwise tell the user a customer needs to be selected first. If the vehicle was added
+     * successfully, display feedback to the user that the action was a success, otherwise display feedback that the
+     * vehicle couldn't be added.
+     */
+    public void addVehicle() {
+        if (this.chosenCustomerId > 0) {
+            /* valid customer, add a vehicle */
+            Vehicle v = buildVehicle();
+            OwnedVehicle ov = new OwnedVehicle(this.chosenCustomerId, v);
+            var success = DB.get().vehicles().add(ov);
+            if (success) { /* give feedback that the action was a success */
+                App.get().log("Added new vehicle");
+            } else { /* otherwise, give feedback of the failed action */
+                App.get().log("Failed to add vehicle, there already exists a vehicle with VIN: " + tfVin.getText());
+            }
+        } else {
+            /* failed to add vehicle */
+            App.get().log("Please select a customer to add a vehicle");
         }
     }
 
@@ -678,13 +717,5 @@ public class WorkOrderWorkspaceController implements Observable, ExitObservable,
         if (workOrder != null && workOrder.isNew()) {
             tfTaxRate.setText(Model.get().preferences().getTaxRatePrettyString());
         }
-    }
-
-    @Override
-    public void exit() {
-        boolean isNew = workOrder.isNew();
-        save();
-        if (isNew)
-            Model.get().currOWOs().add(workOrder.getId());
     }
 }

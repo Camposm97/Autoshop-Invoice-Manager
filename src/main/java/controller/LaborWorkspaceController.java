@@ -1,21 +1,19 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.Model;
-import model.tps.AddLaborTransaction;
 import model.work_order.AutoPart;
 import model.work_order.Labor;
-import model.work_order.WorkOrder;
 
 import java.util.Iterator;
-import java.util.TreeMap;
 import java.util.function.Function;
 
 public class LaborWorkspaceController {

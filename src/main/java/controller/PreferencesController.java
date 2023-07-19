@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -22,6 +23,8 @@ public class PreferencesController {
     ComboBox<Theme> cbTheme;
     @FXML
     Label lblTaxPercent;
+    @FXML
+    CheckBox cbConfirmExit;
 
 
     @FXML
@@ -65,5 +68,7 @@ public class PreferencesController {
         cbTheme.setItems(Theme.list());
         cbTheme.setValue(Model.get().preferences().getTheme());
         cbTheme.setOnAction(e -> Model.get().preferences().setTheme(cbTheme.getValue()));
+        cbConfirmExit.setSelected(Model.get().preferences().getConfirmExit());
+        cbConfirmExit.setOnAction(e -> Model.get().preferences().setConfirmExit(cbConfirmExit.isSelected()));
     }
 }

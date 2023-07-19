@@ -1,6 +1,6 @@
 package controller;
 
-import javafx.application.Platform;
+import app.App;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
@@ -14,6 +14,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 import model.Model;
 import model.customer.Customer;
 import model.database.DB;
@@ -46,16 +47,24 @@ public class AppController implements IShortcuts {
     TabPane tabPane;
     @FXML
     Tab tabComp, tabCus, tabWO;
+
+    @FXML private Parent notifyView;
+    @FXML private NotificationBarController notifyViewController;
+
     Parent myCompany, customers, workOrders;
+
     MyCompanyController compView;
+
     CustomerTableController cusView;
+
     WorkOrderTableController woView;
+
     TreeMap<String, WorkOrderWorkspaceController> map;
 
     @FXML
     public void initialize() {
         map = new TreeMap<>();
-        stage.setTitle(Model.TITLE);
+        stage.setTitle(Model.APP_TITLE);
         stage.getIcons().add(new Image("icon.png"));
         accels().put(ACCEL_CLOSE, this::closeCurrentTab);
         tabPane.getSelectionModel().selectedItemProperty().addListener((o,prev,curr) -> {
@@ -107,6 +116,10 @@ public class AppController implements IShortcuts {
         }
     }
 
+    public void fullScreen() {
+        stage.setFullScreen(!stage.isFullScreen());
+    }
+
     /**
      * Removes all shortcuts (except for zoom-in/out) assigned to this controller
      */
@@ -139,7 +152,7 @@ public class AppController implements IShortcuts {
             tab.setId(TAB_PREFIX_ID + controller.workOrder.getId());
             tab.setContent(content);
             tab.setOnClosed(e -> {
-                System.out.println("Closing tab");
+                System.out.println("Closing " + tab.getId());
                 map.remove(tab.getId());
                 controller.closeTab();
             });
@@ -164,7 +177,11 @@ public class AppController implements IShortcuts {
      * Loads all current work orders from database
      */
     public void openCurrentWorkOrders() {
-        DB.get().workOrders().getCurrOWOs().forEach(this::showWorkOrder);
+        DB.get().workOrders().getCurrOWOs().forEach(x -> {
+            System.out.println("work_order=" + x);
+            if (x != null) this.showWorkOrder(x);
+            else System.out.println("null bug");
+        });
     }
 
     /**
@@ -279,8 +296,7 @@ public class AppController implements IShortcuts {
      */
     public void exportCustomers() throws Exception {
         final String FILE = "customers.xlsx";
-        DialogFactory f = new DialogFactory();
-        File file = f.initExport("Export Customers", FILE);
+        File file = DialogFactory.initExport("Export Customers", FILE);
         if (file != null) {
             DB.get().customers().export(file.getPath());
             Notifications n = Notifications.create().title("Export Customers")
@@ -297,8 +313,7 @@ public class AppController implements IShortcuts {
      */
     public void exportVehicles() throws Exception {
         final String FILE = "vehicles.xlsx";
-        DialogFactory f = new DialogFactory();
-        File file = f.initExport("Export Vehicles",  FILE);
+        File file = DialogFactory.initExport("Export Vehicles",  FILE);
         if (file != null) {
             DB.get().vehicles().export(file.getPath());
             Notifications n = Notifications.create().title("Export Vehicles")
@@ -315,8 +330,7 @@ public class AppController implements IShortcuts {
      */
     public void exportAutoPartSuggestions() throws Exception {
         final String FILE = "auto-part-suggestions.xlsx";
-        DialogFactory f = new DialogFactory();
-        File file = f.initExport("Export Auto Part Suggestions", FILE);
+        File file = DialogFactory.initExport("Export Auto Part Suggestions", FILE);
         if (file != null) {
             DB.get().autoParts().export(file.getPath());
             Notifications n = Notifications.create().title("Export Auto Parts")
@@ -333,8 +347,7 @@ public class AppController implements IShortcuts {
      */
     public void exportWorkOrders() throws Exception {
         final String FILE = "work-orders.xlsx";
-        DialogFactory f = new DialogFactory();
-        File file = f.initExport("Export Work Orders", FILE);
+        File file = DialogFactory.initExport("Export Work Orders", FILE);
         if (file != null) {
             DB.get().workOrders().export(file.getPath());
             Notifications n = Notifications.create().title("Export Work Orders")
@@ -418,9 +431,29 @@ public class AppController implements IShortcuts {
      * Exits the program and saves changes to {Model} and {DB}
      */
     public void exit() {
-        Model.get().save();
-        DB.get().close();
-        Platform.exit();
+        if (Model.get().preferences().getConfirmExit()) {
+            /* confirm the user wants to exit the program */
+            DialogFactory.initConfirmExit();
+        } else {
+            App.exit();
+        }
+    }
+
+    /**
+     * @brief Event handles for {onCloseRequest} on the stage
+     * @param event
+     */
+    public void exitHandler(WindowEvent event) {
+        exit(); /* call this method to decide whether to close the app */
+        event.consume(); /* stop the handler, otherwise it will close the app for real */
+    }
+
+    /**
+     * Logs {text} onto the notification bar
+     * @param text
+     */
+    @FXML public void log(String text) {
+        notifyViewController.log(text);
     }
 
     /**

@@ -1,10 +1,8 @@
 package model.ui;
 
+import app.App;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import model.Model;
@@ -44,6 +42,28 @@ public class AlertBuilder {
 
     public AlertBuilder setContentText(String contentText) {
         this.contentText = contentText;
+        return this;
+    }
+
+    /**
+     * Adds a button type to the button bar of the alert
+     * @param s Text displayed on the button
+     * @param data Type of button
+     * @return AlertBuilder
+     */
+    public AlertBuilder addBtnType(String s, ButtonBar.ButtonData data) {
+        ButtonType type = new ButtonType(s, data);
+        if (btList == null) btList = new LinkedList<>();
+        btList.add(type);
+        return this;
+    }
+
+    public AlertBuilder setExitConfirmBtns() {
+        ButtonType bt1 = new ButtonType("Exit", ButtonBar.ButtonData.OK_DONE);
+        ButtonType bt2 = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        btList = new LinkedList<>();
+        btList.add(bt1);
+        btList.add(bt2);
         return this;
     }
 
@@ -114,6 +134,7 @@ public class AlertBuilder {
 
     public Alert build() {
         Alert alert = new Alert(alertType);
+        alert.initOwner(App.get().window());
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         if (btList != null)

@@ -19,7 +19,7 @@
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <Label text="Version 1.0.0" />
+      <Label text="Version 1.5.2" />
       <TextFlow GridPane.rowIndex="1">
          <children>
             <Label contentDisplay="RIGHT" text="Developed by" />

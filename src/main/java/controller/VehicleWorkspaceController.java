@@ -9,6 +9,7 @@ import model.customer.Customer;
 import model.customer.OwnedVehicle;
 import model.database.DB;
 import model.ui.ChangeListenerFactory;
+import model.ui.DialogFactory;
 import model.ui.FX;
 import model.ui.Theme;
 import model.work_order.Vehicle;
@@ -35,7 +36,6 @@ public class VehicleWorkspaceController {
         f.setVINFormat(tfVin);
         f.setPositiveNums(tfYear);
         f.setUpperCase(tfLicensePlate);
-//        TextFields.bindAutoCompletion(tfYear, DB.get().vehicles().getUniqueYear());
         TextFields.bindAutoCompletion(tfMake, DB.get().vehicles().getUniqueMake());
         TextFields.bindAutoCompletion(tfModel, DB.get().vehicles().getUniqueModel());
         TextFields.bindAutoCompletion(tfColor, DB.get().vehicles().getUniqueColor());
@@ -92,5 +92,17 @@ public class VehicleWorkspaceController {
     public void loadCustomer(Customer customer) {
         this.customer = customer;
         tfCustomer.setText(customer.toPrettyString());
+    }
+
+    public void fetchVehicleData() {
+        String vin = tfVin.getText();
+        DialogFactory.initDecodeVIN(vin, (v) -> {
+            tfYear.setText(v.getYear());
+            tfMake.setText(v.getMake());
+            tfModel.setText(v.getModel());
+            tfEngine.setText(v.getEngine());
+            if (!v.getTransmission().isBlank())
+                tfTransmission.setText(v.getTransmission());
+        });
     }
 }

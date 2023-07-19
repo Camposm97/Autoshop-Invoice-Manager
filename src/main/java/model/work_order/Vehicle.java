@@ -9,11 +9,24 @@ public class Vehicle implements Comparable<Vehicle> {
     private String year;
     private String make, model, licensePlate, color, engine, transmission, mileageIn, mileageOut;
 
+    public Vehicle() { /* empty constructor */
+        this.id = 0;
+        this.vin = "";
+        this.year = "";
+        this.make = "";
+        this.model = "";
+        this.licensePlate = "";
+        this.color = "";
+        this.engine = "";
+        this.transmission = "";
+        this.mileageIn = "";
+        this.mileageOut = "";
+    }
+
     public Vehicle(int id, String vin, String year, String make, String model, String licensePlate, String color, String engine, String transmission) {
         this(vin,year,make,model,licensePlate,color,engine,transmission);
         this.id = id;
     }
-
 
     public Vehicle(String vin, String year, String make, String model, String licensePlate, String color, String engine, String transmission, String mileageIn, String mileageOut) {
         this.vin = vin;

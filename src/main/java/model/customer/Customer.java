@@ -11,6 +11,15 @@ public class Customer implements Comparable<Customer> {
     private String firstName, lastName, phone, email, company;
     private Address address;
 
+    public Customer() { /* empty constructor */
+        this.firstName = "";
+        this.lastName = "";
+        this.phone = "";
+        this.email = "";
+        this.company = "";
+        this.address = new Address("", "", "", "");
+    }
+
     public Customer(String firstName, String lastName, String phone, String email, String company, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;

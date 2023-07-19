@@ -23,13 +23,13 @@ public class RecentWorkOrders {
                 ObjectInputStream ois = new ObjectInputStream(fis);
                 ids = (LinkedList<Integer>) ois.readObject();
                 ois.close();
-                System.out.println("Loaded " + DAT_FILE);
+                System.out.println("Loaded " + DAT_FILE + ": " + ids);
             } else {
                 System.out.println("Missing " + DAT_FILE);
                 ids = new LinkedList<>();
             }
         } catch (IOException | ClassNotFoundException ex) {
-            ex.printStackTrace();
+            System.out.println("Failed to load " + DAT_FILE);
         } finally {
             observables = new LinkedList<>();
         }
@@ -57,11 +57,14 @@ public class RecentWorkOrders {
             ids.removeLast();
         }
         for (Observable o : observables) o.update();
+        System.out.println("Add recent work order (" + workOrderId + "): " + ids);
     }
 
-    public void remove(int workOrderId) {
-        ids.removeFirstOccurrence(workOrderId);
+    public boolean remove(int workOrderId) {
+        var flag = ids.removeFirstOccurrence(workOrderId);
         for (Observable o : observables) o.update();
+        System.out.println("Remove recent work order (" + workOrderId + "): " + ids);
+        return flag;
     }
 
     public Iterator<Integer> iterator() {

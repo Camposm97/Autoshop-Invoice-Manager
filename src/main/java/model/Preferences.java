@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class Preferences {
     private static Preferences singleton;
-    private static final String SRC = "preferences.config";
+    private static final String PREF_FILE = "./preferences.config";
 
     public static Preferences get() {
         if (singleton == null) init();
@@ -33,17 +33,18 @@ public class Preferences {
     private Double taxRate, tempTaxRate;
     private GUIScale guiScale, tempGuiScale;
     private Theme theme, tempTheme;
+    private Boolean confirmExit, tempConfirmExit;
     private List<Observable> observables;
 
     private Preferences() {
-        build();
+        defaultBuild();
         readFile();
         App.get().setScale(GUIScale.getStyleClass(this.guiScale));
         App.get().setTheme(theme);
         System.out.println(this);
     }
 
-    public void build() {
+    public void defaultBuild() {
         company = "Your Company";
         address = "123 Some Street";
         city = "Some City";
@@ -56,12 +57,13 @@ public class Preferences {
         taxRate = 1.08625;
         guiScale = GUIScale.Small;
         theme = Theme.Light;
+        confirmExit = false;
         observables = new LinkedList<>();
     }
 
     public void readFile() {
         try {
-            File file = new File(SRC);
+            File file = new File(PREF_FILE);
             if (file.exists()) {
                 Scanner in = new Scanner(file);
                 while (in.hasNextLine()) {
@@ -123,6 +125,14 @@ public class Preferences {
                                 } catch (IllegalArgumentException e) {
                                     theme = Theme.Light;
                                 }
+                                break;
+                            case "confirm-exit":
+                                try {
+                                    confirmExit = Boolean.valueOf(value);
+                                } catch (IllegalArgumentException e) {
+                                    confirmExit = true;
+                                }
+                                break;
                         }
                     }
                 }
@@ -134,6 +144,7 @@ public class Preferences {
 
     public void save() {
         try {
+            /* Assign the new values if they're not null */
             if (tempCompany != null) company = tempCompany;
             if (tempAddress != null) address = tempAddress;
             if (tempCity != null) city = tempCity;
@@ -146,7 +157,9 @@ public class Preferences {
             if (tempTaxRate != null) taxRate = tempTaxRate;
             if (tempGuiScale != null) guiScale = tempGuiScale;
             if (tempTheme != null) theme = tempTheme;
-            PrintWriter pw = new PrintWriter(SRC);
+            if (tempConfirmExit != null) confirmExit = tempConfirmExit;
+            /* Save the instance variables */
+            PrintWriter pw = new PrintWriter(PREF_FILE);
             pw.println("company=" + company);
             pw.println("address=" + address);
             pw.println("city=" + city);
@@ -159,11 +172,11 @@ public class Preferences {
             pw.println("tax-rate=" + taxRate);
             pw.println("gui-scale=" + guiScale);
             pw.println("theme=" + theme);
+            pw.println("confirm-exit=" + confirmExit);
             pw.close();
-            System.out.println("Saved preferences");
-            for (Observable o : observables) {
-                o.update();
-            }
+            System.out.println("Saved " + PREF_FILE);
+            /* Update every observable */
+            for (Observable o : observables) o.update();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
@@ -273,6 +286,14 @@ public class Preferences {
         this.tempTheme = theme;
     }
 
+    public Boolean getConfirmExit() {
+        return confirmExit;
+    }
+
+    public void setConfirmExit(Boolean confirmExit) {
+        this.tempConfirmExit = confirmExit;
+    }
+
     public void addObserver(Observable observable) {
         this.observables.add(observable);
     }
@@ -286,6 +307,7 @@ public class Preferences {
         return company + " " + address + " " + city + ", " + state + " " + zip +
                 ",\n" + phone + ", " + repairShopId +
                 ",\n" + title +
-                ",\n" + laborRate + ", " + taxRate + ", " + guiScale + ", " + theme;
+                ",\n" + laborRate + ", " + taxRate + ", " + guiScale + ", " + theme +
+                "\nconfirm-exit=" + confirmExit;
     }
 }
