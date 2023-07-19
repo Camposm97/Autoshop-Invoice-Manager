@@ -650,7 +650,18 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
 
     public void fetchVehicleData() {
         String vin = tfVin.getText();
-        DialogFactory.initDecodeVIN(vin, (v) -> loadVehicle(v));
+        DialogFactory.initDecodeVIN(vin, (v) -> {
+            if (!v.getYear().isBlank())
+                tfYear.setText(v.getYear());
+            if (!v.getMake().isBlank())
+                tfMake.setText(v.getMake());
+            if (!v.getModel().isBlank())
+                tfModel.setText(v.getModel());
+            if (!v.getEngine().isBlank())
+                tfEngine.setText(v.getEngine());
+            if (!v.getTransmission().isBlank())
+                tfTransmission.setText(v.getTransmission());
+        });
     }
 
     /**

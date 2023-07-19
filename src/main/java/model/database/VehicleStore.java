@@ -23,6 +23,7 @@ public class VehicleStore {
 
     public boolean add(@NotNull OwnedVehicle ov) {
         try {
+            /* TODO - Validate that the customer doesn't contain vehicle with same VIN */
             PreparedStatement prepStmt = c.prepareStatement(
                     "insert into vehicle " +
                             "(vin, year, make, model, license_plate, color, engine, transmission, customer_id) " +
