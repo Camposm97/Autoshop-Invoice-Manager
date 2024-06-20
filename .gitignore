@@ -1,14 +1,15 @@
-# IntelliJ
-.idea
+# VSCode
+.vscode/settings.json
+
+# Node
+node_modules
+
+# Production Builds
+dist
 out
-target
 
 # Files
-autoshop.db
-preferences.config
-recents.dat
-currowos.dat
-*.xlsx
+*.tgz
 *.log
 
 # MacOS
