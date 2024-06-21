@@ -3,6 +3,7 @@ package model.database;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.customer.OwnedVehicle;
+import model.exception.DuplicateVehicleException;
 import model.work_order.Vehicle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -23,7 +24,17 @@ public class VehicleStore {
 
     public boolean add(@NotNull OwnedVehicle ov) {
         try {
-            /* TODO - Validate that the customer doesn't contain vehicle with same VIN */
+            /* check if the customer already contains the vehicle's VIN */
+            var cusId = ov.getCustomerId();
+            var vin = ov.getVehicle().getVin();
+            PreparedStatement checkStmt = c.prepareStatement("select vin from vehicle where customer_id = ? and vin = ?");
+            checkStmt.setInt(1, cusId);
+            checkStmt.setString(2, vin);
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next()) { /* if there is a result (1 row of data) then throw exception */
+                throw new DuplicateVehicleException(cusId, vin);
+            }
+            /* otherwise, add the vehicle for the customer */
             PreparedStatement prepStmt = c.prepareStatement(
                     "insert into vehicle " +
                             "(vin, year, make, model, license_plate, color, engine, transmission, customer_id) " +
@@ -41,6 +52,8 @@ public class VehicleStore {
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (DuplicateVehicleException e) {
+            System.out.println(e.getClass().getName() + ':' + e.getMessage());
         }
         return false;
     }

@@ -162,15 +162,18 @@ public class Customer implements Comparable<Customer> {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", company='" + company + '\'' +
-                ", address=" + address +
-                '}';
+        String s = firstName;
+        if (!lastName.isBlank())
+            s += ' ' + lastName;
+        if (!phone.isBlank())
+            s += " (" + phone + ")";
+        if (!email.isBlank())
+            s += ", " + email;
+        if (!company.isBlank())
+            s += ", " + company;
+        if (!address.toString().isBlank())
+            s += " " + address;
+        return s;
     }
 
     @Override

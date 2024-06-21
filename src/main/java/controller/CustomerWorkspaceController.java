@@ -1,15 +1,13 @@
 package controller;
 
+import app.App;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-import model.Model;
 import model.State;
 import model.customer.Address;
 import model.customer.Customer;
 import model.database.DB;
 import model.ui.ChangeListenerFactory;
-import model.ui.Theme;
-import org.controlsfx.control.Notifications;
 import org.controlsfx.control.SearchableComboBox;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -47,13 +45,17 @@ public class CustomerWorkspaceController {
         Address address = new Address(street, city, state.name(), zip);
         Customer customer = new Customer(firstName, lastName, phone, email, company, address);
         var success = DB.get().customers().add(customer);
-        var n = Notifications.create();
-        if (Model.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
-        if (success) { // Successfully created the customer
-            n.title("Created Customer").text(customer.toFormattedString());
-        } else { // Failed to create customer (duplicate or write issue)
-            n.title("Failed to Create Customer").text("There already exists a customer with the given information.");
-        }
-        n.showInformation();
+        if (success)
+            App.get().log("Created Customer: " + customer);
+        else
+            App.get().log("Failed to create customer: there already exists a customer with the given information");
+//        var n = Notifications.create();
+//        if (Model.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
+//        if (success) { // Successfully created the customer
+//            n.title("Created Customer").text(customer.toFormattedString());
+//        } else { // Failed to create customer (duplicate or write issue)
+//            n.title("Failed to Create Customer").text("There already exists a customer with the given information.");
+//        }
+//        n.showInformation();
     }
 }

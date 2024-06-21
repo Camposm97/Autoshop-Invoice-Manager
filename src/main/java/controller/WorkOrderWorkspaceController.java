@@ -41,37 +41,7 @@ import java.util.List;
 import java.util.function.Function;
 
 /**
- * NEW UPDATE v2.0 INCOMING
- * The goal of this new update is to save work orders on creation.
- * At the moment, the work order is not saved when its created. It's not saved to the database.
- * That being said, when this controller is created, a work order is created in the database.
- *
- * Does that mean we should save every change we make when editing the work order?
- * No, we still go with the same implementation of saving.
- * Since a work order is always going to be saved, we remove the {isNew} method from
- * the WorkOrder class since created work orders will always have an {id}, so then
- * we can remove the disabled menu item for 'New WorkOrder' (yay).
- *
- * Issue, since multi. work orders can be open, does that effect atomic edits in the WOStore?
- * No, since the atomic lists of edits are located in the controller itself and not the WOStore.
- *
- * TODO - Bug #2
- * When the user opens a work order, then exits the app the work order is saved in {currows}
- * But, if the user closes the work order tab, then deletes the work order. The app refuses to exit (crashes).
- * In addition, the app will then crash when starting up.
- *
- * TODO - Implement Feedback System
- * At the bottom of the BorderPane, implement a feedback system where for each action the
- * user does will be displayed in border pane's bottom.
- *
- * Actions that will be show feedback should be?
- * Saving Customers, Vehicles, Work Orders
- * Printing Work Orders
- *
- * If we wanted, we could be more show feedback for more actions such as
- * editing a work order (CRUD parts, labor)
- *
- * @version 2.0
+ * @brief Workspace for work orders
  */
 @SuppressWarnings("unused")
 public class WorkOrderWorkspaceController implements Observable, IOffsets, IShortcuts {
@@ -405,7 +375,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
         }
     }
 
-    /* TODO - Not sure what to do with this... */
+    /* TODO - Look into email APIs to start an email or maybe use Java's built-in AWT library to create an email and attach the work order as PDF */
     @Deprecated
     public void email() {
         Desktop desktop;
@@ -698,6 +668,13 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
         }
     }
 
+    /*
+        TODO - Implement updateVehicle method
+            Does the same thing as {addVehicle}. In addition, method will also handle updating an existing vehicle
+            assuming its already selected. We know an existing vehicle is selected if it contains an id. The rpogram
+            can then
+     */
+
     /**
      * @brief Adds vehicle for selected customer of current work order
      * If the customer's id is valid, then a vehicle object is built and is passed to the vehicle store to be added
@@ -714,7 +691,7 @@ public class WorkOrderWorkspaceController implements Observable, IOffsets, IShor
             if (success) { /* give feedback that the action was a success */
                 App.get().log("Added new vehicle");
             } else { /* otherwise, give feedback of the failed action */
-                App.get().log("Failed to add vehicle, there already exists a vehicle with VIN: " + tfVin.getText());
+                App.get().log("Failed to add vehicle, customer is already assigned vehicle with VIN: " + tfVin.getText());
             }
         } else {
             /* failed to add vehicle */

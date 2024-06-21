@@ -64,7 +64,7 @@ public class CustomerTableController implements IOffsets {
     }
 
     /**
-     * Initializes listeners for customer input fields
+     * Initializes listeners for customer filter fields
      */
     public void initCustomerInputFields() {
         tfFirstName.textProperty().addListener((o, oldValue, newValue) -> handleSearchCustomers());
@@ -82,6 +82,17 @@ public class CustomerTableController implements IOffsets {
      * Initializes customer table columns and listener(s)
      */
     public void initCustomerTable() {
+        /*
+            TODO - Implement print customer's balance feature
+            Have a button that will print the customer's current balance. Pressing this button to print a balance
+            sheet of the selected customer.
+
+            The balance sheet should print out
+
+            Conditions:
+                A customer should be selected in order for the button to be enabled similar
+                to the delete customer button.
+        */
         customerSelectedListener = (o, m, c) -> {
             if (root.getChildren().contains(tabPane)) {
                 if (c != null) {

@@ -1,5 +1,6 @@
 package controller;
 
+import app.App;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -78,14 +79,18 @@ public class VehicleWorkspaceController {
             int customerId = this.customer.getId();
             OwnedVehicle ownedVehicle = new OwnedVehicle(customerId, vehicle);
             var success = DB.get().vehicles().add(ownedVehicle);
-            var n = Notifications.create();
-            if (Model.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
-            if (success) {
-                n.title("Created Vehicle").text(vehicle.toString());
-            } else {
-                n.title("Failed to Create Vehicle").text("Cannot write to database");
-            }
-            n.showInformation();
+            if (success)
+                App.get().log("Created Vehicle: " + vehicle);
+            else
+                App.get().log("Failed to create vehicle: maybe a customer is already assigned the given vehicle info or i/o error");
+//            var n = Notifications.create();
+//            if (Model.get().preferences().getTheme() == Theme.Dark) n = n.darkStyle();
+//            if (success) {
+//                n.title("Created Vehicle").text(vehicle.toString());
+//            } else {
+//                n.title("Failed to Create Vehicle").text("Cannot write to database");
+//            }
+//            n.showInformation();
         }
     }
 
